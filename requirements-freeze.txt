@@ -1,0 +1,59 @@
+Babel==0.9.6
+Beaker==1.7.0
+bleach==1.4.2
+-e git+https://github.com/GSA/ckan.git@187427c56bd4bed7e56beb12c9d6a554c09cdf50#egg=ckan
+-e git+https://github.com/GSA/ckanext-datajson.git@3205ba3f9af9c37fb0adaed3023c701c23c5cc21#egg=ckanext_datajson
+-e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@0b90194d77938e59ecb7d6937c201bd6815447f8#egg=ckanext_googleanalyticsbasic
+-e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
+-e git+https://github.com/GSA/USMetadata.git@7ce0bff3f0caebdeb54a47faf4ba63f2afa5270f#egg=ckanext_usmetadata
+decorator==4.0.4
+fanstatic==0.12
+FormEncode==1.3.0
+Genshi==0.6
+html5lib==0.9999999
+Jinja2==2.6
+jsonschema==2.4.0
+LEPL==5.1.3
+Mako==1.0.2
+Markdown==2.4
+MarkupSafe==0.23
+mock==1.0.1
+nose==1.3.7
+ofs==0.4.1
+ordereddict==1.1
+Pairtree===0.7.1-T
+passlib==1.6.2
+Paste==1.7.5.1
+PasteDeploy==1.5.2
+PasteScript==2.0.2
+pbr==0.11.0
+pika==0.9.8
+psycopg2==2.4.5
+Pygments==2.0.2
+Pylons==0.9.7
+python-dateutil==1.5
+pytz===2012j
+pyutilib.component.core==4.5.3
+PyYAML==3.13
+redis==2.10.1
+repoze.lru==0.6
+repoze.who==2.0
+repoze.who-friendlyform==1.0.8
+requests==2.7.0
+rfc3987==1.3.8
+Routes==1.13
+simplejson==3.3.1
+six==1.10.0
+solrpy==0.9.5
+SQLAlchemy==0.9.6
+sqlalchemy-migrate==0.9.1
+sqlparse==0.1.11
+Tempita==0.5.2
+tzlocal==1.2
+unicodecsv==0.14.1
+vdm==0.13
+WebError==0.11
+WebHelpers==1.3
+WebOb==1.0.8
+WebTest==1.4.3
+zope.interface==4.1.1
