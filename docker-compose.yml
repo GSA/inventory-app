@@ -4,6 +4,7 @@ services:
     build: .
     command: paster --plugin=ckan serve /etc/ckan/production.ini
     depends_on:
+      - datastore
       - db
       - solr
     environment:
@@ -17,6 +18,13 @@ services:
       - /usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
+
+  datastore:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: datastore
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: datastore
 
   db:
     image: datagov/catalog-db:latest
