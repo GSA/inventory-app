@@ -2,6 +2,29 @@ version: '3'
 services:
   app:
     build: .
+    command: paster --plugin=ckan serve /etc/ckan/production.ini
+    depends_on:
+      - db
+      - solr
+    environment:
+      DB_CKAN_HOST: db
+      DB_CKAN_USER: ckan
+      DB_CKAN_PASSWORD: pass
+      DB_CKAN_DB: ckan
+    ports:
+      - "5001:5000"
     volumes:
       - /usr/lib/ckan
+      - ./config:/etc/ckan
       - .:/opt/inventory-app
+
+  db:
+    image: datagov/catalog-db:latest
+    environment:
+      POSTGRES_USER: postgres
+      DB_CKAN_USER: ckan
+      DB_CKAN_PASSWORD: pass
+      DB_CKAN_DB: ckan
+
+  solr:
+    image: datagov/catalog-solr:latest

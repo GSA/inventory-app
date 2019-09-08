@@ -22,6 +22,10 @@ Build and bring up the containers.
 
     $ docker-compose up
 
+Setup the database tables.
+
+    $ docker-compose run --rm app paster --plugin=ckan db init -c /etc/ckan/production.ini
+
 
 ### Docker-compose commands
 
