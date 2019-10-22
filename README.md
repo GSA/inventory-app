@@ -20,7 +20,7 @@ the `requirements-freeze.txt` for production dependencies. Very little works bey
 
 Build and bring up the containers.
 
-    $ docker-compose up
+    $ make up
 
 Create an admin user. You'll be prompted for a password.
 
