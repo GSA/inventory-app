@@ -1,23 +1,33 @@
+DEPRECATION: Python 2.7 will reach the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 won't be maintained after that date. A future version of pip will drop support for Python 2.7. More details about Python 2 support in pip, can be found at https://pip.pypa.io/en/latest/development/release-process/#python-2-support
+attrs==19.2.0
 Babel==0.9.6
 Beaker==1.7.0
 bleach==1.4.2
--e git+https://github.com/GSA/ckan.git@187427c56bd4bed7e56beb12c9d6a554c09cdf50#egg=ckan
--e git+https://github.com/GSA/ckanext-datajson.git@3205ba3f9af9c37fb0adaed3023c701c23c5cc21#egg=ckanext_datajson
+-e git+https://github.com/GSA/ckan.git@37eb8c3c0c1484c51b88d1cd379250fddce2f3f6#egg=ckan
+-e git+https://github.com/GSA/ckanext-datajson.git@177c9d8719964feed341541aae9a4d1009944be5#egg=ckanext_datajson
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@0b90194d77938e59ecb7d6937c201bd6815447f8#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
+-e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
 -e git+https://github.com/GSA/USMetadata.git@7ce0bff3f0caebdeb54a47faf4ba63f2afa5270f#egg=ckanext_usmetadata
+configparser==4.0.2
+contextlib2==0.6.0.post1
 decorator==4.0.4
 fanstatic==0.12
 FormEncode==1.3.0
+functools32==3.2.3.post2
 Genshi==0.6
 html5lib==0.9999999
+httplib2==0.14.0
+importlib-metadata==0.23
 Jinja2==2.6
-jsonschema==2.4.0
+jsonschema==3.1.1
 LEPL==5.1.3
+M2Crypto==0.23.0
 Mako==1.0.2
 Markdown==2.4
 MarkupSafe==0.23
 mock==1.0.1
+more-itertools==5.0.0
 nose==1.3.7
 ofs==0.4.1
 ordereddict==1.1
@@ -26,15 +36,19 @@ passlib==1.6.2
 Paste==1.7.5.1
 PasteDeploy==1.5.2
 PasteScript==2.0.2
+pathlib2==2.3.5
 pbr==0.11.0
 pika==0.9.8
 psycopg2==2.4.5
 Pygments==2.0.2
 Pylons==0.9.7
+pyrsistent==0.15.4
+-e git+https://github.com/GSA/pysaml2.git@8b605c824ff1d042e9040a9971c28f369197cac2#egg=pysaml2
 python-dateutil==1.5
+python-memcached==1.48
 pytz===2012j
 pyutilib.component.core==4.5.3
-PyYAML==3.13
+PyYAML==5.1.2
 redis==2.10.1
 repoze.lru==0.6
 repoze.who==2.0
@@ -42,8 +56,9 @@ repoze.who-friendlyform==1.0.8
 requests==2.7.0
 rfc3987==1.3.8
 Routes==1.13
+scandir==1.10.0
 simplejson==3.3.1
-six==1.10.0
+six==1.12.0
 solrpy==0.9.5
 SQLAlchemy==0.9.6
 sqlalchemy-migrate==0.9.1
@@ -56,4 +71,5 @@ WebError==0.11
 WebHelpers==1.3
 WebOb==1.0.8
 WebTest==1.4.3
+zipp==0.6.0
 zope.interface==4.1.1
