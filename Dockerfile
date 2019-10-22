@@ -1,6 +1,6 @@
 FROM ubuntu:14.04
 
-ARG PYTHON_VERSION=2.7.15
+ARG PYTHON_VERSION=2.7.10
 
 ENV CKAN_HOME /usr/lib/ckan
 ENV CKAN_CONFIG /etc/ckan/
@@ -11,12 +11,14 @@ WORKDIR /opt/inventory-app
 # Install required packages
 RUN apt-get -q -y update
 RUN apt-get -q -y install \
+  curl \
   build-essential \
   git \
   libbz2-dev \
   libpq-dev \
   libssl-dev \
   libz-dev \
+  swig \
   wget
 
 # Download  python
@@ -39,10 +41,10 @@ RUN /usr/local/bin/pip install -U pip && \
 RUN mkdir -p $CKAN_HOME && \
   virtualenv $CKAN_HOME --no-site-packages -p /usr/local/bin/python
 
-COPY requirements-freeze.txt /tmp
+COPY requirements.txt /tmp/
 
 # Install ckan dependencies
-RUN $CKAN_HOME/bin/pip install -r /tmp/requirements-freeze.txt
+RUN $CKAN_HOME/bin/pip install -r /tmp/requirements.txt
 
 COPY entrypoint-docker.sh /
 ENTRYPOINT ["/entrypoint-docker.sh"]

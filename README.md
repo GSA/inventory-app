@@ -22,9 +22,9 @@ Build and bring up the containers.
 
     $ docker-compose up
 
-Setup the database tables.
+Create an admin user. You'll be prompted for a password.
 
-    $ docker-compose run --rm app paster --plugin=ckan db init -c /etc/ckan/production.ini
+    $ docker-compose run --rm app paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
 
 
 ### Docker-compose commands
@@ -36,6 +36,10 @@ To enter into the container in interactive mode as root:
 To run a one off command inside the container:
 
     $ docker-compose run app {{command}}
+
+Update lock file for dependencies.
+
+    $ docker-compose run --rm app pip --no-color --quiet freeze > requirements-freeze.txt
 
 
 ### Source Code Folder (**src**)
