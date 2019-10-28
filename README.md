@@ -5,7 +5,7 @@
 Is a [Docker](https://www.docker.com/)-based [CKAN](http://ckan.org) development environment for [inventory.data.gov](https://inventory.data.gov).
 
 _Note: this is currently a work in progress. We're mainly using this to manage
-the `requirements-freeze.txt` for production dependencies. Very little works beyond that.`_
+the `requirements-freeze.txt` for production dependencies. Very little works beyond that._
 
 
 ## Development
