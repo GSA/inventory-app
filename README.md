@@ -26,6 +26,9 @@ Create an admin user. You'll be prompted for a password.
 
     $ docker-compose run --rm app paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
 
+Open CKAN to verify it's working
+
+    $ open http://localhost:5000
 
 ### Docker-compose commands
 
