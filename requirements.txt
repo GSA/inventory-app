@@ -8,6 +8,7 @@
 # ckan dependencies
 Babel==0.9.6
 Beaker==1.6.4
+bleach~=1.5.0
 FormEncode==1.2.6
 Genshi==0.6
 Jinja2==2.6
@@ -36,6 +37,9 @@ pbr==0.8.2
 psycopg2==2.4.5
 python-dateutil==1.5
 pyutilib.component.core==4.5.3
+pytz
+tzlocal~=1.0
+Markdown~=2.6.11
 repoze.lru==0.6
 repoze.who==2.0
 repoze.who-friendlyform==1.0.8
