@@ -7,3 +7,10 @@ jobs:
       - run:
           name: Run tests
           command: make test
+
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build

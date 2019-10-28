@@ -2,6 +2,42 @@ version: '3'
 services:
   app:
     build: .
+    command: /opt/inventory-app/start.sh
+    depends_on:
+      - datastore
+      - db
+      - solr
+    environment:
+      DB_CKAN_HOST: db
+      DB_CKAN_USER: ckan
+      DB_CKAN_PASSWORD: pass
+      DB_CKAN_DB: ckan
+    ports:
+      - "5000:5000"
     volumes:
-      - /usr/lib/ckan
+      - ckan:/usr/lib/ckan
+      - ./config:/etc/ckan
       - .:/opt/inventory-app
+
+  datastore:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: datastore
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: datastore
+    volumes:
+      - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  db:
+    image: datagov/catalog-db:latest
+    environment:
+      POSTGRES_USER: postgres
+      DB_CKAN_USER: ckan
+      DB_CKAN_PASSWORD: pass
+      DB_CKAN_DB: ckan
+
+  solr:
+    image: datagov/catalog-solr:inventory
+
+volumes:
+  ckan:
