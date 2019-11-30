@@ -1,6 +1,6 @@
-FROM ubuntu:14.04
+FROM ubuntu:bionic
 
-ARG PYTHON_VERSION=2.7.10
+ARG PYTHON_VERSION=2.7.17
 
 ENV CKAN_HOME /usr/lib/ckan
 ENV CKAN_CONFIG /etc/ckan/
@@ -18,6 +18,7 @@ RUN apt-get -q -y install \
   libpq-dev \
   libssl-dev \
   libz-dev \
+  netcat \
   swig \
   wget
 
