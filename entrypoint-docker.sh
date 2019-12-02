@@ -2,4 +2,6 @@
 
 . $CKAN_HOME/bin/activate
 
-exec /bin/sh -c "$*"
+export PATH="$CKAN_HOME/bin:$PATH"
+
+exec "$@"
