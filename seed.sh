@@ -4,7 +4,7 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-if [ "$1" == "" ]; then
+if [ "${1-}" == "" ]; then
   #Setup various users, organizations, and datasets
   /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=admin email=fake@fake.com -c /etc/ckan/production.ini > /tmp/user_temp.txt
   /usr/lib/ckan/bin/paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
