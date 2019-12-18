@@ -22,9 +22,9 @@ Build and bring up the containers.
 
     $ make up
 
-Create an admin user. You'll be prompted for a password.
+You may seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
 
-    $ docker-compose run --rm app paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
+    $ docker container exec -it inventoryapp_app_1 /opt/inventory-app/seed.sh
 
 Open CKAN to verify it's working
 
@@ -32,13 +32,17 @@ Open CKAN to verify it's working
 
 ### Docker-compose commands
 
-To enter into the container in interactive mode as root:
+To enter into the app container in interactive mode as root, you will need to run the following:
 
-    $ docker-compose run app bash
+    $ docker container exec -it inventoryapp_app_1 /bin/bash
+
+You may need to use a different container name, this can be found by running the following command and searching for the container name with the image inventoryapp_app:
+
+    $ docker container ls
 
 To run a one off command inside the container:
 
-    $ docker-compose run app <command>
+    $ docker container exec -it inventoryapp_app_1 {command}
 
 Update dependencies.
 
@@ -47,7 +51,6 @@ Update dependencies.
 Update lock file for dependencies.
 
     $ make requirements
-
 
 ### Tests
 
