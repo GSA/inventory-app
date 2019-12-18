@@ -8,7 +8,6 @@ build:
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
 
-
 test:
 	docker-compose build
 
