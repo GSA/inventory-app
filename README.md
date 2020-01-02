@@ -52,6 +52,14 @@ Update lock file for dependencies.
 
     $ make requirements
 
+### Live Editing
+
+To edit CKAN or extension code live, the attached volume needs to be found and used.
+
+You can find the volume by running `docker volume ls`, but the default is `inventoryapp_ckan`. You can then run `docker volume inspect inventoryapp_ckan` to get the location details on your local machine. You may need to edit permissions to this folder to edit under your current user. Once this is complete, use your preferred editor to manage the code as needed.
+
+If you restart the service, the volume stays live. It must be removed manually. If you make edits and want to revert, you can run `docker volume rm -f inventoryapp_ckan`. The docker containers need to be stopped and removed before you can run this command.
+
 ### Tests
 
     $ make test
