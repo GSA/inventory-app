@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Can optionally specify an api key if the user is already created. Add as second argument to command.
+
 set -o errexit
 set -o pipefail
 set -o nounset
