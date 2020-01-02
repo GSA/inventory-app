@@ -24,7 +24,7 @@ Build and bring up the containers.
 
 You may seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
 
-    $ docker container exec -it inventoryapp_app_1 /opt/inventory-app/seed.sh
+    $ docker-compose exec app /opt/inventory-app/seed.sh
 
 Open CKAN to verify it's working
 
@@ -34,15 +34,11 @@ Open CKAN to verify it's working
 
 To enter into the app container in interactive mode as root, you will need to run the following:
 
-    $ docker container exec -it inventoryapp_app_1 /bin/bash
-
-You may need to use a different container name, this can be found by running the following command and searching for the container name with the image inventoryapp_app:
-
-    $ docker container ls
+    $ docker-compose exec app /bin/bash
 
 To run a one off command inside the container:
 
-    $ docker container exec -it inventoryapp_app_1 {command}
+    $ docker-compose exec app {command}
 
 Update dependencies.
 
