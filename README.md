@@ -22,9 +22,11 @@ Build and bring up the containers.
 
     $ make up
 
-Create an admin user. You'll be prompted for a password.
+You may seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
 
-    $ docker-compose run --rm app paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
+    $ docker-compose exec app /opt/inventory-app/seed.sh
+
+_If the user is already created and you would like to rebuild the organization and dataset, you can specify the API key as a second argument to the execution: `docker-compose exec app /opt/inventory-app/seed.sh long-api-key`_
 
 Open CKAN to verify it's working
 
@@ -32,13 +34,13 @@ Open CKAN to verify it's working
 
 ### Docker-compose commands
 
-To enter into the container in interactive mode as root:
+To enter into the app container in interactive mode as root, you will need to run the following:
 
-    $ docker-compose run app bash
+    $ docker-compose exec app /bin/bash
 
 To run a one off command inside the container:
 
-    $ docker-compose run app <command>
+    $ docker-compose exec app {command}
 
 Update dependencies.
 
@@ -48,6 +50,13 @@ Update lock file for dependencies.
 
     $ make requirements
 
+### Live Editing
+
+To edit CKAN or extension code live, the attached volume needs to be found and used.
+
+You can find the volume by running `docker volume ls`, but the default is `inventoryapp_ckan`. You can then run `docker volume inspect inventoryapp_ckan` to get the location details on your local machine. You may need to edit permissions to this folder to edit under your current user. Once this is complete, use your preferred editor to manage the code as needed.
+
+If you restart the service, the volume stays live. It must be removed manually. If you make edits and want to revert, you can run `docker volume rm -f inventoryapp_ckan`. The docker containers need to be stopped and removed before you can run this command.
 
 ### Tests
 
