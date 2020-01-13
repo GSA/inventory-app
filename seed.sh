@@ -6,11 +6,33 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+# The app takes quite a while to startup (solr initialization and
+# migrations), close to a minute. Make sure to give it enough time before
+# starting the tests.
+
+hostname="localhost"
+port="5000"
+retries=20
+while ! nc -z -w 30 "$hostname" "$port" ; do
+  if [ "$retries" -le 0 ]; then
+    return 1
+  fi
+
+  retries=$(( $retries - 1 ))
+  echo 'retrying...'
+  sleep 5
+done
+
+#If api_key is passed, utilize; if not, create new user
 if [ "${1-}" == "" ]; then
+  echo creating user admin
   #Setup various users, organizations, and datasets
-  /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=admin email=fake@fake.com -c /etc/ckan/production.ini > /tmp/user_temp.txt
-  /usr/lib/ckan/bin/paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
-  api_key=$(grep -oP "apikey.: u.\K.+" /tmp/user_temp.txt | cut -d "'" -f1)
+  if /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=admin email=fake@fake.com -c /etc/ckan/production.ini > /tmp/user_temp.txt ; then
+    /usr/lib/ckan/bin/paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
+    api_key=$(grep -oP "apikey.: u.\K.+" /tmp/user_temp.txt | cut -d "'" -f1)
+  else
+    api_key=$(/usr/lib/ckan/bin/paster --plugin=ckan user admin -c /etc/ckan/production.ini | grep -oP "apikey=\K.+ " | cut -d " " -f1)
+  fi
 
 else
   api_key="$1"
@@ -45,7 +67,6 @@ curl -X POST \
   "author_email": null,
   "state": "active",
   "version": null,
-  "creator_user_id": "5c1231ea-9d6c-4db1-95ab-175a4c11d764",
   "type": "dataset",
   "resources": [
     {
@@ -61,10 +82,7 @@ curl -X POST \
         "formatReadable": "Format",
         "created": "Created"
       },
-      "package_id": "c9842276-77d7-4082-8e20-d53d04ba3211",
       "webstore_last_updated": null,
-      "datastore_active": false,
-      "id": "e61acaac-c7b7-4be6-a7fd-033a3c0509e0",
       "clear_upload": "",
       "state": "active",
       "size": null,
@@ -84,7 +102,6 @@ curl -X POST \
       "webstore_url": null,
       "last_modified": null,
       "position": 0,
-      "revision_id": "02c5540a-ec1a-4ae1-afd7-1b3c57d8d9b5",
       "resource_type": "file"
     }
   ],
