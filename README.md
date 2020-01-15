@@ -46,9 +46,15 @@ Update dependencies.
 
     $ make update-dependencies
 
-Update lock file for dependencies.
+Update lock file for dependencies. **Because of a version conflict for
+repoze.who, special care should be taken to make sure that repoze.who==1.0.18 is
+shipped to production in order to be compatible with ckanext-saml2. After
+generating the requirements-freeze.txt, manually review the file to make sure
+the versions are correct. See https://github.com/GSA/catalog-app/issues/78 for
+more details.**
 
     $ make requirements
+
 
 ### Live Editing
 
