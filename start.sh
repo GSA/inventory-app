@@ -40,5 +40,8 @@ fi
 # Run migrations
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
 
+# Work around https://github.com/GSA/catalog-app/issues/78
+pip install -U repoze.who==2.0
+
 echo starting ckan...
 exec paster --plugin=ckan serve /etc/ckan/production.ini
