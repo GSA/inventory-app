@@ -1,6 +1,6 @@
 FROM bats/bats
 
-RUN apk add curl
+RUN apk add curl jq
 
 COPY tests/ /tests/
 

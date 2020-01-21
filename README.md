@@ -21,8 +21,9 @@ the `requirements-freeze.txt` for production dependencies. Very little works bey
 Build and bring up the containers.
 
     $ make up
+    $ make up-with-data [_Gives development environment basic user, organization, and dataset_]
 
-You may seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
+You may optionally seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
 
     $ docker-compose exec app /opt/inventory-app/seed.sh
 
