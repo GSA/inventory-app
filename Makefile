@@ -8,12 +8,15 @@ build:
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
 
-
 test:
-	docker-compose build
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml up --abort-on-container-exit test
 
 up:
 	docker-compose up
+
+up-with-data:
+	docker-compose up -f docker-compose.yml -f docker-compose.seed.yml
 
 update-dependencies:
 	docker-compose run --rm app pip install -r requirements.txt

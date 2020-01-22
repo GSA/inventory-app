@@ -41,7 +41,9 @@ pytz
 tzlocal~=1.0
 Markdown~=2.6.11
 repoze.lru==0.6
-repoze.who==2.0
+# CKAN requires 2.0 but ckanext-saml2 requires 1.0.18
+# https://github.com/GSA/catalog-app/issues/78
+repoze.who==1.0.18
 repoze.who-friendlyform==1.0.8
 simplejson==3.3.1
 six==1.7.3
