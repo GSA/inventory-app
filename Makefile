@@ -1,9 +1,12 @@
-.PHONY: all build requirements setup test update-dependencies
+.PHONY: all build clean requirements setup test update-dependencies
 
 all: up
 
 build:
 	docker-compose build
+
+clean:
+	docker-compose down -v --remove-orphans
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
