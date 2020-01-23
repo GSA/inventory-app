@@ -1,4 +1,4 @@
-.PHONY: all build requirements setup test update-dependencies
+.PHONY: all build clean requirements setup test update-dependencies
 
 all: up
 

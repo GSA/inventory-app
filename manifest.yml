@@ -1,0 +1,6 @@
+---
+applications:
+  - name: inventory
+    buildpacks:
+    - python_buildpack
+    random-route: true
