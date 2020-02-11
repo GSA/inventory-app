@@ -1,9 +1,9 @@
--e git+https://github.com/GSA/ckan.git@inventory-bionic#egg=ckan
+-e git+https://github.com/GSA/ckan.git@inventory#egg=ckan
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext-harvest
 -e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
 -e git+https://github.com/GSA/USMetadata.git@master#egg=ckanext-usmetadata
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@master#egg=ckanext-googleanalyticsbasic
--e git+https://github.com/GSA/ckanext-saml2.git@max#egg=ckanext-saml2
+-e git+https://github.com/GSA/ckanext-saml2.git@bionic-m2crypto#egg=ckanext-saml2
 
 # ckan dependencies
 Babel==0.9.6
@@ -51,13 +51,13 @@ solrpy==0.9.5
 sqlalchemy-migrate==0.9.1
 sqlparse==0.1.11
 unicodecsv==0.9.4
-vdm==0.15
+vdm==0.13
 wsgiref==0.1.2
 zope.interface==4.1.1
 
 # ckanext-saml2 dependencies
-M2Crypto~=0.35.2
--e git+https://github.com/GSA/pysaml2.git@max#egg=pysaml2
+M2Crypto>=0.35.2
+-e git+https://github.com/GSA/pysaml2.git@datagov/max-bionic#egg=pysaml2
 
 # ckanext-datajson dependencies
 pyyaml
