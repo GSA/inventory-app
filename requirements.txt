@@ -6,8 +6,6 @@
 -e git+https://github.com/GSA/ckanext-saml2.git@max#egg=ckanext-saml2
 -e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
 Pylons==0.9.7
-# WebOb==1.0.8
-# WebOb==1.8.6
 
 # ckan dependencies
 Babel==0.9.6
