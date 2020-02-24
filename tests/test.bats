@@ -48,3 +48,7 @@ function test_login_and_datasets () {
   # Validate output is 22, curl response for 403 (Forbidden)
   [ "$status" -eq 22 ]
 }
+
+@test "Website display is working" {
+  curl --silent --fail http://app:5000/dataset/test-dataset-1 --cookie ./cookie-jar
+}
