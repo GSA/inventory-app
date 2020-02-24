@@ -50,7 +50,7 @@ pyutilib.component.core==4.5.3
 PyYAML==5.3
 redis==2.10.1
 repoze.lru==0.6
-repoze.who==2.0
+repoze.who==1.0.18
 repoze.who-friendlyform==1.0.8
 requests==2.20.0
 rfc3987==1.3.8

@@ -5,7 +5,7 @@ all: up
 build:
 	docker-compose build
 
-down:
+clean:
 	docker-compose down -v
 
 requirements:
