@@ -37,7 +37,7 @@ services:
       DB_CKAN_DB: ckan
 
   solr:
-    image: datagov/catalog-solr:inventory
+    image: datagov/catalog-solr:inventory2_8
 
 volumes:
   ckan:

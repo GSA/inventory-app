@@ -35,7 +35,7 @@ RUN cd /tmp/Python-$PYTHON_VERSION && \
   ldconfig
 
 RUN /usr/local/bin/pip install -U pip && \
-  /usr/local/bin/pip install virtualenv
+  /usr/local/bin/pip install virtualenv setuptools==36.1
 
 # Create ckan virtualenv
 RUN mkdir -p $CKAN_HOME && \
