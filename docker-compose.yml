@@ -29,7 +29,7 @@ services:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
   db:
-    image: datagov/catalog-db:latest
+    image: datagov/catalog-db:inventory2_8
     environment:
       POSTGRES_USER: postgres
       DB_CKAN_USER: ckan
