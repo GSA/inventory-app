@@ -39,5 +39,8 @@ services:
   solr:
     image: datagov/catalog-solr:inventory2_8
 
+  redis:
+    build: ./redis
+
 volumes:
   ckan:
