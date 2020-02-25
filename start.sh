@@ -29,7 +29,7 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
   curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode action=create \
     --data-urlencode name=inventory \
-    --data-urlencode configSet=ckan2_5
+    --data-urlencode configSet=ckan2_8
 
   # Reload the core
   curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
