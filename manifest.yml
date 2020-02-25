@@ -1,6 +1,17 @@
 ---
+# To apply this manifest: cf push --vars-file vars.yml
 applications:
-  - name: inventory
-    buildpacks:
-    - python_buildpack
+  - name: ((app_name))-solr
+    docker:
+      image: datagov/catalog-solr:inventory
+    routes:
+    - route: ((solr_route))
+  - name: ((app_name))
     random-route: true
+    services: 
+    - ((app_name))-db        # cf create-service aws-rds medium-psql inventory-db
+    - ((app_name))-datastore # cf create-service aws-rds medium-psql inventory-datastore
+    env:
+      DS_RO_USER: datastore_default
+      DS_RO_PASSWORD: ((datastore_readonly_password))
+      SOLR_URL: ((solr_route))/solr/ckan2_5
