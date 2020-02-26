@@ -5,7 +5,7 @@
 Is a [Docker](https://www.docker.com/)-based [CKAN](http://ckan.org) development environment for [inventory.data.gov](https://inventory.data.gov).
 
 _Note: this is currently a work in progress. We're mainly using this to manage
-the `requirements-freeze.txt` for production dependencies. Very little works beyond that._
+the `requirements-freeze.txt` for production dependencies._
 
 
 ## Development
@@ -69,6 +69,56 @@ If you restart the service, the volume stays live. It must be removed manually. 
 
     $ make test
 
+## Deploying to cloud.gov
+
+Copy `vars.yml.template` to `vars.yml`, and customize the values in that file. Then, assuming you're logged in for the Cloud Foundry CLI:
+
+Update and cache all the Python package requirements
+
+```sh
+./vendor_requirements.sh
+```
+
+Create the database used by datastore. `((appname))` should be the same as what you have in vars.yml.
+
+```sh
+$ cf create-service aws-rds medium-psql ((app_name))-datastore
+```
+
+Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available. (See [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time).)
+```sh
+$ cf create-service aws-rds shared-psql ((app_name))-db
+```
+
+Deploy the Solr instance and the app.
+```sh
+$ cf push --vars-file vars.yml
+```
+
+Ensure the inventory app can reach the Solr app.
+```sh
+$ cf add-network-policy ((app_name)) --destination-app ((app_name))-solr --protocol tcp --port 8983
+```
+
+You should now be able to visit `https://&lt;ROUTE&gt;`, where `&lt;ROUTE&gt;` is the route reported by `cf app ((app_name))`.
+
+### Remaining concerns for cloud.gov deployment
+
+* The `repoze.who` workaround in the `cfstart.sh` file shouldn't be necessary
+* We haven't gone past "It responds with a recognizable page!"
+  * We need to sort out how authentication should work, and document that.
+  * Test, test, test, test that everything works as expected.
+* The memory per instance should be right-sized.
+* Staging and production deployments should be driven entirely via CI, including vendoring of dependencies.
+  * The branch `adborden/cloud.gov` includes the start of this work
+* Production should deploy at least two instances of the app for durability.
+* Production should use a non-shared PGSQL instance for durability.
+* Production databases should have a CI-driven process for making dumps into an S3 bucket.
+* The Solr instance deployed in this manifest is not suitable for production use because Solr \
+  requires a durable local filesystem for persistence. cloud.gov can't supply that, so the Solr \
+  deployment for production will need to be outside of cloud.gov. Changes to the instructions: 
+  * Only push the inventory-app: `cf push --vars-file vars.yml ((app_name))`
+  * Set the SOLR_URL explicitly: `cf set-env ((app_name)) SOLR_URL &lt;the-solr-url&gt;`
 
 ## License and Contributing
 

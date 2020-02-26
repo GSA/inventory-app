@@ -13,19 +13,10 @@ set -o pipefail
 DATABASE_URL=$(echo $VCAP_SERVICES | jq -r '.["aws-rds"][] | select(.name == "inventory-db") | .credentials.uri')
 DATASTORE_URL=$(echo $VCAP_SERVICES | jq -r '.["aws-rds"][] | select(.name == "inventory-datastore") | .credentials.uri')
 
-# Parse out the elements of the datastore URL so we can make another one for the neighboring read-only user in the same DB
-if [[ $DATASTORE_URL =~ (.*)'://'(.*):(.*)@(.*):([^/]*)/(.*) ]]; then
-  DS_PROTOCOL=${BASH_REMATCH[1]} \
-  DS_USER=${BASH_REMATCH[2]} \
-  DS_PASSWORD=${BASH_REMATCH[3]} \
-  DS_HOST=${BASH_REMATCH[4]} \
-  DS_PORT=${BASH_REMATCH[5]} \
-  DS_DBNAME=${BASH_REMATCH[6]}
-else
-    echo "Invalid DATASTORE_URL: " $DATASTORE_URL
-    exit 1
-fi
-
+# We need specific datastore URL components so we can construct another URL for the read-only user
+DS_HOST=$(echo $VCAP_SERVICES | jq -r '.["aws-rds"][] | select(.name == "inventory-datastore") | .credentials.host')
+DS_PORT=$(echo $VCAP_SERVICES | jq -r '.["aws-rds"][] | select(.name == "inventory-datastore") | .credentials.port')
+DS_DBNAME=$(echo $VCAP_SERVICES | jq -r '.["aws-rds"][] | select(.name == "inventory-datastore") | .credentials.db_name')
 
 # Edit the config file to use our values
 paster --plugin=ckan config-tool config/production.ini -s server:main -e port=${PORT}
@@ -33,7 +24,7 @@ paster --plugin=ckan config-tool config/production.ini \
     "sqlalchemy.url=${DATABASE_URL}" \
     "solr_url=${SOLR_URL}" \
     "ckan.datastore.write_url=${DATASTORE_URL}" \
-    "ckan.datastore.read_url=${DS_PROTOCOL}://${DS_RO_USER}:${DS_RO_PASSWORD}@${DS_HOST}:${DS_PORT}/${DS_DBNAME}"
+    "ckan.datastore.read_url=postgres://${DS_RO_USER}:${DS_RO_PASSWORD}@${DS_HOST}:${DS_PORT}/${DS_DBNAME}"
 
 echo "Setting up the datastore user"
 DS_PERMS_SQL=$(paster --plugin=ckan datastore set-permissions -c config/production.ini)

@@ -5,13 +5,13 @@ applications:
     docker:
       image: datagov/catalog-solr:inventory
     routes:
-    - route: ((solr_route))
+    - route: ((app_name))-solr.apps.internal
   - name: ((app_name))
     random-route: true
-    services: 
-    - ((app_name))-db        # cf create-service aws-rds medium-psql inventory-db
-    - ((app_name))-datastore # cf create-service aws-rds medium-psql inventory-datastore
+    services:
+    - ((app_name))-db        # cf create-service aws-rds shared-psql ((app_name))-db
+    - ((app_name))-datastore # cf create-service aws-rds medium-psql ((app_name))-datastore
     env:
       DS_RO_USER: datastore_default
       DS_RO_PASSWORD: ((datastore_readonly_password))
-      SOLR_URL: ((solr_route))/solr/ckan2_5
+      SOLR_URL: ((app_name))-solr.apps.internal:8983/solr/ckan2_5
