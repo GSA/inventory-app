@@ -1,4 +1,0 @@
-# Edit in your own values here
-app_name: inventory
-datastore_readonly_password: something
-solr_route: hostname-for-your-solr.app.internal

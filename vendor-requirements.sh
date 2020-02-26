@@ -21,7 +21,7 @@ apt-get -y install swig build-essential python-dev libssl-dev
 curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
 python /tmp/get-pip.py
 
-# As the VCAP user, install the packages, then grab the cached .whls for vendoring
+# As the VCAP user, cache .whls based on the frozen requirements for vendoring
 su - vcap -c 'cd app && pip wheel -r requirements-freeze.txt -w vendor'
 
 EOF
