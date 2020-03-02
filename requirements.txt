@@ -1,5 +1,4 @@
 -e git+https://github.com/GSA/ckan.git@inventory#egg=ckan
--e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext-harvest
 -e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
 -e git+https://github.com/GSA/USMetadata.git@master#egg=ckanext-usmetadata
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@master#egg=ckanext-googleanalyticsbasic
