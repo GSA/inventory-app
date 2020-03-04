@@ -41,7 +41,8 @@ RUN /usr/local/bin/pip install -U pip && \
 
 # Create ckan virtualenv
 RUN mkdir -p $CKAN_HOME && \
-  virtualenv $CKAN_HOME -p /usr/local/bin/python
+  virtualenv $CKAN_HOME -p /usr/local/bin/python && \
+  /usr/local/bin/pip install setuptools==44.0.0
 
 COPY requirements.txt /tmp/
 
