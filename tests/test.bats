@@ -31,6 +31,18 @@ function test_login_and_datasets () {
   fi
 }
 
+#checks that the google id is in the html response
+function check_google_id () {
+  google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
+  find_id=$(curl --silent --fail --request GET 'http://app:5000' | grep -o "$google_id")
+
+  if  [ "$find_id" = "$google_id" ]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
 @test "app container is up" {
   wait_for app 5000
 }
@@ -51,4 +63,8 @@ function test_login_and_datasets () {
 
 @test "Website display is working" {
   curl --silent --fail http://app:5000/dataset/test-dataset-1 --cookie ./cookie-jar
+}
+
+@test "Google Analytics ID present" {
+  check_google_id
 }
