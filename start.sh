@@ -47,8 +47,11 @@ if [ "${1-}" = "seed" ]; then
   # nohup some_command &> nohup2.out&
 fi
 
-# Work around https://github.com/GSA/catalog-app/issues/78
-pip install -U repoze.who==2.0
+# Romove this lines if https://github.com/GSA/catalog-app/issues/78 works by updating ckanext-saml2
+# pip install -U repoze.who==2.0
+
+echo Initializing SAML2 ext
+exec paster --plugin=saml2 create -c /etc/ckan/production.ini
 
 echo starting ckan...
 exec paster --plugin=ckan serve /etc/ckan/production.ini
