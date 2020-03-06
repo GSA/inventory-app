@@ -15,6 +15,8 @@ RUN apt-get -q -y install \
   build-essential \
   git \
   libbz2-dev \
+  libgdbm-dev \
+  libmagic-dev \
   libmagic-dev \
   libpq-dev \
   libssl-dev \
