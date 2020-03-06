@@ -43,6 +43,17 @@ function check_google_id () {
   fi
 }
 
+function test_datastore_request () {
+  datastore_request=$(curl --fail --location --request GET "http://app:5000/api/3/action/datastore_search?resource_id=_table_metadata" | grep -o '"success": true')
+
+  if [ "$datastore_request" = '"success": true' ]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
+
+
 @test "app container is up" {
   wait_for app 5000
 }
@@ -67,4 +78,8 @@ function check_google_id () {
 
 @test "Google Analytics ID present" {
   check_google_id
+}
+
+@test "Datastore successful get request" {
+  test_datastore_request
 }
