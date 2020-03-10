@@ -20,6 +20,7 @@ RUN apt-get -q -y install \
   libssl-dev \
   libz-dev \
   netcat \
+  jq \
   swig \
   wget
 
