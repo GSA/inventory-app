@@ -59,6 +59,8 @@ function test_datastore_request () {
     else
       return 1;
     fi
+  else
+    return 1
   fi
 }
 
