@@ -23,7 +23,8 @@ RUN apt-get -q -y install \
   libz-dev \
   netcat \
   swig \
-  wget
+  wget \
+  xmlsec1
 
 # Download  python
 RUN wget -O- https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz | tar -zxv -C /tmp
