@@ -44,12 +44,21 @@ function check_google_id () {
 }
 
 function test_datastore_request () {
-  datastore_request=$(curl --fail --location --request GET "http://app:5000/api/3/action/datastore_search?resource_id=_table_metadata" | grep -o '"success": true')
+  #make a request to get cookies so that we can be logged on
+  curl --silent --fail 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
+  package_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq '.result | .id')
 
+  datastore_request=$(curl --fail --location --request GET "http://app:5000/api/3/action/datastore_search?resource_id=_table_metadata" | grep -o '"success": true')
   if [ "$datastore_request" = '"success": true' ]; then
-    return 0;
-  else
-    return 1;
+    #make a new package
+    resource_id=$(curl -X POST 'http://app:5000/api/3/action/datastore_create' --cookie ./cookie-jar -d '{"resource": {"package_id": '$package_id'}, "fields": [ {"id": "a"}, {"id": "b"} ], "records": [ { "a": 1, "b": "xyz"}, {"a": 2, "b": "zzz"} ]}' | jq '.result.resource_id')
+    #delete resource
+    delete_resource=$(curl -X POST 'http://app:5000/api/3/action/datastore_delete' --cookie ./cookie-jar -H "Authorization: $api_key" -d '{"resource_id": '$resource_id'}' | grep -o '"success": true')
+    if [ "$delete_resource" = '"success": true' ]; then
+      return 0;
+    else
+      return 1;
+    fi
   fi
 }
 
@@ -80,6 +89,6 @@ function test_datastore_request () {
   check_google_id
 }
 
-@test "Datastore successful get request" {
+@test "Datastore functioning properly" {
   test_datastore_request
 }
