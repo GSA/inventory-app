@@ -37,8 +37,14 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode core=inventory
 fi
 
+echo Initializing SAML2 ext
+# paster --plugin=ckanext-saml2 saml2 create -c /etc/ckan/production.ini
+
 # Run migrations
+echo upgrade ckan db
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
+
+
 
 if [ "${1-}" = "seed" ]; then
   # Run seed script in new process
@@ -49,9 +55,6 @@ fi
 
 # Romove this lines if https://github.com/GSA/catalog-app/issues/78 works by updating ckanext-saml2
 # pip install -U repoze.who==2.0
-
-echo Initializing SAML2 ext
-exec paster --plugin=saml2 create -c /etc/ckan/production.ini
 
 echo starting ckan...
 exec paster --plugin=ckan serve /etc/ckan/production.ini
