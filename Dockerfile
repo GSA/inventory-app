@@ -9,7 +9,7 @@ ENV CKAN_ENV docker
 WORKDIR /opt/inventory-app
 
 # Install required packages
-RUN apt-get -q -y update
+RUN apt-get -q -y update --fix-missing
 RUN apt-get -q -y install \
   curl \
   build-essential \

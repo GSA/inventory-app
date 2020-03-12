@@ -5,6 +5,7 @@ services:
     command: /opt/inventory-app/start.sh
     depends_on:
       - datastore
+      - datapusher
       - db
       - solr
     environment:
@@ -27,6 +28,13 @@ services:
       POSTGRES_DB: datastore
     volumes:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  datapusher:
+    container_name: datapusher-inventory
+    build:
+      context: datapusher/
+    ports:
+      - "8800:8800"
 
   db:
     image: datagov/catalog-db:inventory2_8
