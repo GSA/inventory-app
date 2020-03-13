@@ -100,7 +100,7 @@ Ensure the inventory app can reach the Solr app.
 $ cf add-network-policy ((app_name)) --destination-app ((app_name))-solr --protocol tcp --port 8983
 ```
 
-You should now be able to visit `https://&lt;ROUTE&gt;`, where `&lt;ROUTE&gt;` is the route reported by `cf app ((app_name))`.
+You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ((app_name))`.
 
 ### Remaining concerns for cloud.gov deployment
 
