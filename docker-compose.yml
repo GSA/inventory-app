@@ -35,6 +35,9 @@ services:
       context: datapusher/
     ports:
       - "8800:8800"
+    # activate if you need to debug datapusher
+    # volumes:
+    #   - /home/user/my_code/datapusher:/srv/app/src/datapusher
 
   db:
     image: datagov/catalog-db:inventory2_8

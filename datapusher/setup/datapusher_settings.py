@@ -1,6 +1,6 @@
 import uuid
 
-DEBUG = False
+DEBUG = True
 TESTING = False
 SECRET_KEY = str(uuid.uuid4())
 USERNAME = str(uuid.uuid4())
@@ -22,7 +22,7 @@ PORT = 8800
 #FROM_EMAIL = 'server-error@example.com'
 #ADMINS = ['yourname@example.com']  # where to send emails
 
-#LOG_FILE = '/tmp/ckan_service.log'
+LOG_FILE = '/tmp/ckan_service.log'
 STDERR = True
 
 # cloud settings

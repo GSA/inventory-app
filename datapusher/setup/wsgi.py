@@ -4,6 +4,6 @@ import sys
 import ckanserviceprovider.web as web
 web.init()
 
-import datapusher.jobs as jobs
+from datapusher import jobs
 
 application = web.app

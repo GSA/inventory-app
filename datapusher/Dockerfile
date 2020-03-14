@@ -19,21 +19,21 @@ RUN apk add --no-cache python \
     apk add --no-cache --virtual .build-deps \
     gcc \
     git \
+    util-linux \
     musl-dev \
     python-dev \
     libxml2-dev \
-    libxslt-dev && \
-    # Fetch datapusher and install
-    mkdir ${APP_DIR}/src && cd ${APP_DIR}/src && \
+    libxslt-dev 
+
+# Fetch datapusher and install
+RUN mkdir ${APP_DIR}/src && cd ${APP_DIR}/src && \
     git clone -b ${GIT_BRANCH} --depth=1 --single-branch ${GIT_URL} && \
     cd datapusher && \
-    python setup.py install && \
-    pip install --no-cache-dir -r requirements.txt && \
-    # Remove temporary packages and files
-    apk del .build-deps && \
-    rm -rf ${APP_DIR}/src
+    pip install -r requirements.txt && \
+    python setup.py develop
 
 COPY setup ${APP_DIR}
 
 EXPOSE 8800
-CMD ["gunicorn", "--bind=0.0.0.0:8800", "--log-file=-", "wsgi"]
+# --reload restats gunicoir when code changes
+CMD ["gunicorn", "--reload", "--bind=0.0.0.0:8800", "--log-file=-", "wsgi"]
