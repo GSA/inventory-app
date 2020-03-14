@@ -1,4 +1,7 @@
--e 'git+https://github.com/ckan/ckan.git@ckan-2.8.3#egg=ckan'
+# -e 'git+https://github.com/ckan/ckan.git@ckan-2.8.3#egg=ckan'
+
+# datapusher hotfix. CKAN has an error
+-e git+https://github.com/avdata99/ckan@my_2.8.3#egg=ckan
 -e  git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
 
 #
