@@ -28,6 +28,11 @@ services:
     volumes:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
+  datapusher:
+    image: govtnz/ckan_datapusher
+    ports:
+      - "8800:8000"
+    
   db:
     image: datagov/catalog-db:inventory2_8
     environment:
