@@ -47,5 +47,10 @@ if [ "${1-}" = "seed" ]; then
   # nohup some_command &> nohup2.out&
 fi
 
+# Start xloader
+echo starting xloader worker ...
+exec paster --plugin=ckan jobs worker -c /etc/ckan/production.ini &
+
+# Starts CKAN
 echo starting ckan...
 exec paster --plugin=ckan serve /etc/ckan/production.ini
