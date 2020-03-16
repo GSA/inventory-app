@@ -9,7 +9,7 @@ ENV CKAN_ENV docker
 WORKDIR /opt/inventory-app
 
 # Install required packages
-RUN apt-get -q -y update
+RUN apt-get -q -y update --fix-missing
 RUN apt-get -q -y install \
   curl \
   build-essential \
@@ -22,7 +22,8 @@ RUN apt-get -q -y install \
   netcat \
   jq \
   swig \
-  wget
+  wget \
+  libsqlite3-dev
 
 # Download  python
 RUN wget -O- https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz | tar -zxv -C /tmp
