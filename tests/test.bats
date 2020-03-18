@@ -94,3 +94,13 @@ function test_datastore_request () {
 @test "Datastore functioning properly" {
   test_datastore_request
 }
+
+@test "usmetadata working" {
+  curl 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
+  common_core=$(curl -X GET "http://app:5000/dataset/test-dataset-1" --cookie ./cookie-jar | grep -o "Common Core Metadata")
+  if [ "$common_core" = "Common Core Metadata" ]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
