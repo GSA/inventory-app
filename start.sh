@@ -37,6 +37,13 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode core=inventory
 fi
 
+# Work around for https://github.com/GSA/datagov-deploy/issues/961
+# Use psycopg2==2.7.7 to do db init then switch back.
+frozen_psycopg2=$(pip freeze | grep psycopg2)
+pip install psycopg2==2.7.7
+paster --plugin=ckan db init -c /etc/ckan/production.ini
+pip install $frozen_psycopg2
+
 # Run migrations
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
 
