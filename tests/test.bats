@@ -106,7 +106,7 @@ function test_datastore_request () {
 }
 
 @test "datapusher working" {
-  datapusher_status=$(curl -X GET "http://datapusher:8800/status" | grep -o "push_to_datastore")
+  datapusher_status=$(curl -X GET "http://datapusher:8000/status" | grep -o "push_to_datastore")
   # {"job_types": ["push_to_datastore"], "name": "datapusher", "stats": {"complete": 0, "error": 0, "pending": 0}, "version": 0.1}
   if [ "$datapusher_status" = "push_to_datastore" ]; then
     return 0;

@@ -6,3 +6,4 @@ services:
       dockerfile: Dockerfile.test
     depends_on:
       - app
+      - datapusher
