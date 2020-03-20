@@ -5,7 +5,7 @@ all: up
 build:
 	docker-compose build
 
-clean:
+down:
 	docker-compose down -v
 
 requirements:
@@ -19,6 +19,7 @@ up:
 	docker-compose up
 
 up-with-data:
+	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build
 	docker-compose -f docker-compose.yml -f docker-compose.seed.yml up
 
 update-dependencies:

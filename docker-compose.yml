@@ -29,7 +29,7 @@ services:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
   datapusher:
-    image: govtnz/ckan_datapusher
+    image: viderum/datapusher-1:v9
     ports:
       - "8800:8000"
     
