@@ -4,7 +4,7 @@ bleach==1.5.0
 certifi==2019.11.28
 cffi==1.14.0
 chardet==3.0.4
--e git+https://github.com/GSA/ckan.git@c4ec614b49705860b05fa7d0e10c0ce7675e785e#egg=ckan
+-e git+https://github.com/GSA/ckan.git@ae53fe43d91e9ffff161509547243c45b0b2e752#egg=ckan
 -e git+https://github.com/GSA/ckanext-datajson.git@177c9d8719964feed341541aae9a4d1009944be5#egg=ckanext_datajson
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@0b90194d77938e59ecb7d6937c201bd6815447f8#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
