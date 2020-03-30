@@ -10,7 +10,7 @@ Pylons==0.9.7
 # ckan dependencies
 Babel==0.9.6
 Beaker==1.6.4
-bleach==3.1.1
+bleach==3.1.2
 FormEncode==1.2.6
 Genshi==0.6
 Jinja2~=2.10.1
