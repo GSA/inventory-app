@@ -3,7 +3,7 @@
 -e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
 -e git+https://github.com/GSA/USMetadata.git@master#egg=ckanext-usmetadata
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@master#egg=ckanext-googleanalyticsbasic
--e git+https://github.com/GSA/ckanext-saml2.git@max#egg=ckanext-saml2
+-e git+https://github.com/GSA/ckanext-saml2.git@datagov/v0.4.0#egg=ckanext-saml2
 
 # ckan dependencies
 Babel==0.9.6
