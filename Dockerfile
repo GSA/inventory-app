@@ -35,11 +35,12 @@ RUN cd /tmp/Python-$PYTHON_VERSION && \
   ldconfig
 
 RUN /usr/local/bin/pip install -U pip && \
-  /usr/local/bin/pip install virtualenv
+  /usr/local/bin/pip install virtualenv && \
+  /usr/local/bin/pip install -U setuptools
 
 # Create ckan virtualenv
 RUN mkdir -p $CKAN_HOME && \
-  virtualenv $CKAN_HOME --no-site-packages -p /usr/local/bin/python
+  virtualenv $CKAN_HOME -p /usr/local/bin/python
 
 COPY requirements.txt /tmp/
 

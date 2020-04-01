@@ -4,28 +4,29 @@
 -e git+https://github.com/GSA/USMetadata.git@master#egg=ckanext-usmetadata
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@master#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-saml2.git@datagov/v0.4.0#egg=ckanext-saml2
+-e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
 
 # ckan dependencies
 Babel==0.9.6
 Beaker==1.6.4
-bleach~=1.5.0
+bleach==3.1.4
 FormEncode==1.2.6
 Genshi==0.6
-Jinja2==2.6
+Jinja2~=2.10.1
 Mako==0.9.0
 MarkupSafe==0.18
 Pairtree==0.7.1-T
 Paste==1.7.5.1
 PasteDeploy==1.5.0
 PasteScript==1.7.5
-Pygments==1.6
-Pylons==0.9.7
+Pygments==2.5.2
+
 Routes==1.13
 SQLAlchemy==0.9.6
 Tempita==0.5.2
 WebError==0.10.3
 WebHelpers==1.3
-WebOb==1.0.8
+
 WebTest==1.4.3
 argparse==1.2.1
 decorator==3.4.0
@@ -41,10 +42,12 @@ pytz
 tzlocal~=1.0
 Markdown~=2.6.11
 repoze.lru==0.6
-repoze.who==2.0
+# CKAN requires 2.0 but ckanext-saml2 requires 1.0.18
+# https://github.com/GSA/catalog-app/issues/78
+repoze.who==1.0.18
 repoze.who-friendlyform==1.0.8
 simplejson==3.3.1
-six==1.7.3
+six~=1.9
 solrpy==0.9.5
 sqlalchemy-migrate==0.9.1
 sqlparse==0.1.11
