@@ -59,7 +59,7 @@ zope.interface==4.1.1
 
 # ckanext-saml2 dependencies
 M2Crypto==0.23.0
--e git+https://github.com/GSA/pysaml2.git@datagov/4.9.0#egg=pysaml2
+-e git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 
 # ckanext-datajson dependencies
 pyyaml
