@@ -51,4 +51,4 @@ fi
 pip install -U repoze.who==2.0
 
 echo starting ckan...
-exec paster --plugin=ckan serve /etc/ckan/production.ini
+exec $CKAN_HOME/bin/gunicorn --paste /etc/ckan/production.ini -b 0.0.0.0:5000
