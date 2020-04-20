@@ -17,6 +17,7 @@ enum34==1.1.6
 fanstatic==0.12
 FormEncode==1.2.6
 Genshi==0.6
+gunicorn==19.10.0
 html5lib==1.0.1
 httplib2==0.17.0
 idna==2.7
