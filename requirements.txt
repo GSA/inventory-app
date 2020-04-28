@@ -1,4 +1,4 @@
--e  git+https://github.com/ckan/ckan.git@ckan-2.8.3#egg=ckan
+-e  git+https://github.com/ckan/ckan.git@ckan-2.8.4#egg=ckan
 -e  git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
 -e  git+https://github.com/datopian/USMetadata#egg=ckanext-usmetadata
 -e  git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
