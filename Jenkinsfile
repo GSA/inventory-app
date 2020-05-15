@@ -6,7 +6,7 @@ pipeline {
   }
   stages {
     stage('deploy') {
-      when { anyOf { branch 'master' } }
+      when { anyOf { branch 'inventory_ckan_2.8' } }
       environment {
         ANSIBLE_VAULT_FILE = credentials('ansible-vault-secret')
         SSH_KEY_FILE = credentials('datagov-sandbox')
