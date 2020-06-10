@@ -5,7 +5,7 @@ certifi==2020.4.5.1
 cffi==1.14.0
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@3d540085eeae52261bef37450c7fc7bcd927d658#egg=ckan
--e git+https://github.com/GSA/ckanext-datajson.git@46ed53e6bfa3ad1f60bda06daba8fdf77138b254#egg=ckanext_datajson
+-e git+https://github.com/GSA/ckanext-datajson.git@4ff469736509fe6bfe6a02dbd230ba4ea8b11660#egg=ckanext_datajson
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@0b90194d77938e59ecb7d6937c201bd6815447f8#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
@@ -18,7 +18,7 @@ fanstatic==0.12
 FormEncode==1.2.6
 Genshi==0.6
 gunicorn==19.10.0
-httplib2==0.17.3
+httplib2==0.18.1
 idna==2.7
 ipaddress==1.0.23
 Jinja2==2.10.3
@@ -56,7 +56,7 @@ requests==2.20.0
 rfc3987==1.3.8
 Routes==1.13
 simplejson==3.3.1
-six==1.14.0
+six==1.15.0
 solrpy==0.9.5
 SQLAlchemy==0.9.6
 sqlalchemy-migrate==0.9.1
