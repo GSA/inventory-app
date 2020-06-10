@@ -18,7 +18,7 @@ fanstatic==0.12
 FormEncode==1.2.6
 Genshi==0.6
 gunicorn==19.10.0
-httplib2==0.17.3
+httplib2==0.18.1
 idna==2.7
 ipaddress==1.0.23
 Jinja2==2.10.3
@@ -56,7 +56,7 @@ requests==2.20.0
 rfc3987==1.3.8
 Routes==1.13
 simplejson==3.3.1
-six==1.14.0
+six==1.15.0
 solrpy==0.9.5
 SQLAlchemy==0.9.6
 sqlalchemy-migrate==0.9.1
