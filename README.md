@@ -43,7 +43,8 @@ To run a one off command inside the container:
 
     $ docker-compose exec app {command}
 
-Update dependencies.
+#### Update dependencies
+To update the dependencies from various libraries, run the following:
 
     $ make update-dependencies
 
