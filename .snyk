@@ -7,4 +7,9 @@ ignore:
         reason: >-
           No remediation available yet; Not affecting us since the storage is not accessible to any other client
         expires: 2021-01-10T06:00:00.000Z
+  SNYK-PYTHON-SQLALCHEMY-173678:
+    - '*':
+        reason: >-
+          No remediation path available
+        expires: 2020-09-01T06:00:00.000Z
 patch: {}
