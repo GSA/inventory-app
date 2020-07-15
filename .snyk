@@ -11,6 +11,7 @@ ignore:
     - '*':
         reason: >-
           No remediation path available for CKAN2.3 (not compatible with Alchemy > 1.x). Need to resolve moving to
-          CKAN2.8 for inventory (https://github.com/GSA/datagov-deploy/issues/993).
+          CKAN2.8 for inventory (https://github.com/GSA/datagov-deploy/issues/993). Reviewed group_by and order_by
+          usage manually, all user input sanitized.
         expires: 2020-08-14T06:00:00.000Z
 patch: {}
