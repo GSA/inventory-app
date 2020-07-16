@@ -14,4 +14,9 @@ ignore:
           CKAN2.8 for inventory (https://github.com/GSA/datagov-deploy/issues/993). Reviewed group_by and order_by
           usage manually, all user input sanitized.
         expires: 2020-08-14T06:00:00.000Z
+  SNYK-PYTHON-PASSLIB-569603:
+    - '*':
+        reason: >-
+          Fix not available in a stable release, and library function not utilized.
+        expires: 2020-10-16T06:00:00.000Z
 patch: {}
