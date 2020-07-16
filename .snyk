@@ -17,6 +17,6 @@ ignore:
   SNYK-PYTHON-PASSLIB-569603:
     - '*':
         reason: >-
-          Fix not available in a stable release, and library function not utilized.
+          Fix not available in a stable release, and passlib function that is a security risk is not utilized.
         expires: 2020-10-16T06:00:00.000Z
 patch: {}
