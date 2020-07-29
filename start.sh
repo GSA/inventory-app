@@ -48,7 +48,7 @@ if [ "${1-}" = "seed" ]; then
 fi
 
 # Work around https://github.com/GSA/catalog-app/issues/78
-pip install -U repoze.who==2.0
+[[ "$CKAN_ENV" == "dev" ]] && pip install -U repoze.who==2.0
 
 echo starting ckan...
 exec $CKAN_HOME/bin/gunicorn --paste /etc/ckan/production.ini -b 0.0.0.0:5000
