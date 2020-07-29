@@ -2,11 +2,10 @@ Babel==0.9.6
 Beaker==1.6.4
 bleach==3.1.4
 certifi==2020.6.20
-cffi==1.14.1
+cffi==1.14.0
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@3d540085eeae52261bef37450c7fc7bcd927d658#egg=ckan
--e git+https://github.com/GSA/ckanext-datajson.git@bfaa62dd8f84abf01144cf1ebab2da2d1e11c245#egg=ckanext_datajson
--e git+https://github.com/GSA/ckanext-dcat_usmetadata.git@9111edc8dccd0e67b5082baddb4ac4930fb639e4#egg=ckanext_dcat_usmetadata
+-e git+https://github.com/GSA/ckanext-datajson.git@37f2b7a16dfd49970a7b3348db78d77e25a1d359#egg=ckanext_datajson
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@0b90194d77938e59ecb7d6937c201bd6815447f8#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
@@ -53,7 +52,7 @@ pyutilib.component.core==4.5.3
 PyYAML==5.3.1
 redis==2.10.1
 repoze.lru==0.6
-repoze.who==2.0
+repoze.who==1.0.18
 repoze.who-friendlyform==1.0.8
 requests==2.20.0
 rfc3987==1.3.8
