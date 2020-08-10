@@ -19,4 +19,9 @@ ignore:
         reason: >-
           Fix not available in a stable release, and passlib function that is a security risk is not utilized.
         expires: 2020-10-16T06:00:00.000Z
+  SNYK-PYTHON-PYYAML-590151:
+    - '*':
+        reason: >-
+          There is no fix for PyYaml at this time. Currently, also uses for pyyaml call the safe_load or safe_load_all functions.
+        expires: 2020-08-27T06:00:00.000Z
 patch: {}
