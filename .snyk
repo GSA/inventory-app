@@ -22,7 +22,6 @@ ignore:
   SNYK-PYTHON-PYYAML-590151:
     - '*':
         reason: >-
-          There is no fix for PyYaml at this time. Only trusted operators are allowed to run yaml files on our services.
-          These operators should only be using trusted sources as well.
+          There is no fix for PyYaml at this time. Currently, also uses for pyyaml call the safe_load or safe_load_all functions.
         expires: 2020-08-27T06:00:00.000Z
 patch: {}
