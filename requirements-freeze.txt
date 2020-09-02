@@ -2,7 +2,7 @@ Babel==0.9.6
 Beaker==1.6.4
 bleach==3.1.4
 certifi==2020.6.20
-cffi==1.14.2
+cffi==1.14.1
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@3d540085eeae52261bef37450c7fc7bcd927d658#egg=ckan
 -e git+https://github.com/GSA/ckanext-datajson.git@214ec53c9071d18bc7f7a241a28f6d7f0038276e#egg=ckanext_datajson
