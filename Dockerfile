@@ -43,7 +43,7 @@ RUN /usr/local/bin/pip install -U pip && \
 RUN mkdir -p $CKAN_HOME && \
   virtualenv $CKAN_HOME -p /usr/local/bin/python
 
-COPY $REQUIREMENTS_FILE /tmp/
+COPY $REQUIREMENTS_FILE /tmp/requirements.txt
 
 # Install ckan dependencies
 RUN $CKAN_HOME/bin/pip install -r /tmp/requirements.txt
