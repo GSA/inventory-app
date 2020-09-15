@@ -44,7 +44,8 @@ To run a one off command inside the container:
     $ docker-compose exec app {command}
 
 #### Update dependencies
-To update the dependencies from various libraries, run the following:
+To update the dependencies from various libraries (usually handled by running build),
+run the following:
 
     $ make update-dependencies
 
@@ -56,6 +57,10 @@ the versions are correct. See https://github.com/GSA/catalog-app/issues/78 for
 more details.**
 
     $ make requirements
+
+This freezes the requirements at `requirements-freeze.txt`, and should only be done
+when tests are passing locally. CircleCi will run the build against this 
+`requirements-freeze.txt` file to validate that the code should work in production.
 
 
 ### Live Editing
