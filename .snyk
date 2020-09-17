@@ -36,4 +36,14 @@ ignore:
       reason: >-
         Fix not available. No known usage of this library inside the CKAN app or it's extensions.
       expires: 2020-12-16T06:00:00.000Z
+  SNYK-PYTHON-PIP-609855:
+    - '*':
+      reason: >-
+        Defunct issue, installed pip is 20.0.2 (confirmed locally and on server systems). Not actually an issue.
+      expires: 2021-03-01T06:00:00.000Z
+  SNYK-PYTHON-SOLRPY-598893:
+    - '*':
+      reason: >-
+        No remediation path available, and eval function is not used. Upstream uses pysolr, which will resolve the issue.
+      expires: 2020-11-17T06:00:00.000Z
 patch: {}
