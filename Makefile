@@ -24,3 +24,6 @@ up-with-data:
 
 update-dependencies:
 	docker-compose run --rm app pip install -r requirements.txt
+
+snyk-monitor:
+	snyk monitor --project-name=GSA/inventory-next --package-manager=pip --org=data.gov --file=requirements-freeze.tx
