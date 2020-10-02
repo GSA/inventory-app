@@ -27,15 +27,10 @@ jobs:
       - image: circleci/python:3.6-node
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v4-pipenv-{{ checksum "Pipfile.lock" }}
-            - v4-pipenv-
-      - run: pipenv sync --dev
       - run:
           name: install snyk
           command: sudo npm install -g snyk
-      - run: snyk monitor --project-name=GSA/inventory-next
+      - run: snyk monitor --project-name=GSA/inventory-next --package-manager=pip
 
 
 workflows:
