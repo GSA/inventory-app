@@ -52,4 +52,4 @@ workflows:
       - snyk-monitor:
           filters:
             branches:
-              only: sny/monitor-inventory-2-8
+              only: snyk/monitor-inventory-2-8
