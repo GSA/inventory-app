@@ -17,7 +17,25 @@ jobs:
       - checkout
       - deploy:
           name: jenkins
-          command: bin/jenkins_build deploy-ci-app-inventory-next
+          command: bin/jenkins_build deploy-ci-app-inventory
+  
+  # Snapshots the dependencies. Snyk will send notifications if any new
+  # vulnerabilities appear for this snapshot. This should only be run on
+  # `master`, since it represents the state of shipped dependencies.
+  snyk-monitor:
+    docker:
+      - image: circleci/python:3.6-node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v4-pipenv-{{ checksum "Pipfile.lock" }}
+            - v4-pipenv-
+      - run: pipenv sync --dev
+      - run:
+          name: install snyk
+          command: sudo npm install -g snyk
+      - run: snyk monitor --project-name=GSA/inventory-next
 
 
 workflows:
@@ -31,3 +49,7 @@ workflows:
           filters:
             branches:
               only: inventory_ckan_2.8
+      - snyk-monitor:
+          filters:
+            branches:
+              only: sny/monitor-inventory-2-8
