@@ -30,4 +30,4 @@ workflows:
             - build
           filters:
             branches:
-              only: master
+              only: improved-metadata-form
