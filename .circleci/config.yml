@@ -17,7 +17,7 @@ jobs:
       - checkout
       - deploy:
           name: jenkins
-          command: bin/jenkins_build deploy-ci-app-inventory
+          command: bin/jenkins_build deploy-ci-app-inventory-next
 
 
 workflows:
@@ -31,5 +31,4 @@ workflows:
           filters:
             branches:
               only: 
-                - master
                 - inventory_ckan_2.8
