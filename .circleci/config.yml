@@ -30,4 +30,6 @@ workflows:
             - build
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - inventory_ckan_2.8
