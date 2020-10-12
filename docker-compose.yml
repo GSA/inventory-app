@@ -28,8 +28,13 @@ services:
     volumes:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
 
+  datapusher:
+    image: viderum/datapusher-1:v9
+    ports:
+      - "8800:8000"
+    
   db:
-    image: datagov/catalog-db:latest
+    image: datagov/catalog-db:inventory2_8
     environment:
       POSTGRES_USER: postgres
       DB_CKAN_USER: ckan
@@ -37,7 +42,10 @@ services:
       DB_CKAN_DB: ckan
 
   solr:
-    image: datagov/catalog-solr:inventory
+    image: datagov/catalog-solr:inventory2_8
+
+  redis:
+    build: ./redis
 
 volumes:
   ckan:

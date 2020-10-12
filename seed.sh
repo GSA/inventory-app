@@ -27,7 +27,7 @@ done
 if [ "${1-}" == "" ]; then
   echo creating user admin
   #Setup various users, organizations, and datasets
-  if /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=admin email=fake@fake.com -c /etc/ckan/production.ini > /tmp/user_temp.txt ; then
+  if /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=password email=fake@fake.com -c /etc/ckan/production.ini > /tmp/user_temp.txt ; then
     /usr/lib/ckan/bin/paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
     api_key=$(grep -oP "apikey.: u.\K.+" /tmp/user_temp.txt | cut -d "'" -f1)
   else

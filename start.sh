@@ -29,7 +29,7 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
   curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode action=create \
     --data-urlencode name=inventory \
-    --data-urlencode configSet=ckan2_5
+    --data-urlencode configSet=ckan2_8
 
   # Reload the core
   curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
@@ -46,9 +46,6 @@ if [ "${1-}" = "seed" ]; then
   nohup /opt/inventory-app/seed.sh &> /tmp/nohup.out&
   # nohup some_command &> nohup2.out&
 fi
-
-# Work around https://github.com/GSA/catalog-app/issues/78
-pip install -U repoze.who==2.0
 
 echo starting ckan...
 exec $CKAN_HOME/bin/gunicorn --paste /etc/ckan/production.ini -b 0.0.0.0:5000

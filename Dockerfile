@@ -1,7 +1,7 @@
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 
-ARG PYTHON_VERSION=2.7.10
 ARG REQUIREMENTS_FILE=requirements.txt
+ARG PYTHON_VERSION=2.7.17
 
 ENV CKAN_HOME /usr/lib/ckan
 ENV CKAN_CONFIG /etc/ckan/
@@ -10,15 +10,18 @@ ENV CKAN_ENV docker
 WORKDIR /opt/inventory-app
 
 # Install required packages
-RUN apt-get -q -y update
+RUN apt-get -q -y update --fix-missing
 RUN apt-get -q -y install \
   curl \
   build-essential \
   git \
   libbz2-dev \
+  libmagic-dev \
   libpq-dev \
   libssl-dev \
   libz-dev \
+  netcat \
+  jq \
   swig \
   wget
 
@@ -37,7 +40,7 @@ RUN cd /tmp/Python-$PYTHON_VERSION && \
 
 RUN /usr/local/bin/pip install -U pip && \
   /usr/local/bin/pip install virtualenv && \
-  /usr/local/bin/pip install -U setuptools
+  /usr/local/bin/pip install setuptools==44.0.0
 
 # Create ckan virtualenv
 RUN mkdir -p $CKAN_HOME && \
