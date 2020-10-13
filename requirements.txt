@@ -57,6 +57,7 @@ solrpy==0.9.5
 sqlalchemy-migrate==0.9.1
 sqlparse==0.1.11
 unicodecsv==0.9.4
+urllib3==1.25.9
 vdm==0.13
 wsgiref==0.1.2
 zope.interface==4.1.1
