@@ -1,5 +1,6 @@
 FROM ubuntu:18.04
 
+ARG REQUIREMENTS_FILE=requirements.txt
 ARG PYTHON_VERSION=2.7.17
 
 ENV CKAN_HOME /usr/lib/ckan
@@ -45,8 +46,7 @@ RUN /usr/local/bin/pip install -U pip && \
 RUN mkdir -p $CKAN_HOME && \
   virtualenv $CKAN_HOME -p /usr/local/bin/python
 
-
-COPY requirements.txt /tmp/
+COPY $REQUIREMENTS_FILE /tmp/requirements.txt
 
 # Install ckan dependencies
 RUN $CKAN_HOME/bin/pip install -r /tmp/requirements.txt
