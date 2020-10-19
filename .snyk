@@ -21,11 +21,6 @@ ignore:
         CKAN2.8 for catalog (https://github.com/GSA/datagov-ckan-multi/issues/298). Reviewed group_by and order_by
         usage manually, all user input sanitized.
       expires: 2020-11-27T06:00:00.000Z
-  SNYK-PYTHON-PASSLIB-569603:
-    - '*':
-      reason: >-
-        Fix not available in a stable release, and passlib function that is a security risk is not utilized.
-      expires: 2020-10-16T06:00:00.000Z
   SNYK-PYTHON-PYYAML-590151:
     - '*':
       reason: >-

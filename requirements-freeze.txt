@@ -5,7 +5,7 @@ certifi==2020.6.20
 cffi==1.14.3
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@3d540085eeae52261bef37450c7fc7bcd927d658#egg=ckan
--e git+https://github.com/GSA/ckanext-datajson.git@e769f6a3ead4edb07fb88e63c534c05a92519923#egg=ckanext_datajson
+-e git+https://github.com/GSA/ckanext-datajson.git@c10d8d151b92b92024e0b454dbbf5bfa219aa791#egg=ckanext_datajson
 -e git+https://github.com/GSA/ckanext-dcat_usmetadata.git@41b5d9c1261784ed1bbb619dc7699fd6a90a742e#egg=ckanext_dcat_usmetadata
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@54647da628609543e01731bfc37f0c3d0ad9f0e2#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
@@ -34,7 +34,7 @@ MarkupSafe==0.18
 nose==1.3.0
 ofs==0.4.1
 Pairtree===0.7.1-T
-passlib==1.6.2
+passlib==1.7.4
 Paste==1.7.5.1
 PasteDeploy==1.5.0
 PasteScript==1.7.5
