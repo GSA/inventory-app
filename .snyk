@@ -13,7 +13,7 @@ ignore:
           No remediation path available for CKAN2.3 (not compatible with Alchemy > 1.x). Need to resolve moving to
           CKAN2.8 for inventory (https://github.com/GSA/datagov-deploy/issues/993). Reviewed group_by and order_by
           usage manually, all user input sanitized.
-        expires: 2020-10-14T06:00:00.000Z
+        expires: 2020-11-14T06:00:00.000Z
   SNYK-PYTHON-SQLALCHEMY-590109:
     - '*':
       reason: >-
@@ -21,16 +21,11 @@ ignore:
         CKAN2.8 for catalog (https://github.com/GSA/datagov-ckan-multi/issues/298). Reviewed group_by and order_by
         usage manually, all user input sanitized.
       expires: 2020-11-27T06:00:00.000Z
-  SNYK-PYTHON-PASSLIB-569603:
-    - '*':
-      reason: >-
-        Fix not available in a stable release, and passlib function that is a security risk is not utilized.
-      expires: 2020-10-16T06:00:00.000Z
   SNYK-PYTHON-PYYAML-590151:
     - '*':
       reason: >-
         There is no fix for PyYaml at this time. Currently, also uses for pyyaml call the safe_load or safe_load_all functions.
-      expires: 2020-09-27T06:00:00.000Z
+      expires: 2020-11-27T06:00:00.000Z
   SNYK-PYTHON-IPADDRESS-590065:
     - '*':
       reason: >-
