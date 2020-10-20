@@ -6,7 +6,7 @@ cffi==1.14.3
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@3d540085eeae52261bef37450c7fc7bcd927d658#egg=ckan
 -e git+https://github.com/GSA/ckanext-datajson.git@c10d8d151b92b92024e0b454dbbf5bfa219aa791#egg=ckanext_datajson
--e git+https://github.com/GSA/ckanext-dcat_usmetadata.git@39511f325713f3a3d7be99cafff3dff5b3403c7a#egg=ckanext_dcat_usmetadata
+-e git+https://github.com/GSA/ckanext-dcat_usmetadata.git@cd29e0adb7de17bddb61e5860bbdf87bb50053f5#egg=ckanext_dcat_usmetadata
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@54647da628609543e01731bfc37f0c3d0ad9f0e2#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/ckan/ckanext-harvest.git@13dbb1eea428e6b274f98c36bf29d42e62a70af7#egg=ckanext_harvest
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
