@@ -7,5 +7,20 @@ ignore:
       reason: >-
         No remediation path available (cannot upgrade to SQLAlchemy 1.2). 
         Reviewed group_by and order_by usage manually, all user input sanitized.
-      expires: 2020-11-17T06:00:00.000Z
+      expires: 2020-11-20T06:00:00.000Z
+  SNYK-PYTHON-SQLALCHEMY-590109:
+    - '*':
+      reason: >-
+        Reviewed group_by and order_by usage manually, all user input sanitized.
+      expires: 2021-01-20T06:00:00.000Z
+  SNYK-PYTHON-BEAKER-575115:
+    - '*':
+      reason: >-
+        No remediation available yet; Not affecting us since the storage is not accessible to any other client
+      expires: 2020-11-20T06:00:00.000Z
+  SNYK-PYTHON-PYYAML-590151:
+    - '*':
+      reason: >-
+        There is no fix for PyYaml at this time. Currently, all uses of pyyaml call the safe_load or safe_load_all functions.
+      expires: 2020-11-20T06:00:00.000Z
 patch: {}
