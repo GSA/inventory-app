@@ -5,6 +5,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Build app
+          command: make build
+      - run:
+          name: Run app
+          command: make up
+      - run:
           name: Run tests
           command: make test
 
