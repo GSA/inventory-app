@@ -7,13 +7,9 @@ services:
       - datastore
       - db
       - solr
-    environment:
-      DB_CKAN_HOST: db
-      DB_CKAN_USER: ckan
-      DB_CKAN_PASSWORD: pass
-      DB_CKAN_DB: ckan
     ports:
       - "5000:5000"
+    env_file: .env_file
     volumes:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
