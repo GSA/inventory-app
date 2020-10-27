@@ -1,0 +1,15 @@
+# New Relic
+NEW_RELIC_LICENSE_KEY=
+NEW_RELIC_APP_NAME=inventory-next
+NEW_RELIC_MONITOR_MODE=false
+NEW_RELIC_LOG=/var/log/new_relic.log
+NEW_RELIC_LOG_LEVEL=info
+NEW_RELIC_HOST=gov-collector.newrelic.com
+
+
+# CKAN
+DB_CKAN_HOST=db
+DB_CKAN_USER=ckan
+DB_CKAN_PASSWORD=pass
+DB_CKAN_DB=ckan
+CKAN_INI=/etc/ckan/production.ini
