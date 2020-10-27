@@ -1,7 +1,7 @@
--e  git+https://github.com/ckan/ckan.git@ckan-2.8.4#egg=ckan
--e  git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
--e  git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
--e  git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
+-e git+https://github.com/ckan/ckan.git@ckan-2.8.6#egg=ckan
+-e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
+-e git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
+-e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
 -e git+https://github.com/GSA/ckanext-saml2.git@max#egg=ckanext-saml2
 -e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
 -e git+https://github.com/GSA/ckanext-dcat_usmetadata.git#egg=ckanext-dcat_usmetadata
