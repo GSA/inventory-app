@@ -23,8 +23,7 @@ RUN apt-get -q -y install \
   netcat \
   jq \
   swig \
-  wget \
-  vim
+  wget
 
 # Download  python
 RUN wget -O- https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz | tar -zxv -C /tmp
@@ -55,7 +54,6 @@ RUN $CKAN_HOME/bin/pip install -r /tmp/requirements.txt
 COPY entrypoint-docker.sh /
 ENTRYPOINT ["/entrypoint-docker.sh"]
 
-# Not currently in use in development
 COPY config/server_start.sh $CKAN_CONFIG/
 
 CMD ["/bin/bash"]

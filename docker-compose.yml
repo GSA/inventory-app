@@ -9,7 +9,7 @@ services:
       - solr
     ports:
       - "5000:5000"
-    env_file: .env_file
+    env_file: env_file
     volumes:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
