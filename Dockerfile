@@ -4,7 +4,7 @@ ARG REQUIREMENTS_FILE=requirements.txt
 ARG PYTHON_VERSION=2.7.17
 
 ENV CKAN_HOME /usr/lib/ckan
-ENV CKAN_CONFIG /etc/ckan/
+ENV CKAN_CONFIG /etc/ckan
 ENV CKAN_ENV docker
 
 WORKDIR /opt/inventory-app
@@ -56,6 +56,6 @@ COPY entrypoint-docker.sh /
 ENTRYPOINT ["/entrypoint-docker.sh"]
 
 # Not currently in use in development
-COPY config/server_start.sh $CKAN_CONFIG
+COPY config/server_start.sh $CKAN_CONFIG/
 
 CMD ["/bin/bash"]
