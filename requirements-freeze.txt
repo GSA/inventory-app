@@ -44,7 +44,7 @@ psycopg2==2.4.5
 pycparser==2.20
 Pygments==2.5.2
 Pylons==0.9.7
-pyOpenSSL==18.0.0
+pyOpenSSL==19.1.0
 -e git+https://github.com/GSA/pysaml2.git@8b605c824ff1d042e9040a9971c28f369197cac2#egg=pysaml2
 python-dateutil==1.5
 python-memcached==1.48
