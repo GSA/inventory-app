@@ -12,7 +12,7 @@ chardet==3.0.4
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
 -e git+https://github.com/GSA/USMetadata.git@fc26985504f9b14e92d0ed6d8387326e7fb6864d#egg=ckanext_usmetadata
 ckantoolkit==0.0.3
-cryptography==3.1.1
+cryptography==3.2
 decorator==3.4.0
 enum34==1.1.10
 fanstatic==0.12
