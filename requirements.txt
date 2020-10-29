@@ -5,7 +5,7 @@
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic.git@master#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-saml2.git@max#egg=ckanext-saml2
 -e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
-ckanext-dcat-usmetadata==0.1.12
+ckanext-dcat-usmetadata==0.1.13
 
 Pylons==0.9.7
 
