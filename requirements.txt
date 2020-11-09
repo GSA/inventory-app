@@ -27,7 +27,7 @@ PasteScript==1.7.5
 Pygments==2.5.2
 
 Routes==1.13
-SQLAlchemy==0.9.6
+SQLAlchemy==1.3.0
 Tempita==0.5.2
 WebError==0.10.3
 WebHelpers==1.3
