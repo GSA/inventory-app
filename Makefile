@@ -6,7 +6,7 @@ build:
 	docker-compose build
 
 clean:
-	docker-compose down -v
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml down -v
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
