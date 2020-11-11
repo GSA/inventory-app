@@ -1,7 +1,7 @@
 Babel==0.9.6
 Beaker==1.6.4
 bleach==3.1.4
-certifi==2020.6.20
+certifi==2020.11.8
 cffi==1.14.3
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@92d9d70df69eb42207e75c2733eb483c397d6195#egg=ckan
@@ -48,7 +48,7 @@ pyOpenSSL==19.1.0
 -e git+https://github.com/GSA/pysaml2.git@8b605c824ff1d042e9040a9971c28f369197cac2#egg=pysaml2
 python-dateutil==1.5
 python-memcached==1.48
-pytz==2020.1
+pytz==2020.4
 pyutilib.component.core==4.5.3
 PyYAML==5.3.1
 redis==2.10.1
