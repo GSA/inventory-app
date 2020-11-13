@@ -12,7 +12,7 @@ ckanext-dcat-usmetadata==0.1.11
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@54647da628609543e01731bfc37f0c3d0ad9f0e2#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@4c42fbebad3a19ac437993572753e02b49aa504c#egg=ckanext_s3filestore
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
--e git+https://github.com/GSA/USMetadata.git@e5cf4ffc4f504f13b6c2034bd13759714eb48f95#egg=ckanext_usmetadata
+-e git+https://github.com/GSA/USMetadata.git@a6aab9f54fc1a55b8f668dfa0d74e981a3a0df66#egg=ckanext_usmetadata
 ckantoolkit==0.0.4
 click==6.7
 decorator==4.2.1
