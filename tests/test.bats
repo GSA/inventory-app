@@ -77,6 +77,12 @@ function test_datastore_request () {
   test_login_and_datasets
 }
 
+@test "resource is accessible for user" {
+  resource_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq -r '.result.resources[1].id')
+  package_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq -r '.result.id')
+  curl --fail --request GET "http://app:5000/dataset/$package_id/resource/$resource_id/download/test.csv"
+}
+
 @test "data is inaccessible to public" {
   run curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1'
   # Validate output is 22, curl response for 403 (Forbidden)
