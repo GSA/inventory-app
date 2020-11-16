@@ -113,3 +113,13 @@ function test_datastore_request () {
   resource_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq -r '.result.resources[0].id')
   curl --fail --location --request GET "http://app:5000/api/3/action/datastore_search?resource_id=$resource_id&limit=5" --cookie ./cookie-jar
 }
+
+@test "resource_create working" {
+  echo "for,testing,purposes" > test.csv
+  resource_update=$(curl --location -X POST http://app:5000/api/3/action/resource_create -F "package_id=test-dataset-1" -F "name=test-resource-create" -F "upload=./test.csv" -F "resource_type=CSV" -F "format=CSV" --cookie ./cookie-jar | grep -o '"success": true')
+  if [ "$resource_update" = '"success": true' ]; then
+    return 0;
+  else
+    return 1;
+  fi
+}
