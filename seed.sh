@@ -144,13 +144,3 @@ curl -X POST \
   "name": "test-dataset-1",
   "program_code": "010:001"
 }'
-
-# Adding resource(s) via API
-echo -e "for,testing,purposes\n1,2,3" > test.csv
-curl -X POST http://app:5000/api/action/resource_create  \
-  -H "authorization: $api_key" \
-  -F "package_id=test-dataset-1" \
-  -F "name=test-resource-create" \
-  -F "resource_type=CSV" \
-  -F "format=CSV" \
-  -F "upload=@test.csv"
