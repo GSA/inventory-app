@@ -81,7 +81,7 @@ function test_datastore_request () {
   fi
 }
 
-@test "Add dataset via API" {
+@test "Add private dataset via API" {
   # Adding dataset(s) via API
   login
   curl -f -X POST 'http://app:5000/api/3/action/package_create' --cookie ./cookie-jar \
