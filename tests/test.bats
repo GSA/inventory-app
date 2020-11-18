@@ -148,6 +148,7 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
 
 
 @test "resource is accessible for the world" {
+  # USmetadata hooks into edits to ensure datasets with resources are made public in order for the resource file to be publicly accessible.
   resource_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-2' | jq -r '.result.resources[0].id')
   package_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-2' | jq -r '.result.id')
   curl --fail --request GET "http://app:5000/dataset/$package_id/resource/$resource_id/download/test.csv"
