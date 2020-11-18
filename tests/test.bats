@@ -133,7 +133,7 @@ function test_datastore_request () {
 }'
 }
 
-@test "Add resource to existing dataset via API" {
+@test "Add resource to existing private dataset via API" {
   # Adding resource(s) via API
 echo -e "for,testing,purposes\n1,2,3" > test.csv
 login
