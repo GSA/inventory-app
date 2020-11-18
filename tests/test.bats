@@ -74,11 +74,7 @@ function test_datastore_request () {
   login
   dataset_success=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq -r '.success')
 
-  if [ "$dataset_success" = 'true' ]; then
-    return 0;
-  else
-    return 1;
-  fi
+  [ "$dataset_success" = 'true' ]
 }
 
 @test "Add private dataset via API" {

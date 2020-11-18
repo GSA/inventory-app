@@ -48,21 +48,13 @@ services:
     privileged: true
     image: localstack/localstack:0.11.0
     ports:
-      - "4566-4599:4566-4599"
+      - "4572:4572"
       - "8081:8081"
-    # https://github.com/localstack/localstack#configurations
     environment:
-      - SERVICES=s3,sqs
+      - SERVICES=s3
       - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
       - HOSTNAME=
-      - PORT_WEB_UI=8081
-        # LAMBDA_EXECUTOR: Method to use for executing Lambda functions. Possible values are:
-        #   local: run Lambda functions in a temporary directory on the local machine
-        #   docker: run each function invocation in a separate Docker container
-        #   docker-reuse: create one Docker container per function and reuse it across invocations
-      - LAMBDA_EXECUTOR=docker-reuse
-      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
       - DOCKER_HOST=unix:///var/run/docker.sock
       - DEFAULT_REGION=us-east-1
       - START_WEB=1
