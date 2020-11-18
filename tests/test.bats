@@ -37,7 +37,7 @@ function check_google_id () {
 
 function test_datastore_request () {
   #make a request to get cookies so that we can be logged on
-  curl --silent --fail 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
+  login
   package_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq '.result | .id')
 
   datastore_request=$(curl --fail --location --request GET "http://app:5000/api/3/action/datastore_search?resource_id=_table_metadata" | grep -o '"success": true')
@@ -65,13 +65,11 @@ function test_datastore_request () {
   curl --silent --fail http://app:5000/user/login
 }
 
-@test "user login is working" {
-  login
-}
-
 @test "private dataset accessible for user" {
-  sleep 80 # Validate that the seed file has time to implement
+  echo '3 Waiting 80 seconds to validate user & datasets have been seeded' >&3
+  sleep 80
   login
+
   dataset_success=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq -r '.success')
 
   [ "$dataset_success" = 'true' ]
