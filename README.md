@@ -33,6 +33,14 @@ Open CKAN to verify it's working
 
     $ open http://localhost:5000
 
+### Running the application with debugging enabled
+
+1. Build and bring up the containers by running `make build up`
+1. With the application running, copy into your local `src` folder by running `make copy-src`
+1. Stop all running containers
+1. Start all running containers using your local files with `make local`
+1. To make changes: edit code in the `src` folder, stop containers, and run `make local`
+
 ### Docker-compose commands
 
 To enter into the app container in interactive mode as root, you will need to run the following:
