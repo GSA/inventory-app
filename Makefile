@@ -1,5 +1,7 @@
 .PHONY: all build requirements setup test update-dependencies
 
+CKAN_HOME := /usr/lib/ckan
+
 all: up
 
 build:
@@ -7,6 +9,12 @@ build:
 
 clean:
 	docker-compose down -v
+
+copy-src:
+	docker cp inventory-app_app_1:$(CKAN_HOME)/src .
+
+local:
+	docker-compose -f docker-compose.yml -f docker-compose.local.yml up
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
