@@ -23,4 +23,10 @@ ignore:
       reason: >-
         There is no fix for PyYaml at this time. Currently, all uses of pyyaml call the safe_load or safe_load_all functions.
       expires: 2020-11-20T06:00:00.000Z
+  SNYK-PYTHON-M2CRYPTO-1040426:
+    - '*':
+        reason: >-
+          No remediation path available. Issue created: 
+          https://github.com/GSA/datagov-deploy/issues/2472
+        expires: 2020-12-23T06:00:00.000Z
 patch: {}
