@@ -22,6 +22,10 @@ curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
 python /tmp/get-pip.py
 
 # As the VCAP user, cache .whls based on the frozen requirements for vendoring
+mkdir vendor
+chown vcap.vcap vendor
+mkdir src
+chown vcap.vcap src
 su - vcap -c 'cd app && pip wheel -r requirements-freeze.txt -w vendor'
 
 EOF

@@ -82,13 +82,13 @@ Copy `vars.yml.template` to `vars.yml`, and customize the values in that file. T
 Update and cache all the Python package requirements
 
 ```sh
-./vendor_requirements.sh
+./vendor-requirements.sh
 ```
 
 Create the database used by datastore. `((appname))` should be the same as what you have in vars.yml.
 
 ```sh
-$ cf create-service aws-rds medium-psql ((app_name))-datastore
+$ cf create-service aws-rds micro-psql ((app_name))-datastore
 ```
 
 Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available. (See [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time).)
