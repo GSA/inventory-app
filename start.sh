@@ -15,6 +15,7 @@ function wait_for () {
 
 wait_for solr 8983
 wait_for db 5432
+wait_for localstack-container 4572
 
 # Even though solr is listening, it needs a moment before the core status
 # check will return successfully.

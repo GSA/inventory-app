@@ -6,7 +6,7 @@ build:
 	docker-compose build
 
 clean:
-	docker-compose down -v
+	docker-compose down -v --remove-orphans
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt

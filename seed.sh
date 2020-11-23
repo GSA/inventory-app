@@ -47,6 +47,15 @@ curl -X POST \
 
 echo ''
 
+# Make sure package is removed
+curl -X POST http://app:5000/api/action/package_delete  \
+  -H "authorization: $api_key" \
+  -H 'content-type: application/json' \
+  -d '
+{
+  "id": "test-dataset-1"
+}'
+
 # Adding dataset(s) via API
 curl -X POST \
   http://localhost:5000/api/3/action/package_create \

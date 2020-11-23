@@ -7,3 +7,4 @@ services:
     depends_on:
       - app
       - datapusher
+      - localstack-container
