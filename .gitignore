@@ -1,3 +1,5 @@
 src/
 /tmp/*
 *.csv
+vendor/*
+vars.yml
