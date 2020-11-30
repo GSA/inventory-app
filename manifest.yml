@@ -3,7 +3,7 @@
 applications:
   - name: ((app_name))-solr
     docker:
-      image: datagov/catalog-solr:inventory
+      image: datagov/catalog-solr:inventory2_8
     routes:
     - route: ((app_name))-solr.apps.internal
   - name: ((app_name))
@@ -16,4 +16,4 @@ applications:
     env:
       DS_RO_USER: datastore_default
       DS_RO_PASSWORD: ((datastore_readonly_password))
-      SOLR_URL: http://((app_name))-solr.apps.internal:8983/solr/ckan2_5
+      SOLR_URL: http://((app_name))-solr.apps.internal:8983/solr/ckan2_8
