@@ -1,3 +1,9 @@
+# This line ensures that when no binary is available from the index upstream, 
+# pip checks the vendor directory before trying to build a binary itself.
+# This enables us to supply individual binaries up front to avoid
+# a messy compile at deploy time (eg when deploying to cloud.gov/Cloud Foundry).
+--find-links vendor
+
 -e git+https://github.com/ckan/ckan.git@ckan-2.8.6#egg=ckan
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
@@ -75,8 +81,8 @@ Werkzeug==0.15.3         # via flask
 zope.interface==4.3.2
 
 # ckanext-saml2 dependencies
-M2Crypto
--e git+https://github.com/GSA/pysaml2.git@max#egg=pysaml2
+# M2Crypto
+# -e git+https://github.com/GSA/pysaml2.git@max#egg=pysaml2
 
 #datajson
 jsonschema~=2.4.0
