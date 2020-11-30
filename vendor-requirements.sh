@@ -26,6 +26,6 @@ mkdir vendor
 chown vcap.vcap vendor
 mkdir src
 chown vcap.vcap src
-su - vcap -c 'cd app && pip wheel -r requirements-freeze.txt -w vendor'
+su - vcap -c 'cd app && pip download -r requirements.txt --no-binary=:none: -d vendor'
 
 EOF
