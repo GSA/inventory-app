@@ -26,7 +26,8 @@ ignore:
   SNYK-PYTHON-M2CRYPTO-1040426:
     - '*':
         reason: >-
-          No remediation path available. Issue created: 
-          https://github.com/GSA/datagov-deploy/issues/2472
-        expires: 2020-12-23T06:00:00.000Z
+          Vulnerable code functions are not utilized in CKAN code base (RSA decrypt functionality).
+          No fix for M2Crypto (RSA module) at this time.
+          Community believes this to be a medium severity vulnerability.
+        expires: 2020-02-03T06:00:00.000Z
 patch: {}
