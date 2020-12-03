@@ -2,7 +2,7 @@
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
 -e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
--e git+https://github.com/GSA/ckanext-saml2.git@max#egg=ckanext-saml2
+-e git+https://github.com/GSA/ckanext-saml2.git@063935d1836eaeebf4b00305c9e13ce27cf0ea66#egg=ckanext-saml2
 -e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
 ckanext-dcat-usmetadata~=0.2
 -e git+https://github.com/GSA/ckanext-s3filestore@datagov-v0.1.1#egg=ckanext-s3filestore
@@ -75,8 +75,10 @@ Werkzeug==0.15.3         # via flask
 zope.interface==4.3.2
 
 # ckanext-saml2 dependencies
+defusedxml==0.6.0
 M2Crypto
--e git+https://github.com/GSA/pysaml2.git@max#egg=pysaml2
+python-memcached==1.48
+-e git+https://github.com/GSA/pysaml2.git@51b7e09d0f6d3af31c9d60b09a3f335eb6ecfa5c#egg=pysaml2
 
 #datajson
 jsonschema~=2.4.0
