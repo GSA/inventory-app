@@ -93,7 +93,7 @@ $ cf create-service aws-rds micro-psql ((app_name))-datastore
 
 Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available. (See [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time).)
 ```sh
-$ cf create-service aws-rds shared-psql ((app_name))-db
+$ cf create-service aws-rds micro-psql ((app_name))-db
 ```
 
 Deploy the Solr instance and the app.
