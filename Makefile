@@ -10,11 +10,16 @@ build:
 clean:
 	docker-compose down -v
 
-copy-src:
-	docker cp inventory-app_app_1:$(CKAN_HOME)/src .
-
 local:
 	docker-compose -f docker-compose.yml -f docker-compose.local.yml up
+
+make reload: stop-web start-web
+
+start-web:
+	docker-compose up app
+
+stop-web:
+	docker-compose exec app pkill -f gunicorn
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt

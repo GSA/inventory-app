@@ -14,6 +14,8 @@ services:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
+      - /mnt/c/Users/12058/Desktop/git_repos/side/ckan:/usr/lib/ckan/src/ckan
+      - /mnt/c/Users/12058/Desktop/git_repos/datagov/USMetadata:/usr/lib/ckan/src/ckanext-usmetadata
 
   datastore:
     image: postgres:9.6
