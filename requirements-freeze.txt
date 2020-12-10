@@ -12,12 +12,12 @@ ckanext-dcat-usmetadata==0.2.9
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
 -e git+https://github.com/GSA/USMetadata.git@f7e7b37854f3d72d795b5696df165a35295d1d31#egg=ckanext_usmetadata
 ckantoolkit==0.0.3
-cryptography==3.2.1
+cryptography==3.3
 decorator==3.4.0
 enum34==1.1.10
 fanstatic==0.12
 FormEncode==1.2.6
-Genshi==0.6
+Genshi==0.6.1
 gevent==20.9.0
 greenlet==0.4.17
 gunicorn==19.10.0
