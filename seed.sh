@@ -27,12 +27,10 @@ done
 if [ "${1-}" == "" ]; then
   echo creating user admin
   #Setup various users, organizations, and datasets
-  if /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=password email=fake@fake.com -c /etc/ckan/production.ini > /tmp/user_temp.txt ; then
-    /usr/lib/ckan/bin/paster --plugin=ckan sysadmin add admin -c /etc/ckan/production.ini
-    api_key=$(grep -oP "apikey.: u.\K.+" /tmp/user_temp.txt | cut -d "'" -f1)
-  else
-    api_key=$(/usr/lib/ckan/bin/paster --plugin=ckan user admin -c /etc/ckan/production.ini | grep -oP "apikey=\K.+ " | cut -d " " -f1)
+  if /usr/lib/ckan/bin/ckan -c /etc/ckan/production.ini user add test-admin password=password email=test-fake@fake.com  > /tmp/user_temp.txt ; then
+    /usr/lib/ckan/bin/ckan -c /etc/ckan/production.ini sysadmin add test-admin
   fi
+  api_key=$(/usr/lib/ckan/bin/ckan -c /etc/ckan/production.ini user show test-admin | grep -oP "apikey=\K.+ " | cut -d " " -f1)
 
 else
   api_key="$1"
@@ -48,7 +46,7 @@ curl -X POST \
 echo ''
 
 # Make sure package is removed
-curl -X POST http://app:5000/api/action/package_delete  \
+curl -X POST http://localhost:5000/api/action/package_delete  \
   -H "authorization: $api_key" \
   -H 'content-type: application/json' \
   -d '
