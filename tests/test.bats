@@ -20,7 +20,7 @@ function wait_for () {
 
 # Log into application and save cookie for another application usage
 function login () {
-  curl --silent --fail 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
+  curl --silent --fail -L 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://localhost:5000' -H 'Referer: http://localhost:5000/user/login' --data 'login=test-admin&password=password' --cookie-jar ./cookie-jar
 }
 
 #checks that the google id is in the html response
