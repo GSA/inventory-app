@@ -3,5 +3,4 @@ src/
 *.csv
 vendor/*
 vars.yml
-vars.yml
 tmp/
