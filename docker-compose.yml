@@ -30,12 +30,14 @@ services:
       - "8800:8000"
     
   db:
-    image: datagov/catalog-db:inventory2_8
+    image: postgres:12
     environment:
-      POSTGRES_USER: postgres
-      DB_CKAN_USER: ckan
-      DB_CKAN_PASSWORD: pass
-      DB_CKAN_DB: ckan
+      POSTGRES_USER: ckan
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: ckan
+      # DB_CKAN_USER: ckan
+      # DB_CKAN_PASSWORD: pass
+      # DB_CKAN_DB: ckan
 
   solr:
     image: datagov/catalog-solr:inventory2_8

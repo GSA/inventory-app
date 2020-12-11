@@ -96,6 +96,16 @@ Create the database used by CKAN itself. You have to wait a bit for the datastor
 $ cf create-service aws-rds micro-psql ((app_name))-db
 ```
 
+Create the s3 bucket for data storage. 
+```sh
+$ cf create-service s3 basic-sandbox ((app_name))-s3
+```
+
+Create the Redis service for cache
+```sh
+$ cf create-service aws-elasticache-redis redis-dev ((app_name))-redis
+```
+
 Deploy the Solr instance and the app.
 ```sh
 $ cf push --vars-file vars.yml

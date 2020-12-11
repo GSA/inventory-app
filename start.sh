@@ -39,7 +39,8 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
 fi
 
 # Run migrations
-paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
+# paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
+$CKAN_HOME/bin/ckan -c /etc/ckan/production.ini db upgrade
 
 if [ "${1-}" = "seed" ]; then
   # Run seed script in new process
@@ -49,4 +50,5 @@ if [ "${1-}" = "seed" ]; then
 fi
 
 echo starting ckan...
-exec $CKAN_CONFIG/server_start.sh --paste /etc/ckan/production.ini -b 0.0.0.0:5000
+exec $CKAN_HOME/bin/ckan -c /etc/ckan/production.ini run -H 0.0.0.0
+# exec $CKAN_CONFIG/server_start.sh --paste /etc/ckan/production.ini -b 0.0.0.0:5000
