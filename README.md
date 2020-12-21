@@ -65,11 +65,13 @@ when tests are passing locally. CircleCi will run the build against this
 
 ### Live Editing
 
-To edit CKAN or extension code live, the attached volume needs to be found and used.
+To edit CKAN or extension code live, the attached volume needs to be setup correctly.
 
-You can find the volume by running `docker volume ls`, but the default is `inventoryapp_ckan`. You can then run `docker volume inspect inventoryapp_ckan` to get the location details on your local machine. You may need to edit permissions to this folder to edit under your current user. Once this is complete, use your preferred editor to manage the code as needed.
+Add a local extension folder via the docker-compose.yml file (see volume comment for example).
 
-If you restart the service, the volume stays live. It must be removed manually. If you make edits and want to revert, you can run `docker volume rm -f inventoryapp_ckan`. The docker containers need to be stopped and removed before you can run this command.
+After editing code, run `make restart` to restart the application and evaluate the edits/debugging
+
+_TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag. Hopefully this option improves in the future._
 
 ### Tests
 

@@ -14,6 +14,8 @@ services:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
+      # Add any local extension directories for installation/debugging here, ie
+      # - ../ckanext-saml2:/usr/lib/ckan/src/ckanext-saml2
 
   datastore:
     image: postgres:9.6

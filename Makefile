@@ -11,6 +11,9 @@ clean:
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
 
+restart:
+	docker-compose exec app pkill -f gunicorn && docker-compose up app -d
+
 test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build --build-arg REQUIREMENTS_FILE app
