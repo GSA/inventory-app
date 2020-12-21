@@ -11,11 +11,12 @@ chardet==3.0.4
 ckanext-dcat-usmetadata==0.2.4
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@54647da628609543e01731bfc37f0c3d0ad9f0e2#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284#egg=ckanext_s3filestore
--e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
+-e git+https://github.com/GSA/ckanext-saml2.git@3a1145ba5c71433cff488707d47d41ae2941e040#egg=ckanext_saml2
 -e git+https://github.com/GSA/USMetadata.git@a6aab9f54fc1a55b8f668dfa0d74e981a3a0df66#egg=ckanext_usmetadata
 ckantoolkit==0.0.4
 click==6.7
 decorator==4.2.1
+defusedxml==0.6.0
 fanstatic==0.12
 Flask==0.12.4
 Flask-Babel==0.11.2
@@ -51,7 +52,7 @@ polib==1.0.7
 psycopg2==2.7.3.2
 Pygments==2.2.0
 Pylons==0.9.7
--e git+https://github.com/GSA/pysaml2.git@8b605c824ff1d042e9040a9971c28f369197cac2#egg=pysaml2
+-e git+https://github.com/GSA/pysaml2.git@45d0ea01b3e3c1fba2757387f8068d57153ce2ce#egg=pysaml2
 pysolr==3.6.0
 python-dateutil==1.5
 python-magic==0.4.15
