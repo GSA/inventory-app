@@ -13,3 +13,5 @@ DB_CKAN_USER=ckan
 DB_CKAN_PASSWORD=pass
 DB_CKAN_DB=ckan
 CKAN_INI=/etc/ckan/production.ini
+
+RELOAD__FILES=/user/lib/ckan/src/ckanext-saml2/ckanext/saml2/plugin.py

@@ -17,7 +17,7 @@ test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml up --abort-on-container-exit test
 
 up:
-	docker-compose up -d
+	docker-compose up
 
 up-with-data:
 	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build

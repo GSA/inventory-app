@@ -49,4 +49,4 @@ if [ "${1-}" = "seed" ]; then
 fi
 
 echo starting ckan...
-exec $CKAN_CONFIG/server_start.sh --paste /etc/ckan/production.ini -b 0.0.0.0:5000
+exec $CKAN_CONFIG/server_start.sh --paste /etc/ckan/production.ini -b 0.0.0.0:5000 --reload --reload-extra-file $RELOAD__FILES
