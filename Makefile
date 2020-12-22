@@ -12,7 +12,7 @@ requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
 
 restart:
-	docker-compose exec app pkill -f gunicorn && docker-compose up -d app
+	docker-compose exec app pkill -f gunicorn ; docker-compose up -d -- app
 
 test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build

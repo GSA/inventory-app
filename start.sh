@@ -38,6 +38,13 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode core=inventory
 fi
 
+# Install dev dependencies
+$CKAN_HOME/bin/pip install -r /opt/inventory-app/requirements-dev.txt
+
+if ($EXT_PATH); then
+  $CKAN_HOME/bin/pip install -e $EXT_PATH
+fi
+
 # Run migrations
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
 

@@ -55,8 +55,10 @@ shipped to production in order to be compatible with ckanext-saml2. After
 generating the requirements-freeze.txt, manually review the file to make sure
 the versions are correct. See https://github.com/GSA/catalog-app/issues/78 for
 more details.**
+Need to avoid pulling in dev requirements, so start from a clean build
+(without starting up the app) and save the requirements.
 
-    $ make requirements
+    $ make clean build requirements
 
 This freezes the requirements at `requirements-freeze.txt`, and should only be done
 when tests are passing locally. CircleCi will run the build against this 
@@ -72,6 +74,19 @@ Add a local extension folder via the docker-compose.yml file (see volume comment
 After editing code, run `make restart` to restart the application and evaluate the edits/debugging
 
 _TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag. Hopefully this option improves in the future._
+
+#### Web Debugger
+
+To step through code and examine variables, you can use [web-pdb](https://pypi.org/project/web-pdb/).
+Add/edit the variable located at `.env` (you can create the file from `.env.sample`) called 
+`LOCAL_EXT` to be the local path to the extension you would like to examine.
+Then add/edit the variable `EXT_PATH` to be the container path to the extension you are overriding.
+Finally, edit the `docker-compose.yml` file and uncomment the volume line utilizing those variables.
+
+The `start.sh` script will make sure the python code is installed properly, and you should be able to add
+debug statements and/or make edits in the local repository to test changes in real time.
+
+**Make sure you remove all web-pdb statements before commiting to any repository!**
 
 ### Tests
 

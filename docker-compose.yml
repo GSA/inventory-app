@@ -9,13 +9,14 @@ services:
       - solr
     ports:
       - "5000:5000"
+      - "5555:5555" # For web-pdb debugger
     env_file: env_file
     volumes:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
-      # Add any local extension directories for installation/debugging here, ie
-      # - ../ckanext-saml2:/usr/lib/ckan/src/ckanext-saml2
+      # Uncomment the line below when using the .env variables
+      # - $LOCAL_EXT:$EXT_PATH
 
   datastore:
     image: postgres:9.6
