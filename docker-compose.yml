@@ -9,7 +9,6 @@ services:
       - solr
     ports:
       - "5000:5000"
-      # - "5555:5555" # For web-pdb debugger
     env_file: env_file
     volumes:
       - ckan:/usr/lib/ckan
