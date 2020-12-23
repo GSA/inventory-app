@@ -8,6 +8,9 @@ build:
 clean:
 	docker-compose down -v --remove-orphans
 
+debug:
+	docker-compose exec app pkill -f gunicorn ; docker-compose -f docker-compose.debug.yml -f docker-compose.yml run --service-ports app
+
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
 
@@ -24,7 +27,7 @@ up:
 
 up-with-data:
 	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build
-	docker-compose -f docker-compose.yml -f docker-compose.seed.yml up
+	docker-compose -f docker-compose.yml -f docker-compose.seed.yml up -d
 
 update-dependencies:
 	docker-compose run --rm app pip install -r requirements.txt
