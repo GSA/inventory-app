@@ -15,8 +15,6 @@ services:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
-      # Uncomment the line below when using the .env variables
-      - $LOCAL_EXT:$EXT_PATH
 
   datastore:
     image: postgres:9.6

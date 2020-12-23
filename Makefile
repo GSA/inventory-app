@@ -9,7 +9,7 @@ clean:
 	docker-compose down -v --remove-orphans
 
 debug:
-	docker-compose exec app pkill -f gunicorn ; docker-compose -f docker-compose.debug.yml -f docker-compose.yml run --service-ports app
+	docker-compose kill app ; docker-compose -f docker-compose.debug.yml -f docker-compose.yml run --service-ports app
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt

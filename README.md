@@ -68,25 +68,30 @@ when tests are passing locally. CircleCi will run the build against this
 ### Live Editing
 
 To edit CKAN or extension code live, the attached volume needs to be setup correctly.
-
 Add a local extension folder via the docker-compose.yml file (see volume comment for example).
-
 After editing code, run `make restart` to restart the application and evaluate the edits/debugging
 
 _TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag. Hopefully this option improves in the future._
 
 #### Web Debugger
 
-To step through code and examine variables, you can use [web-pdb](https://pypi.org/project/web-pdb/).
-Add/edit the variable located at `.env` (you can create the file from `.env.sample`) called 
-`LOCAL_EXT` to be the local path to the extension you would like to examine.
-Then add/edit the variable `EXT_PATH` to be the container path to the extension you are overriding.
-Finally, edit the `docker-compose.yml` file and uncomment the volume line utilizing those variables.
+To step through code and examine variables, you can use [ipdb](https://pypi.org/project/ipdb/).
+Edit the `docker-compose.debug.yml` file and add the mappings of the local paths to the remote
+paths (should be `/usr/lib/ckan/src/ckanext-extension/`).
 
 The `start.sh` script will make sure the python code is installed properly, and you should be able to add
-debug statements and/or make edits in the local repository to test changes in real time.
+debug statements and/or make edits in the local repository to test changes in real time. Add
+`import ipdb; ipdb.set_trace()` as a new line where you would like to start debugging.
+Then run `make debug`, and a new instance of ckan will be started. Once the debugger statement
+is triggered, then a command prompt should display in the console. See 
+[documentation](https://docs.python.org/3/library/pdb.html#debugger-commands)
+for available commands. `ipdb` is preferred for styling/readability reasons, but `pdb` will
+work as well.
 
-**Make sure you remove all web-pdb statements before commiting to any repository!**
+_Note: you can configure multiple extensions, but you will need to add pip installation_
+_of all locally mapped folder, as is already handled for `EXT_PATH` on line 45 of `start.sh`._
+
+**Make sure you remove all pdb statements before commiting to any repository!**
 
 ### Tests
 

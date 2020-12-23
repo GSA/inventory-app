@@ -41,9 +41,15 @@ fi
 # Install dev dependencies
 $CKAN_HOME/bin/pip install -r /opt/inventory-app/requirements-dev.txt
 
-if ($EXT_PATH); then
-  $CKAN_HOME/bin/pip install -e $EXT_PATH
-fi
+# re-install all ckan src directories (ckan extensions), in case they
+# are mapped via docker volume and need to be installed in container
+for i in $CKAN_HOME/src/*
+do
+  if [ -d $i ];
+  then
+    $CKAN_HOME/bin/pip install -e $i
+  fi
+done
 
 # Run migrations
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini

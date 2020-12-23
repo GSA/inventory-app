@@ -2,11 +2,10 @@ version: '3'
 services:
   app:
     build: .
-    # command: /opt/inventory-app/start.sh
     env_file: env_file
     volumes:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
-      # Uncomment the line below when using the .env variables
-      - $LOCAL_EXT:$EXT_PATH
+      - ../ckanext-s3filestore/:/usr/lib/ckan/src/ckanext-s3filestore/
+      - ../ckanext-datajson/:/usr/lib/ckan/src/ckanext-datajson/

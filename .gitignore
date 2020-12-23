@@ -3,4 +3,3 @@ src/
 *.csv
 vendor/*
 vars.yml
-.env
