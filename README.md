@@ -88,9 +88,6 @@ is triggered, then a command prompt should display in the console. See
 for available commands. `ipdb` is preferred for styling/readability reasons, but `pdb` will
 work as well.
 
-_Note: you can configure multiple extensions, but you will need to add pip installation_
-_of all locally mapped folder, as is already handled for `EXT_PATH` on line 45 of `start.sh`._
-
 **Make sure you remove all pdb statements before commiting to any repository!**
 
 ### Tests
