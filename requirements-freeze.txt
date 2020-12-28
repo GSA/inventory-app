@@ -2,39 +2,42 @@ Babel==2.3.4
 Beaker==1.9.0
 bleach==3.1.4
 boto==2.49.0
-boto3==1.16.24
-botocore==1.19.24
-certifi==2020.11.8
+boto3==1.16.44
+botocore==1.19.44
+certifi==2020.12.5
+cffi==1.14.4
 chardet==3.0.4
 -e git+https://github.com/ckan/ckan.git@c04b6d64aadc7a647b8896279002626ca3be0a56#egg=ckan
--e git+https://github.com/GSA/ckanext-datajson.git@a66f314333862bc316086a25e735f472cb5b29fe#egg=ckanext_datajson
-ckanext-dcat-usmetadata==0.2.4
--e git+https://github.com/GSA/ckanext-googleanalyticsbasic@54647da628609543e01731bfc37f0c3d0ad9f0e2#egg=ckanext_googleanalyticsbasic
+-e git+https://github.com/GSA/ckanext-datajson.git@4d5994c3f1a5787fbfcf64336d1cfdffe161b4ea#egg=ckanext_datajson
+ckanext-dcat-usmetadata==0.2.11
+-e git+https://github.com/GSA/ckanext-googleanalyticsbasic@b84b93098e80b61c1073236958c33b096987ac3a#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284#egg=ckanext_s3filestore
--e git+https://github.com/GSA/ckanext-saml2.git@3a1145ba5c71433cff488707d47d41ae2941e040#egg=ckanext_saml2
+-e git+https://github.com/GSA/ckanext-saml2.git@1a2aa1fe84ac43dd2865f2f529505739909c3dad#egg=ckanext_saml2
 -e git+https://github.com/GSA/USMetadata.git@a6aab9f54fc1a55b8f668dfa0d74e981a3a0df66#egg=ckanext_usmetadata
 ckantoolkit==0.0.4
 click==6.7
+cryptography==3.3.1
 decorator==4.2.1
 defusedxml==0.6.0
+enum34==1.1.10
 fanstatic==0.12
 Flask==0.12.4
 Flask-Babel==0.11.2
 FormEncode==1.3.1
 funcsigs==1.0.2
 futures==3.3.0
-gevent==20.9.0
+gevent==20.12.1
 greenlet==0.4.17
 gunicorn==19.10.0
 html5lib==1.0.1
-httplib2==0.18.1
 idna==2.7
+ipaddress==1.0.23
 itsdangerous==0.24
 Jinja2==2.10.1
 jmespath==0.10.0
 jsonschema==2.4.0
 LEPL==5.1.3
-M2Crypto==0.36.0
+M2Crypto==0.37.1
 Mako==1.0.7
 Markdown==2.6.7
 MarkupSafe==1.0
@@ -50,8 +53,10 @@ PasteScript==2.0.2
 pbr==1.10.0
 polib==1.0.7
 psycopg2==2.7.3.2
+pycparser==2.20
 Pygments==2.2.0
 Pylons==0.9.7
+pyOpenSSL==20.0.1
 -e git+https://github.com/GSA/pysaml2.git@45d0ea01b3e3c1fba2757387f8068d57153ce2ce#egg=pysaml2
 pysolr==3.6.0
 python-dateutil==1.5
