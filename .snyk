@@ -28,5 +28,5 @@ ignore:
         reason: >-
           No remediation path available. Issue created: 
           https://github.com/GSA/datagov-deploy/issues/2472
-        expires: 2020-12-23T06:00:00.000Z
+        expires: 2021-01-23T06:00:00.000Z
 patch: {}
