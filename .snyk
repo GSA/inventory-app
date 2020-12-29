@@ -32,9 +32,6 @@ ignore:
   SNYK-PYTHON-IPADDRESS-590065:
     - '*':
         reason: >-
-          No remediation available yet.  After inspecting the
-          Python cryptography package, I see no use of the vulnerable
-          method hash() on the classes IPv4Interface and IPv6Interface, 
-          so the risk here is very minimal.
+          Fix not available. No known usage of this library inside the CKAN app or it's extensions.
         expires: 2021-03-29T06:00:00.000Z
 patch: {}
