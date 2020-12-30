@@ -27,7 +27,7 @@ up:
 
 up-with-data:
 	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build
-	docker-compose -f docker-compose.yml -f docker-compose.seed.yml up -d
+	docker-compose -f docker-compose.yml -f docker-compose.seed.yml up
 
 update-dependencies:
 	docker-compose run --rm app pip install -r requirements.txt

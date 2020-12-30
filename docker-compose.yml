@@ -14,6 +14,7 @@ services:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
+      - ./ckanext-datagov_iauthfunctions:/usr/lib/ckan/src/ckanext-datagov_iauthfunctions
 
   datastore:
     image: postgres:9.6
