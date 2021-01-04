@@ -68,12 +68,12 @@ when tests are passing locally. CircleCi will run the build against this
 ### Live Editing
 
 To edit CKAN or extension code live, the attached volume needs to be setup correctly.
-Add a local extension folder via the docker-compose.yml file (see volume comment for example).
-After editing code, run `make restart` to restart the application and evaluate the edits/debugging
+Add a local extension folder via the `docker-compose.debug.yml` file (see volume comment for example).
+After editing code, run `make debug` to restart the application and evaluate the edits/debugging
 
 _TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag. Hopefully this option improves in the future._
 
-#### Web Debugger
+#### Debugger
 
 To step through code and examine variables, you can use [ipdb](https://pypi.org/project/ipdb/).
 Edit the `docker-compose.debug.yml` file and add the mappings of the local paths to the remote
@@ -86,7 +86,8 @@ Then run `make debug`, and a new instance of ckan will be started. Once the debu
 is triggered, then a command prompt should display in the console. See 
 [documentation](https://docs.python.org/3/library/pdb.html#debugger-commands)
 for available commands. `ipdb` is preferred for styling/readability reasons, but `pdb` will
-work as well.
+work as well. `web-pdb` was tested, but has various timing complications of it's own that causes
+unnecessary complications and failures.
 
 **Make sure you remove all pdb statements before commiting to any repository!**
 

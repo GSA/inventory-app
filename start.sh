@@ -47,7 +47,11 @@ for i in $CKAN_HOME/src/*
 do
   if [ -d $i ];
   then
-    $CKAN_HOME/bin/pip install -e $i
+    owner=$(stat -c '%U' $i);
+    if [ $owner != 'root' ];
+    then
+      $CKAN_HOME/bin/pip install -e $i
+    fi
   fi
 done
 
