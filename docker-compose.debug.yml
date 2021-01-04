@@ -7,5 +7,4 @@ services:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
       - .:/opt/inventory-app
-      - ../ckanext-datajson/:/usr/lib/ckan/src/ckanext-datajson/
       # - /local/path/ckanext-some_extension/:/usr/lib/ckan/src/ckanext-some_extension/
