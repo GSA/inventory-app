@@ -68,8 +68,8 @@ when tests are passing locally. CircleCi will run the build against this
 ### Live Editing
 
 To edit CKAN or extension code live, the local code needs to be attached via a volume.
-Add a local extension folder via the `docker-compose.yml` file that you would like to edit
-(see volume comment for example).
+Add a local extension folder path into the `docker-compose.yml` file that you would like to edit
+(see volume section for commented example).
 After editing the extension/ckan core (see below), run `make debug` to restart the application 
 and evaluate the edits/debugging.
 
