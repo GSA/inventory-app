@@ -67,27 +67,29 @@ when tests are passing locally. CircleCi will run the build against this
 
 ### Live Editing
 
-To edit CKAN or extension code live, the attached volume needs to be setup correctly.
-Add a local extension folder via the `docker-compose.debug.yml` file (see volume comment for example).
-After editing code, run `make debug` to restart the application and evaluate the edits/debugging
+To edit CKAN or extension code live, the local code needs to be attached via a volume.
+Add a local extension folder via the `docker-compose.yml` file that you would like to edit
+(see volume comment for example).
+After editing the extension/ckan core (see below), run `make debug` to restart the application 
+and evaluate the edits/debugging.
 
-_TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag. Hopefully this option improves in the future._
+_TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag._
+_Hopefully this option improves in the future._
 
 #### Debugger
 
-To step through code and examine variables, you can use [ipdb](https://pypi.org/project/ipdb/).
-Edit the `docker-compose.debug.yml` file and add the mappings of the local paths to the remote
-paths (should be `/usr/lib/ckan/src/ckanext-extension/`).
-
-The `start.sh` script will make sure the python code is installed properly, and you should be able to add
-debug statements and/or make edits in the local repository to test changes in real time. Add
-`import ipdb; ipdb.set_trace()` as a new line where you would like to start debugging.
-Then run `make debug`, and a new instance of ckan will be started. Once the debugger statement
-is triggered, then a command prompt should display in the console. See 
-[documentation](https://docs.python.org/3/library/pdb.html#debugger-commands)
+Add `import ipdb; ipdb.set_trace()` as a new line where you would like to start debugging.
+Then run `make debug`, and a new instance of the ckan app will be started that has an 
+interactive console. Once the debugger statement is triggered, then a command prompt 
+should display in the console. See [documentation](https://docs.python.org/3/library/pdb.html#debugger-commands)
 for available commands. `ipdb` is preferred for styling/readability reasons, but `pdb` will
 work as well. `web-pdb` was tested, but has various timing complications of it's own that causes
 unnecessary complications and failures.
+
+The flask debugger is also imported as a dev requirement and turned on by default in the
+`production.ini` file (`debug = true`), which gives some UI tools on the webpage to parse stack
+traces and various other examination tools. The behavior is inconsistent, probably due to
+ckan serving pages as pylons sometimes and flask at others.
 
 **Make sure you remove all pdb statements before commiting to any repository!**
 

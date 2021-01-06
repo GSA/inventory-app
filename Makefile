@@ -9,7 +9,7 @@ clean:
 	docker-compose down -v --remove-orphans
 
 debug:
-	docker-compose stop app ; docker-compose -f docker-compose.debug.yml -f docker-compose.yml run --service-ports app
+	docker-compose stop app ; docker-compose run --service-ports app
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
