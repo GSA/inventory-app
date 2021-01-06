@@ -38,16 +38,21 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode core=inventory
 fi
 
-# Install dev dependencies
+# Install dev dependencies after build so freezing dependencies
+# works as expected.
 $CKAN_HOME/bin/pip install -r /opt/inventory-app/requirements-dev.txt
 
-# re-install all ckan src directories (ckan extensions), in case they
-# are mapped via docker volume and need to be installed in container
+# re-install ckan src directories (ckan extensions), that are not owned by root;
+# these are mapped via docker volume and need to be installed in container
 for i in $CKAN_HOME/src/*
 do
   if [ -d $i ];
   then
-    $CKAN_HOME/bin/pip install -e $i
+    owner=$(stat -c '%U' $i);
+    if [ $owner != 'root' ];
+    then
+      $CKAN_HOME/bin/pip install -e $i
+    fi
   fi
 done
 
