@@ -8,7 +8,7 @@ nosetests --ckan \
           --nologcapture \
           --with-pylons=subdir/test.ini \
           --with-coverage \
-          --cover-package=ckanext.datagov_iauthfunctions \
+          --cover-package=ckanext.datagov_inventory \
           --cover-inclusive \
           --cover-erase \
           --cover-tests

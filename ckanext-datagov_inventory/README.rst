@@ -2,34 +2,34 @@
    these badges work. The necessary Travis and Coverage config files have been
    generated for you.
 
-.. image:: https://travis-ci.org/GSA/ckanext-datagov_iauthfunctions.svg?branch=master
-    :target: https://travis-ci.org/GSA/ckanext-datagov_iauthfunctions
+.. image:: https://travis-ci.org/GSA/ckanext-datagov_inventory.svg?branch=master
+    :target: https://travis-ci.org/GSA/ckanext-datagov_inventory
 
-.. image:: https://coveralls.io/repos/GSA/ckanext-datagov_iauthfunctions/badge.svg
-  :target: https://coveralls.io/r/GSA/ckanext-datagov_iauthfunctions
+.. image:: https://coveralls.io/repos/GSA/ckanext-datagov_inventory/badge.svg
+  :target: https://coveralls.io/r/GSA/ckanext-datagov_inventory
 
-.. image:: https://pypip.in/download/ckanext-datagov_iauthfunctions/badge.svg
-    :target: https://pypi.python.org/pypi//ckanext-datagov_iauthfunctions/
+.. image:: https://pypip.in/download/ckanext-datagov_inventory/badge.svg
+    :target: https://pypi.python.org/pypi//ckanext-datagov_inventory/
     :alt: Downloads
 
-.. image:: https://pypip.in/version/ckanext-datagov_iauthfunctions/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-datagov_iauthfunctions/
+.. image:: https://pypip.in/version/ckanext-datagov_inventory/badge.svg
+    :target: https://pypi.python.org/pypi/ckanext-datagov_inventory/
     :alt: Latest Version
 
-.. image:: https://pypip.in/py_versions/ckanext-datagov_iauthfunctions/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-datagov_iauthfunctions/
+.. image:: https://pypip.in/py_versions/ckanext-datagov_inventory/badge.svg
+    :target: https://pypi.python.org/pypi/ckanext-datagov_inventory/
     :alt: Supported Python versions
 
-.. image:: https://pypip.in/status/ckanext-datagov_iauthfunctions/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-datagov_iauthfunctions/
+.. image:: https://pypip.in/status/ckanext-datagov_inventory/badge.svg
+    :target: https://pypi.python.org/pypi/ckanext-datagov_inventory/
     :alt: Development Status
 
-.. image:: https://pypip.in/license/ckanext-datagov_iauthfunctions/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-datagov_iauthfunctions/
+.. image:: https://pypip.in/license/ckanext-datagov_inventory/badge.svg
+    :target: https://pypi.python.org/pypi/ckanext-datagov_inventory/
     :alt: License
 
 =============
-ckanext-datagov_iauthfunctions
+ckanext-datagov_inventory
 =============
 
 .. Put a description of your extension here:
@@ -53,17 +53,17 @@ Installation
    For example installing any non-Python dependencies or adding any required
    config settings.
 
-To install ckanext-datagov_iauthfunctions:
+To install ckanext-datagov_inventory:
 
 1. Activate your CKAN virtual environment, for example::
 
      . /usr/lib/ckan/default/bin/activate
 
-2. Install the ckanext-datagov_iauthfunctions Python package into your virtual environment::
+2. Install the ckanext-datagov_inventory Python package into your virtual environment::
 
-     pip install ckanext-datagov_iauthfunctions
+     pip install ckanext-datagov_inventory
 
-3. Add ``datagov_iauthfunctions`` to the ``ckan.plugins`` setting in your CKAN
+3. Add ``datagov_inventory`` to the ``ckan.plugins`` setting in your CKAN
    config file (by default the config file is located at
    ``/etc/ckan/default/production.ini``).
 
@@ -80,18 +80,18 @@ Document any optional config settings here. For example::
 
     # The minimum number of hours to wait before re-checking a resource
     # (optional, default: 24).
-    ckanext.datagov_iauthfunctions.some_setting = some_default_value
+    ckanext.datagov_inventory.some_setting = some_default_value
 
 
 ------------------------
 Development Installation
 ------------------------
 
-To install ckanext-datagov_iauthfunctions for development, activate your CKAN virtualenv and
+To install ckanext-datagov_inventory for development, activate your CKAN virtualenv and
 do::
 
-    git clone https://github.com/GSA/ckanext-datagov_iauthfunctions.git
-    cd ckanext-datagov_iauthfunctions
+    git clone https://github.com/GSA/ckanext-datagov_inventory.git
+    cd ckanext-datagov_inventory
     python setup.py develop
     pip install -r dev-requirements.txt
 
@@ -107,15 +107,15 @@ To run the tests, do::
 To run the tests and produce a coverage report, first make sure you have
 coverage installed in your virtualenv (``pip install coverage``) then run::
 
-    nosetests --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.datagov_iauthfunctions --cover-inclusive --cover-erase --cover-tests
+    nosetests --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.datagov_inventory --cover-inclusive --cover-erase --cover-tests
 
 
 ---------------------------------
-Registering ckanext-datagov_iauthfunctions on PyPI
+Registering ckanext-datagov_inventory on PyPI
 ---------------------------------
 
-ckanext-datagov_iauthfunctions should be availabe on PyPI as
-https://pypi.python.org/pypi/ckanext-datagov_iauthfunctions. If that link doesn't work, then
+ckanext-datagov_inventory should be availabe on PyPI as
+https://pypi.python.org/pypi/ckanext-datagov_inventory. If that link doesn't work, then
 you can register the project on PyPI for the first time by following these
 steps:
 
@@ -140,10 +140,10 @@ steps:
 
 
 ----------------------------------------
-Releasing a New Version of ckanext-datagov_iauthfunctions
+Releasing a New Version of ckanext-datagov_inventory
 ----------------------------------------
 
-ckanext-datagov_iauthfunctions is availabe on PyPI as https://pypi.python.org/pypi/ckanext-datagov_iauthfunctions.
+ckanext-datagov_inventory is availabe on PyPI as https://pypi.python.org/pypi/ckanext-datagov_inventory.
 To publish a new version to PyPI follow these steps:
 
 1. Update the version number in the ``setup.py`` file.
