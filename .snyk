@@ -30,4 +30,9 @@ ignore:
           No fix for M2Crypto (RSA module) at this time.
           Community believes this to be a medium severity vulnerability.
         expires: 2021-02-03T06:00:00.000Z
+  SNYK-PYTHON-IPADDRESS-590065:
+    - '*':
+        reason: >-
+          Fix not available. No known usage of this library inside the CKAN app or it's extensions.
+        expires: 2021-03-29T06:00:00.000Z
 patch: {}
