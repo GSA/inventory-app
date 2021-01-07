@@ -18,7 +18,7 @@ enum34==1.1.10
 fanstatic==0.12
 FormEncode==1.2.6
 Genshi==0.6.1
-gevent==20.9.0
+gevent==20.12.1
 greenlet==0.4.17
 gunicorn==19.10.0
 httplib2==0.18.1
@@ -48,7 +48,7 @@ pyOpenSSL==19.1.0
 -e git+https://github.com/GSA/pysaml2.git@8b605c824ff1d042e9040a9971c28f369197cac2#egg=pysaml2
 python-dateutil==1.5
 python-memcached==1.48
-pytz==2020.4
+pytz==2020.5
 pyutilib.component.core==4.5.3
 PyYAML==5.3.1
 redis==2.10.1
