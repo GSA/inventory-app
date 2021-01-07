@@ -29,5 +29,5 @@ ignore:
           Vulnerable code functions are not utilized in CKAN code base (RSA decrypt functionality).
           No fix for M2Crypto (RSA module) at this time.
           Community believes this to be a medium severity vulnerability.
-        expires: 2020-02-03T06:00:00.000Z
+        expires: 2021-02-03T06:00:00.000Z
 patch: {}
