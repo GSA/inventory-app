@@ -73,7 +73,7 @@ Add a local extension folder path into the `docker-compose.yml` file that you wo
 After editing the extension/ckan core (see below), run `make up` (the app will not start appropriately)
 then run `make debug` to restart the application with an interactive console.
 
-_TODO: tested `--reload` functionality of gunicorn, but does not work well with paster flag._
+_TODO: tested `--reload` functionality of gunicorn, but [does not work well with paster flag](https://docs.gunicorn.org/en/stable/settings.html#reload)._
 _Hopefully this option improves in the future._
 
 #### Debugger

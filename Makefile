@@ -9,6 +9,8 @@ clean:
 	docker-compose down -v --remove-orphans
 
 debug:
+	# Stop the canonical app container to avoid a port collision. Use `run`
+    # so that we have interactive console access for the debugger.
 	docker-compose stop app ; docker-compose run --service-ports app
 
 requirements:
