@@ -67,10 +67,11 @@ def package_search(context, data_dict=None):
      log.info('Calling package search')
      return validate_user(context, data_dict)
 
-# needed as it's called before resource_read
-@plugins.toolkit.auth_allow_anonymous_access
-def package_show(context, data_dict):
-    return {'success' : True}
+# Let upstream CKAN handle package_show access normally,
+#   depending upon the user
+# @plugins.toolkit.auth_allow_anonymous_access
+# def package_show(context, data_dict):
+#     return {'success' : True}
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def package_list(context, data_dict=None):
@@ -160,7 +161,6 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'license_list': license_list,
                 'member_roles_list': member_roles_list,
                 'organization_list': organization_list,
-                'package_show': package_show,
                 'package_list': package_list,
                 'package_search': package_search,
                 'resource_read': resource_read,
