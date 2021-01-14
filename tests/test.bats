@@ -23,18 +23,6 @@ function login () {
   curl --silent --fail 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
 }
 
-#checks that the google id is in the html response
-function check_google_id () {
-  google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
-  find_id=$(curl --silent --fail --request GET 'http://app:5000' | grep -o "$google_id")
-
-  if  [ "$find_id" = "$google_id" ]; then
-    return 0;
-  else
-    return 1;
-  fi
-}
-
 function test_datastore_request () {
   #make a request to get cookies so that we can be logged on
   login
@@ -171,7 +159,15 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
 }
 
 @test "Google Analytics ID present" {
-  check_google_id
+  login
+  google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
+  find_id=$(curl --silent --fail --request GET 'http://app:5000/dataset' --cookie ./cookie-jar | grep -o "$google_id")
+
+  if  [ "$find_id" = "$google_id" ]; then
+    return 0;
+  else
+    return 1;
+  fi
 }
 
 @test "Datastore functioning properly" {
