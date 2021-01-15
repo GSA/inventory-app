@@ -7,6 +7,10 @@ jobs:
       - run:
           name: Run tests
           command: make test
+      - run:
+          name: Run extension tests
+          command: |
+            docker-compose run --rm app nosetests --ckan --with-pylons=docker-test.ini ckanext-datagov_inventory/ckanext/datagov_inventory/tests/*
 
   deploy-sandbox:
     docker:
