@@ -7,7 +7,7 @@ function wait_for () {
 
   local hostname=$1
   local port=$2
-  local retries=20
+  local retries=30
   while ! nc -z -w 30 "$hostname" "$port" ; do
     if [ "$retries" -le 0 ]; then
       return 1

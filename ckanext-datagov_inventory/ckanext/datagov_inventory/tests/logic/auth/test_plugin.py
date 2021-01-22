@@ -163,56 +163,24 @@ class TestDatagovInventoryAuth(object):
         # Rebuild CKAN's database after each test method, so that each test
         # method runs with a clean slate.
         # model.repo.rebuild_db()
-
-    """
-    def test_user_update_user_cannot_update_another_user(self):
-        '''Users should not be able to update other users' accounts.'''
-
-        # 1. Setup.
-
-        # Make a mock ckan.model.User object, Fred.
-        fred = factories.MockUser(name='fred')
-
-        # Make a mock ckan.model object.
-        mock_model = mock.MagicMock()
-        # model.User.get(user_id) should return Fred.
-        mock_model.User.get.return_value = fred
-
-        # Put the mock model in the context.
-        # This is easier than patching import ckan.model.
-        context = {'model': mock_model}
-
-        # The logged-in user is going to be Bob, not Fred.
-        context['user'] = 'bob'
-
-        # 2. Call the function that's being tested, once only.
-
-        # Make Bob try to update Fred's user account.
-        params = {
-            'id': fred.id,
-            'name': 'updated_user_name',
+    
+    def _anon_rejected_auth_test(self, auth_function):
+        context = {
+            'model': model,
+            'ignore_auth': False,
+            'user': 'org_editor_test_user'
         }
+        # Test user access
+        assert_equal(helpers.call_auth(auth_function,context=context), True)
 
-        # 3. Make assertions about the return value and/or side-effects.
+        context['user'] = None
+        # Test anonymous user is refused
+        assert_raises(logic.NotAuthorized, helpers.call_auth, auth_function,context=context)
 
-        assert_raises(logic.NotAuthorized, helpers.call_auth,
-                      'user_update', context=context, **params)
-
-        # 4. Do nothing else!
-    """
-
-    def test_root_page(self):
-        '''Test organization user has access to root'''
-        log.debug("Running test_root_page")
-
-        user_response = requests.get('http://localhost:5000/',
-            headers={"X-CKAN-API-Key": self.non_org_test_user.get('apikey')})
-        log.debug(user_response.status_code)
-        assert_equal(user_response.status_code, 200)
-
-        anon_response = requests.get('http://localhost:5000/')
-        log.debug(anon_response.status_code)
-        assert_equal(anon_response.status_code, 403)
+    def test_format_autocomplete(self):
+        '''Test format_autocomplete expected output'''
+        log.debug("Running test_format_autocomplete")
+        self._anon_rejected_auth_test('format_autocomplete')
 
     def test_org_user_access_to_public_package_show(self):
         '''Test logged in organization editor access to package_show and resource_show'''
