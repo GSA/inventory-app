@@ -1,5 +1,15 @@
 version: 2
 jobs:
+  lint:
+    docker:
+      - image: circleci/python:2.7.18
+    steps:
+      - run:
+          name: lint code
+          command: |
+            pip install --upgrade pip
+            pip install flake8
+            flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
   build:
     machine: true
     steps:
@@ -28,9 +38,13 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build
+      - lint
+      - build:
+          requires:
+            - lint
       - deploy-sandbox:
           requires:
+            - lint
             - build
           filters:
             branches:
