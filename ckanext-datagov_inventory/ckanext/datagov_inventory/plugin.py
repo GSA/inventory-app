@@ -19,7 +19,7 @@ def validate_user(context, data_dict=None):
         return {'success': False, 'msg': default_message}
 
 # starting auth functions.
-# Most auth functions should only allowed logged in users to access.
+# Most auth functions should only allow logged in users to access.
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
@@ -30,6 +30,7 @@ def format_autocomplete(context, data_dict=None):
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def group_list(context, data_dict=None):
+    log.info('Calling group list')
     return validate_user(context, data_dict)
 
 
@@ -37,7 +38,7 @@ def group_list(context, data_dict=None):
 # this prevents a 500, and instead returns our 403 error
 @plugins.toolkit.auth_allow_anonymous_access
 def group_list_authz(context, data_dict=None):
-    log.info('CALLING GROUP LIST AUTH')
+    log.info('Calling group list authz')
     user = context.get('user')
     if user:
         return authz.is_authorized('group_list', context, data_dict)
@@ -60,7 +61,7 @@ def member_roles_list(context, data_dict=None):
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def organization_list(context, data_dict=None):
-    log.info('Calling Organization List')
+    log.info('Calling organization list')
     return validate_user(context, data_dict)
 
 
@@ -101,79 +102,80 @@ def resource_show(context, data_dict=None):
 
 @plugins.toolkit.auth_allow_anonymous_access
 def resource_read(context, data_dict=None):
-    log.info('Calling Resource Read')
+    log.info('Calling resource read')
     return {'success': True}
 
 
 @plugins.toolkit.auth_allow_anonymous_access
 def resource_view_list(context, data_dict=None):
-    log.info('Calling Resource View List')
+    log.info('Calling resource view list')
     return {'success': True}
 
 
 @plugins.toolkit.auth_allow_anonymous_access
 def resource_view_show(context, data_dict=None):
-    log.info('Calling Resource View')
+    log.info('Calling resource view')
     return {'success': True}
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def request_reset(context, data_dict=None):
-    log.info('Calling Resource View List')
-    return {'success': True}
+    # Using login.gov: reject all CKAN password resets 
+    log.info('Calling password request reset')
+    return {'success': False}
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def revision_list(context, data_dict=None):
-    log.info('Calling Revision List')
+    log.info('Calling revision list')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def revision_show(context, data_dict=None):
-    log.info('Calling Revision Show')
+    log.info('Calling revision show')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def site_read(context, data_dict=None):
-    log.info('Calling Site Read')
+    log.info('Calling site read')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def tag_list(context, data_dict=None):
-    log.info('Calling TagList')
+    log.info('Calling tag list')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def tag_show(context, data_dict=None):
-    log.info('Calling Tag Show')
+    log.info('Calling tag show')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def task_status_show(context, data_dict=None):
-    log.info('Calling Task Status Show')
+    log.info('Calling task status show')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def user_reset(context, data_dict=None):
-    log.info('Calling User Reset')
+    log.info('Calling user reset')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def vocabulary_list(context, data_dict=None):
-    log.info('Calling Vocabulary List')
+    log.info('Calling vocabulary list')
     return validate_user(context, data_dict)
 
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def vocabulary_show(context, data_dict=None):
-    log.info('Calling Vocabulary Show')
+    log.info('Calling vocabulary show')
     return validate_user(context, data_dict)
 
 

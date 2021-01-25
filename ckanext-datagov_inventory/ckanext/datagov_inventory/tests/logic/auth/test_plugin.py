@@ -7,7 +7,6 @@ import ckan.model as model
 import ckan.tests.factories as factories
 import ckan.logic as logic
 
-import paste.fixture
 import pylons.test
 
 import ckan.tests.helpers as helpers
@@ -25,7 +24,7 @@ class TestDatagovInventoryAuth(object):
     def setup_class(self):
         '''Nose runs this method once to setup our test class.'''
 
-        self.app = paste.fixture.TestApp(pylons.test.pylonsapp)
+        #Start with a clean database
         model.repo.rebuild_db()
 
         # Create test user that is editor of test organization
@@ -43,9 +42,9 @@ class TestDatagovInventoryAuth(object):
 
         public_dataset_params = {
             'private': 'false',
-            'name': 'test_package',
-            'title': 'test package',
-            'notes': 'test package notes',
+            'name': 'public_test_package',
+            'title': 'public test package',
+            'notes': 'public test package notes',
             'tag_string': 'test_package',
             'modified': '2014-04-04',
             'publisher': 'GSA',
@@ -128,8 +127,8 @@ class TestDatagovInventoryAuth(object):
         self.public_dataset_id = public_dataset.get("id")
         log.info("Created Public Dataset with id %s", self.public_dataset_id)
 
-        # Create Public Resource with using API to upload file
-        response = requests.post('http://app:5000/api/action/resource_create',
+        # Create public resource with using the API to upload file
+        response = requests.post('http://localhost:5000/api/action/resource_create',
                                  data={"package_id": public_dataset['id'],
                                        "name": "My test CSV"},
                                  headers={
@@ -145,7 +144,7 @@ class TestDatagovInventoryAuth(object):
         log.info("Created Private Dataset with id %s", self.private_dataset_id)
 
         # Create Private Resource with using API to upload file
-        response = requests.post('http://app:5000/api/action/resource_create',
+        response = requests.post('http://localhost:5000/api/action/resource_create',
                                  data={"package_id": private_dataset['id'],
                                        "name": "My private test CSV"},
                                  headers={"X-CKAN-API-Key": sysadmin.get('apikey')},
@@ -159,11 +158,10 @@ class TestDatagovInventoryAuth(object):
     def teardown(self):
         '''Nose runs this method after each test method in our test class.'''
 
-        # Rebuild CKAN's database after each test method, so that each test
-        # method runs with a clean slate.
-        # model.repo.rebuild_db()
-
     def _anon_rejected_auth_test(self, auth_function):
+        # Test that a logged in user has authorization and
+        # an anonymous user raises a NotAuthorized error
+
         context = {
             'model': model,
             'ignore_auth': False,
@@ -179,7 +177,30 @@ class TestDatagovInventoryAuth(object):
                       auth_function,
                       context=context)
 
+    def _all_rejected_auth_test(self, auth_function):
+        # Test that both a logged in user and an
+        # anonymous user raise a NotAuthorized error
+        context = {
+            'model': model,
+            'ignore_auth': False,
+            'user': 'org_editor_test_user'
+        }
+        # Test user access
+        assert_raises(logic.NotAuthorized,
+                      helpers.call_auth,
+                      auth_function,
+                      context=context)
+
+        context['user'] = None
+        # Test anonymous user is refused
+        assert_raises(logic.NotAuthorized,
+                      helpers.call_auth,
+                      auth_function,
+                      context=context)
+
     def _anon_not_rejected_auth_test(self, auth_function):
+        # Test that both a logged in user has and
+        # an anonymous user are authorized
         context = {
             'model': model,
             'ignore_auth': False,
@@ -194,8 +215,7 @@ class TestDatagovInventoryAuth(object):
         
 
     def _test_package_resource_access(self, user, access):
-        log.debug("Running test_org_user_access_to_public_package_show")
-
+        # Test user has authorization to package resource
         context = {
             'model': model,
             'ignore_auth': False,
@@ -227,14 +247,14 @@ class TestDatagovInventoryAuth(object):
     def test_non_org_user_access_to_public_package_show(self):
         '''Test user access to package_show and resource_show'''
 
-        log.debug("Running test_org_user_access_to__public_package_show")
+        log.debug("Running test_non_org_user_access_to_public_package_show")
         self._test_package_resource_access('non_org_test_user', True)
 
     def test_anon_user_access_to_public_package_show(self):
         '''Test anonymous access to package_show and resource_show'''
 
-        log.debug("Running test_org_user_access_to_public_package_show")
-        self._test_package_resource_access('non_org_test_user', True)
+        log.debug("Running test_anon_user_access_to_public_package_show")
+        self._test_package_resource_access(None, True)
 
     def test_org_user_access_to_private_package_show(self):
         '''Test organization editor access to package_show and resource_show'''
@@ -292,7 +312,7 @@ class TestDatagovInventoryAuth(object):
     def test_request_reset(self):
         '''Test request_reset expected output'''
         log.debug("Running test_request_reset")
-        self._anon_rejected_auth_test('request_reset')
+        self._all_rejected_auth_test('request_reset')
 
     def test_revision_list(self):
         '''Test revision_list expected output'''
