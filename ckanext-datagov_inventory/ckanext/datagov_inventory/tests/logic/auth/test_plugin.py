@@ -179,10 +179,19 @@ class TestDatagovInventoryAuth(object):
                       auth_function,
                       context=context)
 
-    def test_format_autocomplete(self):
-        '''Test format_autocomplete expected output'''
-        log.debug("Running test_format_autocomplete")
-        self._anon_rejected_auth_test('format_autocomplete')
+    def _anon_not_rejected_auth_test(self, auth_function):
+        context = {
+            'model': model,
+            'ignore_auth': False,
+            'user': 'org_editor_test_user'
+        }
+        # Test user access
+        assert_equal(helpers.call_auth(auth_function, context=context), True)
+
+        context['user'] = None
+        # Test anonymous user is NOT refused'
+        assert_equal(helpers.call_auth(auth_function, context=context), True)
+        
 
     def _test_package_resource_access(self, user, access):
         log.debug("Running test_org_user_access_to_public_package_show")
@@ -244,3 +253,93 @@ class TestDatagovInventoryAuth(object):
 
         log.debug("Running test_anon_user_access_to_public_private_show")
         self._test_package_resource_access(None, False)
+
+    def test_format_autocomplete(self):
+        '''Test format_autocomplete expected output'''
+        log.debug("Running test_format_autocomplete")
+        self._anon_rejected_auth_test('format_autocomplete')
+
+    def test_group_list(self):
+        '''Test group_list expected output'''
+        log.debug("Running test_group_list")
+        self._anon_rejected_auth_test('group_list')
+
+    def test_license_list(self):
+        '''Test license_list expected output'''
+        log.debug("Running test_license_list")
+        self._anon_rejected_auth_test('license_list')
+
+    def test_organization_list(self):
+        '''Test organization_list expected output'''
+        log.debug("Running test_organization_list")
+        self._anon_rejected_auth_test('organization_list')
+
+    def test_package_list(self):
+        '''Test package_list expected output'''
+        log.debug("Running test_package_list")
+        self._anon_rejected_auth_test('group_list')
+
+    def test_resource_read(self):
+        '''Test resource_read expected output'''
+        log.debug("Running test_resource_read")
+        self._anon_not_rejected_auth_test('resource_read')
+
+    def test_resource_view_list(self):
+        '''Test resource_view_list expected output'''
+        log.debug("Running test_resource_view_list")
+        self._anon_not_rejected_auth_test('resource_view_list')
+
+    def test_request_reset(self):
+        '''Test request_reset expected output'''
+        log.debug("Running test_request_reset")
+        self._anon_rejected_auth_test('request_reset')
+
+    def test_revision_list(self):
+        '''Test revision_list expected output'''
+        log.debug("Running test_revision_list")
+        self._anon_rejected_auth_test('revision_list')
+
+    def test_revision_show(self):
+        '''Test revision_show expected output'''
+        log.debug("Running test_revision_show")
+        self._anon_rejected_auth_test('revision_show')
+
+    def test_site_read(self):
+        '''Test site_read expected output'''
+        log.debug("Running test_site_read")
+        self._anon_rejected_auth_test('site_read')
+
+    def test_resource_view_show(self):
+        '''Test resource_view_show expected output'''
+        log.debug("Running test_resource_view_show")
+        self._anon_not_rejected_auth_test('resource_view_show')
+
+    def test_tag_list(self):
+        '''Test tag_list expected output'''
+        log.debug("Running test_tag_list")
+        self._anon_rejected_auth_test('tag_list')
+
+    def test_tag_show(self):
+        '''Test resource_view_show expected output'''
+        log.debug("Running test_tag_list")
+        self._anon_rejected_auth_test('tag_list')
+
+    def test_task_status_show(self):
+        '''Test task_status_show expected output'''
+        log.debug("Running test_task_status_show")
+        self._anon_rejected_auth_test('task_status_show')
+
+    def test_user_reset(self):
+        '''Test user_reset expected output'''
+        log.debug("Running test_user_reset")
+        self._anon_rejected_auth_test('user_reset')
+
+    def test_vocabulary_list(self):
+        '''Test vocabulary_list expected output'''
+        log.debug("Running test_vocabulary_list")
+        self._anon_rejected_auth_test('vocabulary_list')
+
+    def test_vocabulary_show(self):
+        '''Test vocabulary_show expected output'''
+        log.debug("Running test_vocabulary_show")
+        self._anon_rejected_auth_test('vocabulary_show')

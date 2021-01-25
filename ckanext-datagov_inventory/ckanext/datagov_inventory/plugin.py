@@ -143,7 +143,7 @@ def site_read(context, data_dict=None):
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def tag_list(context, data_dict=None):
-    log.info('Calling Revision List')
+    log.info('Calling TagList')
     return validate_user(context, data_dict)
 
 
