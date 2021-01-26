@@ -8,7 +8,7 @@ certifi==2020.12.5
 cffi==1.14.4
 chardet==3.0.4
 -e git+https://github.com/ckan/ckan.git@c04b6d64aadc7a647b8896279002626ca3be0a56#egg=ckan
--e git+https://github.com/GSA/inventory-app.git@6f4e825c214914faa742386d0b9f0f1a017edaa1#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
+-e git+https://github.com/GSA/inventory-app.git@6de962d38ea6b567a4a4099ee3502e596f10902a#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
 -e git+https://github.com/GSA/ckanext-datajson.git@4d5994c3f1a5787fbfcf64336d1cfdffe161b4ea#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.2.16
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@b84b93098e80b61c1073236958c33b096987ac3a#egg=ckanext_googleanalyticsbasic
