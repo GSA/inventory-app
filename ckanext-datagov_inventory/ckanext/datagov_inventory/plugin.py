@@ -120,7 +120,7 @@ def resource_view_show(context, data_dict=None):
 
 @plugins.toolkit.auth_disallow_anonymous_access
 def request_reset(context, data_dict=None):
-    # Using login.gov: reject all CKAN password resets 
+    # Using login.gov: reject all CKAN password resets
     log.info('Calling password request reset')
     return {'success': False}
 

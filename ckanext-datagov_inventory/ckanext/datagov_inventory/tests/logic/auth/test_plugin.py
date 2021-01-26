@@ -10,9 +10,7 @@ import ckan.logic as logic
 import pylons.test
 
 import ckan.tests.helpers as helpers
-import requests
 
-import json
 import logging
 
 log = logging.getLogger(__name__)
@@ -78,7 +76,20 @@ class TestDatagovInventoryAuth(object):
             'accessURL': 'www.google.com',
             'webService': 'www.gooogle.com',
             'format': 'text/csv',
-            'formatReadable': 'text/csv'
+            'formatReadable': 'text/csv',
+            'resources': [
+                {
+                    'name': 'my_resource',
+                    'id': 'my_resource_id',
+                    'url': 'www.google.com',
+                    'description': 'description'},
+                {
+                    'name': 'my_resource_1',
+                    'id': 'my_resource_id_1',
+                    'url': 'www.google.com',
+                    'description': 'description_2'
+                }
+            ]
         }
 
         private_dataset_params = {
@@ -119,37 +130,34 @@ class TestDatagovInventoryAuth(object):
             'accessURL': 'www.google.com',
             'webService': 'www.gooogle.com',
             'format': 'text/csv',
-            'formatReadable': 'text/csv'
+            'formatReadable': 'text/csv',
+            'resources': [
+                {
+                    'name': 'my_resource',
+                    'id': 'my_private_resource_id',
+                    'url': 'www.google.com',
+                    'description': 'description'},
+                {
+                    'name': 'my_resource_1',
+                    'id': 'my_private_resource_id_1',
+                    'url': 'www.google.com',
+                    'description': 'description_2'
+                }
+            ]
         }
 
         # Create public package/dataset
         public_dataset = factories.Dataset(**public_dataset_params)
         self.public_dataset_id = public_dataset.get("id")
         log.info("Created Public Dataset with id %s", self.public_dataset_id)
-
-        # Create public resource with using the API to upload file
-        response = requests.post('http://app:5000/api/action/resource_create',
-                                 data={"package_id": public_dataset['id'],
-                                       "name": "My test CSV"},
-                                 headers={
-                                    "X-CKAN-API-Key": sysadmin.get('apikey')
-                                 },
-                                 files=[('upload', file('/opt/inventory-app/config/test.csv'))])
-        self.public_resource_id = json.loads(response.text)["result"]["id"]
+        self.public_resource_id = 'my_resource_id'
         log.info("Created Public Resource with id %s", self.public_resource_id)
 
         # Create Private package/dataset
         private_dataset = factories.Dataset(**private_dataset_params)
         self.private_dataset_id = private_dataset["id"]
         log.info("Created Private Dataset with id %s", self.private_dataset_id)
-
-        # Create Private Resource with using API to upload file
-        response = requests.post('http://app:5000/api/action/resource_create',
-                                 data={"package_id": private_dataset['id'],
-                                       "name": "My private test CSV"},
-                                 headers={"X-CKAN-API-Key": sysadmin.get('apikey')},
-                                 files=[('upload', file('/opt/inventory-app/config/test.csv'))])
-        self.private_resource_id = json.loads(response.text)["result"]["id"]
+        self.private_resource_id = 'my_private_resource_id'
         log.info("Created Private Resource id: %s", self.private_resource_id)
 
     def setup(self):
