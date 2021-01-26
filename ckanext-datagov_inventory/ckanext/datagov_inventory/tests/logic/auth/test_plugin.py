@@ -7,8 +7,6 @@ import ckan.model as model
 import ckan.tests.factories as factories
 import ckan.logic as logic
 
-import pylons.test
-
 import ckan.tests.helpers as helpers
 
 import logging
