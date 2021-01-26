@@ -38,7 +38,7 @@ RUN cd /tmp/Python-$PYTHON_VERSION && \
   make && make install && \
   ldconfig
 
-RUN /usr/local/bin/pip install -U pip && \
+RUN /usr/local/bin/pip install pip==20.3.3 && \
   /usr/local/bin/pip install virtualenv && \
   /usr/local/bin/pip install setuptools==44.0.0
 

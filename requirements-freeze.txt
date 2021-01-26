@@ -13,7 +13,7 @@ chardet==3.0.4
 ckanext-dcat-usmetadata==0.2.16
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@b84b93098e80b61c1073236958c33b096987ac3a#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284#egg=ckanext_s3filestore
--e git+https://github.com/GSA/ckanext-saml2.git@1a2aa1fe84ac43dd2865f2f529505739909c3dad#egg=ckanext_saml2
+-e git+https://github.com/keitaroinc/ckanext-saml2auth.git@d9d7db603fe41b2c4c35ab21fdaf8ea005ad5f7c#egg=ckanext_saml2auth
 -e git+https://github.com/GSA/USMetadata.git@a3005c5bb5235f4034256dcbdb64a7715922ac3a#egg=ckanext_usmetadata
 ckantoolkit==0.0.4
 click==6.7
@@ -63,6 +63,7 @@ pysolr==3.6.0
 python-dateutil==1.5
 python-magic==0.4.15
 python-memcached==1.48
+python2-secrets==1.0.5
 pytz==2016.7
 pyutilib.component.core==4.6.4
 PyYAML==5.4.1
