@@ -128,7 +128,7 @@ class TestDatagovInventoryAuth(object):
         log.info("Created Public Dataset with id %s", self.public_dataset_id)
 
         # Create public resource with using the API to upload file
-        response = requests.post('http://localhost:5000/api/action/resource_create',
+        response = requests.post('http://app:5000/api/action/resource_create',
                                  data={"package_id": public_dataset['id'],
                                        "name": "My test CSV"},
                                  headers={
@@ -144,7 +144,7 @@ class TestDatagovInventoryAuth(object):
         log.info("Created Private Dataset with id %s", self.private_dataset_id)
 
         # Create Private Resource with using API to upload file
-        response = requests.post('http://localhost:5000/api/action/resource_create',
+        response = requests.post('http://app:5000/api/action/resource_create',
                                  data={"package_id": private_dataset['id'],
                                        "name": "My private test CSV"},
                                  headers={"X-CKAN-API-Key": sysadmin.get('apikey')},
