@@ -21,7 +21,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage.
-    url='https://github.com/GSA/ckanext-datagov_inventory',
+    url='https://github.com/GSA/inventory-app',
 
     # Author details
     author='Data Gov',
