@@ -92,9 +92,8 @@ class TestDatagovInventoryAuth(object):
             ]
         }
         dataset = factories.Dataset(**private_dataset_params)
-        log.debug('Private Dataset Id %s', dataset['id'])
         # Return id string for the package and resoruce just created
-        return({'package_id' : 'private_package_id', 'resource_id': 'private_resource_id'})
+        return({'package_id' : dataset['id'], 'resource_id': dataset['resources'][0]['id']})
 
     def _setup_public_gsa_dataset(self):
 
@@ -122,9 +121,9 @@ class TestDatagovInventoryAuth(object):
                     'description': 'description'}
             ]
         }
-        factories.Dataset(**public_dataset_params)
+        dataset = factories.Dataset(**public_dataset_params)
         # Return id string for the package and resoruce just created
-        return({'package_id' : 'public_package_id', 'resource_id': 'public_resource_id'})
+        return({'package_id' : dataset['id'], 'resource_id': dataset['resources'][0]['id']})
 
 
     def assert_user_authorization(self, auth_function, object_id, expected_user_access_dict):
@@ -141,7 +140,6 @@ class TestDatagovInventoryAuth(object):
                 'model': model,
                 'ignore_auth': False,
                 'user': user}
-            log.debug('For Loop Context: %s', context)
             if expected_user_access_dict[user]:
                 actual_authorization = helpers.call_auth(auth_function, context=context, id=object_id)
                 assert actual_authorization == expected_user_access_dict[user]
