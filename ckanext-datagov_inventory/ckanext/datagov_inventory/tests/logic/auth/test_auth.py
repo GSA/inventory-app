@@ -82,7 +82,6 @@ class TestDatagovInventoryAuth(object):
             'bureau_code': '001:40',
             'program_code': '015:010',
             'license_id': 'http://creativecommons.org/publicdomain/zero/1.0/',
-            'license_new': 'http://creativecommons.org/publicdomain/zero/1.0/',
             'owner_org': 'gsa',
             'resources': [
                 {
@@ -110,11 +109,10 @@ class TestDatagovInventoryAuth(object):
             'contact_name': 'john doe',
             'contact_email': 'john.doe@gsa.com',
             'unique_id': '002',
-            'public_access_level': 'non-public',
+            'public_access_level': 'public',
             'bureau_code': '001:40',
             'program_code': '015:010',
             'license_id': 'http://creativecommons.org/publicdomain/zero/1.0/',
-            'license_new': 'http://creativecommons.org/publicdomain/zero/1.0/',
             'owner_org': 'gsa',
             'resources': [
                 {
