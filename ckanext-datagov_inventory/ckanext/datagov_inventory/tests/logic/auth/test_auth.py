@@ -36,8 +36,7 @@ class TestDatagovInventoryAuth(object):
 
     def _setup_test_orgs_users(self):
 
-        # Create test user that is editor of test organization    
-
+        # Create test users 
         self.test_users = {
             'gsa_admin' : factories.User(name='gsa_admin'),
             'gsa_editor' : factories.User(name='gsa_editor'),
@@ -50,12 +49,12 @@ class TestDatagovInventoryAuth(object):
         org_users = [{'name': 'gsa_admin', 'capacity': 'admin'},
                      {'name': 'gsa_editor', 'capacity': 'editor'},
                      {'name': 'gsa_member', 'capacity': 'member'}]
-        org_dict = factories.Organization(users=org_users,
+        gsa_org_dict = factories.Organization(users=org_users,
                                           name='gsa')
 
         # Create gsa organization and add users
         org_users = [{'name': 'doi_member', 'capacity': 'member'}]
-        org_dict = factories.Organization(users=org_users,
+        doi_org_dict = factories.Organization(users=org_users,
                                           name='doi')
 
     def _clean_datastore(self):
