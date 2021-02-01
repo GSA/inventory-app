@@ -68,7 +68,7 @@ class TestDatagovInventoryAuth(object):
     def _setup_private_gsa_dataset(self):
 
         private_dataset_params = {
-            'private': 'true',
+            'private': True,
             'name': 'private_test_package',
             'title': 'private test package',
             'id': 'private_package_id',
@@ -98,7 +98,7 @@ class TestDatagovInventoryAuth(object):
     def _setup_public_gsa_dataset(self):
 
         private_dataset_params = {
-            'private': 'true',
+            'private': False,
             'name': 'public_test_package',
             'title': 'public test package',
             'id' : 'public_package_id',
