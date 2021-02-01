@@ -22,6 +22,17 @@ class TestDatagovInventoryAuth(object):
         # Start with a clean database
         model.repo.rebuild_db()
 
+    def setup(self):
+        '''Nose runs this method before each test method in our test class.'''
+
+        # Start with a clean database for each test
+        model.repo.rebuild_db()
+
+    def teardown(self):
+        '''Nose runs this method after each test method in our test class.'''
+
+    def _setup_test_orgs_users(self):
+
         # Create test user that is editor of test organization    
 
         self.test_users = {
@@ -43,13 +54,6 @@ class TestDatagovInventoryAuth(object):
         org_users = [{'name': 'doi_member', 'capacity': 'member'}]
         org_dict = factories.Organization(users=org_users,
                                           name='doi')
-
-
-    def setup(self):
-        '''Nose runs this method before each test method in our test class.'''
-
-    def teardown(self):
-        '''Nose runs this method after each test method in our test class.'''
 
     def _setup_private_gsa_dataset(self):
 
@@ -77,9 +81,49 @@ class TestDatagovInventoryAuth(object):
                     'description': 'description'}
             ]
         }
+        factories.Dataset(**private_dataset_params)
+        return({
+            'model': model,
+            'ignore_auth': False,
+            'user': '',
+            'id' : 'private_resource_id'
+        })
+
+    def _setup_public_gsa_dataset(self):
+
+        private_dataset_params = {
+            'private': 'true',
+            'name': 'public_test_package',
+            'title': 'public test package',
+            'tag_string': 'test_package',
+            'modified': '2014-04-04',
+            'publisher': 'GSA',
+            'contact_name': 'john doe',
+            'contact_email': 'john.doe@gsa.com',
+            'unique_id': '002',
+            'public_access_level': 'non-public',
+            'bureau_code': '001:40',
+            'program_code': '015:010',
+            'license_id': 'http://creativecommons.org/publicdomain/zero/1.0/',
+            'license_new': 'http://creativecommons.org/publicdomain/zero/1.0/',
+            'owner_org': 'gsa',
+            'resources': [
+                {
+                    'name': 'public_resource',
+                    'id': 'public_resource_id',
+                    'url': 'www.google.com',
+                    'description': 'description'}
+            ]
+        }
 
         # Create public package/dataset
-        return (factories.Dataset(**private_dataset_params))
+        factories.Dataset(**public_dataset_params)
+        return({
+            'model': model,
+            'ignore_auth': False,
+            'user': '',
+            'id' : 'public_resource_id'
+        })
 
 
     def assert_user_authorization(self, auth_function, context, expected_user_access_dict):
@@ -99,20 +143,34 @@ class TestDatagovInventoryAuth(object):
     def test_auth_resource_show_for_private_gsa_dataset(self):
         is_allowed = True
         is_denied = False
+        
+        self._setup_test_orgs_users()
+        context = self._setup_private_gsa_dataset()
 
-        private_gsa_dataset = self._setup_private_gsa_dataset()
-        context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': '',
-            'id' : 'private_resource_id'
-        }
         self.assert_user_authorization('resource_show', context, {
             'gsa_admin': is_allowed,
             'gsa_editor': is_allowed,
             'gsa_member': is_allowed,
             'doi_member': is_allowed,
             'anonymous': is_allowed
-    })
+        }
+
+    def test_auth_package_show_for_private_gsa_dataset(self):
+        is_allowed = True
+        is_denied = False
+
+        self._setup_test_orgs_users()
+        context = self._setup_private_gsa_dataset()
+
+        self.assert_user_authorization('resource_show', context, {
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_member': is_allowed,
+            'anonymous': is_allowed
+        }
+
+
+)
 
     
