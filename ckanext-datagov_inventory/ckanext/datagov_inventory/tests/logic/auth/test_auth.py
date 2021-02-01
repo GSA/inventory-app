@@ -13,6 +13,10 @@ import logging
 
 log = logging.getLogger(__name__)
 
+# Define allowed/denied values
+is_allowed = True
+is_denied = False
+
 
 class TestDatagovInventoryAuth(object):
 
@@ -30,19 +34,18 @@ class TestDatagovInventoryAuth(object):
         self._clean_datastore
         model.repo.rebuild_db()
 
-
     def teardown(self):
         '''Nose runs this method after each test method in our test class.'''
 
     def _setup_test_orgs_users(self):
 
-        # Create test users 
+        # Create test users
         self.test_users = {
-            'gsa_admin' : factories.User(name='gsa_admin'),
-            'gsa_editor' : factories.User(name='gsa_editor'),
-            'gsa_member' : factories.User(name='gsa_member'),
-            'doi_member' : factories.User(name='doi_member'),
-            'anonymous' : ''
+            'gsa_admin': factories.User(name='gsa_admin'),
+            'gsa_editor': factories.User(name='gsa_editor'),
+            'gsa_member': factories.User(name='gsa_member'),
+            'doi_member': factories.User(name='doi_member'),
+            'anonymous': ''
         }
 
         # Create gsa organization and add users
@@ -50,12 +53,12 @@ class TestDatagovInventoryAuth(object):
                      {'name': 'gsa_editor', 'capacity': 'editor'},
                      {'name': 'gsa_member', 'capacity': 'member'}]
         gsa_org_dict = factories.Organization(users=org_users,
-                                          name='gsa')
+                                              name='gsa')
 
         # Create gsa organization and add users
         org_users = [{'name': 'doi_member', 'capacity': 'member'}]
         doi_org_dict = factories.Organization(users=org_users,
-                                          name='doi')
+                                              name='doi')
 
     def _clean_datastore(self):
         engine = test_helpers.db.get_write_engine()
@@ -93,15 +96,15 @@ class TestDatagovInventoryAuth(object):
         }
         dataset = factories.Dataset(**private_dataset_params)
         # Return id string for the package and resoruce just created
-        return({'package_id' : dataset['id'], 'resource_id': dataset['resources'][0]['id']})
+        return({'package_id': dataset['id'], 'resource_id': dataset['resources'][0]['id']})
 
     def _setup_public_gsa_dataset(self):
 
-        private_dataset_params = {
+        public_dataset_params = {
             'private': False,
             'name': 'public_test_package',
             'title': 'public test package',
-            'id' : 'public_package_id',
+            'id': 'public_package_id',
             'tag_string': 'test_package',
             'modified': '2014-04-04',
             'publisher': 'GSA',
@@ -123,10 +126,9 @@ class TestDatagovInventoryAuth(object):
         }
         dataset = factories.Dataset(**public_dataset_params)
         # Return id string for the package and resoruce just created
-        return({'package_id' : dataset['id'], 'resource_id': dataset['resources'][0]['id']})
+        return({'package_id': dataset['id'], 'resource_id': dataset['resources'][0]['id']})
 
-
-    def assert_user_authorization(self, auth_function, object_id, expected_user_access_dict):
+    def assert_user_authorization(self, auth_function, expected_user_access_dict, object_id=None):
         # Assert the expected_user_access_dict is complete for our matrix of access roles.
         #  It's an error if the test case is missing an expectation.
         assert 'gsa_admin' in expected_user_access_dict
@@ -141,40 +143,56 @@ class TestDatagovInventoryAuth(object):
                 'ignore_auth': False,
                 'user': user}
             if expected_user_access_dict[user]:
-                actual_authorization = helpers.call_auth(auth_function, context=context, id=object_id)
+                # We expect users to have access, validate
+                actual_authorization = helpers.call_auth(auth_function,
+                                                         context=context,
+                                                         id=object_id)
                 assert actual_authorization == expected_user_access_dict[user]
             else:
-                assert_raises(logic.NotAuthorized, helpers.call_auth, auth_function, context=context, id=object_id)
+                # We expect users to be denied
+                assert_raises(logic.NotAuthorized,
+                              helpers.call_auth,
+                              auth_function,
+                              context=context,
+                              id=object_id)
 
     def test_auth_resource_show_for_private_gsa_dataset(self):
-        is_allowed = True
-        is_denied = False
-        
         # Create test users and test data
         self._setup_test_orgs_users()
         dataset = self._setup_private_gsa_dataset()
 
-        self.assert_user_authorization('resource_show', dataset['resource_id'], {
-            'gsa_admin': is_allowed,
-            'gsa_editor': is_allowed,
-            'gsa_member': is_allowed,
-            'doi_member': is_allowed,
-            'anonymous': is_allowed
-        })
-
-    def test_auth_package_show_for_private_gsa_dataset(self):
-        is_allowed = True
-        is_denied = False
-
-        # Create test users and test data
-        self._setup_test_orgs_users()
-        dataset = self._setup_private_gsa_dataset()
-    
-        log.debug('Test package_show Package Id %s', dataset)
-        self.assert_user_authorization('package_show', dataset['package_id'], {
+        self.assert_user_authorization('resource_show', {
             'gsa_admin': is_allowed,
             'gsa_editor': is_allowed,
             'gsa_member': is_allowed,
             'doi_member': is_denied,
+            'anonymous': is_denied
+        }, object_id=dataset['resource_id'])
+
+    def test_auth_package_show_for_private_gsa_dataset(self):
+        # Create test users and test data
+        self._setup_test_orgs_users()
+        dataset = self._setup_private_gsa_dataset()
+
+        log.debug('Test package_show Package Id %s', dataset)
+        self.assert_user_authorization('package_show', {
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_member': is_denied,
+            'anonymous': is_denied
+        }, object_id=dataset['package_id'])
+
+    def test_auth_package_search(self):
+        # Create test users and test data
+        self._setup_test_orgs_users()
+        dataset = self._setup_private_gsa_dataset()
+
+        log.debug('Test package_show Package Id %s', dataset)
+        self.assert_user_authorization('package_search', {
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_member': is_allowed,
             'anonymous': is_denied
         })
