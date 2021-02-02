@@ -28,8 +28,8 @@ ignore:
         reason: >-
           No remediation path available. Issue created: 
           https://github.com/GSA/datagov-deploy/issues/2472
-        expires: 2021-01-23T06:00:00.000Z
-  SNYK-PYTHON-IPADDRESS-590065:
+        expires: 2021-02-23T06:00:00.000Z
+  SNYK-PYTHON-IPADDRESS-1041793:
     - '*':
         reason: >-
           Fix not available. No known usage of this library inside the CKAN app or it's extensions.
