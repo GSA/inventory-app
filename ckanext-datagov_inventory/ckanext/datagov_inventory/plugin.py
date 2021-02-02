@@ -205,7 +205,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     def get_auth_functions(self):
         return {'format_autocomplete': datagov_disallow_anonymous_access(),
                 'group_list': datagov_disallow_anonymous_access(),
-                'group_list_authz': datagov_disallow_anonymous_access(),
+                # 'group_list_authz': datagov_disallow_anonymous_access(),
                 'license_list': datagov_disallow_anonymous_access(),
                 'member_roles_list': datagov_disallow_anonymous_access(),
                 'organization_list': datagov_disallow_anonymous_access(),
