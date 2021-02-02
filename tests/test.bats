@@ -7,7 +7,7 @@ function wait_for () {
 
   local hostname=$1
   local port=$2
-  local retries=10
+  local retries=20
   while ! nc -z -w 30 "$hostname" "$port" ; do
     if [ "$retries" -le 0 ]; then
       return 1
@@ -21,18 +21,6 @@ function wait_for () {
 # Log into application and save cookie for another application usage
 function login () {
   curl --silent --fail 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
-}
-
-#checks that the google id is in the html response
-function check_google_id () {
-  google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
-  find_id=$(curl --silent --fail --request GET 'http://app:5000' | grep -o "$google_id")
-
-  if  [ "$find_id" = "$google_id" ]; then
-    return 0;
-  else
-    return 1;
-  fi
 }
 
 function test_datastore_request () {
@@ -171,7 +159,15 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
 }
 
 @test "Google Analytics ID present" {
-  check_google_id
+  login
+  google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
+  find_id=$(curl --silent --fail --request GET 'http://app:5000/dataset' --cookie ./cookie-jar | grep -o "$google_id")
+
+  if  [ "$find_id" = "$google_id" ]; then
+    return 0;
+  else
+    return 1;
+  fi
 }
 
 @test "Datastore functioning properly" {

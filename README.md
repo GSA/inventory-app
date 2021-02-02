@@ -55,8 +55,10 @@ shipped to production in order to be compatible with ckanext-saml2. After
 generating the requirements-freeze.txt, manually review the file to make sure
 the versions are correct. See https://github.com/GSA/catalog-app/issues/78 for
 more details.**
+Need to avoid pulling in dev requirements, so start from a clean build
+(without starting up the app) and save the requirements.
 
-    $ make requirements
+    $ make clean build requirements
 
 This freezes the requirements at `requirements-freeze.txt`, and should only be done
 when tests are passing locally. CircleCi will run the build against this 
@@ -65,11 +67,31 @@ when tests are passing locally. CircleCi will run the build against this
 
 ### Live Editing
 
-To edit CKAN or extension code live, the attached volume needs to be found and used.
+To edit CKAN or extension code live, the local code needs to be attached via a volume.
+Add a local extension folder path into the `docker-compose.yml` file that you would like to edit
+(see volume section for commented example).
+After editing the extension/ckan core (see below), run `make up` (the app will not start appropriately)
+then run `make debug` to restart the application with an interactive console.
 
-You can find the volume by running `docker volume ls`, but the default is `inventoryapp_ckan`. You can then run `docker volume inspect inventoryapp_ckan` to get the location details on your local machine. You may need to edit permissions to this folder to edit under your current user. Once this is complete, use your preferred editor to manage the code as needed.
+_TODO: tested `--reload` functionality of gunicorn, but [does not work well with paster flag](https://docs.gunicorn.org/en/stable/settings.html#reload)._
+_Hopefully this option improves in the future._
 
-If you restart the service, the volume stays live. It must be removed manually. If you make edits and want to revert, you can run `docker volume rm -f inventoryapp_ckan`. The docker containers need to be stopped and removed before you can run this command.
+#### Debugger
+
+Add `import ipdb; ipdb.set_trace()` as a new line where you would like to start debugging.
+Then run `make debug`, and a new instance of the ckan app will be started that has an 
+interactive console. Once the debugger statement is triggered, then a command prompt 
+should display in the console. See [documentation](https://docs.python.org/3/library/pdb.html#debugger-commands)
+for available commands. `ipdb` is preferred for styling/readability reasons, but `pdb` will
+work as well. `web-pdb` was tested, but has various timing complications of it's own that causes
+unnecessary complications and failures.
+
+The flask debugger is also imported as a dev requirement and turned on by default in the
+`production.ini` file (`debug = true`), which gives some UI tools on the webpage to parse stack
+traces and various other examination tools. The behavior is inconsistent, probably due to
+ckan serving pages as pylons sometimes and flask at others.
+
+**Make sure you remove all pdb statements before commiting to any repository!**
 
 ### Tests
 

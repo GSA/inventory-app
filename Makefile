@@ -8,8 +8,16 @@ build:
 clean:
 	docker-compose down -v --remove-orphans
 
+debug:
+	# Stop the canonical app container to avoid a port collision. Use `run`
+    # so that we have interactive console access for the debugger.
+	docker-compose stop app ; docker-compose run --service-ports app
+
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
+
+restart:
+	docker-compose restart app
 
 test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build
@@ -17,7 +25,7 @@ test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml up --abort-on-container-exit test
 
 up:
-	docker-compose up -d
+	docker-compose up
 
 up-with-data:
 	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build
