@@ -1,6 +1,6 @@
 Babel==0.9.6
 Beaker==1.6.4
-bleach==3.1.4
+bleach==3.3.0
 certifi==2020.12.5
 cffi==1.14.4
 chardet==3.0.4
