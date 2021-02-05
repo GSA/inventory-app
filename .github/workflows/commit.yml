@@ -6,15 +6,30 @@ on:
 
 
 jobs:
-  deploy-development:
-    name: deploy
-    environment: development
+  test:
+    name: test
     runs-on: ubuntu-latest
+    env:
+      REQUIREMENTS_FILE: requirements-freeze.txt
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - run: ./vendor-requirements.sh
-      - name: Deploy
+      - name: test
+        run: make test
+
+  deploy-development:
+    if: github.ref == 'refs/heads/develop'
+    name: deploy
+    environment: development
+    runs-on: ubuntu-latest
+    needs:
+      - test
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: vendor dependencies
+        run: ./vendor-requirements.sh
+      - name: deploy
         uses: usds/cloud-gov-cli@master
         with:
           org: ${{secrets.CF_ORG}}

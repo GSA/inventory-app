@@ -12,6 +12,8 @@ jobs:
             flake8 . --count --show-source --statistics
   build:
     machine: true
+    environment:
+      REQUIREMENTS_FILE: requirements-freeze.txt
     steps:
       - checkout
       - run:
