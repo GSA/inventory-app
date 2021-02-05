@@ -158,8 +158,6 @@ class TestDatagovInventoryAuth(object):
                               context=context,
                               id=object_id)
 
-                # 'format_autocomplete': datagov_disallow_anonymous_access(),
-
     def test_auth_format_autocomplete(self):
         # Create test users and test group
         self._setup_test_orgs_users()
