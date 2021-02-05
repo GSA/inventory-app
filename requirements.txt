@@ -75,11 +75,11 @@ WebTest==1.4.3            # via pylons
 Werkzeug==0.15.3         # via flask
 zope.interface==4.3.2
 
-# ckanext-saml2 dependencies
-defusedxml==0.6.0
-M2Crypto
-python-memcached==1.48
--e git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
+# # ckanext-saml2 dependencies
+# defusedxml==0.6.0
+# M2Crypto
+# python-memcached==1.48
+# -e git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 
 #datajson
 jsonschema~=2.4.0
