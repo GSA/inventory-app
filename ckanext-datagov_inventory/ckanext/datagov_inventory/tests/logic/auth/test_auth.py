@@ -88,7 +88,7 @@ class TestDatagovInventoryAuth(object):
                 {
                     'name': 'private_resource',
                     'id': 'private_resource_id',
-                    'url': 'www.google.com',
+                    'url': 'www.example.com',
                     'description': 'description'}
             ]
         }
