@@ -78,7 +78,7 @@ class TestDatagovInventoryAuth(object):
             'publisher': 'GSA',
             'contact_name': 'john doe',
             'contact_email': 'john.doe@gsa.com',
-            'unique_id': '002',
+            'unique_id': '001',
             'public_access_level': 'non-public',
             'bureau_code': '001:40',
             'program_code': '015:010',
@@ -95,6 +95,7 @@ class TestDatagovInventoryAuth(object):
         dataset = factories.Dataset(**private_dataset_params)
         # Return id string for the package and resoruce just created
         return({'package_id': dataset['id'],
+                'tag_id' : 'test_package',
                 'resource_id': dataset['resources'][0]['id'],
                 'revision_id': dataset['revision_id']})
 
@@ -127,6 +128,7 @@ class TestDatagovInventoryAuth(object):
         dataset = factories.Dataset(**public_dataset_params)
         # Return id string for the package and resoruce just created
         return({'package_id': dataset['id'],
+                'tag_id' : 'test_package',
                 'resource_id': dataset['resources'][0]['id'],
                 'revision_id': dataset['revision_id']})
 
@@ -173,7 +175,6 @@ class TestDatagovInventoryAuth(object):
     def test_auth_group_list(self):
         # Create test users and test group
         self._setup_test_orgs_users()
-        factories.Group()
 
         self.assert_user_authorization('group_list', {
             'gsa_admin': is_allowed,
@@ -225,7 +226,7 @@ class TestDatagovInventoryAuth(object):
         self._setup_test_orgs_users()
         self._setup_private_gsa_dataset()
 
-        self.assert_user_authorization('package_search', {
+        self.assert_user_authorization('package_list', {
             'gsa_admin': is_allowed,
             'gsa_editor': is_allowed,
             'gsa_member': is_allowed,
@@ -237,6 +238,7 @@ class TestDatagovInventoryAuth(object):
         # Create test users and test data
         self._setup_test_orgs_users()
         self._setup_private_gsa_dataset()
+        self._setup_public_gsa_dataset()
 
         self.assert_user_authorization('package_search', {
             'gsa_admin': is_allowed,
@@ -351,7 +353,7 @@ class TestDatagovInventoryAuth(object):
     def test_auth_tag_show(self):
         # Create test users and test data
         self._setup_test_orgs_users()
-        self._setup_private_gsa_dataset()
+        dataset = self._setup_private_gsa_dataset()
 
         self.assert_user_authorization('tag_show', {
             'gsa_admin': is_allowed,
@@ -359,7 +361,7 @@ class TestDatagovInventoryAuth(object):
             'gsa_member': is_allowed,
             'doi_member': is_allowed,
             'anonymous': is_denied
-        })
+        }, dataset['tag_id'])
 
     def test_auth_task_status_show(self):
         # Create test users and test data
