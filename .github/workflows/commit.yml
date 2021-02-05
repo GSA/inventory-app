@@ -1,0 +1,24 @@
+---
+name: commit
+
+on:
+  push:
+
+
+jobs:
+  deploy-development:
+    name: deploy
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - run: ./vendor-requirements.sh
+      - name: Deploy
+        uses: usds/cloud-gov-cli@master
+        with:
+          org: ${{secrets.CF_ORG}}
+          space: ${{secrets.CF_SPACE}}
+          application: ${{secrets.CF_APP_NAME}}
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
