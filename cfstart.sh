@@ -68,6 +68,8 @@ ckan config-tool config/production.ini \
     "ckan.storage_path=/home/vcap/app/files"
     # "ckanext.s3filestore.public_host_name = http://localhost:4572"
 
+ckan config-tool config/production.ini -s DEFAULT -e debug=false
+
 echo "Setting up the datastore user"
 DATASTORE_URL=$DATASTORE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD ./datastore-usersetup.py
 
