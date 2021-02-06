@@ -30,26 +30,26 @@ SVC_REDIS="${APP_NAME}-redis"
 
 # CKAN wants to know about two databases. We grab those URLs from the VCAP_SERVICES env var provided by the platform
 
-DATABASE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATABASE $SVC_DATABASE '.["aws-rds"][] | select(.name == $SVC_DATABASE) | .credentials.uri')
-DATASTORE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.["aws-rds"][] | select(.name == $SVC_DATASTORE) | .credentials.uri')
+DATABASE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATABASE $SVC_DATABASE '.[][] | select(.name == $SVC_DATABASE) | .credentials.uri')
+DATASTORE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.uri')
 
 # We need specific datastore URL components so we can construct another URL for the read-only user
-DS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.["aws-rds"][] | select(.name == $SVC_DATASTORE) | .credentials.host')
-DS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.["aws-rds"][] | select(.name == $SVC_DATASTORE) | .credentials.port')
-DS_DBNAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.["aws-rds"][] | select(.name == $SVC_DATASTORE) | .credentials.db_name')
+DS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.host')
+DS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.port')
+DS_DBNAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.db_name')
 
 # We need specific s3 variables so we can configure ckan to access s3
-S3_REGION_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.["s3"][] | select(.name == $SVC_S3) | .credentials.region')
-S3_BUCKET_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.["s3"][] | select(.name == $SVC_S3) | .credentials.bucket')
-# S3_HOST_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.["s3"][] | select(.name == $SVC_S3) | .credentials.fips_endpoint')
-# S3_PUBLIC_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.["s3"][] | select(.name == $SVC_S3) | .credentials.region')
-S3_ACCESS_KEY_ID=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.["s3"][] | select(.name == $SVC_S3) | .credentials.access_key_id')
-S3_SECRET_ACCESS_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.["s3"][] | select(.name == $SVC_S3) | .credentials.secret_access_key')
+S3_REGION_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.region')
+S3_BUCKET_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.bucket')
+# S3_HOST_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.fips_endpoint')
+# S3_PUBLIC_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.region')
+S3_ACCESS_KEY_ID=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.access_key_id')
+S3_SECRET_ACCESS_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.secret_access_key')
 
 # We need the redis credentials for ckan to access redis, and we need to build the url
-REDIS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.["aws-elasticache-redis"][] | select(.name == $SVC_REDIS) | .credentials.host')
-REDIS_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.["aws-elasticache-redis"][] | select(.name == $SVC_REDIS) | .credentials.password')
-REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.["aws-elasticache-redis"][] | select(.name == $SVC_REDIS) | .credentials.port')
+REDIS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.host')
+REDIS_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.password')
+REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.port')
 
 # Edit the config file to use our values
 ckan config-tool config/production.ini -s server:main -e port=${PORT}
