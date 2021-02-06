@@ -26,18 +26,6 @@ def datagov_disallow_anonymous_access(func=None):
     return _wrapper
 
 
-# group list is called on anonymous pages through package_show
-# this prevents a 500, and instead returns our 403 error
-# @toolkit.auth_allow_anonymous_access
-# def group_list_authz(context, data_dict=None):
-#     log.info('Calling group list authz')
-#     user = context.get('user')
-#     if user:
-#         return authz.is_authorized('group_list', context, data_dict)
-#     else:
-#         toolkit.abort(status_code=403)
-#         return {'success': False, 'msg': default_message}
-
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurer)
