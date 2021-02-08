@@ -46,10 +46,10 @@ RUN /usr/local/bin/pip install pip==20.3.3 && \
 RUN mkdir -p $CKAN_HOME && \
   virtualenv $CKAN_HOME -p /usr/local/bin/python
 
-COPY $REQUIREMENTS_FILE /tmp/requirements.txt
+COPY . /opt/inventory-app/
 
 # Install ckan dependencies
-RUN $CKAN_HOME/bin/pip install -r /tmp/requirements.txt
+RUN $CKAN_HOME/bin/pip install -r $REQUIREMENTS_FILE
 
 COPY entrypoint-docker.sh /
 ENTRYPOINT ["/entrypoint-docker.sh"]

@@ -1,0 +1,4 @@
+include README.md
+include LICENSE
+include requirements.txt
+recursive-include ckanext/datagov_inventory *.html *.json *.js *.less *.css *.mo

@@ -2,12 +2,13 @@ Babel==2.3.4
 Beaker==1.9.0
 bleach==3.1.4
 boto==2.49.0
-boto3==1.17.0
-botocore==1.20.0
+boto3==1.17.2
+botocore==1.20.2
 certifi==2020.12.5
 cffi==1.14.4
 chardet==3.0.4
 -e git+https://github.com/ckan/ckan.git@c04b6d64aadc7a647b8896279002626ca3be0a56#egg=ckan
+-e git+https://github.com/GSA/inventory-app.git@38ab47c66d1863aa2f9bdb68116a5d9b356d1eba#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
 -e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.2.17
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c#egg=ckanext_googleanalyticsbasic
@@ -16,7 +17,7 @@ ckanext-dcat-usmetadata==0.2.17
 -e git+https://github.com/GSA/USMetadata.git@a3005c5bb5235f4034256dcbdb64a7715922ac3a#egg=ckanext_usmetadata
 ckantoolkit==0.0.4
 click==6.7
-cryptography==3.3.1
+cryptography==3.3.2
 decorator==4.2.1
 defusedxml==0.6.0
 enum34==1.1.10

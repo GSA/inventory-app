@@ -158,6 +158,12 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
   curl --silent --fail http://app:5000/dataset/test-dataset-1 --cookie ./cookie-jar
 }
 
+@test "/dataset is inaccessible to public" {
+  run curl --fail http://app:5000/dataset
+  # Validate output is 22, curl response for 403 (Forbidden)
+  [ "$status" -eq 22 ]
+}
+
 @test "Google Analytics ID present" {
   login
   google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
