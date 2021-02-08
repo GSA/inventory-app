@@ -11,7 +11,6 @@ applications:
     buildpacks:
       - https://github.com/cloudfoundry/python-buildpack#v1.7.6
     random-route: true
-    # health-check-type: process
     services:
     - ((app_name))-db        # cf create-service aws-rds micro-psql ((app_name))-db
     - ((app_name))-datastore # cf create-service aws-rds micro-psql ((app_name))-datastore
