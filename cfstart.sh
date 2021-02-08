@@ -78,6 +78,6 @@ DATASTORE_URL=$DATASTORE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWO
 ckan db upgrade -c config/production.ini 
 
 # Fire it up!
-exec ckan run -H 0.0.0.0 -p $PORT -c config/production.ini
-# exec paster --plugin=ckan serve config/production.ini
+# exec ckan run -H 0.0.0.0 -p $PORT -c config/production.ini
+exec paster --plugin=ckan serve config/production.ini
 
