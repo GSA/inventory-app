@@ -108,18 +108,18 @@ Update and cache all the Python package requirements
 ./vendor-requirements.sh
 ```
 
-Create the database used by datastore. `((appname))` should be the same as what you have in vars.yml.
+Create the database used by datastore. `((app_name))` should be the same as what you have in vars.yml.
 
 ```sh
 $ cf create-service aws-rds micro-psql ((app_name))-datastore
 ```
 
-Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available. (See [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time).)
+Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available (see [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time)). _TODO: replace this with the cloud.gov broker [#2760](https://github.com/GSA/datagov-deploy/issues/2760)._
 ```sh
-$ cf create-service csb-aws-postgresql small ((app_name))-db -c '{"postgres_version": "9.6"}'
+$ cf create-service csb-aws-postgresql small ((app_name))-db -c '{"postgres_version": "9.6", "publicly_accessible": true, "storage_encrypted": true}'
 ```
 
-Create the s3 bucket for data storage. 
+Create the s3 bucket for data storage.
 ```sh
 $ cf create-service s3 basic-sandbox ((app_name))-s3
 ```
