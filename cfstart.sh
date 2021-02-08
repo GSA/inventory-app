@@ -7,15 +7,8 @@ set -o pipefail
 function ckan () {
     paster --plugin=ckan "$@"
 }
-# set -o nounset # This option conflicts with the use of regex matching and $BASH_REMATCH
-
-# At this point we expect that you've already setup these environment variables:
-#   DS_RO_USER <datastore_username>
-#   DS_RO_PASSWORD <datastore_password>
-#   SOLR_URL <solr_url>
 
 # We need to know the application name ...
-
 APP_NAME=$(echo $VCAP_APPLICATION | jq -r '.application_name')
 ORG_NAME=$(echo $VCAP_APPLICATION | jq -r '.organization_name')
 SPACE_NAME=$(echo $VCAP_APPLICATION | jq -r '.space_name')
@@ -87,5 +80,4 @@ DATASTORE_URL=$DATASTORE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWO
 ckan db upgrade -c $CKAN_INI
 
 # Fire it up!
-exec config/server_start.sh -b 0.0.0.0:8080 -t 9000
-
+exec config/server_start.sh -b 0.0.0.0:$PORT -t 9000
