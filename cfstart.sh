@@ -57,6 +57,13 @@ REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | sel
 # We need the secret credentials for various application components (DB configuration, license keys, etc)
 DS_RO_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.DS_RO_PASSWORD')
 export NEW_RELIC_LICENSE_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.NEW_RELIC_LICENSE_KEY')
+SAML2_SP_PRIVATE_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.SAML2_SP_PRIVATE_KEY')
+SAML2_SP_PUBLIC_CERT=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.SAML2_SP_PUBLIC_CERT')
+
+
+# We need the SAML2 cert and key in the tmp file for saml2 authentication
+echo ${SAML2_SP_PRIVATE_KEY} > ${TMPDIR}/saml2auth_key.pem
+echo ${SAML2_SP_PUBLIC_CERT} > ${TMPDIR}/saml2auth_cert.pem
 
 # Edit the config file to use our values
 export CKAN_INI=config/production.ini
@@ -66,6 +73,9 @@ ckan config-tool $CKAN_INI \
     "ckan.site_id=${ORG_NAME}-${SPACE_NAME}-${APP_NAME}" \
     "sqlalchemy.url=${DATABASE_URL}" \
     "solr_url=${SOLR_URL}" \
+    "ckanext.saml2auth.entity_id=${SAML_ENTITY_ID}" \
+    "ckanext.saml2auth.key_file_path=${TMPDIR}/saml2auth_key.pem" \
+    "ckanext.saml2auth.cert_file_path=${TMPDIR}/saml2auth_cert.pem" \
     "ckan.redis.url=rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}" \
     "ckan.datastore.write_url=${DATASTORE_URL}" \
     "ckan.datastore.read_url=postgres://${DS_RO_USER}:${DS_RO_PASSWORD}@${DS_HOST}:${DS_PORT}/${DS_DBNAME}" \

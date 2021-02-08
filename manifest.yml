@@ -25,3 +25,4 @@ applications:
       NEW_RELIC_LOG: /var/log/new_relic.log
       NEW_RELIC_LOG_LEVEL: info
       NEW_RELIC_MONITOR_MODE: False
+      SAML_ENTITY_ID: urn:gov:gsa:SAML:2.0.profiles:sp:sso:gsa:datagov-sandbox-inventory # Sandbox

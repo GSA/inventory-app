@@ -3,3 +3,4 @@ src/
 *.csv
 vendor/*
 vars.yml
+credentials.json
