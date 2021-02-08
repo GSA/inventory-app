@@ -21,7 +21,7 @@ Genshi==0.6.1
 gevent==21.1.2
 greenlet==1.0.0
 gunicorn==19.10.0
-httplib2==0.18.1
+httplib2==0.19.0
 idna==2.7
 ipaddress==1.0.23
 Jinja2==2.10.3
