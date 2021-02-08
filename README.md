@@ -129,7 +129,7 @@ Create the Redis service for cache
 $ cf create-service aws-elasticache-redis redis-dev ((app_name))-redis
 ```
 
-Create the secrets service and bind it
+Create the secrets service to store secret environment variables (current list)
 ```sh
 $ cf cups ((app_name))-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
 ```
