@@ -29,6 +29,7 @@ SVC_DATABASE="${APP_NAME}-db"
 SVC_DATASTORE="${APP_NAME}-datastore"
 SVC_S3="${APP_NAME}-s3"
 SVC_REDIS="${APP_NAME}-redis"
+SVC_SECRETS="${APP_NAME}-secrets"
 
 # CKAN wants to know about two databases. We grab those URLs from the VCAP_SERVICES env var provided by the platform
 
@@ -53,9 +54,14 @@ REDIS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | sel
 REDIS_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.password')
 REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.port')
 
+# We need the secret credentials for various application components (DB configuration, license keys, etc)
+DS_RO_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.DS_RO_PASSWORD')
+export NEW_RELIC_LICENSE_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.NEW_RELIC_LICENSE_KEY')
+
 # Edit the config file to use our values
-ckan config-tool config/production.ini -s server:main -e port=${PORT}
-ckan config-tool config/production.ini \
+export CKAN_INI=config/production.ini
+ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
+ckan config-tool $CKAN_INI \
     "ckan.site_url=http://${APP_URL}" \
     "ckan.site_id=${ORG_NAME}-${SPACE_NAME}-${APP_NAME}" \
     "sqlalchemy.url=${DATABASE_URL}" \
@@ -71,16 +77,15 @@ ckan config-tool config/production.ini \
     "ckan.storage_path=/home/vcap/app/files"
     # "ckanext.s3filestore.public_host_name = http://localhost:4572"
 
-ckan config-tool config/production.ini -s DEFAULT -e debug=false
+ckan config-tool $CKAN_INI -s DEFAULT -e debug=false
 
 echo "Setting up the datastore user"
 DATASTORE_URL=$DATASTORE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD ./datastore-usersetup.py
 
 # Run migrations
 # paster --plugin=ckan db upgrade -c config/production.ini
-ckan db upgrade -c config/production.ini 
+ckan db upgrade -c $CKAN_INI
 
 # Fire it up!
-# exec ckan run -H 0.0.0.0 -p $PORT -c config/production.ini
-exec paster --plugin=ckan serve config/production.ini
+exec config/server_start.sh -b 0.0.0.0:8080 -t 9000
 
