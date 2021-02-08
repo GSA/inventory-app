@@ -57,7 +57,7 @@ do
 done
 
 # Run migrations
-paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
+paster --plugin=ckan db upgrade -c $CKAN_INI
 
 if [ "${1-}" = "seed" ]; then
   # Run seed script in new process
@@ -67,4 +67,4 @@ if [ "${1-}" = "seed" ]; then
 fi
 
 echo starting ckan...
-exec $CKAN_CONFIG/server_start.sh --paste /etc/ckan/production.ini -b 0.0.0.0:5000 -t 9000
+exec $CKAN_CONFIG/server_start.sh --paste $CKAN_INI -b 0.0.0.0:5000 -t 9000

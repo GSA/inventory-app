@@ -17,6 +17,8 @@ function ckan () {
 # We need to know the application name ...
 
 APP_NAME=$(echo $VCAP_APPLICATION | jq -r '.application_name')
+ORG_NAME=$(echo $VCAP_APPLICATION | jq -r '.organization_name')
+SPACE_NAME=$(echo $VCAP_APPLICATION | jq -r '.space_name')
 
 # We need the public URL for the configuration file
 APP_URL=$(echo $VCAP_APPLICATION | jq -r '.application_uris[0]')
@@ -55,6 +57,7 @@ REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | sel
 ckan config-tool config/production.ini -s server:main -e port=${PORT}
 ckan config-tool config/production.ini \
     "ckan.site_url=http://${APP_URL}" \
+    "ckan.site_id=${ORG_NAME}-${SPACE_NAME}-${APP_NAME}" \
     "sqlalchemy.url=${DATABASE_URL}" \
     "solr_url=${SOLR_URL}" \
     "ckan.redis.url=rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}" \

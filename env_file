@@ -12,4 +12,4 @@ DB_CKAN_HOST=db
 DB_CKAN_USER=ckan
 DB_CKAN_PASSWORD=pass
 DB_CKAN_DB=ckan
-CKAN_INI=/etc/ckan/production.ini
+CKAN_INI=/etc/ckan/development.ini

@@ -87,7 +87,7 @@ work as well. `web-pdb` was tested, but has various timing complications of it's
 unnecessary complications and failures.
 
 The flask debugger is also imported as a dev requirement and turned on by default in the
-`production.ini` file (`debug = true`), which gives some UI tools on the webpage to parse stack
+`development.ini` file (`debug = true`), which gives some UI tools on the webpage to parse stack
 traces and various other examination tools. The behavior is inconsistent, probably due to
 ckan serving pages as pylons sometimes and flask at others.
 
