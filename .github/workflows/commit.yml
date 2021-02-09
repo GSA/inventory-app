@@ -29,16 +29,11 @@ jobs:
         uses: actions/checkout@v2
       - name: vendor dependencies
         run: ./vendor-requirements.sh
-      - name: prepare vars.yml
-      - run: |
-          echo 'app_name: ${{secrets.CF_APP_NAME}}' >> vars.yml
-          echo 'datastore_readonly_password: "${{secrets.DATASTORE_READONLY_PASSWORD}}"' >> vars.yml
       - name: deploy
         uses: usds/cloud-gov-cli@master
         with:
-          command: push --vars-file vars.yml --strategy rolling
+          command: push ${{ secrets.CF_APP_NAME }} --vars-file vars.development.yml --strategy rolling
           org: ${{secrets.CF_ORG}}
           space: ${{secrets.CF_SPACE}}
-          application: ${{secrets.CF_APP_NAME}}
           user: ${{secrets.CF_SERVICE_USER}}
           password: ${{secrets.CF_SERVICE_AUTH}}
