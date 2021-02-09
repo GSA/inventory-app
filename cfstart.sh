@@ -55,7 +55,7 @@ export NEW_RELIC_LICENSE_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SV
 export CKAN_INI=config/production.ini
 ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
 ckan config-tool $CKAN_INI \
-    "ckan.site_url=http://${APP_URL}" \
+    "ckan.site_url=https://${APP_URL}" \
     "ckan.site_id=${ORG_NAME}-${SPACE_NAME}-${APP_NAME}" \
     "sqlalchemy.url=${DATABASE_URL}" \
     "solr_url=${SOLR_URL}" \
