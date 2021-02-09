@@ -54,3 +54,5 @@ jobs:
           space: ${{secrets.CF_SPACE}}
           user: ${{secrets.CF_SERVICE_USER}}
           password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: curl --fail --silent https://inventory-dev-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
