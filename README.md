@@ -87,7 +87,7 @@ work as well. `web-pdb` was tested, but has various timing complications of it's
 unnecessary complications and failures.
 
 The flask debugger is also imported as a dev requirement and turned on by default in the
-`production.ini` file (`debug = true`), which gives some UI tools on the webpage to parse stack
+`development.ini` file (`debug = true`), which gives some UI tools on the webpage to parse stack
 traces and various other examination tools. The behavior is inconsistent, probably due to
 ckan serving pages as pylons sometimes and flask at others.
 
@@ -96,6 +96,55 @@ ckan serving pages as pylons sometimes and flask at others.
 ### Tests
 
     $ make test
+
+
+## Deploying to cloud.gov
+
+Copy `vars.yml.template` to `vars.yml`, and customize the values in that file. Then, assuming you're logged in for the Cloud Foundry CLI:
+
+Update and cache all the Python package requirements
+
+```sh
+./vendor-requirements.sh
+```
+
+Create the database used by datastore. `((app_name))` should be the same as what you have in vars.yml.
+
+```sh
+$ cf create-service aws-rds micro-psql ((app_name))-datastore
+```
+
+Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available (see [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time)). _TODO: replace this with the cloud.gov broker [#2760](https://github.com/GSA/datagov-deploy/issues/2760)._
+```sh
+$ cf create-service csb-aws-postgresql small ((app_name))-db -c '{"postgres_version": "9.6", "publicly_accessible": true, "storage_encrypted": true}'
+```
+
+Create the s3 bucket for data storage.
+```sh
+$ cf create-service s3 basic-sandbox ((app_name))-s3
+```
+
+Create the Redis service for cache
+```sh
+$ cf create-service aws-elasticache-redis redis-dev ((app_name))-redis
+```
+
+Create the secrets service to store secret environment variables (current list)
+```sh
+$ cf cups ((app_name))-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
+```
+
+Deploy the Solr instance and the app.
+```sh
+$ cf push --vars-file vars.yml
+```
+
+Ensure the inventory app can reach the Solr app.
+```sh
+$ cf add-network-policy ((app_name)) --destination-app ((app_name))-solr --protocol tcp --port 8983
+```
+
+You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ((app_name))`.
 
 
 ## License and Contributing

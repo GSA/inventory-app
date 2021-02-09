@@ -1,0 +1,13 @@
+# Copy this file to vars.yml and then edit in your own values here
+
+# This is the name to use for the inventory app in Cloud Foundry. You might want to customize this
+# (eg "inventory-<yourname>") to avoid collisions with others are also working on 
+# inventory in the same space.
+app_name: inventory
+
+# Number of application instances to run in cloud.gov
+instances: 1
+
+# This is the password to use for read-only access to the datastore database. The user will be 
+# provisioned with this password at startup time if it doesn't already exist.
+datastore_readonly_password: somepassword
