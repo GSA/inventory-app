@@ -50,8 +50,8 @@ jobs:
         uses: usds/cloud-gov-cli@master
         with:
           command: push inventory-james --vars-file vars.development.yml --strategy rolling
-          org: ${{secrets.CF_ORG}}
-          space: ${{secrets.CF_SPACE}}
+          org: gsa-datagov
+          space: development
           user: ${{secrets.CF_SERVICE_USER}}
           password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
