@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - lint
-      - test
+      #- test
       - vendor
     steps:
       - name: checkout
