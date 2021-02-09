@@ -1,0 +1,130 @@
+---
+name: commit
+
+on:
+  push:
+
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['2.x', '3.x']
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: lint
+        run: |
+          # TODO add this to dev dependencies and Makefile
+          pip install --upgrade pip
+          pip install flake8
+          flake8 ckanext-datagov_inventory --count --show-source --statistics
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    env:
+      REQUIREMENTS_FILE: requirements-freeze.txt
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: test
+        run: make test
+      - name: test extension
+        run: make test_extension
+
+  vendor:
+    name: vendor dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: vendor dependencies
+        run: ./vendor-requirements.sh
+      - uses: actions/upload-artifact@v2
+        with:
+          name: python-vendored
+          path: vendor/
+          if-no-files-found: error
+
+  deploy-development:
+    if: github.ref == 'refs/heads/develop'
+    name: deploy (development)
+    environment: development
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - test
+      - vendor
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: python-vendored
+          path: vendor
+      - name: deploy
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: push inventory --vars-file vars.development.yml --strategy rolling
+          org: gsa-datagov
+          space: development
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: curl --fail --silent https://inventory-dev-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
+
+  deploy-staging:
+    if: github.ref == 'refs/heads/main'
+    name: deploy (staging)
+    environment: staging
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - test
+      - vendor
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: python-vendored
+      - name: deploy
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: push inventory --vars-file vars.staging.yml --strategy rolling
+          org: gsa-datagov
+          space: staging
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: curl --fail --silent https://inventory-stage-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
+
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    name: deploy (production)
+    environment: production
+    runs-on: ubuntu-latest
+    needs:
+      - deploy-staging
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: python-vendored
+      - name: deploy
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: push inventory --vars-file vars.production.yml --strategy rolling
+          org: gsa-datagov
+          space: prod
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: curl --fail --silent https://inventory-prod-datagov.app.cloud.gov/api/action/status_show?$(date +%s)

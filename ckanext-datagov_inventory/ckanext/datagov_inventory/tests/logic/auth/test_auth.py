@@ -25,7 +25,6 @@ class TestDatagovInventoryAuth(object):
     def setup_class(self):
         '''Nose runs this method once to setup our test class.'''
 
-
     def setup(self):
         '''Nose runs this method before each test method in our test class.'''
 
@@ -34,10 +33,8 @@ class TestDatagovInventoryAuth(object):
         self.clean_datastore()
         model.repo.rebuild_db()
 
-
     def teardown(self):
         '''Nose runs this method after each test method in our test class.'''
-
 
     def setup_test_orgs_users(self):
 
@@ -62,7 +59,6 @@ class TestDatagovInventoryAuth(object):
                      {'name': 'doi_member', 'capacity': 'member'}]
         factories.Organization(users=org_users, name='doi')
 
-
     def clean_datastore(self):
         engine = datastore_helpers.db.get_write_engine()
         datastore_helpers.rebuild_all_dbs(
@@ -71,7 +67,6 @@ class TestDatagovInventoryAuth(object):
             )
         )
 
- 
     def factory_dataset(self, **kwargs):
         # Defaults
         dataset_params = {
@@ -101,14 +96,17 @@ class TestDatagovInventoryAuth(object):
         dataset = factories.Dataset(**dataset_params)
         # Return id string for the package and resoruce just created
         return({'package_id': dataset['id'],
-                'tag_id' : dataset_params['tag_string'],
+                'tag_id': dataset_params['tag_string'],
                 'resource_id': dataset['resources'][0]['id'],
                 'revision_id': dataset['revision_id']})
 
-
-    def assert_user_authorization(self, auth_function, expected_user_access_dict, object_id=None):
-        # Assert the expected_user_access_dict is complete for our matrix of access roles.
-        #  It's an error if the test case is missing an expectation.
+    def assert_user_authorization(self,
+                                  auth_function,
+                                  expected_user_access_dict,
+                                  object_id=None):
+        # Assert the expected_user_access_dict is complete for our matrix of
+        #  access roles. It's an error if the test case is missing an
+        #  expectation.
         assert 'gsa_admin' in expected_user_access_dict
         assert 'gsa_editor' in expected_user_access_dict
         assert 'gsa_member' in expected_user_access_dict
@@ -148,7 +146,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         })
 
-
     def test_auth_group_list(self):
         # Create test users and test group
         self.setup_test_orgs_users()
@@ -161,7 +158,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
-
 
     def test_auth_license_list(self):
         # Create test users and test data
@@ -177,7 +173,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         })
 
-
     def test_auth_member_roles_list(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -191,7 +186,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         })
 
-
     def test_auth_organization_list(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -204,7 +198,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
- 
 
     def test_auth_package_list(self):
         # Create test users and test data
@@ -220,7 +213,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         })
 
-
     def test_auth_package_search(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -231,12 +223,11 @@ class TestDatagovInventoryAuth(object):
             'gsa_admin': is_allowed,
             'gsa_editor': is_allowed,
             'gsa_member': is_allowed,
-            'doi_admin' : is_allowed,
+            'doi_admin': is_allowed,
             'doi_admin': is_allowed,
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
-
 
     def test_auth_package_show_for_private_gsa_dataset(self):
         # Create test users and test data
@@ -252,7 +243,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         }, object_id=datasest['package_id'])
 
-
     def test_auth_package_show_for_public_gsa_dataset(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -266,7 +256,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_allowed
         }, object_id=dataset['package_id'])
-
 
     def test_auth_resource_show_for_private_gsa_dataset(self):
         # Create test users and test data
@@ -282,7 +271,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         }, object_id=dataset['resource_id'])
 
-
     def test_auth_resource_show_for_public_gsa_dataset(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -297,7 +285,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_allowed
         }, object_id=dataset['resource_id'])
 
-
     def test_auth_revision_list(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -310,7 +297,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
-
 
     def test_auth_revision_show(self):
         # Create test users and test data
@@ -326,7 +312,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         }, dataset['revision_id'])
 
-
     def test_auth_site_read(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -339,7 +324,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
-
 
     def test_auth_tag_list(self):
         # Create test users and test data
@@ -355,7 +339,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         })
 
-
     def test_auth_tag_show(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -370,7 +353,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         }, dataset['tag_id'])
 
-
     def test_auth_task_status_show(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -384,7 +366,6 @@ class TestDatagovInventoryAuth(object):
             'anonymous': is_denied
         })
 
-
     def test_auth_vocabulary_list(self):
         # Create test users and test data
         self.setup_test_orgs_users()
@@ -397,7 +378,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
-
 
     def test_auth_vocabulary_show(self):
         # Create test users and test data

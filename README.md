@@ -108,30 +108,30 @@ Update and cache all the Python package requirements
 ./vendor-requirements.sh
 ```
 
-Create the database used by datastore. `((app_name))` should be the same as what you have in vars.yml.
+Create the database used by datastore. `${app_name}` should be the same as what you have in vars.yml.
 
 ```sh
-$ cf create-service aws-rds micro-psql ((app_name))-datastore
+$ cf create-service aws-rds micro-psql ${app_name}-datastore
 ```
 
 Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available (see [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time)). _TODO: replace this with the cloud.gov broker [#2760](https://github.com/GSA/datagov-deploy/issues/2760)._
 ```sh
-$ cf create-service csb-aws-postgresql small ((app_name))-db -c '{"postgres_version": "9.6", "publicly_accessible": true, "storage_encrypted": true}'
+$ cf create-service csb-aws-postgresql small ${app_name}-db -c '{"postgres_version": "9.6", "publicly_accessible": true, "storage_encrypted": true}'
 ```
 
 Create the s3 bucket for data storage.
 ```sh
-$ cf create-service s3 basic-sandbox ((app_name))-s3
+$ cf create-service s3 basic-sandbox ${app_name}-s3
 ```
 
 Create the Redis service for cache
 ```sh
-$ cf create-service aws-elasticache-redis redis-dev ((app_name))-redis
+$ cf create-service aws-elasticache-redis redis-dev ${app_name}-redis
 ```
 
 Create the secrets service to store secret environment variables (current list)
 ```sh
-$ cf cups ((app_name))-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
+$ cf cups ${app_name}-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
 ```
 
 Deploy the Solr instance and the app.
@@ -141,10 +141,22 @@ $ cf push --vars-file vars.yml
 
 Ensure the inventory app can reach the Solr app.
 ```sh
-$ cf add-network-policy ((app_name)) --destination-app ((app_name))-solr --protocol tcp --port 8983
+$ cf add-network-policy ${app_name} --destination-app ${app_name}-solr --protocol tcp --port 8983
 ```
 
-You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ((app_name))`.
+You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ${app_name}`.
+
+
+### CI configuration
+
+Create a GitHub environment for each application you're deploying. Each
+GH environment should be configured with secrets from a [ci-deployer service
+account](https://github.com/GSA/datagov-deploy/wiki/Cloud.gov-Cheat-Sheet#space-organization).
+
+Secret name | Description
+----------- | -----------
+CF_SERVICE_AUTH | The service key password.
+CF_SERVICE_USER | The service key username.
 
 
 ## License and Contributing

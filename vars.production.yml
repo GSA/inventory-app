@@ -1,0 +1,7 @@
+app_name: inventory
+
+# Number of application instances to run in cloud.gov
+instances: 2
+
+routes:
+  - route: inventory-prod-datagov.app.cloud.gov

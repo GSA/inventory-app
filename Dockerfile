@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
 
+# TODO this should probably be requirements-freeze.txt, and then `make
+# update-dependencies` will build from requirements.txt
 ARG REQUIREMENTS_FILE=requirements.txt
 ARG PYTHON_VERSION=2.7.17
 
