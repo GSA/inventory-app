@@ -129,9 +129,9 @@ Create the Redis service for cache
 $ cf create-service aws-elasticache-redis redis-dev ((app_name))-redis
 ```
 
-Create the secrets service to store secret environment variables (current list)
+Create the secrets service to store secret environment variables (use `uups` to update)
 ```sh
-$ cf cups ((app_name))-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
+$ cf cups ((app_name))-secrets -p credentials.json
 ```
 
 Deploy the Solr instance and the app.
