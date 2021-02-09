@@ -68,6 +68,7 @@ jobs:
         with:
           name: python-vendored
           path: vendor
+      - run: ls -l vendor
       - name: deploy
         uses: usds/cloud-gov-cli@master
         with:
