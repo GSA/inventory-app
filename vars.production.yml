@@ -5,3 +5,6 @@ instances: 2
 
 routes:
   - route: inventory-prod-datagov.app.cloud.gov
+
+# TODO remove this https://github.com/GSA/datagov-deploy/issues/2778
+solr_route: inventory-prod-solr.apps.internal
