@@ -1,4 +1,4 @@
---find-links vendor
+--find-links file://./vendor
 
 ckanext-dcat-usmetadata~=0.2
 
