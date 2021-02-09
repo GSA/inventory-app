@@ -71,7 +71,7 @@ jobs:
       - name: deploy
         uses: usds/cloud-gov-cli@master
         with:
-          command: push inventory-james --vars-file vars.development.yml --strategy rolling
+          command: push inventory --vars-file vars.development.yml --strategy rolling
           org: gsa-datagov
           space: development
           user: ${{secrets.CF_SERVICE_USER}}

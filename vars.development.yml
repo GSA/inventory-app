@@ -3,7 +3,7 @@
 # This is the name to use for the inventory app in Cloud Foundry. You might want to customize this
 # (eg "inventory-<yourname>") to avoid collisions with others are also working on
 # inventory in the same space.
-app_name: inventory-james
+app_name: inventory
 
 # Number of application instances to run in cloud.gov
 instances: 1
