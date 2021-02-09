@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       #- lint TODO fix linting https://github.com/GSA/datagov-deploy/issues/2772
-      - test
+      #- test
       - vendor
     steps:
       - name: checkout
