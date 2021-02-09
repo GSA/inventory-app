@@ -134,9 +134,14 @@ Create the secrets service to store secret environment variables (current list)
 $ cf cups ${app_name}-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
 ```
 
-Deploy the Solr instance and the app.
+Deploy the Solr instance.
 ```sh
-$ cf push --vars-file vars.yml
+$ cf push --vars-file vars.yml ${app_name}-solr
+```
+
+Deploy the CKAN app.
+```sh
+$ cf push --vars-file vars.yml ${app_name}
 ```
 
 Ensure the inventory app can reach the Solr app.
