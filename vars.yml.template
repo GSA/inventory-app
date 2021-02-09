@@ -11,3 +11,7 @@ instances: 1
 # Routes to assign to this application. This must be globally unique within cloud.gov.
 routes:
   - route: inventory-foo-datagov.app.cloud.gov
+
+# Route for solr app
+# TODO remove this https://github.com/GSA/datagov-deploy/issues/2778
+solr_route: inventory-foo-solr.apps.internal
