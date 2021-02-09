@@ -143,6 +143,7 @@ Ensure the inventory app can reach the Solr app.
 ```sh
 $ cf add-network-policy ${app_name} --destination-app ${app_name}-solr --protocol tcp --port 8983
 ```
+*Note: remove --destination-app flag for cf cli v7, just `cf add-network-policy ${app_name} ${app_name}-solr...`*
 
 You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ${app_name}`.
 
