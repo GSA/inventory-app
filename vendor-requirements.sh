@@ -28,5 +28,6 @@ python /tmp/get-pip.py
 mkdir -p src vendor
 chown vcap.vcap vendor
 chown vcap.vcap src
-su - vcap -c 'cd app && pip download -r requirements.txt --no-binary=:none: -d vendor --exists-action=w'
+pip install --user wheel
+su - vcap -c 'cd app && pip wheel -w vendor -r requirements.txt'
 EOF
