@@ -147,6 +147,18 @@ $ cf add-network-policy ${app_name} --destination-app ${app_name}-solr --protoco
 You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ${app_name}`.
 
 
+### CI configuration
+
+Create a GitHub environment for each application you're deploying. Each
+GH environment should be configured with secrets from a [ci-deployer service
+account](https://github.com/GSA/datagov-deploy/wiki/Cloud.gov-Cheat-Sheet#space-organization).
+
+Secret name | Description
+----------- | -----------
+CF_SERVICE_AUTH | The service key password.
+CF_SERVICE_USER | The service key username.
+
+
 ## License and Contributing
 
 We're so glad you're thinking about re-using and/or contributing to Data.gov!
