@@ -1,4 +1,4 @@
-.PHONY: all build requirements setup test update-dependencies
+.PHONY: all build lint requirements setup test update-dependencies
 
 all: up
 
@@ -15,6 +15,9 @@ debug:
 
 requirements:
 	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
+
+lint:
+	flake8 . --count --show-source --statistics
 
 restart:
 	docker-compose restart app
