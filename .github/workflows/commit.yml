@@ -53,7 +53,7 @@ jobs:
           if-no-files-found: error
 
   deploy-development:
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/feature/envvars'
     name: deploy (development)
     environment: development
     runs-on: ubuntu-latest

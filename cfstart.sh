@@ -24,25 +24,12 @@ SVC_S3="${APP_NAME}-s3"
 SVC_REDIS="${APP_NAME}-redis"
 SVC_SECRETS="${APP_NAME}-secrets"
 
-# CKAN wants to know about two databases. We grab those URLs from the VCAP_SERVICES env var provided by the platform
-
-DATABASE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATABASE $SVC_DATABASE '.[][] | select(.name == $SVC_DATABASE) | .credentials.uri')
-DATASTORE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.uri')
-
 # We need specific datastore URL components so we can construct another URL for the read-only user
 DS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.host')
 DS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.port')
 DS_DBNAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.db_name')
 
-# We need specific s3 variables so we can configure ckan to access s3
-S3_REGION_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.region')
-S3_BUCKET_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.bucket')
-# S3_HOST_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.fips_endpoint')
-# S3_PUBLIC_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.region')
-S3_ACCESS_KEY_ID=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.access_key_id')
-S3_SECRET_ACCESS_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.secret_access_key')
-
-# We need the redis credentials for ckan to access redis, and we need to build the url
+# We need the redis credentials for ckan to access redis, and we need to build the url to use the rediss 
 REDIS_HOST=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.host')
 REDIS_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.password')
 REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | select(.name == $SVC_REDIS) | .credentials.port')
@@ -51,25 +38,26 @@ REDIS_PORT=$(echo $VCAP_SERVICES | jq -r --arg SVC_REDIS $SVC_REDIS '.[][] | sel
 DS_RO_PASSWORD=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.DS_RO_PASSWORD')
 export NEW_RELIC_LICENSE_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SVC_SECRETS '.[][] | select(.name == $SVC_SECRETS) | .credentials.NEW_RELIC_LICENSE_KEY')
 
-# Edit the config file to use our values
+# ckan reads some environment variables... https://docs.ckan.org/en/2.8/maintaining/configuration.html#environment-variables
+export CKAN_SQLALCHEMY_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATABASE $SVC_DATABASE '.[][] | select(.name == $SVC_DATABASE) | .credentials.uri')
+export CKAN_SITE_URL=https://$APP_URL
+export CKAN_SITE_ID=$ORG_NAME-$SPACE_NAME-$APP_NAME
+export CKAN_SOLR_URL=$SOLR_URL
+export CKAN_DATASTORE_WRITE_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATASTORE $SVC_DATASTORE '.[][] | select(.name == $SVC_DATASTORE) | .credentials.uri')
+export CKAN_DATASTORE_READ_URL=postgres://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
+export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
+export CKAN_STORAGE_PATH=/home/vcap/app/files
+
+# Use ckanext-envvars to import other configurations...
+export CKANEXT__S3FILESTORE__REGION_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.region')
+export CKANEXT__S3FILESTORE__HOST_NAME=https://s3-$CKANEXT__S3FILESTORE__REGION_NAME.amazonaws.com
+export CKANEXT__S3FILESTORE__AWS_ACCESS_KEY_ID=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.access_key_id')
+export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.secret_access_key')
+export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(echo $VCAP_SERVICES | jq -r --arg SVC_S3 $SVC_S3 '.[][] | select(.name == $SVC_S3) | .credentials.bucket')
+
+# Edit the config file to use validate debug is off and utilizes the correct port
 export CKAN_INI=config/production.ini
 ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
-ckan config-tool $CKAN_INI \
-    "ckan.site_url=https://${APP_URL}" \
-    "ckan.site_id=${ORG_NAME}-${SPACE_NAME}-${APP_NAME}" \
-    "sqlalchemy.url=${DATABASE_URL}" \
-    "solr_url=${SOLR_URL}" \
-    "ckan.redis.url=rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}" \
-    "ckan.datastore.write_url=${DATASTORE_URL}" \
-    "ckan.datastore.read_url=postgres://${DS_RO_USER}:${DS_RO_PASSWORD}@${DS_HOST}:${DS_PORT}/${DS_DBNAME}" \
-    "ckanext.s3filestore.region_name=${S3_REGION_NAME}" \
-    "ckanext.s3filestore.host_name=https://s3-${S3_REGION_NAME}.amazonaws.com" \
-    "ckanext.s3filestore.aws_access_key_id=${S3_ACCESS_KEY_ID}" \
-    "ckanext.s3filestore.aws_secret_access_key=${S3_SECRET_ACCESS_KEY}" \
-    "ckanext.s3filestore.aws_bucket_name=${S3_BUCKET_NAME}" \
-    "ckan.storage_path=/home/vcap/app/files"
-    # "ckanext.s3filestore.public_host_name = http://localhost:4572"
-
 ckan config-tool $CKAN_INI -s DEFAULT -e debug=false
 
 echo "Setting up the datastore user"
