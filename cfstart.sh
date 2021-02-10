@@ -61,7 +61,7 @@ ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
 ckan config-tool $CKAN_INI -s DEFAULT -e debug=false
 
 echo "Setting up the datastore user"
-DATASTORE_URL=$DATASTORE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD ./datastore-usersetup.py
+DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD ./datastore-usersetup.py
 
 # Run migrations
 # paster --plugin=ckan db upgrade -c config/production.ini
