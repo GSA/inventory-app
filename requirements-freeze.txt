@@ -10,7 +10,7 @@ chardet==3.0.4
 -e git+https://github.com/ckan/ckan.git@c04b6d64aadc7a647b8896279002626ca3be0a56#egg=ckan
 -e git+https://github.com/GSA/inventory-app.git@38ab47c66d1863aa2f9bdb68116a5d9b356d1eba#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
 -e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
-ckanext-dcat-usmetadata==0.2.17
+ckanext-dcat-usmetadata==0.2.19
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284#egg=ckanext_s3filestore
 -e git+https://github.com/keitaroinc/ckanext-saml2auth.git@8a55c23daa1818c7a3843e44550fd79b3f9469a6#egg=ckanext_saml2auth
