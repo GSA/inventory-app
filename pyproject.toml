@@ -61,7 +61,6 @@ psycopg2 = "^2.7.3.2"
 Pygments = "^2.2.0"           # via weberror
 Pylons = "^0.9.7"
 pysolr = "^3.6.0"
-python-dateutil = "^1.5"
 python-magic = "^0.4.15"
 python2-secrets = "^1.0.5"
 pytz = "^2016.7"
