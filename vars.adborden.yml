@@ -1,0 +1,10 @@
+app_name: inventory-adb
+
+# Number of application instances to run in cloud.gov
+instances: 1
+
+routes:
+  - route: inventory-adb-datagov.app.cloud.gov
+
+# TODO remove this https://github.com/GSA/datagov-deploy/issues/2778
+solr_route: inventory-adb-solr.apps.internal

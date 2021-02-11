@@ -52,14 +52,41 @@ jobs:
           path: vendor/
           if-no-files-found: error
 
-  deploy-development:
+  deploy-adb:
     #if: github.ref == 'refs/heads/develop'
-    name: deploy (development)
+    name: deploy (adb)
     environment: development
     runs-on: ubuntu-latest
     needs:
       #- lint
       #- test
+      - vendor
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: python-vendored
+          path: vendor
+      - name: deploy
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: push inventory-adb --vars-file vars.development.yml --strategy rolling
+          org: gsa-datagov
+          space: development
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: curl --fail --silent https://inventory-dev-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
+
+  deploy-development:
+    if: github.ref == 'refs/heads/develop'
+    name: deploy (development)
+    environment: development
+    runs-on: ubuntu-latest
+    needs:
+      - lint
+      - test
       - vendor
     steps:
       - name: checkout
