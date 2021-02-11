@@ -58,7 +58,7 @@ jobs:
     environment: development
     runs-on: ubuntu-latest
     needs:
-      - lint
+      #- lint
       #- test
       - vendor
     steps:
