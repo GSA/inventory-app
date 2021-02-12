@@ -6,6 +6,7 @@ services:
     depends_on:
       - datastore
       - db
+      - localstack-container
       - solr
     ports:
       - "5000:5000"
