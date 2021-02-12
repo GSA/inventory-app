@@ -14,7 +14,7 @@ debug:
 	docker-compose stop app ; docker-compose run --service-ports app
 
 requirements:
-	docker-compose run --rm -T app pip --quiet freeze > requirements-freeze.txt
+	docker-compose run --rm -T app bin/requirements.sh
 
 lint:
 	flake8 . --count --show-source --statistics
@@ -24,7 +24,6 @@ restart:
 
 test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build
-	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build --build-arg REQUIREMENTS_FILE app
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml up --abort-on-container-exit test
 
 test_extension:
