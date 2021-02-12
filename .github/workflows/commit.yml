@@ -78,6 +78,30 @@ jobs:
           password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: curl --fail --silent https://inventory-dev-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
+      - name: deployment failed
+        if: ${{ failure() }}
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GH_DATAGOV_TOKEN}}
+          script: |
+            const issue_title = `Deploy error on ${context.payload.repository.name}`
+            const base_github_options = {
+              owner: context.repo.owner,
+              repo: 'datagov-deploy'
+            }
+            const current_issues = await github.issues.listForRepo(Object.assign(base_github_options, {state: 'open'}))
+            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
+            if(current_issue) {
+              github.issues.createComment(Object.assign(base_github_options, {
+                issue_number: current_issue.number,
+                body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
+              }));
+            } else {
+              github.issues.create(Object.assign(base_github_options, {
+                title: issue_title,
+                body: `The deployment failed, please review the [job](${context.payload.repository.url}/actions/runs/${context.runId})`,
+              }));
+            }
 
   deploy-staging:
     if: github.ref == 'refs/heads/main'
@@ -104,6 +128,30 @@ jobs:
           password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: curl --fail --silent https://inventory-stage-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
+      - name: deployment failed
+        if: ${{ failure() }}
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GH_DATAGOV_TOKEN}}
+          script: |
+            const issue_title = `Deploy error on ${context.payload.repository.name}`
+            const base_github_options = {
+              owner: context.repo.owner,
+              repo: 'datagov-deploy'
+            }
+            const current_issues = await github.issues.listForRepo(Object.assign(base_github_options, {state: 'open'}))
+            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
+            if(current_issue) {
+              github.issues.createComment(Object.assign(base_github_options, {
+                issue_number: current_issue.number,
+                body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
+              }));
+            } else {
+              github.issues.create(Object.assign(base_github_options, {
+                title: issue_title,
+                body: `The deployment failed, please review the [job](${context.payload.repository.url}/actions/runs/${context.runId})`,
+              }));
+            }
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -128,3 +176,27 @@ jobs:
           password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: curl --fail --silent https://inventory-prod-datagov.app.cloud.gov/api/action/status_show?$(date +%s)
+      - name: deployment failed
+        if: ${{ failure() }}
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GH_DATAGOV_TOKEN}}
+          script: |
+            const issue_title = `Deploy error on ${context.payload.repository.name}`
+            const base_github_options = {
+              owner: context.repo.owner,
+              repo: 'datagov-deploy'
+            }
+            const current_issues = await github.issues.listForRepo(Object.assign(base_github_options, {state: 'open'}))
+            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
+            if(current_issue) {
+              github.issues.createComment(Object.assign(base_github_options, {
+                issue_number: current_issue.number,
+                body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
+              }));
+            } else {
+              github.issues.create(Object.assign(base_github_options, {
+                title: issue_title,
+                body: `The deployment failed, please review the [job](${context.payload.repository.url}/actions/runs/${context.runId})`,
+              }));
+            }
