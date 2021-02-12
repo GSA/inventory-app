@@ -40,6 +40,7 @@ export NEW_RELIC_LICENSE_KEY=$(echo $VCAP_SERVICES | jq -r --arg SVC_SECRETS $SV
 
 # ckan reads some environment variables... https://docs.ckan.org/en/2.8/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(echo $VCAP_SERVICES | jq -r --arg SVC_DATABASE $SVC_DATABASE '.[][] | select(.name == $SVC_DATABASE) | .credentials.uri')
+export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
 export CKAN_SITE_URL=https://$APP_URL
 export CKAN_SITE_ID=$ORG_NAME-$SPACE_NAME-$APP_NAME
 export CKAN_SOLR_URL=$SOLR_URL
