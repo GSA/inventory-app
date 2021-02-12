@@ -1,0 +1,87 @@
+git+https://github.com/ckan/ckan.git@ckan-2.8.6#egg=ckan
+git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
+git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
+# TODO https://github.com/GSA/datagov-deploy/issues/2794
+-e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
+git+https://github.com/keitaroinc/ckanext-saml2auth.git@ckan-2.8#egg=ckanext-saml2auth
+git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
+git+https://github.com/GSA/ckanext-s3filestore@datagov-v0.1.1#egg=ckanext-s3filestore
+git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
+
+ckanext-dcat-usmetadata
+ckanext-envvars
+newrelic
+gunicorn
+gevent
+
+
+# TODO move these out of our repo, they should be managed upstream in setup.py
+# From  CKAN
+argparse~=1.4           # via ofs
+Babel~=2.3              # via flask-babel
+Beaker~=1.9
+bleach~=3.1
+click~=6.7
+decorator~=4.2
+fanstatic~=0.12
+Flask-Babel~=0.11
+Flask~=0.12             # via flask-babel
+FormEncode~=1.3         # via Pylons
+funcsigs~=1.0           # via beaker
+html5lib~=1.0           # via bleach
+itsdangerous~=0.24        # via flask
+Jinja2~=2.10            # via flask, flask-babel
+Mako~=1.0               # via pylons
+Markdown~=2.6
+MarkupSafe~=1.0           # via jinja2, mako, webhelpers
+mock~=1.0               # needed for usmetadata
+nose~=1.3.7               # via pylons
+ofs~=0.4.2
+Pairtree
+passlib~=1.7
+paste~=1.7
+PasteDeploy~=1.5        # via pastescript, pylons
+PasteScript~=2.0        # via pylons
+pbr~=1.10               # via sqlalchemy-migrate
+polib~=1.0
+psycopg2~=2.7
+Pygments~=2.2           # via weberror
+Pylons~=0.9
+pysolr~=3.6
+python-dateutil~=1.5
+python-magic~=0.4
+python2-secrets~=1.0
+pytz
+pyutilib.component.core~=4.6
+redis~=2.10             # via rq
+repoze.lru~=0.7           # via routes
+repoze.who-friendlyform~=1.0
+repoze.who~=2.3
+requests~=2.20
+Routes~=1.13              # via pylons
+rq~=0.6.0
+simplejson~=3.10
+six~=1.11               # via bleach, html5lib, pastescript, pyutilib.component.core, sqlalchemy-migrate
+sqlalchemy-migrate~=0.10
+SQLAlchemy~=1.1       # via sqlalchemy-migrate
+sqlparse~=0.2
+Tempita~=0.5            # via pylons, sqlalchemy-migrate, weberror
+tzlocal~=1.3
+unicodecsv~=0.14
+vdm~=0.14
+webencodings~=0.5       # via html5lib
+WebError~=0.13          # via pylons
+WebHelpers~=1.3           # via pylons
+WebTest~=1.4            # via pylons
+Werkzeug~=0.15         # via flask
+zope.interface~=4.3
+
+#datajson
+jsonschema~=2.4
+rfc3987
+pyyaml
+lepl
+
+# ckanext-s3filestore
+boto3>=1.4.4
+ckantoolkit

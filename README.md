@@ -95,7 +95,7 @@ ckan serving pages as pylons sometimes and flask at others.
 
 ### Tests
 
-    $ make test
+    $ make build test_extension test
 
 
 ## Deploying to cloud.gov
