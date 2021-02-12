@@ -28,8 +28,6 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    env:
-      REQUIREMENTS_FILE: requirements-freeze.txt
     steps:
       - name: checkout
         uses: actions/checkout@v2

@@ -43,26 +43,17 @@ To run a one off command inside the container:
 
     $ docker-compose exec app {command}
 
-#### Update dependencies
-To update the dependencies from various libraries (usually handled by running build),
-run the following:
 
-    $ make update-dependencies
+### Update dependencies
 
-Update lock file for dependencies. **Because of a version conflict for
-repoze.who, special care should be taken to make sure that repoze.who==1.0.18 is
-shipped to production in order to be compatible with ckanext-saml2. After
-generating the requirements-freeze.txt, manually review the file to make sure
-the versions are correct. See https://github.com/GSA/catalog-app/issues/78 for
-more details.**
-Need to avoid pulling in dev requirements, so start from a clean build
-(without starting up the app) and save the requirements.
+Update the "lock" file for dependencies.
 
-    $ make clean build requirements
+    $ make build requirements
 
-This freezes the requirements at `requirements-freeze.txt`, and should only be done
-when tests are passing locally. CircleCi will run the build against this 
-`requirements-freeze.txt` file to validate that the code should work in production.
+This freezes the requirements at `requirements.txt`. Run the tests with the
+updated dependencies.
+
+    $ make test
 
 
 ### Live Editing

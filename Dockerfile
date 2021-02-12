@@ -1,8 +1,5 @@
 FROM ubuntu:18.04
 
-# TODO this should probably be requirements-freeze.txt, and then `make
-# update-dependencies` will build from requirements.txt
-ARG REQUIREMENTS_FILE=requirements.txt
 ARG PYTHON_VERSION=2.7.17
 
 ENV CKAN_HOME /usr/lib/ckan
@@ -51,7 +48,7 @@ RUN mkdir -p $CKAN_HOME && \
 COPY . /opt/inventory-app/
 
 # Install ckan dependencies
-RUN $CKAN_HOME/bin/pip install -r $REQUIREMENTS_FILE
+RUN $CKAN_HOME/bin/pip install -r requirements.txt
 
 COPY entrypoint-docker.sh /
 ENTRYPOINT ["/entrypoint-docker.sh"]
