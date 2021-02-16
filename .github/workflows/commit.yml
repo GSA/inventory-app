@@ -95,12 +95,12 @@ jobs:
               q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
             }))
             if(current_issues.data.items.length > 0) {
-              github.issues.createComment(Object.assign(base_github_options, {
+              github.issues.createComment(Object.assign({}, base_github_options, {
                 issue_number: current_issues.data.items[0].number,
                 body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
               }));
             } else {
-              github.issues.create(Object.assign(base_github_options, {
+              github.issues.create(Object.assign({}, base_github_options, {
                 title: issue_title,
                 body: `The deployment failed, please review the [job](${context.payload.repository.url}/actions/runs/${context.runId})`,
               }));
@@ -148,12 +148,12 @@ jobs:
               q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
             }))
             if(current_issues.data.items.length > 0) {
-              github.issues.createComment(Object.assign(base_github_options, {
+              github.issues.createComment(Object.assign({}, base_github_options, {
                 issue_number: current_issues.data.items[0].number,
                 body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
               }));
             } else {
-              github.issues.create(Object.assign(base_github_options, {
+              github.issues.create(Object.assign({}, base_github_options, {
                 title: issue_title,
                 body: `The deployment failed, please review the [job](${context.payload.repository.url}/actions/runs/${context.runId})`,
               }));
@@ -199,12 +199,12 @@ jobs:
               q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
             }))
             if(current_issues.data.items.length > 0) {
-              github.issues.createComment(Object.assign(base_github_options, {
+              github.issues.createComment(Object.assign({}, base_github_options, {
                 issue_number: current_issues.data.items[0].number,
                 body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
               }));
             } else {
-              github.issues.create(Object.assign(base_github_options, {
+              github.issues.create(Object.assign({}, base_github_options, {
                 title: issue_title,
                 body: `The deployment failed, please review the [job](${context.payload.repository.url}/actions/runs/${context.runId})`,
               }));
