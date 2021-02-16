@@ -23,7 +23,7 @@ jobs:
           # TODO add this to dev dependencies and Makefile
           pip install --upgrade pip
           pip install flake8
-          flake8 ckanext-datagov_inventory --count --show-source --statistics
+          flake8 . --count --show-source --statistics
 
   test:
     name: test
