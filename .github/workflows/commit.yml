@@ -55,7 +55,7 @@ jobs:
               repo: 'datagov-deploy'
             }
             const current_issues = await github.search.issuesAndPullRequests(Object.assign({}, base_github_options, {
-              q: "inventory-app+in:title+type:issue+repo:gsa/datagov-deploy",
+              q: issue_title + "+in:title+type:issue+repo:gsa/datagov-deploy",
 
             }))
             if(current_issues.data.items.length > 0) {
