@@ -58,8 +58,8 @@ jobs:
               q: "inventory-app+in:title+type:issue+repo:gsa/datagov-deploy",
 
             }))
-            if(current_issues) {
-              console.log(current_issues);
+            if(current_issues.data.items.length > 0) {
+              console.log(current_issues.data.items);
             } else {
               console.log("No matches");
             }
