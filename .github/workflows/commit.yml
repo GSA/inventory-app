@@ -58,7 +58,6 @@ jobs:
               q: issue_title + "+in:title+type:issue+repo:gsa/datagov-deploy",
 
             }))
-            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
             if(current_issues.length > 1) {
               console.log(current_issues);
             } else {
