@@ -44,6 +44,26 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: deployment failed
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GH_DATAGOV_TOKEN}}
+          script: |
+            const issue_title = `Deploy error on ${context.payload.repository.name}`
+            const base_github_options = {
+              owner: context.repo.owner,
+              repo: 'datagov-deploy'
+            }
+            const current_issues = await github.search.issuesAndPullRequests(Object.assign({}, base_github_options, {
+              q: issue_title + "+in:title+type:issue+repo:gsa/datagov-deploy",
+
+            }))
+            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
+            if(current_issues.length > 1) {
+              console.log(current_issues);
+            } else {
+              console.log("No matches");
+            }
       - name: vendor dependencies
         run: ./vendor-requirements.sh
       - uses: actions/upload-artifact@v2
