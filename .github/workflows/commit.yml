@@ -55,8 +55,7 @@ jobs:
               repo: 'datagov-deploy'
             }
             const current_issues = await github.search.issuesAndPullRequests(Object.assign({}, base_github_options, {
-              q: issue_title + "+in:title+type:issue+repo:gsa/datagov-deploy",
-
+              q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
             }))
             if(current_issues.data.items.length > 0) {
               console.log(current_issues.data.items);
@@ -110,11 +109,12 @@ jobs:
               owner: context.repo.owner,
               repo: 'datagov-deploy'
             }
-            const current_issues = await github.issues.listForRepo(Object.assign(base_github_options, {state: 'open'}))
-            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
-            if(current_issue) {
+            const current_issues = await github.search.issuesAndPullRequests(Object.assign({}, base_github_options, {
+              q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
+            }))
+            if(current_issues.data.items.length > 0) {
               github.issues.createComment(Object.assign(base_github_options, {
-                issue_number: current_issue.number,
+                issue_number: current_issues.data.items[0].number,
                 body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
               }));
             } else {
@@ -162,11 +162,12 @@ jobs:
               owner: context.repo.owner,
               repo: 'datagov-deploy'
             }
-            const current_issues = await github.issues.listForRepo(Object.assign(base_github_options, {state: 'open'}))
-            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
-            if(current_issue) {
+            const current_issues = await github.search.issuesAndPullRequests(Object.assign({}, base_github_options, {
+              q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
+            }))
+            if(current_issues.data.items.length > 0) {
               github.issues.createComment(Object.assign(base_github_options, {
-                issue_number: current_issue.number,
+                issue_number: current_issues.data.items[0].number,
                 body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
               }));
             } else {
@@ -212,11 +213,12 @@ jobs:
               owner: context.repo.owner,
               repo: 'datagov-deploy'
             }
-            const current_issues = await github.issues.listForRepo(Object.assign(base_github_options, {state: 'open'}))
-            const current_issue = current_issues.data.find(issue => issue.title === issue_title);
-            if(current_issue) {
+            const current_issues = await github.search.issuesAndPullRequests(Object.assign({}, base_github_options, {
+              q: issue_title + "+in:title+type:issue+state:open+repo:gsa/datagov-deploy"
+            }))
+            if(current_issues.data.items.length > 0) {
               github.issues.createComment(Object.assign(base_github_options, {
-                issue_number: current_issue.number,
+                issue_number: current_issues.data.items[0].number,
                 body: `The deployment failed again, [latest job](${context.payload.repository.url}/actions/runs/${context.runId})`
               }));
             } else {
