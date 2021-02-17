@@ -11,10 +11,10 @@ ckan @ git+https://github.com/ckan/ckan.git@c04b6d64aadc7a647b8896279002626ca3be
 -e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.2.20
 ckanext-envvars==0.0.1
-ckanext-googleanalyticsbasic @ git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c
+-e git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c#egg=ckanext_googleanalyticsbasic
 ckanext-s3filestore @ git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284
 ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@8a55c23daa1818c7a3843e44550fd79b3f9469a6
-ckanext-usmetadata @ git+https://github.com/GSA/USMetadata.git@a3005c5bb5235f4034256dcbdb64a7715922ac3a
+-e git+https://github.com/GSA/USMetadata.git@a3005c5bb5235f4034256dcbdb64a7715922ac3a#egg=ckanext_usmetadata
 ckantoolkit==0.0.4
 click==6.7
 cryptography==3.3.2
