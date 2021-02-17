@@ -3,6 +3,9 @@
 set -o errexit
 set -o pipefail
 
+# Add the current directory to our virtualenv
+python setup.py develop
+
 # Utilize paster command, can remove when on ckan 2.9
 function ckan () {
     paster --plugin=ckan "$@"
