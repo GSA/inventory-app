@@ -2,7 +2,7 @@ Babel==0.9.6
 Beaker==1.6.4
 bleach==3.3.0
 certifi==2020.12.5
-cffi==1.14.4
+cffi==1.14.5
 chardet==3.0.4
 -e git+https://github.com/GSA/ckan.git@92d9d70df69eb42207e75c2733eb483c397d6195#egg=ckan
 -e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
@@ -12,7 +12,7 @@ ckanext-dcat-usmetadata==0.2.20
 -e git+https://github.com/GSA/ckanext-saml2.git@0e1f11cb3b211e6d337b86ffe7c07620821f7d7d#egg=ckanext_saml2
 -e git+https://github.com/GSA/USMetadata.git@77c20f77f8a915dbcde87eb63d1af2fbb1062846#egg=ckanext_usmetadata
 ckantoolkit==0.0.3
-cryptography==3.3.1
+cryptography==3.3.2
 decorator==3.4.0
 enum34==1.1.10
 fanstatic==0.12
@@ -21,7 +21,7 @@ Genshi==0.6.1
 gevent==21.1.2
 greenlet==1.0.0
 gunicorn==19.10.0
-httplib2==0.18.1
+httplib2==0.19.0
 idna==2.7
 ipaddress==1.0.23
 Jinja2==2.10.3
