@@ -49,7 +49,6 @@ psycopg2==2.7.3.2
 Pygments==2.2.0           # via weberror
 Pylons==0.9.7
 pysolr==3.6.0
-python-dateutil==1.5
 python-magic==0.4.15
 python2-secrets==1.0.5
 pytz==2016.7
@@ -58,7 +57,7 @@ redis==2.10.6             # via rq
 repoze.lru==0.7           # via routes
 repoze.who-friendlyform==1.0.8
 repoze.who==2.3
-requests==2.20
+requests~=2.20
 Routes==1.13              # via pylons
 rq==0.6.0
 simplejson==3.10.0
