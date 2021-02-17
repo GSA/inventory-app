@@ -34,4 +34,17 @@ ignore:
         reason: >-
           Fix not available. No known usage of this library inside the CKAN app or it's extensions.
         expires: 2021-03-29T06:00:00.000Z
+  SNYK-PYTHON-IPADDRESS-590065:
+    - '*':
+        reason: >-
+          No remediation available yet.  After inspecting the
+          Python cryptography package, there is no use of the vulnerable
+          method hash() on the classes IPv4Interface and IPv6Interface, 
+          so the risk here is very minimal.
+        expires: 2021-03-20T06:00:00.000Z
+  SNYK-PYTHON-JINJA2-1012994:
+    - '*':
+        reason: >-
+          Open issuehttps://github.com/GSA/datagov-deploy/issues/2713
+        expires: 2021-05-02T06:00:00.000Z
 patch: {}
