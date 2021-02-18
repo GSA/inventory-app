@@ -1,10 +1,35 @@
 app_name: inventory
 
+ckanext.saml2auth.entity_id: urn:gov:gsa:SAML:2.0.profiles:sp:sso:gsa:datagov-staging-inventory
+
 # Number of application instances to run in cloud.gov
 instances: 1
 
 routes:
   - route: inventory-stage-datagov.app.cloud.gov
+
+saml2_certificate: |
+  -----BEGIN CERTIFICATE-----
+  MIIDgjCCAmoCCQDwRWo8ECEF9jANBgkqhkiG9w0BAQsFADCBgjELMAkGA1UEBhMC
+  VVMxCzAJBgNVBAgMAkRDMRMwEQYDVQQHDApXYXNoaW5ndG9uMQwwCgYDVQQKDANH
+  U0ExDDAKBgNVBAsMA1RUUzERMA8GA1UEAwwIRGF0YS5nb3YxIjAgBgkqhkiG9w0B
+  CQEWE2RhdGFnb3ZoZWxwQGdzYS5nb3YwHhcNMjEwMjE4MDIwNjE1WhcNMjMwMjE4
+  MDIwNjE1WjCBgjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkRDMRMwEQYDVQQHDApX
+  YXNoaW5ndG9uMQwwCgYDVQQKDANHU0ExDDAKBgNVBAsMA1RUUzERMA8GA1UEAwwI
+  RGF0YS5nb3YxIjAgBgkqhkiG9w0BCQEWE2RhdGFnb3ZoZWxwQGdzYS5nb3YwggEi
+  MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC1AwZactvYG9DYBA3MdngYMxs1
+  LvEy65GUK8nlqDuuSx9WYDdKNM2PJmbu1aLNeMllNhcvi/+sQeGvc3qGWWg1liyB
+  KIFiDt1jJyCX1YGidbOsKdKJ0p/5pDySG5Yk+vbpMUUn2wPhR/ORJ2GSSjIlQ2bS
+  kFv56RU7H/sRRUuXCT0n7D6gtqrYGnafnp02vQYFpUavRhtYAmTOKAvd6DKr/ts/
+  E1EqyGNGuvm20IAyBUJS7geyxhk0blmiwx0WOstuVdJM8BlU4NlgMWy1VLNZZeMU
+  pCUlkcyZ4+Uvm7LPYO9LcnN2npOqCOJJQf8OuuVjfm9RxTrWoPF79aaiXfBXAgMB
+  AAEwDQYJKoZIhvcNAQELBQADggEBAAJAB3vS9RZ/7UfYHVHgvqS3Dxy+GaFwp+rj
+  0Nckv4nCVVmLEQ9icex4D1+LwD5NGWxcoCLm+peRAtPFw55CzuF6kSLBFTLLKdYz
+  mWbF3yiyhWsuIGHTajyw1aOnHmVh5IGSIZZWGEFQVa1UtioSDVej3SAyVOazeO7Q
+  3wQSjtV6tQx64b3rvNsl8YuqahhP0w2Fm8Oz37DsoZ4VJPXAhnbsjkheYp92tltj
+  TbCWxu0SgIQXUdFw9lW1LPhhUCnvMf9p7UM+fal02FMFJOXV4kyJFoKbnx5UhyeH
+  5H534bh6UNxIFGe/8QuIZ8ZX6KRx3LVtwLYQY56r+uheU8j9v9s=
+  -----END CERTIFICATE-----
 
 # TODO remove this https://github.com/GSA/datagov-deploy/issues/2778
 solr_route: inventory-stage-solr.apps.internal

@@ -19,9 +19,11 @@ applications:
       - ((app_name))-secrets   # cf cups ((app_name))-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
     env:
       DS_RO_USER: datastore_default
+      CKANEXT__SAML2AUTH__ENTITY_ID: ((ckanext.saml2auth.entity_id))
       SOLR_URL: http://((solr_route)):8983/solr/ckan2_8
       NEW_RELIC_APP_NAME: ((app_name))
       NEW_RELIC_HOST: gov-collector.newrelic.com
       NEW_RELIC_LOG: /var/log/new_relic.log
       NEW_RELIC_LOG_LEVEL: info
       NEW_RELIC_MONITOR_MODE: False
+      SAML2_CERTIFICATE: ((saml2_certificate))

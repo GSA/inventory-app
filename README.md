@@ -118,13 +118,11 @@ Create the Redis service for cache
 
     $ cf create-service aws-elasticache-redis redis-dev ${app_name}-redis
 
-Create the secrets service to store secret environment variables (current list)
-
-    $ cf cups ${app_name}-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
-
 Deploy the Solr instance.
 
     $ cf push --vars-file vars.yml ${app_name}-solr
+
+Create the secrets service to store secret environment variables. See [Secrets](#secrets) below.
 
 Deploy the CKAN app.
 
@@ -135,6 +133,23 @@ Ensure the inventory app can reach the Solr app.
     $ cf add-network-policy ${app_name} ${app_name}-solr --protocol tcp --port 8983
 
 You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ${app_name}`.
+
+
+### Secrets
+
+Tips on managing
+[secrets](https://github.com/GSA/datagov-deploy/wiki/Cloud.gov-Cheat-Sheet#secrets-management).
+When creating the service for the first time, use `create-user-provided-service`
+instead of update.
+
+    $ cf update-user-provided-service ${app_name}-secrets -p "CKAN___BEAKER__SESSION_SECRET, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
+
+Name | Description | Where to find
+---- | ----------- | -------------
+CKAN___BEAKER__SESSION__SECRET | Session secret for encrypting CKAN sessions.  | `pwgen -s 32 1`
+DS_RO_PASSWORD | Read-only password to configure for the [datastore](https://docs.ckan.org/en/2.9/maintaining/datastore.html) user. | Initially randomly generated [#2839](https://github.com/GSA/datagov-deploy/issues/2839)
+NEW_RELIC_LICENSE_KEY | New Relic License key. | New Relic account settings.
+SAML2_PRIVATE_KEY | Base64 encoded SAML2 key matching the certificate configured for Login.gov | [Google Drive](https://drive.google.com/drive/u/0/folders/1VguFPRiRb1Ljnm_6UShryHWDofX0xBnU).
 
 
 ### CI configuration
