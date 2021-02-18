@@ -18,6 +18,10 @@ function vcap_get_service () {
   echo $VCAP_SERVICES | jq --raw-output --arg service_name "$service_name" ".[][] | select(.name == \$service_name) | $path"
 }
 
+# Create a staging area for secrets and files
+CONFIG_DIR=$(mktemp -d)
+SHARED_DIR=$(mktemp -d)
+
 # We need to know the application name ...
 APP_NAME=$(echo $VCAP_APPLICATION | jq -r '.application_name')
 ORG_NAME=$(echo $VCAP_APPLICATION | jq -r '.organization_name')
@@ -45,10 +49,9 @@ REDIS_PASSWORD=$(vcap_get_service $SVC_REDIS .credentials.password)
 REDIS_PORT=$(vcap_get_service $SVC_REDIS .credentials.port)
 
 SAML2_PRIVATE_KEY=$(vcap_get_service $SVC_SECRETS .credentials.SAML2_PRIVATE_KEY)
-SECRETS_DIR=$(mktemp -d)
 
-export CKANEXT__SAML2AUTH__KEY_FILE_PATH=${SECRETS_DIR}/saml2_key.pem
-export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${SECRETS_DIR}/saml2_certificate.pem
+export CKANEXT__SAML2AUTH__KEY_FILE_PATH=${CONFIG_DIR}/saml2_key.pem
+export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 
 # We need the secret credentials for various application components (DB configuration, license keys, etc)
 DS_RO_PASSWORD=$(vcap_get_service $SVC_SECRETS .credentials.DS_RO_PASSWORD)
@@ -64,7 +67,7 @@ export CKAN_SOLR_URL=$SOLR_URL
 export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service $SVC_DATASTORE .credentials.uri)
 export CKAN_DATASTORE_READ_URL=postgres://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
 export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
-export CKAN_STORAGE_PATH=/home/vcap/app/files
+export CKAN_STORAGE_PATH=${SHARED_DIR}/files
 
 # Use ckanext-envvars to import other configurations...
 export CKANEXT__S3FILESTORE__REGION_NAME=$(vcap_get_service $SVC_S3 .credentials.region)
@@ -73,7 +76,8 @@ export CKANEXT__S3FILESTORE__AWS_ACCESS_KEY_ID=$(vcap_get_service $SVC_S3 .crede
 export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(vcap_get_service $SVC_S3 .credentials.secret_access_key)
 export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service $SVC_S3 .credentials.bucket)
 
-# Write out any files
+# Write out any files and directories
+mkdir -p $CKAN_STORAGE_PATH
 echo "$SAML2_PRIVATE_KEY" | base64 -d > $CKANEXT__SAML2AUTH__KEY_FILE_PATH
 echo "$SAML2_CERTIFICATE" > $CKANEXT__SAML2AUTH__CERT_FILE_PATH
 
