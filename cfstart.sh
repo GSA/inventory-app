@@ -52,6 +52,8 @@ SAML2_PRIVATE_KEY=$(vcap_get_service $SVC_SECRETS .credentials.SAML2_PRIVATE_KEY
 
 export CKANEXT__SAML2AUTH__KEY_FILE_PATH=${CONFIG_DIR}/saml2_key.pem
 export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
+export CKANEXT__SAML2AUTH__IDP_METADATA__REMOTE_CERT=${CONFIG_DIR}/saml2_idp_certificate.pem
+#export CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH=${CONFIG_DIR}/idp.xml
 
 # We need the secret credentials for various application components (DB configuration, license keys, etc)
 DS_RO_PASSWORD=$(vcap_get_service $SVC_SECRETS .credentials.DS_RO_PASSWORD)

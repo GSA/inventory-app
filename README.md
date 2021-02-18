@@ -164,6 +164,23 @@ CF_SERVICE_AUTH | The service key password.
 CF_SERVICE_USER | The service key username.
 
 
+## Login.gov integration
+
+We use Login.gov as our
+[SAML2](https://github.com/GSA/datagov-deploy/wiki/SAML2-authentication)
+Identity Provider (IdP). Production apps use the production Login.gov instance
+while other apps use the Login.gov identity sandbox.
+
+Each year in March, Login.gov rotates their credentials. See our
+[wiki](https://github.com/GSA/datagov-deploy/wiki/SAML2-authentication#working-with-logingov)
+for details.
+
+Our Service Provider (SP) certificate and key are provided in through
+environment variable and user-provided service.
+
+The Login.gov IdP metadata is stored in file under `config/`.
+
+
 ## License and Contributing
 
 We're so glad you're thinking about re-using and/or contributing to Data.gov!
