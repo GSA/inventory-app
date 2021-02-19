@@ -2,9 +2,9 @@
 
 # Connect to the $DATASTORE_URL and attempt to provision the read-only user
 
+from __future__ import print_function
 import os
 import psycopg2
-import re
 import sys
 from urlparse import urlparse
 
@@ -66,9 +66,9 @@ def main():
 
     sql = datastore_sql(datastoredb, writeuser, readuser, readpassword)
 
-    print "<datastore SQL>"
-    print sql
-    print "</datastore SQL>"
+    print("<datastore SQL>")
+    print(sql)
+    print("</datastore SQL>")
 
     try:
         with psycopg2.connect(datastore_url) as conn:
@@ -76,9 +76,9 @@ def main():
                 with conn.cursor() as cur:
                     cur.execute(sql)
             except Exception as sql_e:
-                print "Exception while executing SQL:", str(sql_e)
+                print("Exception while executing SQL:", str(sql_e))
     except Exception as conn_e:
-        print "Unable to connect to datastore:", str(conn_e)
+        print("Unable to connect to datastore:", str(conn_e))
         sys.exit(-1)
 
 
