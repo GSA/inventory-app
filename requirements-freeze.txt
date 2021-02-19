@@ -30,7 +30,7 @@ gunicorn==19.10.0
 html5lib==1.0.1
 idna==2.7
 itsdangerous==0.24
-Jinja2==2.10.1
+Jinja2==2.11.3
 jmespath==0.10.0
 jsonschema==2.4.0
 LEPL==5.1.3
