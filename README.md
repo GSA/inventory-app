@@ -118,13 +118,11 @@ Create the Redis service for cache
 
     $ cf create-service aws-elasticache-redis redis-dev ${app_name}-redis
 
-Create the secrets service to store secret environment variables (current list)
-
-    $ cf cups ${app_name}-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
-
 Deploy the Solr instance.
 
     $ cf push --vars-file vars.yml ${app_name}-solr
+
+Create the secrets service to store secret environment variables. See [Secrets](#secrets) below.
 
 Deploy the CKAN app.
 
@@ -137,6 +135,23 @@ Ensure the inventory app can reach the Solr app.
 You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ${app_name}`.
 
 
+### Secrets
+
+Tips on managing
+[secrets](https://github.com/GSA/datagov-deploy/wiki/Cloud.gov-Cheat-Sheet#secrets-management).
+When creating the service for the first time, use `create-user-provided-service`
+instead of update.
+
+    $ cf update-user-provided-service ${app_name}-secrets -p "CKAN___BEAKER__SESSION_SECRET, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
+
+Name | Description | Where to find
+---- | ----------- | -------------
+CKAN___BEAKER__SESSION__SECRET | Session secret for encrypting CKAN sessions.  | `pwgen -s 32 1`
+DS_RO_PASSWORD | Read-only password to configure for the [datastore](https://docs.ckan.org/en/2.9/maintaining/datastore.html) user. | Initially randomly generated [#2839](https://github.com/GSA/datagov-deploy/issues/2839)
+NEW_RELIC_LICENSE_KEY | New Relic License key. | New Relic account settings.
+SAML2_PRIVATE_KEY | Base64 encoded SAML2 key matching the certificate configured for Login.gov | [Google Drive](https://drive.google.com/drive/u/0/folders/1VguFPRiRb1Ljnm_6UShryHWDofX0xBnU).
+
+
 ### CI configuration
 
 Create a GitHub environment for each application you're deploying. Each
@@ -147,6 +162,23 @@ Secret name | Description
 ----------- | -----------
 CF_SERVICE_AUTH | The service key password.
 CF_SERVICE_USER | The service key username.
+
+
+## Login.gov integration
+
+We use Login.gov as our
+[SAML2](https://github.com/GSA/datagov-deploy/wiki/SAML2-authentication)
+Identity Provider (IdP). Production apps use the production Login.gov instance
+while other apps use the Login.gov identity sandbox.
+
+Each year in March, Login.gov rotates their credentials. See our
+[wiki](https://github.com/GSA/datagov-deploy/wiki/SAML2-authentication#working-with-logingov)
+for details.
+
+Our Service Provider (SP) certificate and key are provided in through
+environment variable and user-provided service.
+
+The Login.gov IdP metadata is stored in file under `config/`.
 
 
 ## License and Contributing
