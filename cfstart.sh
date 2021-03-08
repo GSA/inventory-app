@@ -70,7 +70,7 @@ mkdir -p $CKAN___CACHE_DIR
 echo "$SAML2_PRIVATE_KEY" | base64 -d > $CKANEXT__SAML2AUTH__KEY_FILE_PATH
 echo "$SAML2_CERTIFICATE" > $CKANEXT__SAML2AUTH__CERT_FILE_PATH
 
-# Edit the config file to use validate debug is off and utilizes the correct port
+# Edit the config file to validate debug is off and utilizes the correct port
 export CKAN_INI=config/production.ini
 ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
 ckan config-tool $CKAN_INI -s DEFAULT -e debug=false
