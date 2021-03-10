@@ -1,11 +1,41 @@
 app_name: inventory
 
+ckanext__saml2auth__entity_id: urn:gov:gsa:SAML:2.0.profiles:sp:sso:gsa:datagov-prod-inventory
+ckanext__saml2auth__idp_metadata__local_path: config/login.sandbox.idp.xml
+
 # Number of application instances to run in cloud.gov
 # TODO bump this to 2+ before launching https://github.com/GSA/datagov-deploy/issues/2788
 instances: 1
 
+new_relic_app_name: inventory
+new_relic_monitor_mode: true
+
 routes:
   - route: inventory-prod-datagov.app.cloud.gov
+
+saml2_certificate: |
+  -----BEGIN CERTIFICATE-----
+  MIIDljCCAn4CCQCXgGGEjSiIojANBgkqhkiG9w0BAQsFADCBjDELMAkGA1UEBhMC
+  VVMxCzAJBgNVBAgMAkRDMRMwEQYDVQQHDApXYXNoaW5ndG9uMQwwCgYDVQQKDANH
+  U0ExDDAKBgNVBAsMA1RUUzEbMBkGA1UEAwwSaW52ZW50b3J5LmRhdGEuZ292MSIw
+  IAYJKoZIhvcNAQkBFhNkYXRhZ292aGVscEBnc2EuZ292MB4XDTIxMDIxODAyMDcw
+  M1oXDTIzMDIxODAyMDcwM1owgYwxCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJEQzET
+  MBEGA1UEBwwKV2FzaGluZ3RvbjEMMAoGA1UECgwDR1NBMQwwCgYDVQQLDANUVFMx
+  GzAZBgNVBAMMEmludmVudG9yeS5kYXRhLmdvdjEiMCAGCSqGSIb3DQEJARYTZGF0
+  YWdvdmhlbHBAZ3NhLmdvdjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+  ALp+Ok9CNILECRIeA1767ldcrB3gh6lBVByA3FB63UycyaKAyahlte/uOz7i9ej3
+  SoGDOY8f4iRVlL/JP4S3+4eR3OGCa2qrrMOhjCGlYVzUYU+t9f6dRf4lfBWfFAv3
+  zW4mI+zVzaxX/bXVBYb6M9n2GNXTCQwNCqqQqgdpLstWVfiv1PU8X1nxT3CrVgwu
+  0AvfZuTuHCIuBtRzXq8yu8INS7eISloqcc+ou9+c7UUzXdyrY+3nATi+S4M5v9O7
+  Hy831yETEAtnaPQmNpxVL+LdUbVK6TIDcfNxmonfqnsG5kABvgrU+nf57d39iRPe
+  +mlM3NqRSWkfNwr0shm6cDUCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEANCUWGk/E
+  s8gxAIgT9bOOfTZz9+ADT7nMuRdE8GdFq+fzS4SorreqYfFITqd+TUXaDrfsvQvz
+  0IjAIsXlWVhkkVTBXNhTkUth6bdVS/VUPBIrdlhSK9D7npWzhQhfK628T4HUhXb4
+  dx8WEIv1yu7xBmBfUwpE2uSCkPRN+xH1E61JryLqdvTrkc9CwxFU0qVDnCLSr3Ay
+  8W5ARzRUFpNpWS6kHVMQFraxvawjm3xJgR+JmeZZln79v3a44pKstKeELnINGoLT
+  FR8/D6wMVxy018ugn1/rA4DN6oEmDbFYrhzu3ELG7OkSNce82LKgqD3GdkCr/Dzc
+  FACe3zAui0XWNA==
+  -----END CERTIFICATE-----
 
 # TODO remove this https://github.com/GSA/datagov-deploy/issues/2778
 solr_route: inventory-prod-solr.apps.internal

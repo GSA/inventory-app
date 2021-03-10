@@ -14,6 +14,7 @@ the `requirements-freeze.txt` for production dependencies. Very little works bey
 ### Prerequisites
 
 - [Docker and Docker Compose](https://docs.docker.com/compose/)
+- [Cloud Foundry](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html) CLI v7
 
 
 ### Getting started
@@ -43,26 +44,17 @@ To run a one off command inside the container:
 
     $ docker-compose exec app {command}
 
-#### Update dependencies
-To update the dependencies from various libraries (usually handled by running build),
-run the following:
 
-    $ make update-dependencies
+### Update dependencies
 
-Update lock file for dependencies. **Because of a version conflict for
-repoze.who, special care should be taken to make sure that repoze.who==1.0.18 is
-shipped to production in order to be compatible with ckanext-saml2. After
-generating the requirements-freeze.txt, manually review the file to make sure
-the versions are correct. See https://github.com/GSA/catalog-app/issues/78 for
-more details.**
-Need to avoid pulling in dev requirements, so start from a clean build
-(without starting up the app) and save the requirements.
+Update the "lock" file for dependencies.
 
-    $ make clean build requirements
+    $ make build requirements
 
-This freezes the requirements at `requirements-freeze.txt`, and should only be done
-when tests are passing locally. CircleCi will run the build against this 
-`requirements-freeze.txt` file to validate that the code should work in production.
+This freezes the requirements at `requirements.txt`. Run the tests with the
+updated dependencies.
+
+    $ make test
 
 
 ### Live Editing
@@ -95,7 +87,7 @@ ckan serving pages as pylons sometimes and flask at others.
 
 ### Tests
 
-    $ make test
+    $ make build test_extension test
 
 
 ## Deploying to cloud.gov
@@ -114,43 +106,50 @@ Create the database used by datastore. `${app_name}` should be the same as what 
 $ cf create-service aws-rds micro-psql ${app_name}-datastore
 ```
 
-Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available (see [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time)). _TODO: replace this with the cloud.gov broker [#2760](https://github.com/GSA/datagov-deploy/issues/2760)._
-```sh
-$ cf create-service csb-aws-postgresql small ${app_name}-db -c '{"postgres_version": "9.6", "publicly_accessible": true, "storage_encrypted": true}'
-```
+Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available (see [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time)).
+
+    $ cf create-service aws-rds small-psql ${app_name}-db -c '{"version": 11}'
 
 Create the s3 bucket for data storage.
-```sh
-$ cf create-service s3 basic-sandbox ${app_name}-s3
-```
+
+    $ cf create-service s3 basic-sandbox ${app_name}-s3
 
 Create the Redis service for cache
-```sh
-$ cf create-service aws-elasticache-redis redis-dev ${app_name}-redis
-```
 
-Create the secrets service to store secret environment variables (current list)
-```sh
-$ cf cups ${app_name}-secrets -p "DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY"
-```
+    $ cf create-service aws-elasticache-redis redis-dev ${app_name}-redis
 
 Deploy the Solr instance.
-```sh
-$ cf push --vars-file vars.yml ${app_name}-solr
-```
+
+    $ cf push --vars-file vars.yml ${app_name}-solr
+
+Create the secrets service to store secret environment variables. See [Secrets](#secrets) below.
 
 Deploy the CKAN app.
-```sh
-$ cf push --vars-file vars.yml ${app_name}
-```
+
+    $ cf push --vars-file vars.yml ${app_name}
 
 Ensure the inventory app can reach the Solr app.
-```sh
-$ cf add-network-policy ${app_name} --destination-app ${app_name}-solr --protocol tcp --port 8983
-```
-*Note: remove --destination-app flag for cf cli v7, just `cf add-network-policy ${app_name} ${app_name}-solr...`*
+
+    $ cf add-network-policy ${app_name} ${app_name}-solr --protocol tcp --port 8983
 
 You should now be able to visit `https://[ROUTE]`, where `[ROUTE]` is the route reported by `cf app ${app_name}`.
+
+
+### Secrets
+
+Tips on managing
+[secrets](https://github.com/GSA/datagov-deploy/wiki/Cloud.gov-Cheat-Sheet#secrets-management).
+When creating the service for the first time, use `create-user-provided-service`
+instead of update.
+
+    $ cf update-user-provided-service ${app_name}-secrets -p "CKAN___BEAKER__SESSION_SECRET, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
+
+Name | Description | Where to find
+---- | ----------- | -------------
+CKAN___BEAKER__SESSION__SECRET | Session secret for encrypting CKAN sessions.  | `pwgen -s 32 1`
+DS_RO_PASSWORD | Read-only password to configure for the [datastore](https://docs.ckan.org/en/2.9/maintaining/datastore.html) user. | Initially randomly generated [#2839](https://github.com/GSA/datagov-deploy/issues/2839)
+NEW_RELIC_LICENSE_KEY | New Relic License key. | New Relic account settings.
+SAML2_PRIVATE_KEY | Base64 encoded SAML2 key matching the certificate configured for Login.gov | [Google Drive](https://drive.google.com/drive/u/0/folders/1VguFPRiRb1Ljnm_6UShryHWDofX0xBnU).
 
 
 ### CI configuration
@@ -163,6 +162,23 @@ Secret name | Description
 ----------- | -----------
 CF_SERVICE_AUTH | The service key password.
 CF_SERVICE_USER | The service key username.
+
+
+## Login.gov integration
+
+We use Login.gov as our
+[SAML2](https://github.com/GSA/datagov-deploy/wiki/SAML2-authentication)
+Identity Provider (IdP). Production apps use the production Login.gov instance
+while other apps use the Login.gov identity sandbox.
+
+Each year in March, Login.gov rotates their credentials. See our
+[wiki](https://github.com/GSA/datagov-deploy/wiki/SAML2-authentication#working-with-logingov)
+for details.
+
+Our Service Provider (SP) certificate and key are provided in through
+environment variable and user-provided service.
+
+The Login.gov IdP metadata is stored in file under `config/`.
 
 
 ## License and Contributing
