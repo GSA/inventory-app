@@ -43,7 +43,7 @@ services:
     image: datagov/catalog-solr:inventory2_8
 
   redis:
-    build: ./redis
+    image: redis:alpine
 
   localstack-container:
     container_name: "localstack-container"
