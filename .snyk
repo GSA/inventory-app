@@ -56,4 +56,16 @@ ignore:
           which might help reduce the chances of this vulnerability 
           being exploited.
         expires: 2021-04-10T06:00:00.000Z
+  SNYK-PYTHON-SPHINX-570772:
+    - '*':
+        reason: >-
+          Dev-only requirement; vulnerable to cross-site scripting
+          which is not a useful vulnerability in a dev environment.
+        expires: 2021-06-12T06:00:00.000Z
+  SNYK-PYTHON-SPHINX-570773:
+    - '*':
+        reason: >-
+          Dev-only requirement; vulnerable to cross-site scripting
+          which is not a useful vulnerability in a dev environment.
+        expires: 2021-06-12T06:00:00.000Z
 patch: {}
