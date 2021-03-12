@@ -68,4 +68,30 @@ ignore:
           Dev-only requirement; vulnerable to cross-site scripting
           which is not a useful vulnerability in a dev environment.
         expires: 2021-06-12T06:00:00.000Z
+  SNYK-UBUNTU1804-LIBZSTD-1082297:
+    - '*':
+        reason: >-
+          Dev-only requirement; momentary incorrect permissions are
+          acceptable as there is not any sensitive/private data in
+          dev environments
+        expires: 2021-06-12T06:00:00.000Z
+  SNYK-UBUNTU1804-LIBZSTD-1082293:
+    - '*':
+        reason: >-
+          Dev-only requirement; momentary incorrect permissions are
+          acceptable as there is not any sensitive/private data in
+          dev environments.
+        expires: 2021-06-12T06:00:00.000Z
+  SNYK-UBUNTU1804-GCC8-572149:
+    - '*':
+        reason: >-
+          Dev-only requirement; local access required to implement
+          attack and user safeguards are sufficient in dev environment.
+        expires: 2021-06-12T06:00:00.000Z
+  SNYK-UBUNTU1804-SYSTEMD-346780:
+    - '*':
+        reason: >-
+          Dev-only requirement; passwords in dev environment not
+          considered security risk (publicly available)
+        expires: 2021-06-12T06:00:00.000Z
 patch: {}
