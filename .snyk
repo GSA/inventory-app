@@ -50,48 +50,48 @@ ignore:
       expires: 2021-05-02T06:00:00.000Z
   SNYK-PYTHON-CRYPTOGRAPHY-1022152:
     - '*':
-      reason: >-
-        Patched to version 3.2; long term fix expected later.
-        Version 3.2 of this package contains an incomplete fix,
-        which might help reduce the chances of this vulnerability 
-        being exploited.
-      expires: 2021-04-10T06:00:00.000Z
+        reason: >-
+          Patched to version 3.2; long term fix expected later.
+          Version 3.2 of this package contains an incomplete fix,
+          which might help reduce the chances of this vulnerability 
+          being exploited.
+        expires: 2021-04-10T06:00:00.000Z
   SNYK-PYTHON-SPHINX-570772:
     - '*':
-      reason: >-
-        Dev-only requirement; vulnerable to cross-site scripting
-        which is not a useful vulnerability in a dev environment.
-      expires: 2021-06-12T06:00:00.000Z
+        reason: >-
+          Dev-only requirement; vulnerable to cross-site scripting
+          which is not a useful vulnerability in a dev environment.
+        expires: 2021-06-12T06:00:00.000Z
   SNYK-PYTHON-SPHINX-570773:
     - '*':
-      reason: >-
-        Dev-only requirement; vulnerable to cross-site scripting
-        which is not a useful vulnerability in a dev environment.
-      expires: 2021-06-12T06:00:00.000Z
+        reason: >-
+          Dev-only requirement; vulnerable to cross-site scripting
+          which is not a useful vulnerability in a dev environment.
+        expires: 2021-06-12T06:00:00.000Z
   SNYK-UBUNTU1804-LIBZSTD-1082297:
     - '*':
-      reason: >-
-        Dev-only requirement; momentary incorrect permissions are
-        acceptable as there is not any sensitive/private data in
-        dev environments
-      expires: 2021-06-12T06:00:00.000Z
+        reason: >-
+          Dev-only requirement; momentary incorrect permissions are
+          acceptable as there is not any sensitive/private data in
+          dev environments
+        expires: 2021-06-12T06:00:00.000Z
   SNYK-UBUNTU1804-LIBZSTD-1082293:
     - '*':
-      reason: >-
-        Dev-only requirement; momentary incorrect permissions are
-        acceptable as there is not any sensitive/private data in
-        dev environments.
-      expires: 2021-06-12T06:00:00.000Z
+        reason: >-
+          Dev-only requirement; momentary incorrect permissions are
+          acceptable as there is not any sensitive/private data in
+          dev environments.
+        expires: 2021-06-12T06:00:00.000Z
   SNYK-UBUNTU1804-GCC8-572149:
     - '*':
-      reason: >-
-        Dev-only requirement; local access required to implement
-        attack and user safeguards are sufficient in dev environment.
-      expires: 2021-06-12T06:00:00.000Z
+        reason: >-
+          Dev-only requirement; local access required to implement
+          attack and user safeguards are sufficient in dev environment.
+        expires: 2021-06-12T06:00:00.000Z
   SNYK-UBUNTU1804-SYSTEMD-346780:
     - '*':
-      reason: >-
-        Dev-only requirement; passwords in dev environment not
-        considered security risk (publicly available)
-      expires: 2021-06-12T06:00:00.000Z
+        reason: >-
+          Dev-only requirement; passwords in dev environment not
+          considered security risk (publicly available)
+        expires: 2021-06-12T06:00:00.000Z
 patch: {}
