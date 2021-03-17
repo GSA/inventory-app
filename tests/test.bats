@@ -148,9 +148,8 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
 }
 
 @test "data is inaccessible to public" {
-  run curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1'
-  # Validate output is 22, curl response for 403 (Forbidden)
-  [ "$status" -eq 22 ]
+  [ "404" == "$(curl --silent --output /dev/null --write-out %{http_code} http://app:5000/dataset/test-dataset-1)" ]
+  [ "403" == "$(curl --silent --output /dev/null --write-out %{http_code} http://app:5000/api/action/package_show?id=test-dataset-1)" ]
 }
 
 @test "Website display is working" {
