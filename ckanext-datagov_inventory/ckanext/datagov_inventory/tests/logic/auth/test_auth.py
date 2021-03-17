@@ -385,6 +385,34 @@ class TestDatagovInventoryAuth(object):
         })
 
 
+    def test_auth_user_list(self):
+        # Create test users and test data
+        self.setup_test_orgs_users()
+
+        self.assert_user_authorization('user_list', {
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_admin': is_allowed,
+            'doi_member': is_allowed,
+            'anonymous': is_denied
+        })
+
+
+    def test_auth_user_show(self):
+        # Create test users and test data
+        self.setup_test_orgs_users()
+
+        self.assert_user_authorization('user_show', {
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_admin': is_allowed,
+            'doi_member': is_allowed,
+            'anonymous': is_denied
+        })
+
+
     def test_auth_vocabulary_list(self):
         # Create test users and test data
         self.setup_test_orgs_users()
