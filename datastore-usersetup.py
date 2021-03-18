@@ -5,6 +5,7 @@
 from __future__ import print_function
 import os
 import psycopg2
+import re
 import sys
 from urlparse import urlparse
 
@@ -21,6 +22,20 @@ def identifier(s):
     Return s as a double-quoted string (good for psql identifiers)
     """
     return u'"' + s.replace(u'"', u'""').replace(u'\0', '') + u'"'
+
+
+def hide_sensitive(s):
+    """
+    Return s with sensitive info replaced.
+    """
+
+    # Hide password with <...>
+    s = re.sub(
+            r'((?i)PASSWORD\s+)(\'.*?\')(\s*;\s*)',
+            r'\g<1><...>\g<3>',
+            s)
+
+    return s
 
 
 def datastore_sql(datastoredb, writeuser, readuser, readpassword):
@@ -67,7 +82,7 @@ def main():
     sql = datastore_sql(datastoredb, writeuser, readuser, readpassword)
 
     print("<datastore SQL>")
-    print(sql)
+    print(hide_sensitive(sql))
     print("</datastore SQL>")
 
     try:
