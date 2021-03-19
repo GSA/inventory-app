@@ -12,3 +12,4 @@ pip-tools==1.7.0
 pyfakefs==2.9
 Sphinx==1.7.1
 sphinx-rtd-theme==0.3.1
+pygments>=2.7.4 # not directly required, pinned by Snyk to avoid a vulnerability
