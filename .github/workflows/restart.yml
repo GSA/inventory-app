@@ -3,7 +3,7 @@ name: restart application
 
 on:
   schedule:
-    - cron: '7,15,22,37,52 * * * *'
+    - cron: '7/15 * * * *'
 
 jobs:
   restart-staging:
@@ -18,9 +18,29 @@ jobs:
       - name: restart
         uses: usds/cloud-gov-cli@master
         with:
-          command: restart --strategy rolling
+          command: restart inventory --strategy rolling
           org: gsa-datagov
           space: staging
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: bin/smoke.sh
+  
+  restart-prod:
+    name: restart (prod)
+    environment: production
+    runs-on: ubuntu-latest
+    env:
+      APP_URL: https://inventory-prod-datagov.app.cloud.gov
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: restart
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: restart inventory --strategy rolling
+          org: gsa-datagov
+          space: prod
           user: ${{secrets.CF_SERVICE_USER}}
           password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
