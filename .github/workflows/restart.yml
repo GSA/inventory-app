@@ -3,7 +3,7 @@ name: restart application
 
 on:
   schedule:
-    - cron: '7,15,22,37,52 * * * *'
+    - cron: '7/15 * * * *'
 
 jobs:
   restart-staging:
