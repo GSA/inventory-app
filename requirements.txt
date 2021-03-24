@@ -55,7 +55,7 @@ pbr==1.10.0
 polib==1.0.7
 psycopg2==2.7.3.2
 pycparser==2.20
-Pygments==2.2.0
+Pygments==2.7.4
 Pylons==0.9.7
 pyOpenSSL==20.0.1
 pyparsing==2.4.7
