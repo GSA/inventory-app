@@ -1,0 +1,27 @@
+---
+name: restart application
+
+on:
+  schedule:
+    - cron: '7,15,22,37,52 * * * *'
+
+jobs:
+  restart-staging:
+    name: restart (staging)
+    environment: staging
+    runs-on: ubuntu-latest
+    env:
+      APP_URL: https://inventory-stage-datagov.app.cloud.gov
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: restart
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: restart --strategy rolling
+          org: gsa-datagov
+          space: staging
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: bin/smoke.sh
