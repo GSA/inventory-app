@@ -78,7 +78,7 @@ rq==0.6.0
 s3transfer==0.3.4
 simplejson==3.10.0
 six==1.11.0
-SQLAlchemy==1.1.11
+SQLAlchemy==1.2.18
 sqlalchemy-migrate==0.10.0
 sqlparse==0.2.2
 Tempita==0.5.2
