@@ -25,11 +25,6 @@ services:
       POSTGRES_DB: datastore
     volumes:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-
-  datapusher:
-    image: viderum/datapusher-1:v9
-    ports:
-      - "8800:8000"
     
   db:
     image: datagov/catalog-db:inventory2_8
