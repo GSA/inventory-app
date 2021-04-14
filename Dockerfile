@@ -22,7 +22,6 @@ RUN apt-get -q -y install \
   netcat \
   jq \
   swig \
-  vim \
   wget
 
 # Download  python
