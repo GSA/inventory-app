@@ -189,8 +189,3 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
     return 1;
   fi
 }
-
-@test "xloader working" {
-  echo -e "for,testing,purposes\n1,2,3" > test_two.csv
-  paster --plugin=ckanext-xloader xloader submit test_two.csv -c /etc/ckan/development.ini
- }
