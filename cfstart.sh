@@ -63,6 +63,8 @@ export CKANEXT__S3FILESTORE__HOST_NAME=https://s3-$CKANEXT__S3FILESTORE__REGION_
 export CKANEXT__S3FILESTORE__AWS_ACCESS_KEY_ID=$(vcap_get_service s3 .credentials.access_key_id)
 export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(vcap_get_service s3 .credentials.secret_access_key)
 export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.bucket)
+# xloader uses the same db as datastore
+export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service datastore .credentials.uri)
 
 # Write out any files and directories
 mkdir -p $CKAN_STORAGE_PATH
@@ -82,5 +84,7 @@ DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$D
 # paster --plugin=ckan db upgrade -c config/production.ini
 ckan db upgrade -c $CKAN_INI
 
+# start xloader
+exec paster --plugin=ckan jobs worker -c $CKAN_INI &
 # Fire it up!
 exec config/server_start.sh -b 0.0.0.0:$PORT -t 9000
