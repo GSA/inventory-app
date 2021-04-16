@@ -66,5 +66,8 @@ if [ "${1-}" = "seed" ]; then
   # nohup some_command &> nohup2.out&
 fi
 
+echo starting xloader worker...
+exec paster --plugin=ckan jobs worker -c $CKAN_INI & 
+
 echo starting ckan...
 exec $CKAN_CONFIG/server_start.sh --paste $CKAN_INI -b 0.0.0.0:5000 -t 9000

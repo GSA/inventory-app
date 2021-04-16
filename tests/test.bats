@@ -189,13 +189,3 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
     return 1;
   fi
 }
-
-@test "datapusher working" {
-  curl --silent --fail "http://datapusher:8000/status" | grep push_to_datastore
-}
-
-@test "datapusher API working" {
-  login
-  resource_id=$(curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1' --cookie ./cookie-jar | jq -r '.result.resources[0].id')
-  curl --fail --location --request GET "http://app:5000/api/3/action/datastore_search?resource_id=$resource_id&limit=5" --cookie ./cookie-jar
-}
