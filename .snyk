@@ -61,13 +61,13 @@ ignore:
         reason: >-
           Upgrade remediation requires Python 3, Python2 dropped in v2.6.
           Ticket to address issue: https://github.com/GSA/datagov-deploy/issues/2713
-        expires: 2021-04-23T06:00:00.000Z
+        expires: 2021-05-07T06:00:00.000Z
   SNYK-PYTHON-PYGMENTS-1088505:
     - '*':
         reason: >-
           Upgrade remediation requires Python 3, Python2 dropped in v2.6.
           Ticket to address issue: https://github.com/GSA/datagov-deploy/issues/2713
-        expires: 2021-04-23T06:00:00.000Z
+        expires: 2021-05-07T06:00:00.000Z
   SNYK-PYTHON-SPHINX-570772:
     - '*':
         reason: >-
@@ -80,6 +80,11 @@ ignore:
           Dev-only requirement; vulnerable to cross-site scripting
           which is not a useful vulnerability in a dev environment.
         expires: 2021-06-12T06:00:00.000Z
+  SNYK-PYTHON-WEBOB-40490:
+    - '*':
+        reason: >-
+          Patched via https://github.com/GSA/webob/commit/90d895f9a85c8bea11c80efa4e2f6bdd04eabbe4
+        expires: 2021-07-30T06:00:00.000Z
   SNYK-UBUNTU1804-LIBZSTD-1082297:
     - '*':
         reason: >-
