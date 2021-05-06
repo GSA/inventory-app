@@ -53,6 +53,7 @@ RUN $CKAN_HOME/bin/pip install -r requirements.txt
 COPY entrypoint-docker.sh /
 ENTRYPOINT ["/entrypoint-docker.sh"]
 
+COPY config/gunicorn.conf.py $CKAN_CONFIG/
 COPY config/server_start.sh $CKAN_CONFIG/
 
 CMD ["/bin/bash"]
