@@ -2,9 +2,8 @@
 name: restart application
 
 on:
-  pull_request:
-  # schedule:
-  #   - cron: '7/15 * * * *'
+  schedule:
+    - cron: '7/15 * * * *'
 
 jobs:
   restart-staging:
@@ -18,16 +17,16 @@ jobs:
         uses: actions/checkout@v2
       - name: fail
         run: exit 1
-      # - name: restart
-      #   uses: usds/cloud-gov-cli@master
-      #   with:
-      #     command: restart inventory --strategy rolling
-      #     org: gsa-datagov
-      #     space: staging
-      #     user: ${{secrets.CF_SERVICE_USER}}
-      #     password: ${{secrets.CF_SERVICE_AUTH}}
-      # - name: smoke test
-      #   run: bin/smoke.sh
+      - name: restart
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: restart inventory --strategy rolling
+          org: gsa-datagov
+          space: staging
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: bin/smoke.sh
   
   restart-prod:
     name: restart (prod)
@@ -38,16 +37,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      # - name: restart
-      #   uses: usds/cloud-gov-cli@master
-      #   with:
-      #     command: restart inventory --strategy rolling
-      #     org: gsa-datagov
-      #     space: prod
-      #     user: ${{secrets.CF_SERVICE_USER}}
-      #     password: ${{secrets.CF_SERVICE_AUTH}}
-      # - name: smoke test
-      #   run: bin/smoke.sh
+      - name: restart
+        uses: usds/cloud-gov-cli@master
+        with:
+          command: restart inventory --strategy rolling
+          org: gsa-datagov
+          space: prod
+          user: ${{secrets.CF_SERVICE_USER}}
+          password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: smoke test
+        run: bin/smoke.sh
 
   notify:
     name: notify
@@ -60,7 +59,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - uses: JasonEtco/create-an-issue@v2
-        if: ${{ needs.restart-staging.result == 'failure' }}
+        if: ${{ needs.restart-staging.result == 'failure' || needs.restart-prod.result == 'failure' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
