@@ -15,8 +15,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: fail
-        run: exit 1
       - name: restart
         uses: usds/cloud-gov-cli@master
         with:
