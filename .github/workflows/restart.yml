@@ -59,7 +59,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - uses: JasonEtco/create-an-issue@v2
-        if: ${{ needs.restart-staging.result == 'failure' || needs.restart-prod.result == 'failure' }}
+        if: ${{ needs.restart-staging.result == 'failure' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
