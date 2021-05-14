@@ -1,7 +1,7 @@
 -e git+https://github.com/GSA/ckan.git@patch/datastore-search-sql#egg=ckan
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
--e git+https://github.com/GSA/ckanext-datajson.git@master#egg=ckanext-datajson
+-e git+https://github.com/GSA/ckanext-datajson.git@main#egg=ckanext-datajson
 -e git+https://github.com/keitaroinc/ckanext-saml2auth.git@ckan-2.8#egg=ckanext-saml2auth
 -e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
 ckanext-dcat-usmetadata~=0.2
@@ -39,7 +39,7 @@ PasteScript==2.0.2        # via pylons
 pbr==1.10.0               # via sqlalchemy-migrate
 polib==1.0.7
 psycopg2==2.7.3.2
-git+https://github.com/GSA/pygments.git@datagov/v2.2.x#egg=pygments
+git+https://github.com/GSA/pygments.git@feature/redos-fix#egg=pygments
 Pylons==0.9.7
 pysolr==3.6.0
 python-dateutil==1.5
