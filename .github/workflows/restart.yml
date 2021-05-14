@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: fail
+        run: exit 1
       # - name: restart
       #   uses: usds/cloud-gov-cli@master
       #   with:
@@ -26,12 +28,6 @@ jobs:
       #     password: ${{secrets.CF_SERVICE_AUTH}}
       # - name: smoke test
       #   run: bin/smoke.sh
-      - uses: JasonEtco/create-an-issue@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          update_existing: true
-          filename: .github/ISSUE_TEMPLATE/restart_issue.md
   
   restart-prod:
     name: restart (prod)
@@ -52,3 +48,20 @@ jobs:
       #     password: ${{secrets.CF_SERVICE_AUTH}}
       # - name: smoke test
       #   run: bin/smoke.sh
+
+  notify:
+    name: notify
+    runs-on: ubuntu-latest
+    needs:
+      - restart-staging
+      - restart-prod
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: JasonEtco/create-an-issue@v2
+        if: ${{ needs.restart-staging.result == 'failure' || needs.restart-prod.result == 'failure' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          update_existing: true
+          filename: .github/ISSUE_TEMPLATE/restart_issue.md
