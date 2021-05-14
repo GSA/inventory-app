@@ -2,8 +2,8 @@ Babel==2.3.4
 Beaker==1.9.0
 bleach==3.3.0
 boto==2.49.0
-boto3==1.17.61
-botocore==1.20.61
+boto3==1.17.72
+botocore==1.20.72
 certifi==2020.12.5
 cffi==1.14.5
 chardet==4.0.0
@@ -15,7 +15,7 @@ ckanext-envvars==0.0.1
 ckanext-s3filestore @ git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284
 ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@d77d85349c7a6fcfa5a14c19a56b53eacf137a7c
 -e git+https://github.com/GSA/USMetadata.git@a3005c5bb5235f4034256dcbdb64a7715922ac3a#egg=ckanext_usmetadata
--e git+https://github.com/ckan/ckanext-xloader.git@6a4b7b1afc22df00b01799dd57baae75d047ad46#egg=ckanext_xloader
+-e git+https://github.com/ckan/ckanext-xloader.git@17d62dd95a67c805dda3f978f019ab484ec6a7c8#egg=ckanext_xloader
 ckantoolkit==0.0.4
 click==6.7
 cryptography==3.3.2
@@ -30,7 +30,7 @@ funcsigs==1.0.2
 future==0.18.2
 futures==3.3.0
 gevent==21.1.2
-greenlet==1.0.0
+greenlet==1.1.0
 gunicorn==19.10.0
 html5lib==1.0.1
 idna==2.10
@@ -60,7 +60,7 @@ pbr==1.10.0
 polib==1.0.7
 psycopg2==2.7.3.2
 pycparser==2.20
-Pygments @ git+https://github.com/GSA/pygments.git@f9f800a18ed795f6d9579f0acf934f8103a964bf
+Pygments @ git+https://github.com/GSA/pygments.git@f6ccbc8c73b6b0a3c86ba7f1cfc36ac98ff5f122
 Pylons==0.9.7
 pyOpenSSL==20.0.1
 pyparsing==2.4.7
