@@ -2,8 +2,9 @@
 name: restart application
 
 on:
-  schedule:
-    - cron: '7/15 * * * *'
+  pull_request:
+  # schedule:
+  #   - cron: '7/15 * * * *'
 
 jobs:
   restart-staging:
@@ -15,16 +16,21 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: restart
-        uses: usds/cloud-gov-cli@master
+      # - name: restart
+      #   uses: usds/cloud-gov-cli@master
+      #   with:
+      #     command: restart inventory --strategy rolling
+      #     org: gsa-datagov
+      #     space: staging
+      #     user: ${{secrets.CF_SERVICE_USER}}
+      #     password: ${{secrets.CF_SERVICE_AUTH}}
+      # - name: smoke test
+      #   run: bin/smoke.sh
+      - uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          command: restart inventory --strategy rolling
-          org: gsa-datagov
-          space: staging
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
+          update_existing: true
   
   restart-prod:
     name: restart (prod)
@@ -35,13 +41,13 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: restart
-        uses: usds/cloud-gov-cli@master
-        with:
-          command: restart inventory --strategy rolling
-          org: gsa-datagov
-          space: prod
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
+      # - name: restart
+      #   uses: usds/cloud-gov-cli@master
+      #   with:
+      #     command: restart inventory --strategy rolling
+      #     org: gsa-datagov
+      #     space: prod
+      #     user: ${{secrets.CF_SERVICE_USER}}
+      #     password: ${{secrets.CF_SERVICE_AUTH}}
+      # - name: smoke test
+      #   run: bin/smoke.sh
