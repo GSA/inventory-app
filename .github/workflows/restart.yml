@@ -55,6 +55,7 @@ jobs:
     needs:
       - restart-staging
       - restart-prod
+    if: always()
     steps:
       - name: checkout
         uses: actions/checkout@v2
