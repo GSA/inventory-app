@@ -2,15 +2,15 @@ Babel==2.3.4
 Beaker==1.9.0
 bleach==3.3.0
 boto==2.49.0
-boto3==1.17.107
-botocore==1.20.107
+boto3==1.17.108
+botocore==1.20.108
 certifi==2021.5.30
-cffi==1.14.5
+cffi==1.14.6
 chardet==3.0.4
 -e git+https://github.com/ckan/ckan.git@e5105334fbdfd312412da4e05221ce0588dc2dfd#egg=ckan
--e git+https://github.com/GSA/inventory-app.git@eb6fc870abc6c5dc4447e8a49be8b247c885c150#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
+-e git+https://github.com/GSA/inventory-app.git@223a52426b7d0432f794cd677cd3f675767a3d92#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
 -e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
-ckanext-dcat-usmetadata==0.2.20
+ckanext-dcat-usmetadata==0.2.21
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284#egg=ckanext_s3filestore
 -e git+https://github.com/keitaroinc/ckanext-saml2auth.git@d77d85349c7a6fcfa5a14c19a56b53eacf137a7c#egg=ckanext_saml2auth
