@@ -227,7 +227,8 @@ function add_datasets_for_draft_json {
   'http://app:5000/organization/test-organization/draft.json'
   unzip draft.zip
   result=`cat draft_data.json | jq .dataset[].title`
-  expected='"Draft Test Dataset 1" "Draft Test Dataset 2"'
+  expected='"Draft Test Dataset 1"
+"Draft Test Dataset 2"'
   if [ "$result" = "$expected" ]; then
     echo "Success! Dataset 1 and 2 registered as draft"
     echo "Dataset 3 not registered as draft "
