@@ -237,7 +237,7 @@ function add_datasets_for_draft_json {
   clean_dataset "draft-test-dataset-2"
   clean_dataset "test-dataset-3"
 
-  unzip draft.zip
+  unzip -o draft.zip
   result=`cat draft_data.json | jq .dataset[].title`
   # We expect only dataset 1 and 2 to be draft-status
   expected='"Draft Test Dataset 1"
