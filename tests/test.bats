@@ -190,28 +190,34 @@ curl -f -X POST http://app:5000/api/action/resource_create  \
   fi
 }
 
+function clean_dataset {
+  curl -X POST 'http://app:5000/api/3/action/package_delete' --cookie ./cookie-jar \
+  -H 'content-type: application/json' \
+  -d '{"id": "$1"}'
+}
 
 function add_datasets_for_draft_json {
 
-  # In case the 'package_create' throws a '409 Conflict', the following command can
-  # be used to delete the package so there is not conflict.. I couldn't come up with
-  # a smart way of implementing this delete.  The only way to delete currently is to
-  # do a 'make clean up' to refresh everything
-  #  curl -f -X POST 'http://app:5000/api/3/action/package_delete' --cookie ./cookie-jar \
-  #  -H 'content-type: application/json' \
-  #  -d '{"id": "draft-test-dataset-1"}'
+  # Make sure datasets don't exist
+  clean_dataset "draft-test-dataset-1"
+  clean_dataset "draft-test-dataset-2"
+  clean_dataset "test-dataset-3"
+
+  # Add dataset 1 - draft
   data1="$(cat tests/draft_data_1.json)"
   curl -f -X POST 'http://app:5000/api/3/action/package_create' --cookie ./cookie-jar \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d "$data1"
 
+  # Add dataset 2 - draft
   data1="$(cat tests/draft_data_2.json)"
   curl -f -X POST 'http://app:5000/api/3/action/package_create' --cookie ./cookie-jar \
   -H 'cache-control: no-cache' \
   -H 'content-type: application/json' \
   -d "$data1"
 
+  # Add dataset 3 - not draft
   data1="$(cat tests/draft_data_3.json)"
   curl -f -X POST 'http://app:5000/api/3/action/package_create' --cookie ./cookie-jar \
   -H 'cache-control: no-cache' \
@@ -223,10 +229,12 @@ function add_datasets_for_draft_json {
   login
   add_datasets_for_draft_json
 
+  # Get draft.json
   curl --fail --location --request GET --output draft.zip --cookie ./cookie-jar \
   'http://app:5000/organization/test-organization/draft.json'
   unzip draft.zip
   result=`cat draft_data.json | jq .dataset[].title`
+  # We expect only dataset 1 and 2 to be draft-status
   expected='"Draft Test Dataset 1"
 "Draft Test Dataset 2"'
   if [ "$result" = "$expected" ]; then
@@ -237,4 +245,9 @@ function add_datasets_for_draft_json {
     echo "$result does NOT equal $expected"
     return 1;
   fi
+
+  # Remove datasets to prevetn future conflicts
+  clean_dataset "draft-test-dataset-1"
+  clean_dataset "draft-test-dataset-2"
+  clean_dataset "test-dataset-3"
 }
