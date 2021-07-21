@@ -231,5 +231,9 @@ function add_datasets_for_draft_json {
   if [ "$result" = "$expected" ]; then
     echo "Success! Dataset 1 and 2 registered as draft"
     echo "Dataset 3 not registered as draft "
+    return 0;
+  else
+    echo "$result does NOT equal $expected"
+    return 1;
   fi
 }
