@@ -198,11 +198,6 @@ function clean_dataset {
 
 function add_datasets_for_draft_json {
 
-  # Make sure datasets don't exist
-  clean_dataset "draft-test-dataset-1"
-  clean_dataset "draft-test-dataset-2"
-  clean_dataset "test-dataset-3"
-
   # Add dataset 1 - draft
   data1="$(cat tests/draft_data_1.json)"
   curl -f -X POST 'http://app:5000/api/3/action/package_create' --cookie ./cookie-jar \
@@ -232,6 +227,12 @@ function add_datasets_for_draft_json {
   # Get draft.json
   curl --fail --location --request GET --output draft.zip --cookie ./cookie-jar \
   'http://app:5000/organization/test-organization/draft.json'
+
+  # Remove datasets to prevetn future conflicts
+  clean_dataset "draft-test-dataset-1"
+  clean_dataset "draft-test-dataset-2"
+  clean_dataset "test-dataset-3"
+
   unzip draft.zip
   result=`cat draft_data.json | jq .dataset[].title`
   # We expect only dataset 1 and 2 to be draft-status
@@ -246,8 +247,4 @@ function add_datasets_for_draft_json {
     return 1;
   fi
 
-  # Remove datasets to prevetn future conflicts
-  clean_dataset "draft-test-dataset-1"
-  clean_dataset "draft-test-dataset-2"
-  clean_dataset "test-dataset-3"
 }
