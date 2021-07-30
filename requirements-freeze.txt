@@ -2,14 +2,14 @@ Babel==2.3.4
 Beaker==1.9.0
 bleach==3.3.0
 boto==2.49.0
-boto3==1.17.108
-botocore==1.20.108
+boto3==1.17.112
+botocore==1.20.112
 certifi==2021.5.30
 cffi==1.14.6
 chardet==3.0.4
 -e git+https://github.com/ckan/ckan.git@e5105334fbdfd312412da4e05221ce0588dc2dfd#egg=ckan
--e git+https://github.com/GSA/inventory-app.git@223a52426b7d0432f794cd677cd3f675767a3d92#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
--e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
+-e git+https://github.com/GSA/inventory-app.git@9eeebdb5a7ee41835dbc5ef8f2807beb40c28fce#egg=ckanext_datagov_inventory&subdirectory=ckanext-datagov_inventory
+-e git+https://github.com/GSA/ckanext-datajson.git@a842fa67ff8e3e9e85e80ebc3b34d3c17a38dd2f#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.2.21
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c#egg=ckanext_googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284#egg=ckanext_s3filestore
@@ -26,6 +26,7 @@ Flask==0.12.4
 Flask-Babel==0.11.2
 FormEncode==1.3.1
 funcsigs==1.0.2
+future==0.18.2
 futures==3.3.0
 gevent==21.1.2
 greenlet==1.1.0
