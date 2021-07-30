@@ -2,7 +2,7 @@ FROM bats/bats
 
 RUN apk add curl jq
 
-COPY tests/ /tests/
+COPY tests/ /code/tests/
 
 # bats/bats uses bats as the entrypoint
-CMD ["-r", "/tests"]
+CMD ["-r", "/code/tests"]
