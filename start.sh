@@ -60,11 +60,17 @@ done
 # Run migrations
 ckan -c $CKAN_INI db upgrade 
 
-if [ "${1-}" = "seed" ]; then
-  # Run seed script in new process
-  echo running seed script...
-  nohup /app/seed.sh &> /tmp/nohup.out&
-  # nohup some_command &> nohup2.out&
+# Run any startup scripts provided by images extending this one
+if [[ -d "/docker-entrypoint.d" ]]
+then
+    for f in /docker-entrypoint.d/*; do
+        case "$f" in
+            *.sh)     echo "$0: Running init file $f"; . "$f" || true ;;
+            *.py)     echo "$0: Running init file $f"; python3 "$f"; echo ;;
+            *)        echo "$0: Ignoring $f (not an sh or py file)" ;;
+        esac
+        echo
+    done
 fi
 
 echo starting xloader worker...

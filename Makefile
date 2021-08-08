@@ -22,15 +22,17 @@ lint:
 restart:
 	docker-compose restart app
 
+test-build:
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml build
+
 test:
-	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml build
-	docker-compose -f docker-compose.yml -f docker-compose.test.yml -f docker-compose.seed.yml up --abort-on-container-exit test
+	docker-compose -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit test
 
 test_extension:
 	docker-compose run --rm app nosetests --ckan --with-pylons=docker_test.ini ckanext/datagov_inventory/tests/*
 
 up:
-	docker-compose up
+	docker-compose up --abort-on-container-exit app
 
 up-with-data:
 	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build

@@ -1,9 +1,19 @@
 version: '3'
 services:
+  app:
+    environment:
+      - CKAN_SITE_URL=http://app:5000
+    volumes:
+      - ./e2e/00-setup-cypress-user.sh:/docker-entrypoint.d/00-setup-cypress-user.sh
+      - .:/app/
   test:
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    depends_on:
-      - app
-      - localstack-container
+        image: cypress/included:7.3.0
+        entrypoint: []
+        command: /bin/bash -c "npx wait-on http://app:5000 && cypress run"
+        # To run specific test, use the following syntax:
+        # command: /bin/bash -c "npx wait-on http://app:5000 && cypress run --spec cypress/integration/organizations.spec.js"
+        working_dir: /e2e
+        depends_on:
+        - app
+        volumes:
+        - ./e2e:/e2e

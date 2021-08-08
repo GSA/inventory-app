@@ -1,0 +1,7 @@
+{
+    "baseUrl": "http://app:5000",
+    "reporter": "junit",
+    "reporterOptions": {
+        "mochaFile": "cypress/results/output.xml"
+    }
+}

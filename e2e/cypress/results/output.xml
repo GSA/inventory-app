@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="27.8420" tests="3" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-08-08T20:54:29" tests="0" file="cypress/integration/organizations.spec.js" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="Organization" timestamp="2021-08-08T20:54:29" tests="3" time="27.8420" failures="0">
+    <testcase name="Organization Create Organization" time="19.1570" classname="Create Organization">
+    </testcase>
+    <testcase name="Organization Contains Organization Information" time="0.6600" classname="Contains Organization Information">
+    </testcase>
+    <testcase name="Organization Edit Organization Description" time="8.0250" classname="Edit Organization Description">
+    </testcase>
+  </testsuite>
+</testsuites>

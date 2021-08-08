@@ -27,11 +27,11 @@ done
 if [ "${1-}" == "" ]; then
   echo creating user admin
   #Setup various users, organizations, and datasets
-  if /usr/lib/ckan/bin/paster --plugin=ckan user add admin password=password email=fake@fake.com -c $CKAN_INI > /tmp/user_temp.txt ; then
-    /usr/lib/ckan/bin/paster --plugin=ckan sysadmin add admin -c $CKAN_INI
+  if ckan -c $CKAN_INI user add admin password=password email=fake@fake.com  > /tmp/user_temp.txt ; then
+    ckan -c $CKAN_INI sysadmin add admin 
     api_key=$(grep -oP "apikey.: u.\K.+" /tmp/user_temp.txt | cut -d "'" -f1)
   else
-    api_key=$(/usr/lib/ckan/bin/paster --plugin=ckan user admin -c $CKAN_INI | grep -oP "apikey=\K.+ " | cut -d " " -f1)
+    api_key=$(ckan -c $CKAN_INI --plugin=ckan user admin  | grep -oP "apikey=\K.+ " | cut -d " " -f1)
   fi
 
 else
@@ -153,4 +153,5 @@ else
   wget https://raw.githubusercontent.com/GSA/ckanext-dcat_usmetadata/main/ckanext/dcat_usmetadata/publishers.test.csv
 fi
 # add publisher file
-/usr/lib/ckan/bin/paster --plugin=ckanext-dcat_usmetadata publishers-import /app/publishers.test.csv -c $CKAN_INI
+# TODO Add this back when integrating dcat_usmetadata
+# ckan -c $CKAN_INI --plugin=ckanext-dcat_usmetadata publishers-import /app/publishers.test.csv 
