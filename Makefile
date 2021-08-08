@@ -14,7 +14,7 @@ debug:
 	docker-compose stop app ; docker-compose run --service-ports app
 
 requirements:
-	docker-compose run --rm -T app bin/requirements.sh
+	docker-compose run --rm -T app /app/bin/requirements.sh
 
 lint:
 	flake8 . --count --show-source --statistics

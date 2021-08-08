@@ -40,34 +40,36 @@ fi
 
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
-$CKAN_HOME/bin/pip install -r /opt/inventory-app/requirements-dev.txt
+# Currently not installing properly, leaving out as not required
+# pip3 install -r /app/requirements-dev.txt
 
 # re-install ckan src directories (ckan extensions), that are not owned by root;
 # these are mapped via docker volume and need to be installed in container
-for i in $CKAN_HOME/src/*
+for i in $CKAN_HOME/src_extensions/*
 do
   if [ -d $i ];
   then
     owner=$(stat -c '%U' $i);
     if [ $owner != 'root' ];
     then
-      $CKAN_HOME/bin/pip install -e $i
+      pip3 install -e $i
     fi
   fi
 done
 
 # Run migrations
-paster --plugin=ckan db upgrade -c $CKAN_INI
+ckan -c $CKAN_INI db upgrade 
 
 if [ "${1-}" = "seed" ]; then
   # Run seed script in new process
   echo running seed script...
-  nohup /opt/inventory-app/seed.sh &> /tmp/nohup.out&
+  nohup /app/seed.sh &> /tmp/nohup.out&
   # nohup some_command &> nohup2.out&
 fi
 
 echo starting xloader worker...
-exec paster --plugin=ckan jobs worker -c $CKAN_INI & 
+exec ckan -c $CKAN_INI  jobs worker & 
 
 echo starting ckan...
-exec $CKAN_CONFIG/server_start.sh --paste $CKAN_INI -b 0.0.0.0:5000 -t 9000
+sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
+# exec $CKAN_CONFIG/server_start.sh --paste $CKAN_INI -b 0.0.0.0:5000 -t 9000

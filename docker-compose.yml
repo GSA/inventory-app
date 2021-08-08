@@ -2,7 +2,7 @@ version: '3'
 services:
   app:
     build: .
-    command: /opt/inventory-app/start.sh
+    command: /app/start.sh
     depends_on:
       - datastore
       - db
@@ -10,10 +10,13 @@ services:
     ports:
       - "5000:5000"
     env_file: env_file
+    environment:
+      CKAN_HOME: /srv/app
+      CKAN_CONFIG: /app/config
     volumes:
       - ckan:/usr/lib/ckan
       - ./config:/etc/ckan
-      - .:/opt/inventory-app
+      - .:/app/
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       # - /local/path/ckanext-some_extension/:/usr/lib/ckan/src/ckanext-some_extension
 

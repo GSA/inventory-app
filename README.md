@@ -26,9 +26,9 @@ Build and bring up the containers.
 
 You may optionally seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
 
-    $ docker-compose exec app /opt/inventory-app/seed.sh
+    $ docker-compose exec app /app/seed.sh
 
-_If the user is already created and you would like to rebuild the organization and dataset, you can specify the API key as a second argument to the execution: `docker-compose exec app /opt/inventory-app/seed.sh long-api-key`_
+_If the user is already created and you would like to rebuild the organization and dataset, you can specify the API key as a second argument to the execution: `docker-compose exec app /app/seed.sh long-api-key`_
 
 Open CKAN to verify it's working
 

@@ -1,4 +1,4 @@
 version: '3'
 services:
   app:
-    command: /opt/inventory-app/start.sh seed
+    command: /app/start.sh seed

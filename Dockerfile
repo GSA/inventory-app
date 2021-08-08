@@ -1,59 +1,29 @@
-FROM ubuntu:18.04
+FROM openknowledge/ckan-dev:2.9
+# Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.8/Dockerfile
+# And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.8/Dockerfile
 
-ARG PYTHON_VERSION=2.7.17
+ENV GIT_BRANCH=2.9
+ENV CKAN_HOME /srv/app
+ENV CKAN_CONFIG /app/config
+# ENV CKAN_ENV docker
 
-ENV CKAN_HOME /usr/lib/ckan
-ENV CKAN_CONFIG /etc/ckan
-ENV CKAN_ENV docker
+# add dependencies for cryptography and vim
+# RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
-WORKDIR /opt/inventory-app
+COPY requirements.txt ${APP_DIR}
 
-# Install required packages
-RUN apt-get -q -y update --fix-missing
-RUN apt-get -q -y install \
-  curl \
-  build-essential \
-  git \
-  libbz2-dev \
-  libmagic-dev \
-  libpq-dev \
-  libssl-dev \
-  libz-dev \
-  netcat \
-  jq \
-  swig \
-  wget
+RUN pip3 install --ignore-installed -r requirements.txt
+# COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
-# Download  python
-RUN wget -O- https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz | tar -zxv -C /tmp
+# What saml2 info do we need?
+# COPY saml2 ${APP_DIR}/saml2
 
-# Compile and install python
-RUN cd /tmp/Python-$PYTHON_VERSION && \
-  ./configure \
-    --enable-ipv6 \
-    --enable-shared \
-    --enable-unicode=ucs4 \
-    --with-ensurepip=install && \
-  make && make install && \
-  ldconfig
+# COPY the ini test file to the container 
+# COPY test-catalog-next.ini ${SRC_DIR}/ckan
 
-RUN /usr/local/bin/pip install pip==20.3.3 && \
-  /usr/local/bin/pip install virtualenv && \
-  /usr/local/bin/pip install setuptools==44.0.0
+# COPY entrypoint-docker.sh /
+# ENTRYPOINT ["/entrypoint-docker.sh"]
 
-# Create ckan virtualenv
-RUN mkdir -p $CKAN_HOME && \
-  virtualenv $CKAN_HOME -p /usr/local/bin/python
-
-COPY . /opt/inventory-app/
-
-# Install ckan dependencies
-RUN $CKAN_HOME/bin/pip install -r requirements.txt
-
-COPY entrypoint-docker.sh /
-ENTRYPOINT ["/entrypoint-docker.sh"]
-
+# Not currently in use in development
 COPY config/gunicorn.conf.py $CKAN_CONFIG/
 COPY config/server_start.sh $CKAN_CONFIG/
-
-CMD ["/bin/bash"]

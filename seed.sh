@@ -147,10 +147,10 @@ curl -X POST \
 
 echo Adding publishers to metadata form
 # check if file exists, if not get it from github
-if [ -f "/opt/inventory-app/publishers.test.csv" ]; then
+if [ -f "/app/publishers.test.csv" ]; then
   echo Publisher file already exists
 else
   wget https://raw.githubusercontent.com/GSA/ckanext-dcat_usmetadata/main/ckanext/dcat_usmetadata/publishers.test.csv
 fi
 # add publisher file
-/usr/lib/ckan/bin/paster --plugin=ckanext-dcat_usmetadata publishers-import /opt/inventory-app/publishers.test.csv -c $CKAN_INI
+/usr/lib/ckan/bin/paster --plugin=ckanext-dcat_usmetadata publishers-import /app/publishers.test.csv -c $CKAN_INI
