@@ -26,6 +26,8 @@ describe('DCAT-US Export', () => {
     })
     after(() => {
         cy.delete_dataset('test-dataset-1')
+        cy.delete_dataset('draft-dataset-1')
+        cy.delete_dataset('draft-dataset-2')
         cy.delete_organization('test-organization')
     })
 
