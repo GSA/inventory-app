@@ -10,10 +10,9 @@ describe('Public Access', () => {
             });
         });
     })
-    // beforeEach(() => {
-    //     Cypress.Cookies.preserveOnce('auth_tkt', 'ckan')
-    // })
+
     after(() => {
+        cy.login('cypress-user', 'cypress-user-password', false);
         cy.delete_dataset('test-dataset-1')
         cy.delete_organization('test-organization')
     })

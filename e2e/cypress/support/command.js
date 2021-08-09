@@ -154,7 +154,6 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
      cy.request({
         url: '/api/action/dataset_purge',
         method: 'POST',
-        failOnStatusCode: false,
         body: {
             "id": datasetName
         }
