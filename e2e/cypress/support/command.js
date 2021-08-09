@@ -109,12 +109,36 @@ Cypress.Commands.add('delete_organization', (orgName) => {
      * :PARAM orgName String: Name of the organization to purge from the current state
      * :RETURN null:
      */
+     cy.request({
+        url: '/api/action/organization_delete',
+        method: 'POST',
+        failOnStatusCode: false,
+        body: {
+            "id": orgName
+        }
+    })
     cy.request({
         url: '/api/action/organization_purge',
         method: 'POST',
         failOnStatusCode: false,
         body: {
             "id": orgName
+        }
+    })
+})
+
+Cypress.Commands.add('delete_dataset', (datasetName) => {
+    /**
+     * Method to purge a dataset from the current state
+     * :PARAM datasetName String: Name of the dataset to purge from the current state
+     * :RETURN null:
+     */
+     cy.request({
+        url: '/api/action/dataset_purge',
+        method: 'POST',
+        failOnStatusCode: false,
+        body: {
+            "id": datasetName
         }
     })
 })
@@ -179,4 +203,33 @@ Cypress.Commands.add('start_harvest_job', (harvestName) => {
     //cy.reload(true)
     //cy.contains('0 not modified').should('have.class', 'label')
     //cy.get('td').should('contain', 'Finished')
+})
+
+
+Cypress.Commands.add('create_dataset', (ckan_dataset) => {
+    var options = {
+        'method': 'POST',
+        'url': '/api/3/action/package_create',
+        'headers': {
+            'cache-control': 'no-cache',
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(ckan_dataset)
+    };
+
+    return cy.request(options)
+})
+
+
+// Performs an XMLHttpRequest instead of a cy.request (able to send data as FormData - multipart/form-data)
+Cypress.Commands.add('form_request', (method, url, formData, done) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.onload = function () {
+        done(xhr);
+    };
+    xhr.onerror = function () {
+        done(xhr);
+    };
+    xhr.send(formData);
 })
