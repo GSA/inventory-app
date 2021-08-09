@@ -1,6 +1,6 @@
 src/
 /tmp/*
-*.csv
+# *.csv
 vendor/*
 vars.yml
 secrets.json
