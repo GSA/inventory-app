@@ -28,7 +28,7 @@
     "organization": "test-organization",
     "isopen": false,
     "url": null,
-    "notes": "The description of the second test dataset",
+    "notes": "The description of the first test dataset",
     "owner_org": "test-organization",
     "bureau_code": "010:00",
     "contact_email": "tester@fake.com",

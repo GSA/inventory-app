@@ -28,7 +28,7 @@
   "organization": "test-organization",
   "isopen": false,
   "url": null,
-  "notes": "The description of the second test dataset",
+  "notes": "The description of the first draft dataset",
   "owner_org": "test-organization",
   "bureau_code": "010:00",
   "contact_email": "tester@fake.com",
@@ -36,8 +36,9 @@
   "modified": "2020-12-18",
   "public_access_level": "public",
   "publisher": "Department of the Interior",
-  "unique_id": "doi-123456789-333",
-  "title": "Test Dataset 3",
-  "name": "test-dataset-3",
-  "program_code": "010:004"
+  "unique_id": "doi-123456789-111",
+  "title": "Draft Dataset 1",
+  "name": "draft-dataset-1",
+  "program_code": "010:002",
+  "extras": [{"key": "publishing_status", "value": "Draft"}]
 }
