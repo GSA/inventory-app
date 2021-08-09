@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="8.1150" tests="1" failures="0">
-  <testsuite name="Root Suite" timestamp="2021-08-09T01:46:22" tests="0" file="cypress/integration/public_access.spec.js" time="0.0000" failures="0">
+<testsuites name="Mocha Tests" time="15.4410" tests="4" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-08-09T06:05:29" tests="0" file="cypress/integration/datastore.spec.js" time="0.0000" failures="0">
   </testsuite>
-  <testsuite name="Public Access" timestamp="2021-08-09T01:46:22" tests="1" time="8.1150" failures="0">
-    <testcase name="Public Access Cannot access the standard public pages" time="8.1150" classname="Cannot access the standard public pages">
+  <testsuite name="Datastore" timestamp="2021-08-09T06:05:29" tests="4" time="15.4410" failures="0">
+    <testcase name="Datastore Is available via CKAN API" time="5.1720" classname="Is available via CKAN API">
+    </testcase>
+    <testcase name="Datastore Can create datastore resource via API" time="9.8220" classname="Can create datastore resource via API">
+    </testcase>
+    <testcase name="Datastore Can access datastore API" time="0.2020" classname="Can access datastore API">
+    </testcase>
+    <testcase name="Datastore Can delete datastore resource via API" time="0.2450" classname="Can delete datastore resource via API">
     </testcase>
   </testsuite>
 </testsuites>

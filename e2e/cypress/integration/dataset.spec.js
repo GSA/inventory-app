@@ -2,7 +2,7 @@ describe('Dataset', () => {
     before(() => {
         cy.login('cypress-user', 'cypress-user-password', false)
         cy.delete_organization('test-organization')
-        cy.create_organization('test-organization', 'Test organization', false)
+        cy.create_organization('test-organization', 'Test organization')
     })
     beforeEach(() => {
         Cypress.Cookies.preserveOnce('auth_tkt', 'ckan')
@@ -20,9 +20,11 @@ describe('Dataset', () => {
         });
     });
 
-    it('Has a details page', () => {
+    it('Has a details page with core metadata', () => {
         cy.visit('/dataset/test-dataset-1');
         cy.contains('Test Dataset 1');
+        // TODO: re-add the following check to validate usmetadata template is working
+        // cy.contains('Common Core Metadata');
     })
 
     it('Add resource to private dataset via API', () => {

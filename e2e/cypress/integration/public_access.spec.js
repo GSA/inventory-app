@@ -2,7 +2,7 @@ describe('Public Access', () => {
     before(() => {
         cy.login('cypress-user', 'cypress-user-password', false);
         cy.delete_organization('test-organization');
-        cy.create_organization('test-organization', 'Test organization', false);
+        cy.create_organization('test-organization', 'Test organization');
         cy.fixture('ckan_dataset.json').then((ckan_dataset) => {
             cy.create_dataset(ckan_dataset).should((response) => {
                 expect(response.body).to.have.property('success', true);

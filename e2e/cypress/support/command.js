@@ -63,7 +63,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 
 Cypress.Commands.add('login', (userName, password, loginTest) => {
     /**
-     * Method to fill and submit the DOI CKAN Login form
+     * Method to fill and submit the CKAN Login form
      * :PARAM userName String: user name of that will be attempting to login
      * :PARAM password String: password for the user logging in
      * :RETURN null:
@@ -76,20 +76,15 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
     cy.get('.btn-primary').click()
 })
 
-
-Cypress.Commands.add('create_organization', (orgName, orgDesc, orgTest) => {
+Cypress.Commands.add('create_organization_ui', (orgName, orgDesc) => {
     /**
-     * Method to fill out the form to create a DOI CKAN organization
+     * Method to fill out the form to create a CKAN organization
      * :PARAM orgName String: Name of the organization being created
      * :PARAM orgDesc String: Description of the organization being created
      * :PARAM orgTest Boolean: Control value to determine if to use UI to create organization 
      *      for testing or to visit the organization creation page
      * :RETURN null:
      */
-
-    if (!orgTest) {
-        cy.visit('/organization/new')
-    }
     cy.get('#field-name').type(orgName)
     cy.get('#field-description').type(orgDesc)
     cy.get('#field-url').then($field_url => {
@@ -100,6 +95,29 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc, orgTest) => {
     //cy.get('input[type="file"]').attachFile(cy.fixture('org_photo.jpg'))
     cy.screenshot()
     cy.get('button[name=save]').click()
+})
+
+Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
+    /**
+     * Method to create organization via CKAN API
+     * :PARAM orgName String: Name of the organization being created
+     * :PARAM orgDesc String: Description of the organization being created
+     * :PARAM orgTest Boolean: Control value to determine if to use UI to create organization 
+     *      for testing or to visit the organization creation page
+     * :RETURN null:
+     */
+
+     cy.request({
+        url: '/api/action/organization_create',
+        method: 'POST',
+        body: {
+            "description": orgDesc,
+            "title": orgName,
+            "approval_status": "approved",
+            "state": "active",
+            "name": orgName
+        }
+    })
 })
 
 
@@ -146,7 +164,7 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
 
 Cypress.Commands.add('create_harvest_source', (dataSourceUrl, harvestTitle, harvestDesc, harvestType, org, harvestTest, invalidTest) => {
     /**
-     * Method to create a new CKAN DOI harvest source via the CKAN DOI harvest form
+     * Method to create a new CKAN harvest source via the CKAN harvest form
      * :PARAM dataSourceUrl String: URL to source the data that will be harvested
      * :PARAM harvestTitle String: Title of the organization's harvest
      * :PARAM harvestDesc String: Description of the harvest being created
