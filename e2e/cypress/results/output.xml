@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="6.5470" tests="1" failures="0">
-  <testsuite name="Root Suite" timestamp="2021-08-09T01:26:34" tests="0" file="cypress/integration/public_access.spec.js" time="0.0000" failures="0">
+<testsuites name="Mocha Tests" time="8.1150" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-08-09T01:46:22" tests="0" file="cypress/integration/public_access.spec.js" time="0.0000" failures="0">
   </testsuite>
-  <testsuite name="Public Access" timestamp="2021-08-09T01:26:34" tests="1" time="6.5470" failures="0">
-    <testcase name="Public Access Cannot access the standard public pages" time="6.5470" classname="Cannot access the standard public pages">
+  <testsuite name="Public Access" timestamp="2021-08-09T01:46:22" tests="1" time="8.1150" failures="0">
+    <testcase name="Public Access Cannot access the standard public pages" time="8.1150" classname="Cannot access the standard public pages">
     </testcase>
   </testsuite>
 </testsuites>

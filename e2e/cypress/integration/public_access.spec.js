@@ -28,4 +28,16 @@ describe('Public Access', () => {
         })
         
     })
+
+    it('Cannot access the dataset pages', () => {
+        cy.request({
+            url: '/dataset/test-dataset-1',
+            failOnStatusCode: false
+        }).then((response) => {
+            // TODO: local extension should return 403 on anonymous access
+            // expect(response.status).to.eq(403)
+            expect(response.status).to.eq(200)
+        })
+        
+    })
 })

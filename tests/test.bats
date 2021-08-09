@@ -1,23 +1,5 @@
 #!/usr/bin/env bats
 
-function wait_for () {
-  # The app takes quite a while to startup (solr initialization and
-  # migrations), close to a minute. Make sure to give it enough time before
-  # starting the tests.
-
-  local hostname=$1
-  local port=$2
-  local retries=20
-  while ! nc -z -w 30 "$hostname" "$port" ; do
-    if [ "$retries" -le 0 ]; then
-      return 1
-    fi
-
-    retries=$(( $retries - 1 ))
-    sleep 5
-  done
-}
-
 # Log into application and save cookie for another application usage
 function login () {
   curl --silent --fail 'http://app:5000/login_generic?came_from=/user/logged_in' --compressed -H 'Content-Type: application/x-www-form-urlencoded' -H 'Origin: http://app:5000' -H 'Referer: http://app:5000/user/login' --data 'login=admin&password=password' --cookie-jar ./cookie-jar
@@ -41,30 +23,6 @@ function test_datastore_request () {
     fi
   else
     return 1
-  fi
-}
-
-@test "data is inaccessible to public" {
-  run curl --fail --location --request GET 'http://app:5000/api/3/action/package_show?id=test-dataset-1'
-  # Validate output is 22, curl response for 403 (Forbidden)
-  [ "$status" -eq 22 ]
-}
-
-@test "/dataset is inaccessible to public" {
-  run curl --fail http://app:5000/dataset
-  # Validate output is 22, curl response for 403 (Forbidden)
-  [ "$status" -eq 22 ]
-}
-
-@test "Google Analytics ID present" {
-  login
-  google_id='google-analytics-fake-key-testing-87654321' #this is completely random. Set to "googleanalytics.ids" in production.ini file
-  find_id=$(curl --silent --fail --request GET 'http://app:5000/dataset' --cookie ./cookie-jar | grep -o "$google_id")
-
-  if  [ "$find_id" = "$google_id" ]; then
-    return 0;
-  else
-    return 1;
   fi
 }
 

@@ -16,7 +16,7 @@ CKAN_SQLALCHEMY_URL=postgresql://ckan:pass@db/ckan
 CKAN_INI=/app/config/development.ini
 CKAN_HOME=/srv/app
 CKAN_CONFIG=/app/config
-CKAN__PLUGINS=datastore xloader stats text_view recline_view envvars
+CKAN__PLUGINS=datastore xloader stats text_view recline_view googleanalyticsbasic envvars
 
 CKAN__SITE_TITLE=Inventory
 CKAN__SITE_DESCRIPTION=Inventory is a Metadata Repository for Government Agencies
