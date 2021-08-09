@@ -16,7 +16,9 @@ CKAN_SQLALCHEMY_URL=postgresql://ckan:pass@db/ckan
 CKAN_INI=/app/config/development.ini
 CKAN_HOME=/srv/app
 CKAN_CONFIG=/app/config
-CKAN__PLUGINS=datastore xloader stats text_view recline_view googleanalyticsbasic envvars
+
+# Need to add the following extensions: datagov_inventory, dcat_usmetadata, usmetadata datajson, saml2auth
+CKAN__PLUGINS=datastore xloader stats text_view recline_view googleanalyticsbasic s3filestore envvars
 
 CKAN__SITE_TITLE=Inventory
 CKAN__SITE_DESCRIPTION=Inventory is a Metadata Repository for Government Agencies
