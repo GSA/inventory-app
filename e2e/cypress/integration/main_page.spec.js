@@ -1,4 +1,5 @@
 describe('Main Page', () => {
+    
     it('Load main page with configuration', () => {
         cy.visit('/dataset')
         cy.contains('Inventory')

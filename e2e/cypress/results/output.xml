@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="2.6960" tests="2" failures="0">
-  <testsuite name="Root Suite" timestamp="2021-08-09T08:06:01" tests="0" file="cypress/integration/public_access.spec.js" time="0.0000" failures="0">
+<testsuites name="Mocha Tests" time="4.1110" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2021-08-09T09:25:35" tests="0" file="cypress/integration/public_access.spec.js" time="0.0000" failures="0">
   </testsuite>
-  <testsuite name="Public Access" timestamp="2021-08-09T08:06:01" tests="2" time="2.6960" failures="0">
-    <testcase name="Public Access Cannot access the standard public pages" time="2.4860" classname="Cannot access the standard public pages">
+  <testsuite name="Public Access" timestamp="2021-08-09T09:25:35" tests="2" time="4.1110" failures="0">
+    <testcase name="Public Access Cannot access the standard public pages" time="3.7520" classname="Cannot access the standard public pages">
     </testcase>
-    <testcase name="Public Access Cannot access the dataset pages" time="0.2100" classname="Cannot access the dataset pages">
+    <testcase name="Public Access Cannot access the dataset pages" time="0.3590" classname="Cannot access the dataset pages">
     </testcase>
   </testsuite>
 </testsuites>

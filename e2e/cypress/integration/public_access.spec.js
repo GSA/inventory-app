@@ -1,4 +1,5 @@
 describe('Public Access', () => {
+    
     before(() => {
         cy.login('cypress-user', 'cypress-user-password', false);
         cy.delete_organization('test-organization');

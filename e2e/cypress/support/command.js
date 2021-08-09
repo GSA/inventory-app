@@ -1,49 +1,4 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 function verify_element_exists() {
-
-    /* for (let i = 0; i < 5; i++) {
-
-        if(tdText == 'Finishe') {
-            cy.wrap(tdText).should('eq', 'Finished');
-            break;
-        }
-        
-        cy.wait(30000);
-        cy.reload(true);
-        tdText = cy.get('td').eq(4).then(($td) => {
-
-            cy.log(`tdText1=${$td.text()}`);
-            let textCont = $td.text()
-             if(textCont != 'Running') {
-                textCont.should('eq', 'Finished');
-            } 
-            return textCont
-        });
-    } */
     cy.get('td').eq(4).then(($td) => {
         if ($td.text() == 'Finished') {
             cy.wrap($td.text()).should('eq', 'Finished');
@@ -54,12 +9,6 @@ function verify_element_exists() {
         }  
     })
 }
-
-Cypress.on('uncaught:exception', (err, runnable) => {
-    // returning false here prevents Cypress from
-    // failing the test
-    return false
-})
 
 Cypress.Commands.add('login', (userName, password, loginTest) => {
     /**
@@ -92,8 +41,6 @@ Cypress.Commands.add('create_organization_ui', (orgName, orgDesc) => {
             $field_url.type(orgName)
         }
     })
-    //cy.get('input[type="file"]').attachFile(cy.fixture('org_photo.jpg'))
-    cy.screenshot()
     cy.get('button[name=save]').click()
 })
 
@@ -207,7 +154,6 @@ Cypress.Commands.add('delete_harvest_source', (harvestName) => {
     cy.visit('/harvest/admin/' + harvestName)
     cy.contains('Clear').click({force:true})
     cy.visit('/harvest/delete/'+harvestName+'?clear=True')
-    
 })
 
 
@@ -216,10 +162,6 @@ Cypress.Commands.add('start_harvest_job', (harvestName) => {
     cy.contains('Admin').click()
     cy.get('.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle)').click({force:true})
     verify_element_exists();
-    //cy.wait(150000)
-    //cy.reload(true)
-    //cy.contains('0 not modified').should('have.class', 'label')
-    //cy.get('td').should('contain', 'Finished')
 })
 
 
