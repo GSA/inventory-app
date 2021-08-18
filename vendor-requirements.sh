@@ -22,7 +22,7 @@ apt-get -y install swig build-essential python-dev libssl-dev
 
 # Install PIP
 curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
-python /tmp/get-pip.py
+python3 /tmp/get-pip.py
 
 # As the VCAP user, cache .whls based on the frozen requirements for vendoring
 mkdir -p src vendor

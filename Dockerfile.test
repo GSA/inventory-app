@@ -1,8 +1,0 @@
-FROM bats/bats
-
-RUN apk add curl jq
-
-COPY tests/ /code/tests/
-
-# bats/bats uses bats as the entrypoint
-CMD ["-r", "/code/tests"]

@@ -21,9 +21,6 @@ RUN pip3 install --ignore-installed -r requirements.txt
 # COPY the ini test file to the container 
 # COPY test-catalog-next.ini ${SRC_DIR}/ckan
 
-# COPY entrypoint-docker.sh /
-# ENTRYPOINT ["/entrypoint-docker.sh"]
-
 # Not currently in use in development
 COPY config/gunicorn.conf.py $CKAN_CONFIG/
 COPY config/server_start.sh $CKAN_CONFIG/
