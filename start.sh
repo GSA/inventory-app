@@ -57,6 +57,8 @@ do
   fi
 done
 
+pip3 install -e /app/.
+
 # Run migrations
 ckan -c $CKAN_INI db upgrade 
 

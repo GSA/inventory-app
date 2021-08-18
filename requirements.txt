@@ -93,4 +93,4 @@ xlrd==2.0.1
 xmlschema==1.7.0
 zipp==3.5.0
 zope.event==4.5.0
-zope.interface==4.3.2
+zope.interface==4.7.2

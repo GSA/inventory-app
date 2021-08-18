@@ -4,12 +4,7 @@ set -o errexit
 set -o pipefail
 
 # Add the current directory to our virtualenv
-python setup.py develop
-
-# Utilize paster command, can remove when on ckan 2.9
-function ckan () {
-    paster --plugin=ckan "$@"
-}
+pip3 install .
 
 function vcap_get_service () {
   local path name
@@ -82,9 +77,9 @@ DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$D
 
 # Run migrations
 # paster --plugin=ckan db upgrade -c config/production.ini
-ckan db upgrade -c $CKAN_INI
+ckan -c $CKAN_INI db upgrade
 
 # start xloader
-exec paster --plugin=ckan jobs worker -c $CKAN_INI &
+exec ckan -c $CKAN_INI jobs worker &
 # Fire it up!
 exec config/server_start.sh -b 0.0.0.0:$PORT -t 9000
