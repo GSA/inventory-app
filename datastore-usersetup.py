@@ -7,7 +7,7 @@ import os
 import psycopg2
 import re
 import sys
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 
 def squote(s):

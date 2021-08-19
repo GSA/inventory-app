@@ -4,7 +4,7 @@ set -o errexit
 set -o pipefail
 
 # Add the current directory to our virtualenv
-pip3 install .
+# pip3 install .
 
 function vcap_get_service () {
   local path name
@@ -73,13 +73,16 @@ ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
 ckan config-tool $CKAN_INI -s DEFAULT -e debug=false
 
 echo "Setting up the datastore user"
-DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD ./datastore-usersetup.py
+DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD python3 datastore-usersetup.py
 
 # Run migrations
 # paster --plugin=ckan db upgrade -c config/production.ini
 ckan -c $CKAN_INI db upgrade
 
+# sleep 5000
+
 # start xloader
 exec ckan -c $CKAN_INI jobs worker &
 # Fire it up!
-exec config/server_start.sh -b 0.0.0.0:$PORT -t 9000
+exec ckan -c $CKAN_INI run --port $PORT
+# exec config/server_start.sh -b 0.0.0.0:$PORT -t 9000
