@@ -87,7 +87,13 @@ ckan serving pages as pylons sometimes and flask at others.
 
 ### Tests
 
-    $ make build test_extension test
+    $ make test
+
+The tests utilize cypress. The above command runs in "headless" mode, and debugging capabilities are limited. To fully install and rapidly iterate on tests, install cypress locally with npm.
+
+    $ npm install cypress
+
+Then, you should be able to run `make cypress` to turn on cypress in interactive mode. If you are using WSL you may need additional setup. Start at [this walkthrough](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress), and consider asking a team member for setup help.
 
 
 ## Deploying to cloud.gov
