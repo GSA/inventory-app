@@ -1,7 +1,7 @@
 describe('Public Access', () => {
     
     before(() => {
-        cy.login('cypress-user', 'cypress-user-password', false);
+        cy.login();
         cy.delete_organization('test-organization');
         cy.create_organization('test-organization', 'Test organization');
         cy.fixture('ckan_dataset.json').then((ckan_dataset) => {
@@ -13,7 +13,7 @@ describe('Public Access', () => {
     })
 
     after(() => {
-        cy.login('cypress-user', 'cypress-user-password', false);
+        cy.login();
         cy.delete_dataset('test-dataset-1')
         cy.delete_organization('test-organization')
     })

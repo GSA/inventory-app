@@ -9,7 +9,8 @@ clean:
 	docker-compose down -v --remove-orphans
 
 cypress:
-	docker-compose up -d && cd e2e && npx cypress open
+	# Turn on local system, and open cypress in interactive mode
+	docker-compose up -d && cd e2e && CYPRESS_BASE_URL=http://localhost:5000 npx cypress open
 
 debug:
 	# Stop the canonical app container to avoid a port collision. Use `run`

@@ -20,6 +20,13 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
     if (!loginTest) {
         cy.visit('/user/login')
     }
+    if(!userName) {
+        userName = Cypress.env('USER');
+        cy.log(userName, process.env);
+    }
+    if(!password) {
+        password = Cypress.env('USER_PASSWORD');
+    }
     cy.get('#field-login').type(userName)
     cy.get('#field-password').type(password)
     cy.get('.btn-primary').click()

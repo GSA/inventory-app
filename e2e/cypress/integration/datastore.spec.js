@@ -1,7 +1,7 @@
 describe('Datastore', () => {
 
     before(() => {
-        cy.login('cypress-user', 'cypress-user-password', false);
+        cy.login();
         cy.delete_organization('test-organization');
         cy.create_organization('test-organization', 'Test organization');
     })

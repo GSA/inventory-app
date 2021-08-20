@@ -79,8 +79,4 @@ DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$D
 # paster --plugin=ckan db upgrade -c config/production.ini
 ckan -c $CKAN_INI db upgrade
 
-# start xloader
-exec ckan -c $CKAN_INI jobs worker &
-# Fire it up!
-exec ckan -c $CKAN_INI run --port $PORT --host 0.0.0.0
-# exec config/server_start.sh -b 0.0.0.0:$PORT -t 9000
+exec ./$@

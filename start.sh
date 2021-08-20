@@ -79,5 +79,5 @@ echo starting xloader worker...
 exec ckan -c $CKAN_INI  jobs worker & 
 
 echo starting ckan...
-sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
-# exec $CKAN_CONFIG/server_start.sh --paste $CKAN_INI -b 0.0.0.0:5000 -t 9000
+# sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
+exec $CKAN_CONFIG/server_start.sh --paste $CKAN_INI -b 0.0.0.0:5000 -t 9000

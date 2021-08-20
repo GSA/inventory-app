@@ -10,7 +10,7 @@ describe('Login', () => {
     it('Valid login attempt', () => {
         cy.visit('/dataset')
         cy.get('a[href="/user/login"]').click()
-        cy.login('cypress-user', 'cypress-user-password', true)
+        cy.login()
         cy.get('.nav-tabs>li>a').should('contain', 'My Organizations')
     })
 

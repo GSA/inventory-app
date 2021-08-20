@@ -1,6 +1,6 @@
 describe('Organization', () => {
     before(() => {
-        cy.login('cypress-user', 'cypress-user-password', false)
+        cy.login()
     })
     beforeEach(() => {
         Cypress.Cookies.preserveOnce('auth_tkt', 'ckan')

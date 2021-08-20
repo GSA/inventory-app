@@ -7,13 +7,19 @@ services:
       - ./e2e/00-setup-cypress-user.sh:/docker-entrypoint.d/00-setup-cypress-user.sh
       - .:/app/
   test:
-        image: cypress/included:7.3.0
-        entrypoint: []
-        command: /bin/bash -c "npx wait-on http://app:5000 && cypress run"
-        # To run specific test, use the following syntax:
-        # command: /bin/bash -c "npx wait-on http://app:5000 && cypress run --spec cypress/integration/organizations.spec.js"
-        working_dir: /e2e
-        depends_on:
-        - app
-        volumes:
-        - ./e2e:/e2e
+    image: cypress/included:7.3.0
+    entrypoint: []
+    command: /bin/bash -c "npx wait-on http://app:5000 && cypress run"
+    # To run specific test, use the following syntax:
+    # command: /bin/bash -c "npx wait-on http://app:5000 && cypress run --spec cypress/integration/organizations.spec.js"
+    # To run against a dev or production image, use the following syntax:
+    # command: /bin/bash -c "CYPRESS_BASE_URL=https://inventory-dev-datagov.app.cloud.gov/ cypress run"
+    environment:
+      # Created cypress user and password, setup in 00-setup-cypress-user.sh
+      - CYPRESS_USER=cypress-user
+      - CYPRESS_USER_PASSWORD=cypress-user-password
+    working_dir: /e2e
+    depends_on:
+    - app
+    volumes:
+    - ./e2e:/e2e
