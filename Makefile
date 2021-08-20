@@ -8,6 +8,9 @@ build:
 clean:
 	docker-compose down -v --remove-orphans
 
+cypress:
+	docker-compose up -d && cd e2e && npx cypress open
+
 debug:
 	# Stop the canonical app container to avoid a port collision. Use `run`
 	# so that we have interactive console access for the debugger.
