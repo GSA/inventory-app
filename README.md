@@ -24,15 +24,11 @@ Build and bring up the containers.
     $ make up
     $ make up-with-data [_Gives development environment basic user, organization, and dataset_]
 
-You may optionally seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
-
-    $ docker-compose exec app /app/seed.sh
-
-_If the user is already created and you would like to rebuild the organization and dataset, you can specify the API key as a second argument to the execution: `docker-compose exec app /app/seed.sh long-api-key`_
-
 Open CKAN to verify it's working
 
     $ open http://localhost:5000
+
+If you would like to seed data into the system, examine the test framework (`e2e/cypress/support/command.js`) for some examples of creating organizations and/or datasets with resources.
 
 ### Docker-compose commands
 
@@ -95,6 +91,9 @@ The tests utilize cypress. The above command runs in "headless" mode, and debugg
 
 Then, you should be able to run `make cypress` to turn on cypress in interactive mode. If you are using WSL you may need additional setup. Start at [this walkthrough](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress), and consider asking a team member for setup help.
 
+#### Extension Tests
+
+_TODO: add details about running and editing extension tests here_
 
 ## Deploying to cloud.gov
 

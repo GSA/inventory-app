@@ -36,11 +36,7 @@ test_extension:
 	docker-compose run --rm app nosetests --ckan --with-pylons=docker_test.ini ckanext/datagov_inventory/tests/*
 
 up:
-	docker-compose up --abort-on-container-exit app
-
-up-with-data:
-	docker-compose -f docker-compose.yml -f docker-compose.seed.yml build
-	docker-compose -f docker-compose.yml -f docker-compose.seed.yml up
+	docker-compose up
 
 update-dependencies:
 	docker-compose run --rm app pip install -r requirements.txt

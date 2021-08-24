@@ -20,11 +20,6 @@ gevent
 # Add CKAN core libraries
 -r ${SRC_DIR}/ckan/requirements.txt
 
-# TODO move these out of our repo, they should be managed upstream in setup.py
-# TODO use loose version specifiers where possible
-# From root CKAN
-
-
 # # ckanext-saml2 dependencies
 # defusedxml==0.6.0
 # M2Crypto

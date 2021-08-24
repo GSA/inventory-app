@@ -79,4 +79,4 @@ DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$D
 # paster --plugin=ckan db upgrade -c config/production.ini
 ckan -c $CKAN_INI db upgrade
 
-exec ./$@
+exec $@
