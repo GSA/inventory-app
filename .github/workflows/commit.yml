@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - lint
-      # - test
+      - test
       - vendor
     env:
       APP_URL: https://inventory-dev-datagov.app.cloud.gov
