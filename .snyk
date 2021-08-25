@@ -2,92 +2,6 @@
 version: v1.13.5
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-PYTHON-SQLALCHEMY-173678:
-    - '*':
-        reason: >-
-          No remediation path available (cannot upgrade to SQLAlchemy 1.2). 
-          Reviewed group_by and order_by usage manually, all user input sanitized.
-        expires: 2021-04-12T06:00:00.000Z
-  SNYK-PYTHON-SQLALCHEMY-590109:
-    - '*':
-        reason: >-
-          Reviewed group_by and order_by usage manually, all user input sanitized.
-        expires: 2021-06-12T06:00:00.000Z
-  SNYK-PYTHON-IPADDRESS-590065:
-    - '*':
-        reason: >-
-          After inspecting the Python cryptography package, I see no use of the
-          vulnerable method hash() on the classes IPv4Interface and
-          IPv6Interface, so the risk here is very minimal. We expect a fix to be
-          made available before our 90 day SLA for this moderate severity issue.
-          https://github.com/GSA/datagov-deploy/issues/2844
-        expires: 2021-05-18T06:00:00.000Z
-  SNYK-PYTHON-PYSAML2-1063038:
-    - '*':
-        reason: >-
-          Risk is acceptable during development. We will incorporate a fix before
-          our 90 day SLA for this moderate severity issue.
-          https://github.com/GSA/datagov-deploy/issues/2845
-        expires: 2021-05-18T06:00:00.000Z
-  SNYK-PYTHON-PYSAML2-1063039:
-    - '*':
-        reason: >-
-          Risk is acceptable during development. We will incorporate a fix before
-          our 90 day SLA for this moderate severity issue.
-          https://github.com/GSA/datagov-deploy/issues/2845
-        expires: 2021-05-18T06:00:00.000Z
-  SNYK-PYTHON-PYSAML2-543298:
-    - '*':
-        reason: >-
-          Patch has been applied https://github.com/GSA/pysaml2/commit/c26a4893ff4c8d97e5f7994809ccb96a9d12caa3
-        expires: 2021-05-18T06:00:00.000Z
-  SNYK-PYTHON-WEBOB-40490:
-    - '*':
-        reason: >-
-          Patch applied https://github.com/GSA/webob/commit/90d895f9a85c8bea11c80efa4e2f6bdd04eabbe4
-        expires: 2021-05-18T06:00:00.000Z
-  SNYK-PYTHON-IPADDRESS-1041793:
-    - '*':
-        reason: >-
-          Fix not available. No known usage of this library inside the CKAN app or it's extensions.
-        expires: 2021-06-29T06:00:00.000Z
-  SNYK-PYTHON-CRYPTOGRAPHY-1022152:
-    - '*':
-        reason: >-
-          Patched to version 3.2; long term fix expected later.
-          Version 3.2 of this package contains an incomplete fix,
-          which might help reduce the chances of this vulnerability 
-          being exploited.
-        expires: 2021-04-10T06:00:00.000Z
-  SNYK-PYTHON-PYGMENTS-1086606:
-    - '*':
-        reason: >-
-          Upgrade remediation requires Python 3, Python2 dropped in v2.6.
-          Ticket to address issue: https://github.com/GSA/datagov-deploy/issues/2713
-        expires: 2021-04-23T06:00:00.000Z
-  SNYK-PYTHON-PYGMENTS-1088505:
-    - '*':
-        reason: >-
-          Upgrade remediation requires Python 3, Python2 dropped in v2.6.
-          Ticket to address issue: https://github.com/GSA/datagov-deploy/issues/2713
-        expires: 2021-04-25T06:00:00.000Z
-  SNYK-PYTHON-BEAKER-575115:
-    - '*':
-        reason: >-
-          No remediation available yet; Not affecting us since the storage is not accessible to any other client
-        expires: 2021-04-12T06:00:00.000Z
-  SNYK-PYTHON-SPHINX-570772:
-    - '*':
-        reason: >-
-          Dev-only requirement; vulnerable to cross-site scripting
-          which is not a useful vulnerability in a dev environment.
-        expires: 2021-06-12T06:00:00.000Z
-  SNYK-PYTHON-SPHINX-570773:
-    - '*':
-        reason: >-
-          Dev-only requirement; vulnerable to cross-site scripting
-          which is not a useful vulnerability in a dev environment.
-        expires: 2021-06-12T06:00:00.000Z
   SNYK-UBUNTU1804-LIBZSTD-1082297:
     - '*':
         reason: >-
@@ -114,4 +28,23 @@ ignore:
           Dev-only requirement; passwords in dev environment not
           considered security risk (publicly available)
         expires: 2021-06-12T06:00:00.000Z
+  
+  SNYK-PYTHON-IPADDRESS-1290073:
+    - '*':
+        reason: >-
+          Dev-only requirement; data integrity and system
+          availability not a threat when running in dev mode
+        expires: 2021-09-25T06:00:00.000Z
+  SNYK-PYTHON-IPADDRESS-590065:
+    - '*':
+        reason: >-
+          Dev-only requirement; hash conflict not a concern
+          in dev mode.
+        expires: 2021-11-25T06:00:00.000Z
+  SNYK-PYTHON-IPADDRESS-1041793:
+    - '*':
+        reason: >-
+          Dev-only requirement; Denial of service attack not
+          a concern in dev mode
+        expires: 2021-11-25T06:00:00.000Z
 patch: {}

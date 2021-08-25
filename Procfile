@@ -1,1 +1,1 @@
-web: ./cfstart.sh
+web: ./cfsetup.sh config/server_start.sh
