@@ -20,6 +20,6 @@ services:
       - CYPRESS_USER_PASSWORD=cypress-user-password
     working_dir: /e2e
     depends_on:
-    - app
+      - app
     volumes:
     - ./e2e:/e2e

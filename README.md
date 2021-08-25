@@ -89,7 +89,9 @@ The tests utilize cypress. The above command runs in "headless" mode, and debugg
 
     $ npm install cypress
 
-Then, you should be able to run `make cypress` to turn on cypress in interactive mode. If you are using WSL you may need additional setup. Start at [this walkthrough](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress), and consider asking a team member for setup help.
+Then, you should be able to run `make cypress` to turn on cypress in interactive mode. If you are using WSL you may need additional setup. Start at [this walkthrough](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress), and consider asking a team member for setup help. You will also need to install npx to use the make command.
+
+Please be aware that the tests attempt to clean themselves after each spec file by specifically removing datasets and organizations. If datasets are manually added into the test organization, the dataset and organization may not be removed and this may have unintended consequences. If the system is in a bad state, you should be able to run `make clean` to restart in a clean environment.
 
 #### Extension Tests
 

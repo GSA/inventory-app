@@ -42,8 +42,6 @@ describe('Dataset', () => {
             formData.set('format', "CSV");
             cy.form_request('POST', 'http://app:5000/api/action/resource_create', formData, function (response) {
                 expect(response.status).to.eq(200);
-                console.log(response.body, response.status);
-                // expect(response.body).to.have.property('success', true);
             });
         });
     })
