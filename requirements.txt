@@ -1,103 +1,98 @@
-Babel==2.3.4
-Beaker==1.9.0
+alembic==1.0.0
+Babel==2.7.0
+Beaker==1.11.0
 bleach==3.3.0
-boto==2.49.0
-boto3==1.17.108
-botocore==1.20.108
+boto3==1.18.28
+botocore==1.21.28
 certifi==2021.5.30
 cffi==1.14.6
-chardet==4.0.0
-ckan @ git+https://github.com/ckan/ckan.git@c04b6d64aadc7a647b8896279002626ca3be0a56
--e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext_datajson
+chardet==3.0.4
+ckan @ git+https://github.com/ckan/ckan.git@e8b7970423e2cce9731441edd13f7fcfd3be58e9
+-e git+https://github.com/GSA/ckanext-datajson.git@a842fa67ff8e3e9e85e80ebc3b34d3c17a38dd2f#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.2.21
 ckanext-envvars==0.0.1
--e git+https://github.com/GSA/ckanext-googleanalyticsbasic@f0b75cf965e477a84f044885b27880782a48969c#egg=ckanext_googleanalyticsbasic
-ckanext-s3filestore @ git+https://github.com/GSA/ckanext-s3filestore@3fe563120c914627610fdf5df48eb6b42bd3c284
-ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@d77d85349c7a6fcfa5a14c19a56b53eacf137a7c
--e git+https://github.com/GSA/USMetadata.git@a3005c5bb5235f4034256dcbdb64a7715922ac3a#egg=ckanext_usmetadata
--e git+https://github.com/ckan/ckanext-xloader.git@c8b3c316912f5e12c697da0d58b8c5ff2846f913#egg=ckanext_xloader
+-e git+https://github.com/GSA/ckanext-googleanalyticsbasic@10ebfe25744b0f6e4cb1294f4a16654eb13119f6#egg=ckanext_googleanalyticsbasic
+ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@82a63639b0f54f65496661c7120ed85461eade37
+ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@454412fb32a8ba3676e08a948959c6c5be684b6f
+-e git+https://github.com/GSA/ckanext-usmetadata.git@ab34db23c0409f23ce40c67f29161e56820af028#egg=ckanext_usmetadata
+-e git+https://github.com/ckan/ckanext-xloader.git@63d12d6e66f2da72a2ee05a56c30575acf20bc44#egg=ckanext_xloader
 ckantoolkit==0.0.4
-click==6.7
-cryptography==3.3.2
-decorator==4.2.1
+click==7.1.2
+cryptography==3.4.8
+decorator==5.0.9
 defusedxml==0.7.1
-enum34==1.1.10
-fanstatic==0.12
-Flask==0.12.4
-Flask-Babel==0.11.2
-FormEncode==1.3.1
-funcsigs==1.0.2
-future==0.18.2
-futures==3.3.0
-gevent==21.1.2
-greenlet==1.1.0
-gunicorn==19.10.0
-html5lib==1.0.1
-idna==2.10
-ipaddress==1.0.23
-itsdangerous==0.24
+dominate==2.4.0
+elementpath==2.2.3
+fanstatic==1.1
+feedgen==0.9.0
+Flask==1.1.1
+Flask-Babel==1.0.0
+flask-multistatic==1.0
+gevent==21.8.0
+greenlet==1.1.1
+gunicorn==20.1.0
+html5lib==1.1
+idna==2.8
+importlib-resources==5.2.2
+itsdangerous==2.0.1
 Jinja2==2.11.3
 jmespath==0.10.0
 json-table-schema==0.2.1
 jsonschema==2.4.0
 LEPL==5.1.3
 lxml==4.6.3
-Mako==1.0.7
+Mako==1.1.5
 Markdown==2.6.7
-MarkupSafe==1.0
+MarkupSafe==2.0.1
 messytables==0.15.2
-mock==1.0.1
-newrelic==6.4.4.161
+newrelic==6.8.1.164
 nose==1.3.7
-ofs==0.4.2
-packaging==20.9
-Pairtree===0.7.1-T
+packaging==21.0
 passlib==1.7.3
-Paste==1.7.5.1
-PasteDeploy==1.5.2
-PasteScript==2.0.2
-pbr==1.10.0
+pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
+pathtools==0.1.2          # via watchdog
+pbr==5.6.0
+pika==1.2.0
 polib==1.0.7
-psycopg2==2.7.3.2
+psycopg2==2.8.2
 pycparser==2.20
-Pygments @ git+https://github.com/GSA/pygments.git@f6ccbc8c73b6b0a3c86ba7f1cfc36ac98ff5f122
-Pylons==0.9.7
+PyJWT==1.7.1
 pyOpenSSL==20.0.1
 pyparsing==2.4.7
-pysaml2 @ git+https://github.com/GSA/pysaml2.git@ba144b7d5c804fd45808914e8562d1d26300c8a8
+pysaml2==7.0.1
 pysolr==3.6.0
-python-dateutil==2.8.1
+python-dateutil==2.8.2
+python-editor==1.0.4
 python-magic==0.4.15
-python2-secrets==1.0.5
 pytz==2016.7
-pyutilib.component.core==4.6.4
-PyYAML==5.4.1
-redis==2.10.6
+PyUtilib==5.7.1
+PyYAML==5.4
+redis==3.5.3
 repoze.lru==0.7
 repoze.who==2.3
-repoze.who-friendlyform==1.0.8
-requests==2.25.1
+requests==2.25.0
 rfc3987==1.3.8
 Routes==1.13
-rq==0.6.0
-s3transfer==0.4.2
+rq==1.0
+s3transfer==0.5.0
+shutilwhich==1.1.0
 simplejson==3.10.0
-six==1.11.0
-SQLAlchemy==1.1.11
-sqlalchemy-migrate==0.10.0
+six==1.16.0
+SQLAlchemy==1.3.5
+sqlalchemy-migrate==0.12.0
 sqlparse==0.2.2
 Tempita==0.5.2
 tzlocal==1.3
 unicodecsv==0.14.1
 Unidecode==1.0.22
 urllib3==1.26.5
-vdm==0.14
+watchdog==2.1.5
+webassets==0.12.1
 webencodings==0.5.1
-WebError==0.13.1
-WebHelpers==1.3
-WebOb @ git+https://github.com/GSA/webob.git@90d895f9a85c8bea11c80efa4e2f6bdd04eabbe4
-WebTest==1.4.3
-Werkzeug==0.15.3
+WebOb==1.8.7
+Werkzeug==1.0.0
 xlrd==2.0.1
+xmlschema==1.7.0
+zipp==3.5.0
 zope.event==4.5.0
-zope.interface==4.3.2
+zope.interface==4.7.2

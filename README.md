@@ -24,15 +24,11 @@ Build and bring up the containers.
     $ make up
     $ make up-with-data [_Gives development environment basic user, organization, and dataset_]
 
-You may optionally seed the inventory with a default user, organization, and dataset by running the following command in the folder while the docker-compose is still up and has finished running:
-
-    $ docker-compose exec app /opt/inventory-app/seed.sh
-
-_If the user is already created and you would like to rebuild the organization and dataset, you can specify the API key as a second argument to the execution: `docker-compose exec app /opt/inventory-app/seed.sh long-api-key`_
-
 Open CKAN to verify it's working
 
     $ open http://localhost:5000
+
+If you would like to seed data into the system, examine the test framework (`e2e/cypress/support/command.js`) for some examples of creating organizations and/or datasets with resources.
 
 ### Docker-compose commands
 
@@ -87,8 +83,19 @@ ckan serving pages as pylons sometimes and flask at others.
 
 ### Tests
 
-    $ make build test_extension test
+    $ make test
 
+The tests utilize cypress. The above command runs in "headless" mode, and debugging capabilities are limited. To fully install and rapidly iterate on tests, install cypress locally with npm.
+
+    $ npm install cypress
+
+Then, you should be able to run `make cypress` to turn on cypress in interactive mode. If you are using WSL you may need additional setup. Start at [this walkthrough](https://nickymeuleman.netlify.app/blog/gui-on-wsl2-cypress), and consider asking a team member for setup help. You will also need to install npx to use the make command.
+
+Please be aware that the tests attempt to clean themselves after each spec file by specifically removing datasets and organizations. If datasets are manually added into the test organization, the dataset and organization may not be removed and this may have unintended consequences. If the system is in a bad state, you should be able to run `make clean` to restart in a clean environment.
+
+#### Extension Tests
+
+_TODO: add details about running and editing extension tests here_
 
 ## Deploying to cloud.gov
 
@@ -108,7 +115,7 @@ $ cf create-service aws-rds micro-psql ${app_name}-datastore
 
 Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available (see [the cloud.gov instructions on how to know when it's up](https://cloud.gov/docs/services/relational-database/#instance-creation-time)).
 
-    $ cf create-service aws-rds small-psql ${app_name}-db -c '{"version": 11}'
+    $ cf create-service aws-rds small-psql ${app_name}-db -c '{"version": "11"}'
 
 Create the s3 bucket for data storage.
 

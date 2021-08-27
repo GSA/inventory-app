@@ -33,8 +33,9 @@ jobs:
         uses: actions/checkout@v2
       - name: test
         run: make test
-      - name: test extension
-        run: make test_extension
+      # Re-enable once https://github.com/GSA/datagov-deploy/issues/3388 is complete
+      # - name: test extension
+      #   run: make test_extension
 
   vendor:
     name: vendor dependencies

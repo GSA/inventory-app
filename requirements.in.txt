@@ -1,12 +1,13 @@
-git+https://github.com/ckan/ckan.git@ckan-2.8.6#egg=ckan
+git+https://github.com/ckan/ckan.git@ckan-2.9.3#egg=ckan
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
--e git+https://github.com/GSA/USMetadata.git@ckan-2-8#egg=ckanext-usmetadata
+-e git+https://github.com/GSA/ckanext-usmetadata.git@main#egg=ckanext-usmetadata
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 -e git+https://github.com/GSA/ckanext-datajson.git@main#egg=ckanext-datajson
-git+https://github.com/keitaroinc/ckanext-saml2auth.git@ckan-2.8#egg=ckanext-saml2auth
-git+https://github.com/GSA/webob.git@datagov/v1.0.8#egg=webob
-git+https://github.com/GSA/ckanext-s3filestore@datagov-v0.1.1#egg=ckanext-s3filestore
-git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
+git+https://github.com/keitaroinc/ckanext-saml2auth.git@main#egg=ckanext-saml2auth
+# TODO Remove webob fork
+# git+https://github.com/GSA/webob.git@datagov/v1.0.8#egg=webob
+git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
+# git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
 ckanext-dcat-usmetadata
@@ -15,71 +16,51 @@ newrelic
 gunicorn
 gevent
 
-
-# TODO move these out of our repo, they should be managed upstream in setup.py
-# TODO use loose version specifiers where possible
-# From root CKAN
-argparse==1.4.0           # via ofs
-Babel==2.3.4              # via flask-babel
-Beaker==1.9.0             # via pylons
-bleach~=3.3
-click==6.7
-decorator==4.2.1          # via pylons, sqlalchemy-migrate
-fanstatic==0.12
-Flask-Babel==0.11.2
-Flask==0.12.4             # via flask-babel
-FormEncode==1.3.1         # via Pylons
-funcsigs==1.0.2           # via beaker
-future==0.18.2            # via xloader
-html5lib==1.0.1           # via bleach
-itsdangerous==0.24        # via flask
-Mako==1.0.7               # via pylons
-Markdown==2.6.7
-MarkupSafe==1.0           # via jinja2, mako, webhelpers
-messytables==0.15.2       # xloader
-mock==1.0.1               # needed for usmetadata
-nose==1.3.7               # via pylons
-ofs==0.4.2
-Pairtree==0.7.1-T
-passlib==1.7.3
-paste==1.7.5.1
-PasteDeploy==1.5.2        # via pastescript, pylons
-PasteScript==2.0.2        # via pylons
-pbr==1.10.0               # via sqlalchemy-migrate
-polib==1.0.7
-psycopg2==2.7.3.2
-git+https://github.com/GSA/pygments.git@datagov/v2.2.x#egg=pygments
-Pylons==0.9.7
-pysolr==3.6.0
-python-magic==0.4.15
-python2-secrets==1.0.5
-pytz==2016.7
-pyutilib.component.core==4.6.4
-redis==2.10.6             # via rq
-repoze.lru==0.7           # via routes
-repoze.who-friendlyform==1.0.8
-repoze.who==2.3
-requests~=2.20
-requests[security]        # xloader
-Routes==1.13              # via pylons
-rq==0.6.0
-simplejson==3.10.0
-six==1.11.0               # via bleach, html5lib, pastescript, pyutilib.component.core, sqlalchemy-migrate
-sqlalchemy-migrate==0.10.0
-SQLAlchemy==1.1.11       # via sqlalchemy-migrate
-sqlparse==0.2.2
-Tempita==0.5.2            # via pylons, sqlalchemy-migrate, weberror
-tzlocal==1.3
-Unidecode==1.0.22         # xloader
-unicodecsv==0.14.1
+# CKAN core library dependency upgrade pin
+lxml==4.6.3
 urllib3==1.26.5
-vdm==0.14
-webencodings==0.5.1       # via html5lib
-WebError==0.13.1          # via pylons
-WebHelpers==1.3           # via pylons
-WebTest==1.4.3            # via pylons
-Werkzeug==0.15.3         # via flask
-zope.interface==4.3.2
+# bleach==3.3.0
+# Jinja2==2.11.3
+
+# Add necessary CKAN core libraries
+alembic==1.0.0
+Babel==2.7.0
+Beaker==1.11.0
+bleach==3.3.0
+click==7.1.2
+dominate==2.4.0
+fanstatic==1.1
+feedgen==0.9.0
+Flask==1.1.1
+Flask-Babel==1.0.0
+flask-multistatic==1.0
+Jinja2==2.11.3
+PyJWT==1.7.1
+Markdown==2.6.7
+passlib==1.7.3
+pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
+pathtools==0.1.2          # via watchdog
+polib==1.0.7
+psycopg2==2.8.2
+python-magic==0.4.15
+pysolr==3.6.0
+python-dateutil>=1.5.0
+pytz==2016.7
+PyUtilib==5.7.1
+pyyaml==5.4
+repoze.who==2.3
+requests==2.25.0
+Routes==1.13
+rq==1.0
+simplejson==3.10.0
+sqlalchemy-migrate==0.12.0
+SQLAlchemy==1.3.5
+sqlparse==0.2.2
+tzlocal==1.3
+unicodecsv>=0.9
+webassets==0.12.1
+Werkzeug[watchdog]==1.0.0
+zope.interface==4.7.2
 
 # # ckanext-saml2 dependencies
 # defusedxml==0.6.0
@@ -89,9 +70,14 @@ zope.interface==4.3.2
 #datajson
 jsonschema~=2.4.0
 rfc3987
-pyyaml
+# pyyaml # Already installed via CKAN core
 lepl
 
 # ckanext-s3filestore
 boto3>=1.4.4
 ckantoolkit
+
+# ckanext-xloader
+messytables==0.15.2
+pika>=1.1.0
+Unidecode==1.0.22
