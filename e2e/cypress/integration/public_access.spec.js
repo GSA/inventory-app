@@ -1,6 +1,7 @@
 describe('Public Access', () => {
     
     before(() => {
+        cy.logout();
         cy.login();
         cy.delete_organization('test-organization');
         cy.create_organization('test-organization', 'Test organization');
@@ -14,18 +15,19 @@ describe('Public Access', () => {
 
     after(() => {
         cy.login();
+        cy.wait(2000);
         cy.delete_dataset('test-dataset-1')
         cy.delete_organization('test-organization')
     })
 
     it('Cannot access the standard public pages', () => {
+        cy.logout();
         cy.request({
             url: '/dataset',
             failOnStatusCode: false
         }).then((response) => {
             // TODO: local extension should return 403 on anonymous access
-            // expect(response.status).to.eq(403)
-            expect(response.status).to.eq(200)
+            expect(response.status).to.eq(403)
         })
         
     })
@@ -35,9 +37,8 @@ describe('Public Access', () => {
             url: '/dataset/test-dataset-1',
             failOnStatusCode: false
         }).then((response) => {
-            // TODO: local extension should return 403 on anonymous access
-            // expect(response.status).to.eq(403)
-            expect(response.status).to.eq(200)
+            // TODO: local extension should return 404 on anonymous access
+            expect(response.status).to.eq(404)
         })
         
     })

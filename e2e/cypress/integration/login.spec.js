@@ -1,15 +1,12 @@
 describe('Login', () => {
     
     it('Invalid user login attempt', () => {
-        cy.visit('/dataset')
-        cy.get('a[href="/user/login"]').click()
+        cy.visit('/user/login')
         cy.login('not-user', 'not-password', true)
-        cy.get('.flash-messages .alert').should('contain', 'Login failed. Bad username or password.')
+        cy.contains('Not authorized to see this page')
     });
 
     it('Valid login attempt', () => {
-        cy.visit('/dataset')
-        cy.get('a[href="/user/login"]').click()
         cy.login()
         cy.get('.nav-tabs>li>a').should('contain', 'My Organizations')
     })
