@@ -26,6 +26,11 @@ def datagov_disallow_anonymous_access(func=None):
     return _wrapper
 
 
+@toolkit.auth_allow_anonymous_access
+def datagov_allow_anonymous_access(context, data_dict):
+    return {'success': True}
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurer)
@@ -39,6 +44,8 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'organization_list': datagov_disallow_anonymous_access(),
                 'package_list': datagov_disallow_anonymous_access(),
                 'package_search': datagov_disallow_anonymous_access(),
+                'package_show': datagov_disallow_anonymous_access(),
+                'resource_show': datagov_allow_anonymous_access,
                 'site_read': datagov_disallow_anonymous_access(),
                 'tag_list': datagov_disallow_anonymous_access(),
                 'tag_show': datagov_disallow_anonymous_access(),

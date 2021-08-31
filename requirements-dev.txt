@@ -1,4 +1,11 @@
 -e /app
+
+future
+flake8
+pytest
+pytest-ckan
+pytest-cov
+
 beautifulsoup4==4.5.1
 coveralls   #Let Unpinned - Requires latest coveralls
 docutils==0.12

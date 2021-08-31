@@ -54,3 +54,9 @@ e2e/cypress/screenshots/*
 e2e/cypress/results/output.xml
 # Commit testing resource(s) csv
 !e2e/cypress/fixtures/*.csv
+
+# Future
+*.bak
+
+# Vim
+*.swp
