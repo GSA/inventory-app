@@ -26,7 +26,6 @@ describe('Public Access', () => {
             url: '/dataset',
             failOnStatusCode: false
         }).then((response) => {
-            // TODO: local extension should return 403 on anonymous access
             expect(response.status).to.eq(403)
         })
         
@@ -37,7 +36,6 @@ describe('Public Access', () => {
             url: '/dataset/test-dataset-1',
             failOnStatusCode: false
         }).then((response) => {
-            // TODO: local extension should return 404 on anonymous access
             expect(response.status).to.eq(404)
         })
         
