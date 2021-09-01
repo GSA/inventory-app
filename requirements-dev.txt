@@ -20,4 +20,5 @@ pyfakefs==3.2
 responses==0.10.14
 Sphinx==1.8.5
 sphinx-rtd-theme==0.4.3
+pygments==2.7.4
 urllib3>=1.25.9 # not directly required, pinned by Snyk to avoid a vulnerability
