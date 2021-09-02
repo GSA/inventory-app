@@ -1,5 +1,5 @@
 alembic==1.0.0
-Babel==2.7.0
+Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
 boto3==1.18.34
