@@ -10,7 +10,7 @@ applications:
     instances: ((instances))
     buildpacks:
       - https://github.com/cloudfoundry/apt-buildpack
-      - python-buildpack
+      - python_buildpack
     routes: ((routes))
     services:
       - ((app_name))-db
