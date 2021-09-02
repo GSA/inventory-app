@@ -17,9 +17,8 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
      * :PARAM password String: password for the user logging in
      * :RETURN null:
      */
-    if (!loginTest) {
-        cy.visit('/user/login')
-    }
+    cy.visit('/user/login')
+
     if(!userName) {
         userName = Cypress.env('USER');
         cy.log(userName, process.env);
@@ -30,6 +29,10 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
     cy.get('#field-login').type(userName)
     cy.get('#field-password').type(password)
     cy.get('.btn-primary').click()
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.clearCookies();
 })
 
 Cypress.Commands.add('create_organization_ui', (orgName, orgDesc) => {
