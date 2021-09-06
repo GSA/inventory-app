@@ -35,12 +35,12 @@ describe('DCAT-US Export', () => {
     })
 
     // TODO: integrate datajson and usmetadata extensions
-    // it('Can create a zip export of the organization', () => {
-    //     cy.request('/organization/test-organization/draft.json')
-    //     .then((response) => {
-    //         cy.log(response.status, response.body);
-    //     })
-    // })
+    it('Can create a zip export of the organization', () => {
+        cy.request('/organization/test-organization/draft.json')
+        .then((response) => {
+            cy.log(response.status, response.body);
+        })
+    })
 
     // unzip response
     // Validate that there are 2 files, draft_data.json and data.json
