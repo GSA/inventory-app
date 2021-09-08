@@ -28,5 +28,7 @@ python3 /tmp/get-pip.py
 mkdir -p src vendor
 chown vcap.vcap vendor
 chown vcap.vcap src
-su - vcap -c 'cd app && pip download -r requirements.txt --no-binary=:none: -d vendor --exists-action=w'
+# Pin setuptools to handle use_2to3 failure on old library tempita
+# https://setuptools.readthedocs.io/en/latest/history.html#v58-0-2
+su - vcap -c 'cd app && pip install setuptools==58.0.1 && pip download -r requirements.txt --no-binary=:none: -d vendor --exists-action=w'
 EOF
