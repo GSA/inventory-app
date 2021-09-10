@@ -4,7 +4,7 @@ set -o errexit
 set -o pipefail
 
 # Add the current directory to our virtualenv
-# pip3 install .
+pip3 install -e .
 
 function vcap_get_service () {
   local path name

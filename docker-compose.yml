@@ -40,6 +40,8 @@ services:
 
   solr:
     image: datagov/catalog-solr:inventory2_8
+    ports:
+      - "8983:8983"
 
   redis:
     image: redis:alpine

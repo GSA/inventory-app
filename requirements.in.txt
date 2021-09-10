@@ -24,7 +24,7 @@ urllib3==1.26.5
 
 # Add necessary CKAN core libraries
 alembic==1.0.0
-Babel==2.7.0
+Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
 click==7.1.2
@@ -38,6 +38,8 @@ Jinja2==2.11.3
 PyJWT==1.7.1
 Markdown==2.6.7
 passlib==1.7.3
+pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
+pathtools==0.1.2          # via watchdog
 polib==1.0.7
 psycopg2==2.8.2
 python-magic==0.4.15

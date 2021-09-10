@@ -1,14 +1,15 @@
 describe('Dataset', () => {
 
     before(() => {
-        cy.login()
-        cy.delete_organization('test-organization')
-        cy.create_organization('test-organization', 'Test organization')
-    })
+        cy.logout();
+        cy.login();
+        cy.delete_organization('test-organization');
+        cy.create_organization('test-organization', 'Test organization');
+    });
 
     beforeEach(() => {
-        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan')
-    })
+        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan');
+    });
     
     after(() => {
         cy.delete_dataset('test-dataset-1')
@@ -18,7 +19,7 @@ describe('Dataset', () => {
     it('Creates dataset via API', () => {
         cy.fixture('ckan_dataset.json').then((ckan_dataset) => {
             cy.create_dataset(ckan_dataset).should((response) => {
-                expect(response.body).to.have.property('success', true)
+                expect(response.body).to.have.property('success', true);
             });
         });
     });
@@ -28,7 +29,7 @@ describe('Dataset', () => {
         cy.contains('Test Dataset 1');
         // TODO: re-add the following check to validate usmetadata template is working
         // cy.contains('Common Core Metadata');
-    })
+    });
 
     it('Add resource to private dataset via API', () => {
         cy.fixture('ckan_resource.csv', 'binary').then((ckan_resource) => {
@@ -40,11 +41,12 @@ describe('Dataset', () => {
             formData.set('name', "test-resource-1");
             formData.set('resource_type', "CSV");
             formData.set('format', "CSV");
-            cy.form_request('POST', 'http://app:5000/api/action/resource_create', formData, function (response) {
+            cy.form_request('POST', '/api/action/resource_create', formData, function (response) {
                 expect(response.status).to.eq(200);
             });
         });
-    })
+        cy.visit('/dataset');
+    });
 
     it('Download resource file', () => {
         cy.visit('/dataset/test-dataset-1')

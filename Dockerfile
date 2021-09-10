@@ -5,14 +5,18 @@ FROM openknowledge/ckan-dev:2.9
 ENV GIT_BRANCH=2.9
 ENV CKAN_HOME /srv/app
 ENV CKAN_CONFIG /app/config
+ENV APP_DIR /app
 # ENV CKAN_ENV docker
 
 # add dependencies for cryptography and vim
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
-COPY requirements.txt ${APP_DIR}
+COPY requirements.txt requirements-dev.txt ${APP_DIR}/
+ADD setup.py README.md ${APP_DIR}/
+ADD ckanext ${APP_DIR}/ckanext/
 
-RUN pip3 install --ignore-installed -r requirements.txt
+RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements.txt
+RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements-dev.txt
 # COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
 # What saml2 info do we need?
