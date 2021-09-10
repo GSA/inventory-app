@@ -1,6 +1,7 @@
 version: '3'
 services:
   app:
+    image: datagov/inventory-app:2.9
     build: .
     command: /app/start.sh
     depends_on:
