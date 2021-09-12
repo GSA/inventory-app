@@ -83,7 +83,7 @@ simplejson==3.10.0
 six==1.11.0
 SQLAlchemy==1.1.11
 sqlalchemy-migrate==0.10.0
-sqlparse==0.2.2
+sqlparse==0.4.2
 Tempita==0.5.2
 typing==3.10.0.0
 tzlocal==1.3
