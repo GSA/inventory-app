@@ -2,8 +2,8 @@ alembic==1.0.0
 Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.18.34
-botocore==1.21.34
+boto3==1.18.40
+botocore==1.21.40
 certifi==2021.5.30
 cffi==1.14.6
 chardet==3.0.4
@@ -19,10 +19,9 @@ ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@4544
 ckantoolkit==0.0.4
 click==7.1.2
 cryptography==3.4.8
-decorator==5.0.9
 defusedxml==0.7.1
 dominate==2.4.0
-elementpath==2.3.0
+elementpath==2.3.1
 fanstatic==1.1
 feedgen==0.9.0
 Flask==1.1.1
@@ -51,7 +50,6 @@ packaging==21.0
 passlib==1.7.3
 PasteDeploy==2.0.1
 pathtools==0.1.2
-pbr==5.6.0
 pika==1.2.0
 polib==1.0.7
 psycopg2==2.8.2
@@ -79,9 +77,7 @@ shutilwhich==1.1.0
 simplejson==3.10.0
 six==1.16.0
 SQLAlchemy==1.3.5
-sqlalchemy-migrate==0.12.0
 sqlparse==0.2.2
-Tempita==0.5.2
 tzlocal==1.3
 unicodecsv==0.14.1
 Unidecode==1.0.22
@@ -92,7 +88,7 @@ webencodings==0.5.1
 WebOb==1.8.7
 Werkzeug==1.0.0
 xlrd==2.0.1
-xmlschema==1.7.0
+xmlschema==1.7.1
 zipp==3.5.0
 zope.event==4.5.0
 zope.interface==4.7.2
