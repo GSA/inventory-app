@@ -1,5 +1,7 @@
 
 require('cypress-downloadfile/lib/downloadFileCommand');
+import Chance from 'chance';
+const chance = new Chance();
 
 function verify_element_exists() {
     cy.get('td').eq(4).then(($td) => {

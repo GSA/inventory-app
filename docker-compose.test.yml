@@ -9,7 +9,7 @@ services:
   test:
     image: cypress/included:7.3.0
     entrypoint: []
-    command: /bin/bash -c "npm install cypress-downloadfile && npx wait-on http://app:5000/api/action/status_show && cypress run"
+    command: /bin/bash -c "npm install cypress-downloadfile chance && npx wait-on http://app:5000/api/action/status_show && cypress run"
     # To run specific test, use the following syntax:
     # command: /bin/bash -c "npx wait-on http://app:5000 && cypress run --spec cypress/integration/organizations.spec.js"
     # To run against a dev or production image, use the following syntax:
