@@ -48,6 +48,8 @@ const hasFile = (fileName, ms) => {
     });
 };
 
+const {downloadFile} = require('cypress-downloadfile/lib/addPlugin');
+
 module.exports = (on, config) => {
     // require('@cypress/code-coverage/task')(on, config);
     // on('before:browser:launch', (browser, options) => {
@@ -76,6 +78,8 @@ module.exports = (on, config) => {
         return hasFile(fileName, ms);
     }
     });
+
+    on('task', {downloadFile});
 
     return config;
 };
