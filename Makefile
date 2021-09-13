@@ -39,6 +39,3 @@ test_extension:
 
 up:
 	docker-compose up
-
-update-dependencies:
-	docker-compose run --rm app pip install -r requirements.txt
