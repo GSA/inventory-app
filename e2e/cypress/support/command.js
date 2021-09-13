@@ -1,3 +1,6 @@
+
+require('cypress-downloadfile/lib/downloadFileCommand');
+
 function verify_element_exists() {
     cy.get('td').eq(4).then(($td) => {
         if ($td.text() == 'Finished') {
@@ -111,6 +114,7 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
      cy.request({
         url: '/api/action/dataset_purge',
         method: 'POST',
+        failOnStatusCode: false,
         body: {
             "id": datasetName
         }
@@ -202,3 +206,28 @@ Cypress.Commands.add('form_request', (method, url, formData, done) => {
     };
     xhr.send(formData);
 })
+
+Cypress.Commands.add('requiredMetadata', (title) => {
+  cy.intercept('/api/3/action/package_create').as('packageCreate');
+  const datasetTitle = title || chance.word({ length: 5 });
+  cy.get('input[name=title]').type(datasetTitle);
+  cy.get('textarea[name=description]').type(chance.sentence({ words: 4 }));
+  cy.get('.react-tags input').type('1234{enter}');
+  cy.get('select[name=owner_org]').select('test-organization');
+  cy.get('input[placeholder="Select publisher"]').type('top level publisher');
+  cy.get('input[placeholder="Select publisher"]').type('{downarrow}{enter}');
+  cy.get('input[name=contact_name]').type(chance.name());
+  cy.get('input[name=contact_email]').type(chance.email());
+  cy.get('input[name=unique_id]').type(chance.string({ length: 10 }));
+  cy.get('select[name=public_access_level]').select('public');
+  cy.get('select[name=license]').select('Other');
+  cy.get('input[name=licenseOther]').type(chance.url());
+  cy.get('#rights_option_1').parent('.form-group').click();
+  cy.get('#spatial_option_2').parent('.form-group').click();
+  cy.get('input[name=spatial_location_desc]').type(chance.sentence({ words: 2 }));
+  cy.get('#temporal_option_2').parent('.form-group').click();
+  cy.get('input[name=temporal_start_date]').type('2010-11-11');
+  cy.get('input[name=temporal_end_date]').type('2020-11-11');
+  cy.get('button[type=button]').contains('Save and Continue').click();
+  cy.wait('@packageCreate');
+});
