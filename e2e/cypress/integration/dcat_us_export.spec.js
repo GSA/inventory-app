@@ -1,7 +1,12 @@
 describe('DCAT-US Export', () => {
 
-    before(() => {
+    beforeEach(() => {
+        cy.logout();
         cy.login();
+        cy.delete_dataset('test-dataset-1')
+        cy.delete_dataset('test-dataset-2')
+        cy.delete_dataset('draft-dataset-1')
+        cy.delete_dataset('draft-dataset-2')
         cy.delete_organization('test-organization');
         cy.create_organization('test-organization', 'Test organization');
 
@@ -21,28 +26,36 @@ describe('DCAT-US Export', () => {
                 expect(response.body).to.have.property('success', true)
             });
         });
-    })
-
-    beforeEach(() => {
-        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan')
+        cy.exec('rm cypress/downloads/draft*', {failOnNonZeroExit: false});
     })
     
-    after(() => {
+    afterEach(() => {
         cy.delete_dataset('test-dataset-1')
+        cy.delete_dataset('test-dataset-2')
         cy.delete_dataset('draft-dataset-1')
         cy.delete_dataset('draft-dataset-2')
         cy.delete_organization('test-organization')
+        cy.exec('rm cypress/downloads/draft*', {failOnNonZeroExit: false});
     })
 
-    // TODO: integrate datajson and usmetadata extensions
     it('Can create a zip export of the organization', () => {
-        cy.request('/organization/test-organization/draft.json')
-        .then((response) => {
-            cy.log(response.status, response.body);
-        })
+        cy.downloadFile('http://localhost:5000/organization/test-organization/draft.json',
+                            'cypress/downloads', 'draft.zip')
+
+        cy.exec('unzip cypress/downloads/draft.zip -d cypress/downloads');
+        cy.exec('grep -q \'Test Dataset 1\' cypress/downloads/draft_data.json', { failOnNonZeroExit: false })
+            .its('code').should('eq', 1);
+        cy.exec('grep -q \'Draft Dataset 1\' cypress/downloads/draft_data.json')
+            .its('code').should('eq', 0);
+        cy.exec('grep -q \'Draft Dataset 2\' cypress/downloads/draft_data.json')
+            .its('code').should('eq', 0);
+
     })
 
-    // unzip response
-    // Validate that there are 2 files, draft_data.json and data.json
-    // Read files and validate content (dataset titles)
+    // TODO: integrate dcat_usmetadata form
+    it('Submit Required Metadata works', () => {
+        cy.visit('/dataset/new-metadata');
+        cy.requiredMetadata('test-dataset-2');
+        cy.contains('Dataset saved successfully');
+    });
 })
