@@ -14,6 +14,5 @@ describe('Main Page', () => {
         cy.request('/dataset').then((response) => {
             expect(response.body).to.have.string('google-analytics-fake-key-testing-87654321');
         });
-        // cy.contains()
     });
-});
+})

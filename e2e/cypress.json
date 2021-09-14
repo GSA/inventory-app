@@ -1,5 +1,5 @@
 {
-    "baseUrl": "http://app:5000",
+    "baseUrl": "http://ckan:5000",
     "reporter": "junit",
     "reporterOptions": {
         "mochaFile": "cypress/results/output.xml"

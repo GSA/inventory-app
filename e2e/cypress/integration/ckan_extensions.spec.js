@@ -20,10 +20,10 @@ describe('CKAN Extensions', () => {
             expect(installed_extensions).to.include('envvars');
             expect(installed_extensions).to.include('datastore');
             expect(installed_extensions).to.include('datagov_inventory');
-            // TODO: The following extensions should be verified to be installed:
-            // expect(installed_extensions).to.include('dcat_usmetadata');
-            // expect(installed_extensions).to.include('usmetadata');
-            // expect(installed_extensions).to.include('datajson');
+            expect(installed_extensions).to.include('dcat_usmetadata');
+            expect(installed_extensions).to.include('usmetadata');
+            expect(installed_extensions).to.include('datajson');
+            // TODO: Re-integrate saml2auth when automated testing is created for it
             // expect(installed_extensions).to.include('saml2auth');
         });
     })

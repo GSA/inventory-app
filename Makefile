@@ -10,6 +10,7 @@ clean:
 
 cypress:
 	# Turn on local system, and open cypress in interactive mode
+	npm install chance cypress-downloadfile
 	docker-compose up -d && cd e2e && CYPRESS_USER_PASSWORD=cypress-user-password \
 	CYPRESS_USER=cypress-user CYPRESS_BASE_URL=http://localhost:5000 npx cypress open
 
