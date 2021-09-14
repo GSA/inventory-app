@@ -39,7 +39,7 @@ describe('DCAT-US Export', () => {
     })
 
     it('Can create a zip export of the organization', () => {
-        cy.downloadFile('http://localhost:5000/organization/test-organization/draft.json',
+        cy.downloadFile(Cypress.config().baseUrl + '/organization/test-organization/draft.json',
                             'cypress/downloads', 'draft.zip')
 
         cy.exec('unzip cypress/downloads/draft.zip -d cypress/downloads');

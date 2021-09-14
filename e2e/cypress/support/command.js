@@ -73,12 +73,18 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
         url: '/api/action/organization_create',
         method: 'POST',
         body: {
-            "description": orgDesc,
-            "title": orgName,
-            "approval_status": "approved",
-            "state": "active",
-            "name": orgName
-        }
+          description: orgDesc,
+          title: orgName,
+          approval_status: 'approved',
+          state: 'active',
+          name: orgName,
+          extras: [
+            {
+              key: 'publisher',
+              value: `[["${orgName}", "${orgName}", "top level publisher"], ["${orgName}", "${orgName}", "top level publisher", "first level publisher", "second level publisher"]]`,
+            },
+          ],
+        },
     })
 })
 

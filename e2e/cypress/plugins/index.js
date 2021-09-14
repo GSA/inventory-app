@@ -25,7 +25,6 @@ const downloadDirectory = path.join(__dirname, '..', 'downloads');
 const findDownload = (fileName) => {
     const filePath = `${downloadDirectory}/${fileName}`;
     const file_exists = fs.existsSync(filePath);
-    console.log()
     return (file_exists ? filePath : false);
 };
 

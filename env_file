@@ -18,7 +18,8 @@ CKAN_HOME=/srv/app
 CKAN_CONFIG=/app/config
 PORT=5000
 
-CKAN__PLUGINS=datagov_inventory datastore xloader stats text_view recline_view googleanalyticsbasic s3filestore envvars dcat_usmetadata usmetadata datajson saml2auth
+# Put envvars last per envvars doc, https://github.com/okfn/ckanext-envvars#requirements
+CKAN__PLUGINS=datagov_inventory datastore xloader stats text_view recline_view googleanalyticsbasic s3filestore dcat_usmetadata usmetadata datajson saml2auth envvars
 
 CKAN__SITE_TITLE=Inventory
 CKAN__SITE_DESCRIPTION=Inventory is a Metadata Repository for Government Agencies
