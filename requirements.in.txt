@@ -69,6 +69,7 @@ zope.interface==4.7.2
 # python-memcached==1.48
 
 #datajson
+future
 jsonschema~=2.4.0
 rfc3987
 # pyyaml # Already installed via CKAN core
