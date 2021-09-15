@@ -20,13 +20,13 @@ debug:
 	docker-compose stop app ; docker-compose run --service-ports app
 
 requirements:
-	docker-compose run --rm -T app /app/bin/requirements.sh
+	docker-compose run --rm -T ckan /app/bin/requirements.sh
 
 lint:
 	flake8 . --count --show-source --statistics
 
 restart:
-	docker-compose restart app
+	docker-compose restart ckan
 
 test-build:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml build
