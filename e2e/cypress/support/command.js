@@ -59,7 +59,7 @@ Cypress.Commands.add('create_organization_ui', (orgName, orgDesc) => {
     cy.get('button[name=save]').click()
 })
 
-Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
+Cypress.Commands.add('create_organization', (orgName, orgDesc, extras=null) => {
     /**
      * Method to create organization via CKAN API
      * :PARAM orgName String: Name of the organization being created
@@ -69,7 +69,7 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
      * :RETURN null:
      */
 
-     cy.request({
+    let request_obj = {
         url: '/api/action/organization_create',
         method: 'POST',
         body: {
@@ -85,7 +85,13 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
             },
           ],
         },
-    })
+    };
+
+    if(extras) {
+        request_obj.body.extras = request_obj.body.extras.concat(extras);
+    }
+
+     cy.request(request_obj)
 })
 
 
