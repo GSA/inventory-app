@@ -48,6 +48,7 @@ describe('DCAT-US Export', () => {
         cy.delete_dataset('draft-dataset-1')
         cy.delete_dataset('draft-dataset-2')
         cy.delete_organization('test-organization')
+        cy.delete_organization('test-sub-organization');
         cy.exec('rm cypress/downloads/draft*', {failOnNonZeroExit: false});
     })
 
