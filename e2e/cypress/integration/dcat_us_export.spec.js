@@ -1,6 +1,6 @@
 describe('DCAT-US Export', () => {
 
-    before(() => {
+    beforeEach(() => {
         cy.logout();
         cy.login();
         cy.delete_dataset('test-dataset-1')
@@ -40,12 +40,8 @@ describe('DCAT-US Export', () => {
         });
         cy.exec('rm cypress/downloads/draft*', {failOnNonZeroExit: false});
     })
-
-    beforeEach(() => {
-        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan');
-    });
     
-    after(() => {
+    afterEach(() => {
         cy.delete_dataset('test-dataset-1')
         cy.delete_dataset('test-dataset-2')
         cy.delete_dataset('test-sub-dataset-1')
