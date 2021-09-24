@@ -52,7 +52,6 @@ docs/_build/
 e2e/cypress/videos/*
 e2e/cypress/screenshots/*
 e2e/cypress/results/output.xml
-e2e/cypress/downloads
 # Commit testing resource(s) csv
 !e2e/cypress/fixtures/*.csv
 
