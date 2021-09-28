@@ -33,7 +33,7 @@ test:
 	docker-compose -f docker-compose.yml -f docker-compose.test.yml up --abort-on-container-exit test
 
 test_extension:
-	docker-compose exec ckan pytest --cov=ckanext.datagov_inventory --disable-warnings /app/ckanext/datagov_inventory/tests/
+	docker-compose exec -T ckan pytest --cov=ckanext.datagov_inventory --disable-warnings /app/ckanext/datagov_inventory/tests/
 
 up:
 	docker-compose up
