@@ -1,5 +1,9 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan.model import User
+from ckan.common import _
+from ckan.logic.auth import get_resource_object
+import ckan.authz as authz
 # import ckan.authz as authz
 import logging
 
@@ -25,10 +29,33 @@ def datagov_disallow_anonymous_access(func=None):
     # We're always applying the auth_disallow_anonymous_access decorator.
     return _wrapper
 
-
+# Comes from https://github.com/ckan/ckan/blob/master/ckan/logic/auth/get.py#L129-L145
+# Anonymous users rely on public/private package info to have access
+# CKAN users utilize normal process
 @toolkit.auth_allow_anonymous_access
-def datagov_allow_anonymous_access(context, data_dict):
-    return {'success': True}
+def inventory_resource_show(context, data_dict):
+    model = context['model']
+    user = User.by_name(context.get('user'))
+    resource = get_resource_object(context, data_dict)
+
+    # check authentication against package
+    pkg = model.Package.get(resource.package_id)
+    if not pkg:
+        raise logic.NotFound(_('No package found for this resource, cannot check auth.'))
+
+    if user is None:
+        if pkg.private:
+            return {'success': False}
+        else:
+            return {'success': True}
+    else:
+        pkg_dict = {'id': pkg.id}
+        authorized = authz.is_authorized('package_show', context, pkg_dict).get('success')
+
+        if not authorized:
+            return {'success': False, 'msg': _('User %s not authorized to read resource %s') % (user, resource.id)}
+        else:
+            return {'success': True}
 
 
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
@@ -45,7 +72,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'package_list': datagov_disallow_anonymous_access(),
                 'package_search': datagov_disallow_anonymous_access(),
                 'package_show': datagov_disallow_anonymous_access(),
-                'resource_show': datagov_allow_anonymous_access,
+                'resource_show': inventory_resource_show,
                 'site_read': datagov_disallow_anonymous_access(),
                 'tag_list': datagov_disallow_anonymous_access(),
                 'tag_show': datagov_disallow_anonymous_access(),
