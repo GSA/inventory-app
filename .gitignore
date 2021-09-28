@@ -3,3 +3,9 @@ src/
 *.csv
 vendor/*
 vars.yml
+
+node_modules/
+ckanext/
+ckanext_datagov_inventory.egg-info/
+e2e/
+config/__pycache__
