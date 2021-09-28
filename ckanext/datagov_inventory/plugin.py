@@ -1,5 +1,6 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+import ckan.logic as logic
 from ckan.model import User
 from ckan.common import _
 from ckan.logic.auth import get_resource_object
@@ -29,7 +30,9 @@ def datagov_disallow_anonymous_access(func=None):
     # We're always applying the auth_disallow_anonymous_access decorator.
     return _wrapper
 
-# Comes from https://github.com/ckan/ckan/blob/master/ckan/logic/auth/get.py#L129-L145
+
+# Comes from
+# https://github.com/ckan/ckan/blob/master/ckan/logic/auth/get.py#L129-L145
 # Anonymous users rely on public/private package info to have access
 # CKAN users utilize normal process
 @toolkit.auth_allow_anonymous_access
@@ -41,7 +44,8 @@ def inventory_resource_show(context, data_dict):
     # check authentication against package
     pkg = model.Package.get(resource.package_id)
     if not pkg:
-        raise logic.NotFound(_('No package found for this resource, cannot check auth.'))
+        raise logic.NotFound(_('No package found for this resource,'
+                               ' cannot check auth.'))
 
     if user is None:
         if pkg.private:
@@ -50,10 +54,13 @@ def inventory_resource_show(context, data_dict):
             return {'success': True}
     else:
         pkg_dict = {'id': pkg.id}
-        authorized = authz.is_authorized('package_show', context, pkg_dict).get('success')
+        authorized = authz.is_authorized('package_show', context, pkg_dict) \
+            .get('success')
 
         if not authorized:
-            return {'success': False, 'msg': _('User %s not authorized to read resource %s') % (user, resource.id)}
+            return {'success': False,
+                    'msg': _('User %s not authorized to read resource %s')
+                    % (user, resource.id)}
         else:
             return {'success': True}
 
