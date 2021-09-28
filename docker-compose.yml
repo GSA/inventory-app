@@ -12,12 +12,11 @@ services:
       - localstack-container
     ports:
       - "5000:5000"
-    env_file: env_file
+    env_file: .env
     environment:
       CKAN_SITE_URL: http://localhost:5000
     volumes:
       - .:/app/
-      - ./e2e/00-setup-cypress-user.sh:/docker-entrypoint.d/00-setup-cypress-user.sh
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       # - /local/path/ckanext-some_extension/:/usr/lib/ckan/src/ckanext-some_extension
 

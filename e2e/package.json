@@ -1,0 +1,29 @@
+{
+  "name": "inventory-app-tests",
+  "version": "0.0.1",
+  "description": "Node package (including Cypress) for UI end-to-end tests for data.gov inventory application",
+  "main": "index.js",
+  "dependencies": {
+    "chance": "^1.1.8",
+    "cypress": "^8.4.1",
+    "cypress-downloadfile": "^1.2.1",
+    "cypress-file-upload": "^5.0.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "CYPRESS_USER_PASSWORD=password CYPRESS_USER=admin CYPRESS_BASE_URL=http://localhost:5000 npx cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gsa/inventory-app.git"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "GSA TTS data.gov team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gsa/inventory-app/issues"
+  },
+  "homepage": "https://github.com/gsa/inventory-app#readme"
+}
