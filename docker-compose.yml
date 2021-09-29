@@ -1,19 +1,23 @@
 version: '3'
 services:
-  app:
+  ckan:
+    image: datagov/inventory-app:2.9
     build: .
-    command: /opt/inventory-app/start.sh
+    command: /app/start.sh
     depends_on:
       - datastore
       - db
       - solr
+      - redis
+      - localstack-container
     ports:
       - "5000:5000"
     env_file: env_file
+    environment:
+      CKAN_SITE_URL: http://localhost:5000
     volumes:
-      - ckan:/usr/lib/ckan
-      - ./config:/etc/ckan
-      - .:/opt/inventory-app
+      - .:/app/
+      - ./e2e/00-setup-cypress-user.sh:/docker-entrypoint.d/00-setup-cypress-user.sh
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       # - /local/path/ckanext-some_extension/:/usr/lib/ckan/src/ckanext-some_extension
 
@@ -36,6 +40,8 @@ services:
 
   solr:
     image: datagov/catalog-solr:inventory2_8
+    ports:
+      - "8983:8983"
 
   redis:
     image: redis:alpine
