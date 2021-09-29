@@ -2,7 +2,6 @@
 NEW_RELIC_LICENSE_KEY=
 NEW_RELIC_APP_NAME=inventory-next
 NEW_RELIC_MONITOR_MODE=false
-NEW_RELIC_LOG=/var/log/new_relic.log
 NEW_RELIC_LOG_LEVEL=info
 NEW_RELIC_HOST=gov-collector.newrelic.com
 
@@ -12,14 +11,15 @@ DB_CKAN_HOST=db
 DB_CKAN_USER=ckan
 DB_CKAN_PASSWORD=pass
 DB_CKAN_DB=ckan
+
 CKAN_SQLALCHEMY_URL=postgresql://ckan:pass@db/ckan
 CKAN_INI=/app/config/development.ini
 CKAN_HOME=/srv/app
 CKAN_CONFIG=/app/config
 PORT=5000
 
-# Need to add the following extensions: , dcat_usmetadata, usmetadata, datajson, saml2auth
-CKAN__PLUGINS=datagov_inventory datastore xloader stats text_view recline_view googleanalyticsbasic s3filestore envvars
+# Put envvars last per envvars doc, https://github.com/okfn/ckanext-envvars#requirements
+CKAN__PLUGINS=datagov_inventory datastore xloader stats text_view recline_view googleanalyticsbasic s3filestore dcat_usmetadata usmetadata datajson saml2auth envvars
 
 CKAN__SITE_TITLE=Inventory
 CKAN__SITE_DESCRIPTION=Inventory is a Metadata Repository for Government Agencies

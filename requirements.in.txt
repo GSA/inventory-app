@@ -1,4 +1,4 @@
-git+https://github.com/ckan/ckan.git@ckan-2.9.3#egg=ckan
+git+https://github.com/ckan/ckan.git@ckan-2.9.4#egg=ckan
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/GSA/ckanext-usmetadata.git@main#egg=ckanext-usmetadata
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
@@ -10,7 +10,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 # git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
-ckanext-dcat-usmetadata
+ckanext-dcat-usmetadata==0.3.0
 ckanext-envvars
 newrelic
 gunicorn
@@ -24,7 +24,7 @@ urllib3==1.26.5
 
 # Add necessary CKAN core libraries
 alembic==1.0.0
-Babel==2.7.0
+Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
 click==7.1.2
@@ -38,6 +38,8 @@ Jinja2==2.11.3
 PyJWT==1.7.1
 Markdown==2.6.7
 passlib==1.7.3
+pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
+pathtools==0.1.2          # via watchdog
 polib==1.0.7
 psycopg2==2.8.2
 python-magic==0.4.15
@@ -51,7 +53,8 @@ requests==2.25.0
 Routes==1.13
 rq==1.0
 simplejson==3.10.0
-sqlalchemy-migrate==0.12.0
+# Following can be ignored: https://github.com/ckan/ckan/pull/4450
+# sqlalchemy-migrate==0.12.0
 SQLAlchemy==1.3.5
 sqlparse==0.2.2
 tzlocal==1.3
@@ -65,17 +68,18 @@ zope.interface==4.7.2
 # M2Crypto
 # python-memcached==1.48
 
-#datajson
+# ckanext-datajson dependencies
+future
 jsonschema~=2.4.0
 rfc3987
 # pyyaml # Already installed via CKAN core
 lepl
 
-# ckanext-s3filestore
+# ckanext-s3filestore dependencies
 boto3>=1.4.4
 ckantoolkit
 
-# ckanext-xloader
+# ckanext-xloader dependencies
 messytables==0.15.2
 pika>=1.1.0
 Unidecode==1.0.22

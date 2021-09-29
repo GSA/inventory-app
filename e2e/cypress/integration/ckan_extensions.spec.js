@@ -3,7 +3,7 @@ describe('CKAN Extensions', () => {
     it('Uses CKAN 2.9', () => {
         cy.request('/api/action/status_show').should((response) => {
             expect(response.body).to.have.property('success', true);
-            expect(response.body.result).to.have.property('ckan_version', '2.9.3');
+            expect(response.body.result).to.have.property('ckan_version', '2.9.4');
         });
     })
 
@@ -19,11 +19,11 @@ describe('CKAN Extensions', () => {
             expect(installed_extensions).to.include('s3filestore');
             expect(installed_extensions).to.include('envvars');
             expect(installed_extensions).to.include('datastore');
-            // TODO: The following extensions should be verified to be installed:
-            // expect(installed_extensions).to.include('datagov_inventory');
-            // expect(installed_extensions).to.include('dcat_usmetadata');
-            // expect(installed_extensions).to.include('usmetadata');
-            // expect(installed_extensions).to.include('datajson');
+            expect(installed_extensions).to.include('datagov_inventory');
+            expect(installed_extensions).to.include('dcat_usmetadata');
+            expect(installed_extensions).to.include('usmetadata');
+            expect(installed_extensions).to.include('datajson');
+            // TODO: Re-integrate saml2auth when automated testing is created for it
             // expect(installed_extensions).to.include('saml2auth');
         });
     })
