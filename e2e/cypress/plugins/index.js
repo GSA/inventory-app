@@ -25,7 +25,6 @@ const downloadDirectory = path.join(__dirname, '..', 'downloads');
 const findDownload = (fileName) => {
     const filePath = `${downloadDirectory}/${fileName}`;
     const file_exists = fs.existsSync(filePath);
-    console.log()
     return (file_exists ? filePath : false);
 };
 
@@ -47,6 +46,8 @@ const hasFile = (fileName, ms) => {
     }, 10);
     });
 };
+
+const {downloadFile} = require('cypress-downloadfile/lib/addPlugin');
 
 module.exports = (on, config) => {
     // require('@cypress/code-coverage/task')(on, config);
@@ -76,6 +77,8 @@ module.exports = (on, config) => {
         return hasFile(fileName, ms);
     }
     });
+
+    on('task', {downloadFile});
 
     return config;
 };

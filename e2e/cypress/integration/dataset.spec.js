@@ -12,9 +12,9 @@ describe('Dataset', () => {
     });
     
     after(() => {
-        cy.delete_dataset('test-dataset-1')
-        cy.delete_organization('test-organization')
-    })
+        cy.delete_dataset('test-dataset-1');
+        cy.delete_organization('test-organization');
+    });
 
     it('Creates dataset via API', () => {
         cy.fixture('ckan_dataset.json').then((ckan_dataset) => {
@@ -27,8 +27,7 @@ describe('Dataset', () => {
     it('Has a details page with core metadata', () => {
         cy.visit('/dataset/test-dataset-1');
         cy.contains('Test Dataset 1');
-        // TODO: re-add the following check to validate usmetadata template is working
-        // cy.contains('Common Core Metadata');
+        cy.contains('DCAT-US Metadata');
     });
 
     it('Add resource to private dataset via API', () => {
@@ -50,6 +49,8 @@ describe('Dataset', () => {
 
     it('Download resource file', () => {
         cy.visit('/dataset/test-dataset-1')
+        // Hide flask debug toolbar
+        cy.get('#flHideToolBarButton').click();
         // Open resource dropdown
         cy.get('.dropdown-toggle').click()
         // Download resource file

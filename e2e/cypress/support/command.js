@@ -1,3 +1,8 @@
+
+require('cypress-downloadfile/lib/downloadFileCommand');
+import Chance from 'chance';
+const chance = new Chance();
+
 function verify_element_exists() {
     cy.get('td').eq(4).then(($td) => {
         if ($td.text() == 'Finished') {
@@ -26,6 +31,10 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
     if(!password) {
         password = Cypress.env('USER_PASSWORD');
     }
+
+    // Hide flask debug toolbar
+    cy.get('#flHideToolBarButton').click();
+    
     cy.get('#field-login').type(userName)
     cy.get('#field-password').type(password)
     cy.get('.btn-primary').click()
@@ -54,7 +63,7 @@ Cypress.Commands.add('create_organization_ui', (orgName, orgDesc) => {
     cy.get('button[name=save]').click()
 })
 
-Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
+Cypress.Commands.add('create_organization', (orgName, orgDesc, extras=null) => {
     /**
      * Method to create organization via CKAN API
      * :PARAM orgName String: Name of the organization being created
@@ -64,17 +73,29 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc) => {
      * :RETURN null:
      */
 
-     cy.request({
+    let request_obj = {
         url: '/api/action/organization_create',
         method: 'POST',
         body: {
-            "description": orgDesc,
-            "title": orgName,
-            "approval_status": "approved",
-            "state": "active",
-            "name": orgName
-        }
-    })
+          description: orgDesc,
+          title: orgName,
+          approval_status: 'approved',
+          state: 'active',
+          name: orgName,
+          extras: [
+            {
+              key: 'publisher',
+              value: `[["${orgName}", "${orgName}", "top level publisher"], ["${orgName}", "${orgName}", "top level publisher", "first level publisher", "second level publisher"]]`,
+            },
+          ],
+        },
+    };
+
+    if(extras) {
+        request_obj.body.extras = request_obj.body.extras.concat(extras);
+    }
+
+     cy.request(request_obj)
 })
 
 
@@ -111,6 +132,7 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
      cy.request({
         url: '/api/action/dataset_purge',
         method: 'POST',
+        failOnStatusCode: false,
         body: {
             "id": datasetName
         }
@@ -202,3 +224,48 @@ Cypress.Commands.add('form_request', (method, url, formData, done) => {
     };
     xhr.send(formData);
 })
+
+Cypress.Commands.add('requiredMetadata', (title) => {
+  cy.intercept('/api/3/action/package_create').as('packageCreate');
+  const datasetTitle = title || chance.word({ length: 5 });
+  cy.get('input[name=title]').type(datasetTitle);
+  cy.get('textarea[name=description]').type(chance.sentence({ words: 4 }));
+  cy.get('.react-tags input').type('1234{enter}');
+  cy.get('select[name=owner_org]').select('test-organization');
+  cy.get('input[placeholder="Select publisher"]').type('top level publisher');
+  cy.get('input[placeholder="Select publisher"]').type('{downarrow}{enter}');
+  cy.get('input[name=contact_name]').type(chance.name());
+  cy.get('input[name=contact_email]').type(chance.email());
+  cy.get('input[name=unique_id]').type(chance.string({ length: 10 }));
+  cy.get('select[name=public_access_level]').select('public');
+  cy.get('select[name=license]').select('Other');
+  cy.get('input[name=licenseOther]').type(chance.url());
+  cy.get('#rights_option_1').parent('.form-group').click();
+  cy.get('#spatial_option_2').parent('.form-group').click();
+  cy.get('input[name=spatial_location_desc]').type(chance.sentence({ words: 2 }));
+  cy.get('#temporal_option_2').parent('.form-group').click();
+  cy.get('input[name=temporal_start_date]').type('2010-11-11');
+  cy.get('input[name=temporal_end_date]').type('2020-11-11');
+  cy.get('button[type=button]').contains('Save and Continue').click();
+  cy.wait('@packageCreate');
+});
+
+Cypress.Commands.add('additionalMetadata', (isparent) => {
+    cy.get('select[name=dataQuality]').select('Yes');
+    cy.get('#category-option-yes').parent('.form-group').click();
+    cy.get('input[name=data_dictionary]').clear().type(chance.url());
+    cy.get('select[name=describedByType]').select('text/csv');
+    cy.get('select[name=accrualPeriodicity]').select('R/P7D');
+    cy.get('input[name=homepage_url]').clear().type(chance.url());
+    cy.get('select[name=languageSubTag]').select('en');
+    cy.get('select[name=languageRegSubTag]').select('US');
+    cy.get('input[name=primary_it_investment_uii]').type('123-123456789');
+    cy.get('input[name=related_documents]').type(chance.name());
+    cy.get('input[name=release_date]').type('2020-08-08');
+    cy.get('input[name=system_of_records]').type(chance.url());
+    if (isparent) {
+      cy.get('select[name=isParent]').select('Yes');
+    } else {
+      cy.get('select[name=isParent]').select('No');
+    }
+});

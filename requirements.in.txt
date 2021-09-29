@@ -10,7 +10,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 # git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
-ckanext-dcat-usmetadata
+ckanext-dcat-usmetadata==0.3.0
 ckanext-envvars
 newrelic
 gunicorn
@@ -53,9 +53,10 @@ requests==2.25.0
 Routes==1.13
 rq==1.0
 simplejson==3.10.0
-sqlalchemy-migrate==0.12.0
+# Following can be ignored: https://github.com/ckan/ckan/pull/4450
+# sqlalchemy-migrate==0.12.0
 SQLAlchemy==1.3.5
-sqlparse==0.2.2
+sqlparse==0.4.2
 tzlocal==1.3
 unicodecsv>=0.9
 webassets==0.12.1
@@ -67,17 +68,18 @@ zope.interface==4.7.2
 # M2Crypto
 # python-memcached==1.48
 
-#datajson
+# ckanext-datajson dependencies
+future
 jsonschema~=2.4.0
 rfc3987
 # pyyaml # Already installed via CKAN core
 lepl
 
-# ckanext-s3filestore
+# ckanext-s3filestore dependencies
 boto3>=1.4.4
 ckantoolkit
 
-# ckanext-xloader
+# ckanext-xloader dependencies
 messytables==0.15.2
 pika>=1.1.0
 Unidecode==1.0.22
