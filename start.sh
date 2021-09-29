@@ -59,8 +59,15 @@ done
 
 pip3 install -e /app/.
 
+# Set debug to true
+echo "Enabling debug mode"
+ckan config-tool $CKAN_INI -s DEFAULT "debug = true"
+
 # Run migrations
-ckan -c $CKAN_INI db upgrade 
+ckan db upgrade
+
+# Run the prerun script to init CKAN and create the default admin user
+python3 prerun.py
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]
@@ -76,7 +83,7 @@ then
 fi
 
 echo starting xloader worker...
-exec ckan -c $CKAN_INI  jobs worker & 
+exec ckan jobs worker & 
 
 echo starting ckan...
 # sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0

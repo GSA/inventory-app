@@ -1,6 +1,9 @@
-describe('DCAT-US Export', () => {
+import 'cypress-file-upload';
 
-    before(() => {
+describe('DCAT-US Export', () => {
+    const dataset_title = 'test-dataset-2';
+
+    beforeEach(() => {
         cy.logout();
         cy.login();
         cy.delete_dataset('test-dataset-1')
@@ -40,18 +43,15 @@ describe('DCAT-US Export', () => {
         });
         cy.exec('rm cypress/downloads/draft*', {failOnNonZeroExit: false});
     })
-
-    beforeEach(() => {
-        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan');
-    });
     
-    after(() => {
+    afterEach(() => {
         cy.delete_dataset('test-dataset-1')
         cy.delete_dataset('test-dataset-2')
         cy.delete_dataset('test-sub-dataset-1')
         cy.delete_dataset('draft-dataset-1')
         cy.delete_dataset('draft-dataset-2')
         cy.delete_organization('test-organization')
+        cy.delete_organization('test-sub-organization');
         cy.exec('rm cypress/downloads/draft*', {failOnNonZeroExit: false});
     })
 
@@ -82,10 +82,35 @@ describe('DCAT-US Export', () => {
             .its('code').should('eq', 0);
     })
 
-    // TODO: integrate dcat_usmetadata form
     it('Submit Required Metadata works', () => {
         cy.visit('/dataset/new-metadata');
-        cy.requiredMetadata('test-dataset-2');
+        cy.requiredMetadata(dataset_title);
         cy.contains('Dataset saved successfully');
     });
+
+    it('Save resource file to inventory', () => {
+        cy.visit('/dataset/new-metadata');
+        cy.requiredMetadata(dataset_title);
+        cy.additionalMetadata();
+        cy.get('button[type=button]')
+        .contains('Save and Continue')
+        .click()
+        .then(() => {
+            cy.get('#resource-option-upload-file').parent('.form-group').click();
+            cy.get('label[for=upload]').click();
+            const yourFixturePath = '../fixtures/ckan_resource.csv';
+            cy.get('input#upload').attachFile(yourFixturePath);
+            cy.get('button[type=button]')
+            .contains('Finish and publish')
+            .click()
+            .then(() => {
+                cy.get('.resource-list').find('.resource-item').should('have.length', 1);
+                // Test that the dataset is non-private when uploading a file
+                cy.request('/api/3/action/package_show?id=' + dataset_title).then((response) => {
+                    expect(response.status).to.eq(200);
+                    expect(response.body.result.private).to.equal(false);
+                });
+            });
+        });
+    })
 })

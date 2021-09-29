@@ -49,6 +49,8 @@ describe('Dataset', () => {
 
     it('Download resource file', () => {
         cy.visit('/dataset/test-dataset-1')
+        // Hide flask debug toolbar
+        cy.get('#flHideToolBarButton').click();
         // Open resource dropdown
         cy.get('.dropdown-toggle').click()
         // Download resource file

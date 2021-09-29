@@ -245,7 +245,7 @@ class TestDatagovInventoryAuth(object):
             'gsa_member': is_allowed,
             'doi_admin': is_allowed,
             'doi_member': is_allowed,
-            'anonymous': is_allowed
+            'anonymous': is_denied
         }, object_id=dataset['package_id'])
 
     def test_auth_resource_show_for_private_gsa_dataset(self):

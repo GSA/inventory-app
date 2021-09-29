@@ -31,6 +31,10 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
     if(!password) {
         password = Cypress.env('USER_PASSWORD');
     }
+
+    // Hide flask debug toolbar
+    cy.get('#flHideToolBarButton').click();
+    
     cy.get('#field-login').type(userName)
     cy.get('#field-password').type(password)
     cy.get('.btn-primary').click()
@@ -244,4 +248,24 @@ Cypress.Commands.add('requiredMetadata', (title) => {
   cy.get('input[name=temporal_end_date]').type('2020-11-11');
   cy.get('button[type=button]').contains('Save and Continue').click();
   cy.wait('@packageCreate');
+});
+
+Cypress.Commands.add('additionalMetadata', (isparent) => {
+    cy.get('select[name=dataQuality]').select('Yes');
+    cy.get('#category-option-yes').parent('.form-group').click();
+    cy.get('input[name=data_dictionary]').clear().type(chance.url());
+    cy.get('select[name=describedByType]').select('text/csv');
+    cy.get('select[name=accrualPeriodicity]').select('R/P7D');
+    cy.get('input[name=homepage_url]').clear().type(chance.url());
+    cy.get('select[name=languageSubTag]').select('en');
+    cy.get('select[name=languageRegSubTag]').select('US');
+    cy.get('input[name=primary_it_investment_uii]').type('123-123456789');
+    cy.get('input[name=related_documents]').type(chance.name());
+    cy.get('input[name=release_date]').type('2020-08-08');
+    cy.get('input[name=system_of_records]').type(chance.url());
+    if (isparent) {
+      cy.get('select[name=isParent]').select('Yes');
+    } else {
+      cy.get('select[name=isParent]').select('No');
+    }
 });
