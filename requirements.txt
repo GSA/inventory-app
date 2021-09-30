@@ -7,7 +7,7 @@ botocore==1.21.45
 certifi==2021.5.30
 cffi==1.14.6
 chardet==3.0.4
-ckan @ git+https://github.com/ckan/ckan.git@e8b7970423e2cce9731441edd13f7fcfd3be58e9
+ckan @ git+https://github.com/ckan/ckan.git@6731c5a821a6a5f4bdaa20f4e793e0b6ba44f823
 -e git+https://github.com/GSA/ckanext-datajson.git@a5d8c9458a7efe955c31b90eeac1e7797881d014#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.3.0
 ckanext-envvars==0.0.1
