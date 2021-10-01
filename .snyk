@@ -12,7 +12,7 @@ ignore:
   SNYK-PYTHON-IPADDRESS-1290073:
     - '*':
         reason: >-
-          Dev-only requirement; data integrity and system
-          availability not a threat when running in dev mode
+          All input into system is from trusted and verified
+          government users (requires piv card), so risk is low.
         expires: 2021-12-30T06:00:00.000Z
 patch: {}
