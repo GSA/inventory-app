@@ -56,6 +56,8 @@ do
   fi
 done
 
+# give db more time
+sleep 5
 # Run migrations
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
 
