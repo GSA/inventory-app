@@ -38,6 +38,8 @@ if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
     --data-urlencode core=inventory
 fi
 
+$CKAN_HOME/bin/pip install -e /opt/inventory-app/ckanext-datagov_inventory/.
+
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
 $CKAN_HOME/bin/pip install -r /opt/inventory-app/requirements-dev.txt
@@ -56,6 +58,8 @@ do
   fi
 done
 
+# give db more time
+sleep 5
 # Run migrations
 paster --plugin=ckan db upgrade -c /etc/ckan/production.ini
 
