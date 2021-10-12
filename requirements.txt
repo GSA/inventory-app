@@ -6,7 +6,7 @@
 -e git+https://github.com/GSA/ckanext-datajson.git@4ca1ca31cfcc23d6610c13693049fcfc83696d08#egg=ckanext-datajson
 -e git+https://github.com/keitaroinc/ckanext-saml2auth.git@ckan-2.8#egg=ckanext-saml2auth
 -e git+https://github.com/GSA/webob.git@ckan-patch#egg=webob
-ckanext-dcat-usmetadata~=0.2
+ckanext-dcat-usmetadata==0.2.21
 -e git+https://github.com/GSA/ckanext-s3filestore@datagov-v0.1.1#egg=ckanext-s3filestore
 -e ./ckanext-datagov_inventory
 
