@@ -4,111 +4,63 @@ version: v1.13.5
 ignore:
   SNYK-PYTHON-SQLALCHEMY-173678:
     - '*':
-      reason: >-
-        No remediation path available (cannot upgrade to SQLAlchemy 1.2). 
-        Reviewed group_by and order_by usage manually, all user input sanitized.
-      expires: 2020-11-20T06:00:00.000Z
-  SNYK-PYTHON-SQLALCHEMY-590109:
-    - '*':
-      reason: >-
-        Reviewed group_by and order_by usage manually, all user input sanitized.
-      expires: 2021-01-20T06:00:00.000Z
+        reason: >-
+          No remediation path available (cannot upgrade to SQLAlchemy 1.2). 
+          Reviewed group_by and order_by usage manually, all user input sanitized.
+        expires: 2020-11-20T06:00:00.000Z
   SNYK-PYTHON-BEAKER-575115:
     - '*':
-      reason: >-
-        No remediation available yet; Not affecting us since the storage is not accessible to any other client
-      expires: 2020-11-20T06:00:00.000Z
-  SNYK-PYTHON-PYYAML-590151:
-    - '*':
-      reason: >-
-        There is no fix for PyYaml at this time. Currently, all uses of pyyaml call the safe_load or safe_load_all functions.
-      expires: 2020-11-20T06:00:00.000Z
+        reason: >-
+          No remediation available yet; Not affecting us since the storage is not accessible to any other client
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-M2CRYPTO-1040426:
     - '*':
-      reason: >-
-        Vulnerable code functions are not utilized in CKAN code base (RSA decrypt functionality).
-        No fix for M2Crypto (RSA module) at this time.
-        Community believes this to be a medium severity vulnerability.
-      expires: 2021-05-12T06:00:00.000Z
+        reason: >-
+          Vulnerable code functions are not utilized in CKAN code base (RSA decrypt functionality).
+          No fix for M2Crypto (RSA module) at this time.
+          Community believes this to be a medium severity vulnerability.
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-IPADDRESS-1041793:
     - '*':
-      reason: >-
-        Fix not available. No known usage of this library inside the CKAN app or it's extensions.
-      expires: 2021-03-29T06:00:00.000Z
+        reason: >-
+          Fix not available. No known usage of this library inside the CKAN app or it's extensions.
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-IPADDRESS-590065:
     - '*':
-      reason: >-
-        No remediation available yet.  After inspecting the
-        Python cryptography package, there is no use of the vulnerable
-        method hash() on the classes IPv4Interface and IPv6Interface, 
-        so the risk here is very minimal.
-      expires: 2021-03-20T06:00:00.000Z
-  SNYK-PYTHON-JINJA2-1012994:
-    - '*':
-      reason: >-
-        Open issuehttps://github.com/GSA/datagov-deploy/issues/2713
-      expires: 2021-05-02T06:00:00.000Z
-  SNYK-PYTHON-CRYPTOGRAPHY-1022152:
-    - '*':
         reason: >-
-          Patched to version 3.2; long term fix expected later.
-          Version 3.2 of this package contains an incomplete fix,
-          which might help reduce the chances of this vulnerability 
-          being exploited.
-        expires: 2021-04-10T06:00:00.000Z
+          No remediation available yet.  After inspecting the
+          Python cryptography package, there is no use of the vulnerable
+          method hash() on the classes IPv4Interface and IPv6Interface, 
+          so the risk here is very minimal.
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-PYGMENTS-1086606:
     - '*':
         reason: >-
           Upgrade remediation requires Python 3, Python2 dropped in v2.6.
           Ticket to address issue: https://github.com/GSA/datagov-deploy/issues/2713
-        expires: 2021-05-07T06:00:00.000Z
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-PYGMENTS-1088505:
     - '*':
         reason: >-
           Upgrade remediation requires Python 3, Python2 dropped in v2.6.
           Ticket to address issue: https://github.com/GSA/datagov-deploy/issues/2713
-        expires: 2021-05-07T06:00:00.000Z
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-SPHINX-570772:
     - '*':
         reason: >-
           Dev-only requirement; vulnerable to cross-site scripting
           which is not a useful vulnerability in a dev environment.
-        expires: 2021-06-12T06:00:00.000Z
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-SPHINX-570773:
     - '*':
         reason: >-
           Dev-only requirement; vulnerable to cross-site scripting
           which is not a useful vulnerability in a dev environment.
-        expires: 2021-06-12T06:00:00.000Z
-  SNYK-PYTHON-WEBOB-40490:
-    - '*':
-        reason: >-
-          Patched via https://github.com/GSA/webob/commit/90d895f9a85c8bea11c80efa4e2f6bdd04eabbe4
-        expires: 2021-07-30T06:00:00.000Z
-  SNYK-UBUNTU1804-LIBZSTD-1082297:
-    - '*':
-        reason: >-
-          Dev-only requirement; momentary incorrect permissions are
-          acceptable as there is not any sensitive/private data in
-          dev environments
-        expires: 2021-06-12T06:00:00.000Z
-  SNYK-UBUNTU1804-LIBZSTD-1082293:
-    - '*':
-        reason: >-
-          Dev-only requirement; momentary incorrect permissions are
-          acceptable as there is not any sensitive/private data in
-          dev environments.
-        expires: 2021-06-12T06:00:00.000Z
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-UBUNTU1804-GCC8-572149:
     - '*':
         reason: >-
           Dev-only requirement; local access required to implement
           attack and user safeguards are sufficient in dev environment.
-        expires: 2021-06-12T06:00:00.000Z
-  SNYK-UBUNTU1804-SYSTEMD-346780:
-    - '*':
-        reason: >-
-          Dev-only requirement; passwords in dev environment not
-          considered security risk (publicly available)
-        expires: 2021-06-12T06:00:00.000Z
+        expires: 2021-12-31T06:00:00.000Z
 patch: {}
