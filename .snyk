@@ -7,7 +7,21 @@ ignore:
         reason: >-
           No remediation path available (cannot upgrade to SQLAlchemy 1.2). 
           Reviewed group_by and order_by usage manually, all user input sanitized.
-        expires: 2020-11-20T06:00:00.000Z
+        expires: 2021-12-31T06:00:00.000Z
+  SNYK-PYTHON-SQLPARSE-1584201:
+    - '*':
+        reason: >-
+          Cannot upgrade to 0.4 at this time, requires py3.
+          SQL is sanitized/written by trusted sources, so risk
+          is minimal.
+        expires: 2021-12-31T06:00:00.000Z
+  SNYK-PYTHON-IPADDRESS-1290073:
+    - '*':
+        reason: >-
+          No remediation available yet.  After inspecting the
+          vulnerability, ipaddresses are only provided from trusted
+          sources, so the risk is minimal.
+        expires: 2021-12-31T06:00:00.000Z
   SNYK-PYTHON-BEAKER-575115:
     - '*':
         reason: >-
