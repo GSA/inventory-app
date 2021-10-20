@@ -35,6 +35,14 @@ jobs:
         run: make test
       - name: test extension
         run: make test_extension
+      - name: cypress-artifacs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-artifacts
+          path: |
+            ./e2e/cypress/screenshots/
+            ./e2e/cypress/videos/
 
   vendor:
     name: vendor dependencies
