@@ -11,7 +11,8 @@ jobs:
             pip install flake8
             flake8 . --count --show-source --statistics
   build:
-    machine: true
+    machine: 
+      image: ubuntu-2004:202107-02
     steps:
       - checkout
       - run:
