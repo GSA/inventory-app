@@ -2,10 +2,10 @@ alembic==1.0.0
 Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.18.45
-botocore==1.21.45
-certifi==2021.5.30
-cffi==1.14.6
+boto3==1.20.11
+botocore==1.23.11
+certifi==2021.10.8
+cffi==1.15.0
 chardet==3.0.4
 ckan @ git+https://github.com/ckan/ckan.git@6731c5a821a6a5f4bdaa20f4e793e0b6ba44f823
 -e git+https://github.com/GSA/ckanext-datajson.git@a5d8c9458a7efe955c31b90eeac1e7797881d014#egg=ckanext_datajson
@@ -13,15 +13,16 @@ ckanext-dcat-usmetadata==0.3.0
 ckanext-envvars==0.0.1
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@c6a425d5e14d658c0fa3661fdc4423162161c3f4#egg=ckanext_googleanalyticsbasic
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@82a63639b0f54f65496661c7120ed85461eade37
-ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@454412fb32a8ba3676e08a948959c6c5be684b6f
--e git+https://github.com/GSA/ckanext-usmetadata.git@0382cf70550867188336a9dda382bf0aa8b933a1#egg=ckanext_usmetadata
--e git+https://github.com/ckan/ckanext-xloader.git@7423f1da96173b777c0e4aa40e208981c297f0ca#egg=ckanext_xloader
+ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@7412ff7aba3d215f95a08f99216410e72e60c5bc
+-e git+https://github.com/GSA/ckanext-usmetadata.git@687f5c3e27321728d3d12e6827125c00a8ecd370#egg=ckanext_usmetadata
+-e git+https://github.com/ckan/ckanext-xloader.git@ef300955001d2d51088697013dae24c3ff4d39fd#egg=ckanext_xloader
 ckantoolkit==0.0.4
 click==7.1.2
-cryptography==3.4.8
+cryptography==36.0.0
 defusedxml==0.7.1
+Deprecated==1.2.13
 dominate==2.4.0
-elementpath==2.3.2
+elementpath==2.4.0
 fanstatic==1.1
 feedgen==0.9.0
 Flask==1.1.1
@@ -29,11 +30,11 @@ Flask-Babel==1.0.0
 flask-multistatic==1.0
 future==0.18.2
 gevent==21.8.0
-greenlet==1.1.1
+greenlet==1.1.2
 gunicorn==20.1.0
 html5lib==1.1
 idna==2.10
-importlib-resources==5.2.2
+importlib-resources==5.4.0
 itsdangerous==2.0.1
 Jinja2==2.11.3
 jmespath==0.10.0
@@ -41,24 +42,24 @@ json-table-schema==0.2.1
 jsonschema==2.4.0
 LEPL==5.1.3
 lxml==4.6.3
-Mako==1.1.5
+Mako==1.1.6
 Markdown==2.6.7
 MarkupSafe==2.0.1
 messytables==0.15.2
-newrelic==6.10.0.165
+newrelic==7.2.4.171
 nose==1.3.7
-packaging==21.0
+packaging==21.3
 passlib==1.7.3
 PasteDeploy==2.0.1
 pathtools==0.1.2
 pika==1.2.0
 polib==1.0.7
 psycopg2==2.8.2
-pycparser==2.20
+pycparser==2.21
 PyJWT==1.7.1
-pyOpenSSL==20.0.1
-pyparsing==2.4.7
-pysaml2==7.0.1
+pyOpenSSL==21.0.0
+pyparsing==3.0.6
+pysaml2==7.1.0
 pysolr==3.6.0
 python-dateutil==2.8.2
 python-editor==1.0.4
@@ -66,7 +67,7 @@ python-magic==0.4.15
 pytz==2016.7
 PyUtilib==5.7.1
 PyYAML==5.4
-redis==3.5.3
+redis==4.0.2
 repoze.lru==0.7
 repoze.who==2.3
 requests==2.25.0
@@ -83,13 +84,14 @@ tzlocal==1.3
 unicodecsv==0.14.1
 Unidecode==1.0.22
 urllib3==1.26.5
-watchdog==2.1.5
+watchdog==2.1.6
 webassets==0.12.1
 webencodings==0.5.1
 WebOb==1.8.7
 Werkzeug==1.0.0
+wrapt==1.13.3
 xlrd==2.0.1
-xmlschema==1.7.1
-zipp==3.5.0
+xmlschema==1.8.2
+zipp==3.6.0
 zope.event==4.5.0
 zope.interface==4.7.2
