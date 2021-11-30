@@ -2,8 +2,8 @@ alembic==1.0.0
 Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.20.11
-botocore==1.23.11
+boto3==1.20.16
+botocore==1.23.16
 certifi==2021.10.8
 cffi==1.15.0
 chardet==3.0.4
@@ -59,7 +59,7 @@ pycparser==2.21
 PyJWT==1.7.1
 pyOpenSSL==21.0.0
 pyparsing==3.0.6
-pysaml2==7.1.0
+pysaml2==7.0.1
 pysolr==3.6.0
 python-dateutil==2.8.2
 python-editor==1.0.4
