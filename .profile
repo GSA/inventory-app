@@ -43,6 +43,9 @@ export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_L
 export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 
+# Get sysadmins list by a user-provided-service per environment
+export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-output ".[][] | select(.name == \"sysadmin-users\") | .credentials.CKANEXT__SAML2AUTH__SYSADMINS_LIST")
+
 # ckan reads some environment variables... https://docs.ckan.org/en/2.8/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
 export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
@@ -78,5 +81,3 @@ DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$D
 # Run migrations
 # paster --plugin=ckan db upgrade -c config/production.ini
 ckan -c $CKAN_INI db upgrade
-
-exec $@
