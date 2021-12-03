@@ -18,6 +18,7 @@ applications:
       - ((app_name))-s3
       - ((app_name))-redis
       - ((app_name))-secrets
+      - sysadmin-users
     timeout: 120
     health-check-http-endpoint: /api/action/status_show
     env:
