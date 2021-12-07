@@ -84,6 +84,7 @@ jobs:
     needs:
       - lint
       - vendor
+      - create-cloudgov-services-development
     env:
       APP_URL: https://inventory-dev-datagov.app.cloud.gov
     steps:
@@ -112,6 +113,24 @@ jobs:
       - name: smoke test
         run: bin/smoke.sh
 
+  create-cloudgov-services-staging:
+    name: create services (staging)
+    environment: staging
+    runs-on: ubuntu-latest
+    container:
+      image: cloudfoundry/cli:8
+      env:
+        org: gsa-datagov
+        space: staging
+        user: ${{secrets.CF_SERVICE_USER}}
+        password: ${{secrets.CF_SERVICE_AUTH}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: auth
+        run: ./cfauth.sh
+      - name: create services
+        run: ./create-cloudgov-services.sh
   deploy-staging:
     if: github.ref == 'refs/heads/main'
     name: deploy (staging)
@@ -121,6 +140,7 @@ jobs:
       - lint
       - test
       - vendor
+      - create-cloudgov-services-staging
     env:
       APP_URL: https://inventory-stage-datagov.app.cloud.gov
     steps:
@@ -148,6 +168,24 @@ jobs:
       - name: smoke test
         run: bin/smoke.sh
 
+  create-cloudgov-services-production:
+    name: create services (production)
+    environment: production
+    runs-on: ubuntu-latest
+    container:
+      image: cloudfoundry/cli:8
+      env:
+        org: gsa-datagov
+        space: prod
+        user: ${{secrets.CF_SERVICE_USER}}
+        password: ${{secrets.CF_SERVICE_AUTH}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: auth
+        run: ./cfauth.sh
+      - name: create services
+        run: ./create-cloudgov-services.sh  
   deploy-production:
     if: github.ref == 'refs/heads/main'
     name: deploy (production)
@@ -155,6 +193,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - deploy-staging
+      - create-cloudgov-services-production
     env:
       APP_URL: https://inventory-prod-datagov.app.cloud.gov
     steps:
