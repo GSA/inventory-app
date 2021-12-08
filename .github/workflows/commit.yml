@@ -114,6 +114,7 @@ jobs:
         run: bin/smoke.sh
 
   create-cloudgov-services-staging:
+    if: github.ref == 'refs/heads/main'
     name: create services (staging)
     environment: staging
     runs-on: ubuntu-latest
@@ -169,6 +170,7 @@ jobs:
         run: bin/smoke.sh
 
   create-cloudgov-services-production:
+    if: github.ref == 'refs/heads/main'
     name: create services (production)
     environment: production
     runs-on: ubuntu-latest
