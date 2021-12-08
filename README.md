@@ -100,7 +100,7 @@ Create the database used by datastore. `${app_name}` should be the same as what 
 
 Create the database used by CKAN itself. You have to wait a bit for the datastore DB to be available.
 
-    cf create-service aws-rds small-psql ${app_name}-db -c '{"version": "11"}' --wait
+    cf create-service aws-rds small-psql ${app_name}-db --wait
 
 Create the s3 bucket for data storage.
 
