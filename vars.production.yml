@@ -35,6 +35,3 @@ saml2_certificate: |
   FR8/D6wMVxy018ugn1/rA4DN6oEmDbFYrhzu3ELG7OkSNce82LKgqD3GdkCr/Dzc
   FACe3zAui0XWNA==
   -----END CERTIFICATE-----
-
-# TODO remove this https://github.com/GSA/datagov-deploy/issues/2778
-solr_route: inventory-prod-solr.apps.internal

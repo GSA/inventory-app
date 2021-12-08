@@ -54,6 +54,9 @@ export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service datastore .credentials.uri)
 export CKAN_DATASTORE_READ_URL=postgres://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
 export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
 export CKAN_STORAGE_PATH=${SHARED_DIR}/files
+export CKAN_SOLR_URL=https://$(vcap_get_service solr .credentials.domain)/solr/ckan
+export CKAN_SOLR_USER=$(vcap_get_service solr .credentials.username)
+export CKAN_SOLR_PASSWORD=$(vcap_get_service solr .credentials.password)
 
 # Use ckanext-envvars to import other configurations...
 export CKANEXT__S3FILESTORE__REGION_NAME=$(vcap_get_service s3 .credentials.region)
@@ -69,6 +72,10 @@ mkdir -p $CKAN_STORAGE_PATH
 mkdir -p $CKAN___CACHE_DIR
 echo "$SAML2_PRIVATE_KEY" | base64 -d > $CKANEXT__SAML2AUTH__KEY_FILE_PATH
 echo "$SAML2_CERTIFICATE" > $CKANEXT__SAML2AUTH__CERT_FILE_PATH
+
+# Set up the collection in Solr
+echo Setting up Solr collection
+./solr/migrate-solrcloud-schema.sh
 
 # Edit the config file to validate debug is off and utilizes the correct port
 export CKAN_INI=config/production.ini

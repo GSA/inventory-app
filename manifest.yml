@@ -1,11 +1,6 @@
 ---
 # To apply this manifest: cf push --vars-file vars.yml
 applications:
-  - name: ((app_name))-solr
-    docker:
-      image: datagov/catalog-solr:inventory2_8
-    routes:
-      - route: ((solr_route))
   - name: ((app_name))
     instances: ((instances))
     buildpacks:
@@ -18,6 +13,7 @@ applications:
       - ((app_name))-s3
       - ((app_name))-redis
       - ((app_name))-secrets
+      - ((app_name))-solr
       - sysadmin-users
     timeout: 120
     health-check-http-endpoint: /api/action/status_show
@@ -26,7 +22,6 @@ applications:
       CKANEXT__SAML2AUTH__ENTITY_ID: ((ckanext__saml2auth__entity_id))
       CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH: ((ckanext__saml2auth__idp_metadata__local_path))
       CKAN_SITE_ID: inventory
-      CKAN_SOLR_URL: http://((solr_route)):8983/solr/ckan2_8
       NEW_RELIC_APP_NAME: ((new_relic_app_name))
       NEW_RELIC_HOST: gov-collector.newrelic.com
       NEW_RELIC_MONITOR_MODE: ((new_relic_monitor_mode))
