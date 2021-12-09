@@ -94,14 +94,6 @@ jobs:
         with:
           name: python-vendored
           path: vendor
-      - name: deploy-solr
-        uses: usds/cloud-gov-cli@master
-        with:
-          command: push inventory-solr --vars-file vars.development.yml --strategy rolling
-          org: gsa-datagov
-          space: development
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
       - name: deploy-inventory
         uses: usds/cloud-gov-cli@master
         with:
@@ -150,14 +142,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: python-vendored
-      - name: deploy-solr
-        uses: usds/cloud-gov-cli@master
-        with:
-          command: push inventory-solr --vars-file vars.staging.yml --strategy rolling
-          org: gsa-datagov
-          space: staging
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
       - name: deploy-inventory
         uses: usds/cloud-gov-cli@master
         with:
@@ -204,14 +188,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: python-vendored
-      - name: deploy-solr
-        uses: usds/cloud-gov-cli@master
-        with:
-          command: push inventory-solr --vars-file vars.production.yml --strategy rolling
-          org: gsa-datagov
-          space: prod
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
       - name: deploy-inventory
         uses: usds/cloud-gov-cli@master
         with:
