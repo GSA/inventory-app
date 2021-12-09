@@ -41,6 +41,7 @@ jobs:
       - name: create services
         run: ./create-cloudgov-services.sh
   deploy-staging:
+    concurrency: staging
     name: deploy (staging)
     environment: staging
     runs-on: ubuntu-latest
@@ -85,6 +86,7 @@ jobs:
       - name: create services
         run: ./create-cloudgov-services.sh  
   deploy-production:
+    concurrency: production
     name: deploy (production)
     environment: production
     runs-on: ubuntu-latest

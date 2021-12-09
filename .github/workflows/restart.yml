@@ -7,6 +7,7 @@ on:
 
 jobs:
   restart-staging:
+    concurrency: staging
     name: restart (staging)
     environment: staging
     runs-on: ubuntu-latest
@@ -27,6 +28,7 @@ jobs:
         run: bin/smoke.sh
   
   restart-prod:
+    concurrency: production
     name: restart (prod)
     environment: production
     runs-on: ubuntu-latest
