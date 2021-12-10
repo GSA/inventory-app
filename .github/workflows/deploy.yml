@@ -26,21 +26,18 @@ jobs:
     name: create services (staging)
     environment: staging
     runs-on: ubuntu-latest
-    container:
-      image: cloudfoundry/cli:8
-      env:
-        org: gsa-datagov
-        space: staging
-        user: ${{secrets.CF_SERVICE_USER}}
-        password: ${{secrets.CF_SERVICE_AUTH}}
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: auth
-        run: ./cfauth.sh
       - name: create services
-        run: ./create-cloudgov-services.sh
-  deploy-staging:
+        uses: cloud-gov/cg-cli-tools@cli-v8
+        with:
+          command: ./create-cloudgov-services.sh
+          cf_org: gsa-datagov
+          cf_space: staging
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
+    deploy-staging:
     concurrency: staging
     name: deploy (staging)
     environment: staging
@@ -57,13 +54,13 @@ jobs:
         with:
           name: python-vendored
       - name: deploy-inventory
-        uses: usds/cloud-gov-cli@master
+        uses: cloud-gov/cg-cli-tools@cli-v8
         with:
-          command: push inventory --vars-file vars.staging.yml --strategy rolling
-          org: gsa-datagov
-          space: staging
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
+          command: cf push inventory --vars-file vars.staging.yml --strategy rolling
+          cf_org: gsa-datagov
+          cf_space: staging
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: bin/smoke.sh
 
@@ -71,20 +68,17 @@ jobs:
     name: create services (production)
     environment: production
     runs-on: ubuntu-latest
-    container:
-      image: cloudfoundry/cli:8
-      env:
-        org: gsa-datagov
-        space: prod
-        user: ${{secrets.CF_SERVICE_USER}}
-        password: ${{secrets.CF_SERVICE_AUTH}}
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: auth
-        run: ./cfauth.sh
       - name: create services
-        run: ./create-cloudgov-services.sh  
+        uses: cloud-gov/cg-cli-tools@cli-v8
+        with:
+          command: ./create-cloudgov-services.sh
+          cf_org: gsa-datagov
+          cf_space: prod
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
   deploy-production:
     concurrency: production
     name: deploy (production)
@@ -102,12 +96,12 @@ jobs:
         with:
           name: python-vendored
       - name: deploy-inventory
-        uses: usds/cloud-gov-cli@master
+        uses: cloud-gov/cg-cli-tools@cli-v8
         with:
-          command: push inventory --vars-file vars.production.yml --strategy rolling
-          org: gsa-datagov
-          space: prod
-          user: ${{secrets.CF_SERVICE_USER}}
-          password: ${{secrets.CF_SERVICE_AUTH}}
+          command: cf push inventory --vars-file vars.production.yml --strategy rolling
+          cf_org: gsa-datagov
+          cf_space: prod
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: bin/smoke.sh
