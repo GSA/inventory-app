@@ -36,7 +36,8 @@ jobs:
           cf_org: gsa-datagov
           cf_space: staging
           cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}  deploy-staging:
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
+     deploy-staging:
     concurrency: staging
     name: deploy (staging)
     environment: staging
