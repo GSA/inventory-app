@@ -64,6 +64,7 @@ export CKANEXT__S3FILESTORE__HOST_NAME=https://s3-$CKANEXT__S3FILESTORE__REGION_
 export CKANEXT__S3FILESTORE__AWS_ACCESS_KEY_ID=$(vcap_get_service s3 .credentials.access_key_id)
 export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(vcap_get_service s3 .credentials.secret_access_key)
 export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.bucket)
+export CKANEXT__S3FILESTORE__AWS_STORAGE_PATH=datagov/inventory-next
 # xloader uses the same db as datastore
 export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service datastore .credentials.uri)
 
