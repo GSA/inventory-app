@@ -2,8 +2,9 @@
 name: restart application
 
 on:
-  schedule:
-    - cron: '7/15 * * * *'
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '7/15 * * * *'
 
 jobs:
   restart-staging:
