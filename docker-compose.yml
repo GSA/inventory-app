@@ -28,7 +28,7 @@ services:
       POSTGRES_DB: datastore
     volumes:
       - ./datastore/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-    
+
   db:
     image: datagov/catalog-db:inventory2_8
     environment:

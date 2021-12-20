@@ -81,13 +81,13 @@ export SOLR_COLLECTION=ckan
 export CKAN_SOLR_URL=$CKAN_SOLR_BASE_URL/solr/$SOLR_COLLECTION
 
 # Edit the config file to validate debug is off and utilizes the correct port
-export CKAN_INI=config/production.ini
-ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
-ckan config-tool $CKAN_INI -s DEFAULT -e debug=false
+export CKAN_INI=config/ckan.ini
+# ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
+ckan config-tool $CKAN_INI --section DEFAULT --edit debug=false
 
 echo "Setting up the datastore user"
 DATASTORE_URL=$CKAN_DATASTORE_WRITE_URL DS_RO_USER=$DS_RO_USER DS_RO_PASSWORD=$DS_RO_PASSWORD python3 datastore-usersetup.py
 
 # Run migrations
-# paster --plugin=ckan db upgrade -c config/production.ini
+# paster --plugin=ckan db upgrade -c config/ckan.ini
 ckan -c $CKAN_INI db upgrade
