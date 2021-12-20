@@ -18,4 +18,3 @@ loggingFileConfig(config_path)
 config = CKANConfigLoader(config_path).get_config()
 
 application = make_app(config)
-
