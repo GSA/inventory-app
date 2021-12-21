@@ -9,7 +9,7 @@ set -o pipefail
 
 # Get the latest version of the cflinuxfs3 image
 if [[ "$1" == "build" ]]; then
-  docker build -t inventory-vendor .
+  docker build -t inventory-vendor - < Dockerfile.vendor
 fi
 
 # The bind mount here enables us to write back to the host filesystem
