@@ -17,6 +17,7 @@ applications:
       - sysadmin-users
     timeout: 120
     health-check-http-endpoint: /api/action/status_show
+    command: ./config/server_start.sh
     env:
       DS_RO_USER: datastore_default
       CKANEXT__SAML2AUTH__ENTITY_ID: ((ckanext__saml2auth__entity_id))
