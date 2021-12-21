@@ -1,30 +1,15 @@
-FROM openknowledge/ckan-dev:2.9
-# Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.8/Dockerfile
-# And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.8/Dockerfile
+FROM cloudfoundry/cflinuxfs3
 
-ENV GIT_BRANCH=2.9
-ENV CKAN_HOME /srv/app
-ENV CKAN_CONFIG /app/config
-ENV APP_DIR /app
-# ENV CKAN_ENV docker
+# Go where the app files are
+RUN cd ~vcap/app
 
-# add dependencies for cryptography and vim
-# RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
+# Install any packaged dependencies for our vendored packages
+# Install python3.7 because that's what the buildpak uses
+RUN apt-get -y update
+RUN apt install software-properties-common -y
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt-get -y install swig build-essential python-dev libssl-dev python3.8
 
-COPY requirements.txt requirements-dev.txt ${APP_DIR}/
-ADD setup.py README.md ${APP_DIR}/
-ADD ckanext ${APP_DIR}/ckanext/
-
-RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements.txt
-RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements-dev.txt
-# COPY docker-entrypoint.d/* /docker-entrypoint.d/
-
-# What saml2 info do we need?
-# COPY saml2 ${APP_DIR}/saml2
-
-# COPY the ini test file to the container 
-# COPY test-catalog-next.ini ${SRC_DIR}/ckan
-
-# Not currently in use in development
-COPY config/gunicorn.conf.py $CKAN_CONFIG/
-COPY config/server_start.sh $CKAN_CONFIG/
+# Install PIP
+RUN curl -sSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+RUN python3.8 /tmp/get-pip.py
