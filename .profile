@@ -73,6 +73,8 @@ mkdir -p $CKAN_STORAGE_PATH
 mkdir -p $CKAN___CACHE_DIR
 echo "$SAML2_PRIVATE_KEY" | base64 -d > $CKANEXT__SAML2AUTH__KEY_FILE_PATH
 echo "$SAML2_CERTIFICATE" > $CKANEXT__SAML2AUTH__CERT_FILE_PATH
+# Update local path with full path
+export CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH="${HOME}/${CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH}"
 
 # Set up the collection in Solr
 echo Setting up Solr collection
