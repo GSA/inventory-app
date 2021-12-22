@@ -88,7 +88,7 @@ jobs:
       - deploy-staging
       - create-cloudgov-services-production
     env:
-      APP_URL: https://inventory-prod-datagov.app.cloud.gov
+      APP_URL: https://inventory.data.gov
     steps:
       - name: checkout
         uses: actions/checkout@v2

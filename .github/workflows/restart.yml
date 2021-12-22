@@ -34,7 +34,7 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
     env:
-      APP_URL: https://inventory-prod-datagov.app.cloud.gov
+      APP_URL: https://inventory.data.gov
     steps:
       - name: checkout
         uses: actions/checkout@v2
