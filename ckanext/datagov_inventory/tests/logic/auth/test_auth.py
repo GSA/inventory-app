@@ -438,7 +438,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
 
         self.create_datasets()
         context = {'user': None, 'model': model}
-        data_dict = {'id': self.dataset_public['id']}
+        data_dict = {'id': self.dataset_private['id']}
         test_url = '/dataset/'+'0'*36+'/resource/'+'0'*36+'/download/1'
         with self.app.flask_app.test_request_context(test_url):
             assert inventory_package_show(context,
