@@ -6,10 +6,13 @@ import pytest
 
 import ckan.logic as logic
 import ckan.model as model
+from ckan.tests.helpers import FunctionalTestBase
 
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
 import ckanext.datastore.tests.helpers as datastore_helpers
+
+from ckanext.datagov_inventory.plugin import inventory_package_show
 
 import logging
 
@@ -22,11 +25,49 @@ is_denied = False
 
 @pytest.mark.usefixtures(u"clean_index")
 @pytest.mark.usefixtures(u"clean_db")
-class TestDatagovInventoryAuth(object):
+@pytest.mark.usefixtures("with_request_context")
+class TestDatagovInventoryAuth(FunctionalTestBase):
 
     def setup(self):
+        super(TestDatagovInventoryAuth, self).setup_class()
         # Start with a clean database and index for each test
         self.clean_datastore()
+
+    def create_datasets(self):
+        self.sysadmin = factories.Sysadmin(name='admin')
+        self.user = factories.User()
+        self.organization = factories.Organization()
+        self.extra_environ = {'REMOTE_USER': self.sysadmin['name']}
+        self.extra_environ_user = {'REMOTE_USER': self.user['name']}
+
+        self.dataset1 = {
+            'name': 'my_package_000',
+            'title': 'my package',
+            'notes': 'my package notes',
+            'public_access_level': 'public',
+            'access_level_comment': 'Access level comment',
+            'unique_id': '000',
+            'contact_name': 'Jhon',
+            'program_code': '018:001',
+            'bureau_code': '019:20',
+            'contact_email': 'jhon@mail.com',
+            'publisher': 'Publicher 01',
+            'modified': '2019-01-27 11:41:21',
+            'tag_string': 'mypackage,tag01,tag02',
+            'private': 'true',
+            'owner_org': self.organization['id']
+        }
+
+        for key in self.sysadmin:
+            if key not in ['id', 'name']:
+                self.dataset1.update({key: self.sysadmin[key]})
+        self.dataset_private = factories.Dataset(**self.dataset1)
+
+        self.dataset2 = self.dataset1.copy()
+        self.dataset2['name'] = 'my_package_111'
+        self.dataset2['unique_id'] = '111'
+        self.dataset2['private'] = 'false'
+        self.dataset_public = factories.Dataset(**self.dataset2)
 
     def setup_test_orgs_users(self):
 
@@ -381,3 +422,23 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_denied
         })
+
+    def test_resource_show_request_public_dataset(self):
+        self.app = self._get_test_app()
+
+        self.create_datasets()
+        context = {'user': None, 'model': model}
+        data_dict = {'id': self.dataset_public['id']}
+        test_url = '/dataset/'+'0'*36+'/resource/'+'0'*36+'/download/1'
+        with self.app.flask_app.test_request_context(test_url):
+            assert inventory_package_show(context, data_dict) == {'success': True}
+
+    def test_resource_show_request_private_dataset(self):
+        self.app = self._get_test_app()
+
+        self.create_datasets()
+        context = {'user': None, 'model': model}
+        data_dict = {'id': self.dataset_public['id']}
+        test_url = '/dataset/'+'0'*36+'/resource/'+'0'*36+'/download/1'
+        with self.app.flask_app.test_request_context(test_url):
+            assert inventory_package_show(context, data_dict) == {'success': False}
