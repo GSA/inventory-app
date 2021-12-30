@@ -1,6 +1,5 @@
 """Tests for datagov_inventory plugin.py."""
 
-from builtins import object
 from pytest import raises as assert_raises
 import pytest
 
@@ -431,7 +430,8 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         data_dict = {'id': self.dataset_public['id']}
         test_url = '/dataset/'+'0'*36+'/resource/'+'0'*36+'/download/1'
         with self.app.flask_app.test_request_context(test_url):
-            assert inventory_package_show(context, data_dict) == {'success': True}
+            assert inventory_package_show(context,
+                                          data_dict) == {'success': True}
 
     def test_resource_show_request_private_dataset(self):
         self.app = self._get_test_app()
@@ -441,4 +441,5 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         data_dict = {'id': self.dataset_public['id']}
         test_url = '/dataset/'+'0'*36+'/resource/'+'0'*36+'/download/1'
         with self.app.flask_app.test_request_context(test_url):
-            assert inventory_package_show(context, data_dict) == {'success': False}
+            assert inventory_package_show(context,
+                                          data_dict) == {'success': False}
