@@ -5,7 +5,6 @@ from ckan.model import User
 from ckan.common import _
 from ckan.logic.auth import get_resource_object
 import ckan.authz as authz
-# import ckan.authz as authz
 import logging
 
 
@@ -72,7 +71,6 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     def get_auth_functions(self):
         return {'format_autocomplete': datagov_disallow_anonymous_access(),
                 'group_list': datagov_disallow_anonymous_access(),
-                'group_list_authz': datagov_disallow_anonymous_access(),
                 'license_list': datagov_disallow_anonymous_access(),
                 'member_roles_list': datagov_disallow_anonymous_access(),
                 'organization_list': datagov_disallow_anonymous_access(),
@@ -80,10 +78,14 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'package_search': datagov_disallow_anonymous_access(),
                 'package_show': datagov_disallow_anonymous_access(),
                 'resource_show': inventory_resource_show,
+                'revision_list': datagov_disallow_anonymous_access(),
+                'revision_show': datagov_disallow_anonymous_access(),
                 'site_read': datagov_disallow_anonymous_access(),
                 'tag_list': datagov_disallow_anonymous_access(),
                 'tag_show': datagov_disallow_anonymous_access(),
                 'task_status_show': datagov_disallow_anonymous_access(),
+                'user_list': datagov_disallow_anonymous_access(),
+                'user_show': datagov_disallow_anonymous_access(),
                 'vocabulary_list': datagov_disallow_anonymous_access(),
                 'vocabulary_show': datagov_disallow_anonymous_access(),
                 }
