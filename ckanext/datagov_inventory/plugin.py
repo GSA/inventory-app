@@ -2,10 +2,12 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 from ckan.model import User
-from ckan.common import _
+from ckan.common import _, request as ckan_request
 from ckan.logic.auth import get_resource_object
+from ckan.logic.auth.get import package_show
 import ckan.authz as authz
 import logging
+import re
 
 
 log = logging.getLogger(__name__)
@@ -64,6 +66,26 @@ def inventory_resource_show(context, data_dict):
             return {'success': True}
 
 
+@toolkit.auth_allow_anonymous_access
+def inventory_package_show(context, data_dict):
+    model = context['model']
+    user = User.by_name(context.get('user'))
+    pkg = model.Package.get(data_dict.get('id', None))
+
+    # package_show appears to be needed to download package resources.
+    # but we dont want direct package_show call open to anonymous user.
+    # only for download url matching /dataset/*/resource/*/download/*
+    url_pattern = r"^/dataset/[0-9a-f-]{36}/resource/[0-9a-f-]{36}/download/.*"
+    re_pattern = re.compile(url_pattern)
+    if user is None:
+        if not pkg.private and re_pattern.match(ckan_request.full_path):
+            return {'success': True}
+        else:
+            return {'success': False}
+    else:
+        return package_show(context, data_dict)
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurer)
@@ -76,7 +98,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'organization_list': datagov_disallow_anonymous_access(),
                 'package_list': datagov_disallow_anonymous_access(),
                 'package_search': datagov_disallow_anonymous_access(),
-                'package_show': datagov_disallow_anonymous_access(),
+                'package_show': inventory_package_show,
                 'resource_show': inventory_resource_show,
                 'site_read': datagov_disallow_anonymous_access(),
                 'tag_list': datagov_disallow_anonymous_access(),
