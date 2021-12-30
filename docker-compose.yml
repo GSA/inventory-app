@@ -38,7 +38,7 @@ services:
       DB_CKAN_DB: ckan
 
   solr:
-    image: datagov/catalog-solr:inventory2_8
+    image: ghcr.io/gsa/catalog.data.gov.solr:8-curl
     ports:
       - "8983:8983"
 
