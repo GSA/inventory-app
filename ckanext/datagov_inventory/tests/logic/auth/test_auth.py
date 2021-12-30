@@ -89,8 +89,8 @@ class TestDatagovInventoryAuth(object):
         # Return id string for the package and resoruce just created
         return({'package_id': dataset['id'],
                 'tag_id': dataset_params['tag_string'],
-                'resource_id': dataset['resources'][0]['id'],
-                'revision_id': dataset['revision_id']})
+                'resource_id': dataset['resources'][0]['id']})
+        # 'revision_id': dataset['revision_id']})
 
     def assert_user_authorization(self,
                                   auth_function,
@@ -275,31 +275,6 @@ class TestDatagovInventoryAuth(object):
             'doi_member': is_allowed,
             'anonymous': is_allowed
         }, object_id=dataset['resource_id'])
-
-    def test_auth_revision_list(self):
-        # Create test users and test data
-        self.setup_test_orgs_users()
-
-        self.assert_user_authorization('revision_list', {
-            'gsa_admin': is_allowed,
-            'gsa_editor': is_allowed,
-            'gsa_member': is_allowed,
-            'anonymous': is_denied
-        })
-
-    def test_auth_revision_show(self):
-        # Create test users and test data
-        self.setup_test_orgs_users()
-        dataset = self.factory_dataset(owner_org='gsa', private=True)
-
-        self.assert_user_authorization('revision_show', {
-            'gsa_admin': is_allowed,
-            'gsa_editor': is_allowed,
-            'gsa_member': is_allowed,
-            'doi_admin': is_allowed,
-            'doi_member': is_allowed,
-            'anonymous': is_denied
-        }, dataset['revision_id'])
 
     def test_auth_site_read(self):
         # Create test users and test data

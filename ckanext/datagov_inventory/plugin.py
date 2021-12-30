@@ -78,8 +78,6 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'package_search': datagov_disallow_anonymous_access(),
                 'package_show': datagov_disallow_anonymous_access(),
                 'resource_show': inventory_resource_show,
-                'revision_list': datagov_disallow_anonymous_access(),
-                'revision_show': datagov_disallow_anonymous_access(),
                 'site_read': datagov_disallow_anonymous_access(),
                 'tag_list': datagov_disallow_anonymous_access(),
                 'tag_show': datagov_disallow_anonymous_access(),
