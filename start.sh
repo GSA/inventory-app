@@ -1,9 +1,5 @@
 #!/bin/bash
 
-set -o errexit
-set -o pipefail
-set -o nounset
-
 function wait_for () {
   local host=$1
   local port=$2
@@ -21,22 +17,6 @@ wait_for localstack-container 4572
 # check will return successfully.
 sleep 1
 
-# Check if the solr core exists.
-if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
-  --data-urlencode action=status \
-  --data-urlencode core=inventory | grep -q segmentsFileSizeInBytes); then
-
-  # Create the solr core
-  curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
-    --data-urlencode action=create \
-    --data-urlencode name=inventory \
-    --data-urlencode configSet=ckan2_8
-
-  # Reload the core
-  curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
-    --data-urlencode action=reload \
-    --data-urlencode core=inventory
-fi
 
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
