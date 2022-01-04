@@ -30,4 +30,4 @@ COPY config/gunicorn.conf.py $CKAN_CONFIG/
 COPY config/server_start.sh $CKAN_CONFIG/
 
 # Custom prerun script for Solr 8
-COPY config/GSA_prerun.py ${APP_DIR}/
+COPY config/GSA_prerun.py ${CKAN_HOME}/
