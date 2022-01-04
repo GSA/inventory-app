@@ -28,3 +28,6 @@ RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements-dev.txt
 # Not currently in use in development
 COPY config/gunicorn.conf.py $CKAN_CONFIG/
 COPY config/server_start.sh $CKAN_CONFIG/
+
+# Custom prerun script for Solr 8
+COPY setup/GSA_prerun.py ${APP_DIR}/

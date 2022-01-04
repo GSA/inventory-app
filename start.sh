@@ -47,7 +47,8 @@ ckan config-tool $CKAN_INI -s DEFAULT "debug = true"
 ckan db upgrade
 
 # Run the prerun script to init CKAN and create the default admin user
-python3 prerun.py
+# python3 prerun.py
+python3 GSA_prerun.py
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]
