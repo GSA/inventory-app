@@ -74,7 +74,6 @@ future
 jsonschema~=2.4.0
 rfc3987
 # pyyaml # Already installed via CKAN core
-lepl
 
 # ckanext-s3filestore dependencies
 boto3>=1.4.4
