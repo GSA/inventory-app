@@ -2,13 +2,13 @@ alembic==1.0.0
 Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.20.26
-botocore==1.23.26
+boto3==1.20.28
+botocore==1.23.28
 certifi==2021.10.8
 cffi==1.15.0
 chardet==3.0.4
 ckan @ git+https://github.com/ckan/ckan.git@6731c5a821a6a5f4bdaa20f4e793e0b6ba44f823
--e git+https://github.com/GSA/ckanext-datajson.git@128efba209183158ba59525836e739d533affa0c#egg=ckanext_datajson
+-e git+https://github.com/GSA/ckanext-datajson.git@cfd0758ec5d8ea0ca3ef276b709967576b8b29e4#egg=ckanext_datajson
 ckanext-dcat-usmetadata==0.3.0
 ckanext-envvars==0.0.1
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@c6a425d5e14d658c0fa3661fdc4423162161c3f4#egg=ckanext_googleanalyticsbasic
@@ -92,6 +92,6 @@ Werkzeug==1.0.0
 wrapt==1.13.3
 xlrd==2.0.1
 xmlschema==1.9.2
-zipp==3.6.0
+zipp==3.7.0
 zope.event==4.5.0
 zope.interface==4.7.2
