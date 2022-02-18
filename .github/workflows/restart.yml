@@ -2,30 +2,31 @@
 name: restart application
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '7/15 * * * *'
 
 jobs:
-  restart-staging:
-    concurrency: staging
-    name: restart (staging)
-    environment: staging
-    runs-on: ubuntu-latest
-    env:
-      APP_URL: https://inventory-stage-datagov.app.cloud.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: restart
-        uses: cloud-gov/cg-cli-tools@cli-v8
-        with:
-          command: cf restart inventory --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
+  # restart-staging:
+  #   concurrency: staging
+  #   name: restart (staging)
+  #   environment: staging
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     APP_URL: https://inventory-stage-datagov.app.cloud.gov
+  #   steps:
+  #     - name: checkout
+  #       uses: actions/checkout@v2
+  #     - name: restart
+  #       uses: cloud-gov/cg-cli-tools@main
+  #       with:
+  #         command: cf restart inventory --strategy rolling
+  #         cf_org: gsa-datagov
+  #         cf_space: staging
+  #         cf_username: ${{secrets.CF_SERVICE_USER}}
+  #         cf_password: ${{secrets.CF_SERVICE_AUTH}}
+  #     - name: smoke test
+  #       run: bin/smoke.sh
   
   restart-prod:
     concurrency: production
@@ -33,12 +34,12 @@ jobs:
     environment: production
     runs-on: ubuntu-latest
     env:
-      APP_URL: https://inventory-prod-datagov.app.cloud.gov
+      APP_URL: https://inventory.data.gov
     steps:
       - name: checkout
         uses: actions/checkout@v2
       - name: restart
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf restart inventory --strategy rolling
           cf_org: gsa-datagov

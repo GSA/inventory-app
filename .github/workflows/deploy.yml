@@ -15,7 +15,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: vendor dependencies
-        run: ./vendor-requirements.sh
+        run: ./vendor-requirements.sh build
       - uses: actions/upload-artifact@v2
         with:
           name: python-vendored
@@ -30,7 +30,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: create services
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: ./create-cloudgov-services.sh
           cf_org: gsa-datagov
@@ -54,7 +54,7 @@ jobs:
         with:
           name: python-vendored
       - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf push inventory --vars-file vars.staging.yml --strategy rolling
           cf_org: gsa-datagov
@@ -72,7 +72,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: create services
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: ./create-cloudgov-services.sh
           cf_org: gsa-datagov
@@ -88,7 +88,7 @@ jobs:
       - deploy-staging
       - create-cloudgov-services-production
     env:
-      APP_URL: https://inventory-prod-datagov.app.cloud.gov
+      APP_URL: https://inventory.data.gov
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -96,7 +96,7 @@ jobs:
         with:
           name: python-vendored
       - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf push inventory --vars-file vars.production.yml --strategy rolling
           cf_org: gsa-datagov
