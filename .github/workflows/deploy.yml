@@ -30,7 +30,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: create services
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: ./create-cloudgov-services.sh
           cf_org: gsa-datagov
@@ -54,7 +54,7 @@ jobs:
         with:
           name: python-vendored
       - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf push inventory --vars-file vars.staging.yml --strategy rolling
           cf_org: gsa-datagov
@@ -72,7 +72,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: create services
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: ./create-cloudgov-services.sh
           cf_org: gsa-datagov
@@ -96,7 +96,7 @@ jobs:
         with:
           name: python-vendored
       - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf push inventory --vars-file vars.production.yml --strategy rolling
           cf_org: gsa-datagov
