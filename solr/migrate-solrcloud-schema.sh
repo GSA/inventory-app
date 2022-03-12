@@ -23,8 +23,7 @@ if ! (curl --get --fail --location-trusted  --user $CKAN_SOLR_USER:$CKAN_SOLR_PA
     --data-urlencode action=list \
     --data-urlencode wt=json | grep -q $COLLECTION_NAME); then
 
-    # Zip solr configSet
-    cd solr
+    cd $(dirname $0)
 
     # Get managed-schema
     CKAN_BRANCH="dev-v2.9"
@@ -34,6 +33,7 @@ if ! (curl --get --fail --location-trusted  --user $CKAN_SOLR_USER:$CKAN_SOLR_PA
     sed -i "s/<defaultSearchField>text<\/defaultSearchField>/<df>text<\/df>/" schema.xml
     sed -i "s/<solrQueryParser defaultOperator=\"AND\"\/>/<solrQueryParser q.op=\"AND\"\/>/" schema.xml
 
+    # Zip solr configSet
     zip ckan_2.9_solr_config.zip \
         schema.xml solrconfig.xml protwords.txt stopwords.txt  synonyms.txt elevate.xml currency.xml
 
