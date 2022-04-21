@@ -17,7 +17,7 @@ gunicorn
 gevent
 
 # CKAN core library dependency upgrade pin
-lxml==4.6.3
+lxml==4.6.5
 urllib3==1.26.5
 # bleach==3.3.0
 # Jinja2==2.11.3
