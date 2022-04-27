@@ -27,7 +27,15 @@ jobs:
   #         cf_password: ${{secrets.CF_SERVICE_AUTH}}
   #     - name: smoke test
   #       run: bin/smoke.sh
-  
+  #     - name: restart proxy
+  #       uses: cloud-gov/cg-cli-tools@cli-v8
+  #       with:
+  #         command: cf restart catalog-proxy --strategy rolling
+  #         cf_org: gsa-datagov
+  #         cf_space: staging
+  #         cf_username: ${{secrets.CF_SERVICE_USER}}
+  #         cf_password: ${{secrets.CF_SERVICE_AUTH}}
+
   restart-prod:
     concurrency: production
     name: restart (prod)
@@ -48,3 +56,11 @@ jobs:
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: bin/smoke.sh
+      - name: restart proxy
+        uses: cloud-gov/cg-cli-tools@cli-v8
+        with:
+          command: cf restart catalog-proxy --strategy rolling
+          cf_org: gsa-datagov
+          cf_space: prod
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
