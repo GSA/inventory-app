@@ -41,10 +41,10 @@ services:
     image: ghcr.io/gsa/catalog.data.gov.solr:8-curl
     environment:
       - ZK_HOST=zookeeper1:2181,zookeeper2:2182,zookeeper3:2183
-    ports:
-      - "8983:8983"
+    # ports:
+    #   - "8983:8983"
     deploy:
-      replicas: 1
+      replicas: 2
     depends_on:
       - zookeeper1
       - zookeeper2
