@@ -49,7 +49,6 @@ export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-outpu
 # ckan reads some environment variables... https://docs.ckan.org/en/2.8/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
 export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
-export CKAN_SITE_URL=https://$APP_URL
 export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service datastore .credentials.uri)
 export CKAN_DATASTORE_READ_URL=postgres://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
 export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
