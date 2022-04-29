@@ -9,7 +9,7 @@ cffi==1.15.0
 chardet==3.0.4
 ckan @ git+https://github.com/ckan/ckan.git@65af260bef26ea99981597f872d39da0a3f4f3f9
 -e git+https://github.com/GSA/ckanext-datajson.git@8258c00b4067c95ec142c4a610dc600c9e93cd41#egg=ckanext_datajson
-ckanext-dcat-usmetadata==0.3.2
+ckanext-dcat-usmetadata==0.3.4
 ckanext-envvars==0.0.1
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@c6a425d5e14d658c0fa3661fdc4423162161c3f4#egg=ckanext_googleanalyticsbasic
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@82a63639b0f54f65496661c7120ed85461eade37
