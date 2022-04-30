@@ -44,7 +44,7 @@ if ! (curl --get --fail --location-trusted  --user $CKAN_SOLR_USER:$CKAN_SOLR_PA
 
     echo "Creating solr collection..."
     curl --fail --location-trusted --user $CKAN_SOLR_USER:$CKAN_SOLR_PASSWORD \
-        "$CKAN_SOLR_BASE_URL/solr/admin/collections?action=create&name=$COLLECTION_NAME&collection.configName=$COLLECTION_NAME&numShards=1&nrtReplicas=2" \
+        "$CKAN_SOLR_BASE_URL/solr/admin/collections?action=create&name=$COLLECTION_NAME&collection.configName=$COLLECTION_NAME&numShards=1&nrtReplicas=1" \
         -X POST
     cd -
 fi
