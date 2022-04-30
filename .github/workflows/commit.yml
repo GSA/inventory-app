@@ -32,7 +32,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: test
-        run: make test
+        run: make build test
       - name: test extension
         run: make test_extension
       - name: cypress-artifacts
