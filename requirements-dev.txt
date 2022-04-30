@@ -22,7 +22,3 @@ Sphinx==3.0.4
 sphinx-rtd-theme==0.4.3
 urllib3>=1.25.9 # not directly required, pinned by Snyk to avoid a vulnerability
 pygments>=2.7.4 # not directly required, pinned by Snyk to avoid a vulnerability
-
-# Pin for CKAN compatibility when running 'make build'
-Jinja2<=2.11.3
-MarkupSafe<2.1.0
