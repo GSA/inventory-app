@@ -65,7 +65,7 @@ jobs:
       - name: smoke test
         run: bin/smoke.sh
       - name: deploy-proxy
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf push inventory-proxy --vars-file vars.staging.yml --strategy rolling
           cf_org: gsa-datagov
