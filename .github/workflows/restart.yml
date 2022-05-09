@@ -28,7 +28,7 @@ jobs:
   #     - name: smoke test
   #       run: bin/smoke.sh
   #     - name: restart proxy
-  #       uses: cloud-gov/cg-cli-tools@cli-v8
+  #       uses: cloud-gov/cg-cli-tools@main
   #       with:
   #         command: cf restart inventory-proxy --strategy rolling
   #         cf_org: gsa-datagov
@@ -57,7 +57,7 @@ jobs:
       - name: smoke test
         run: bin/smoke.sh
       - name: restart proxy
-        uses: cloud-gov/cg-cli-tools@cli-v8
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: cf restart inventory-proxy --strategy rolling
           cf_org: gsa-datagov
