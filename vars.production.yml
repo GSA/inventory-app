@@ -11,8 +11,8 @@ disk_quota: 2G
 new_relic_app_name: inventory
 new_relic_monitor_mode: true
 
-routes:
-  - route: inventory.data.gov
+route_external: inventory.data.gov
+route_internal: inventory-prod-datagov.apps.internal
 
 saml2_certificate: |
   -----BEGIN CERTIFICATE-----

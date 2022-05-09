@@ -37,6 +37,7 @@ jobs:
           cf_space: staging
           cf_username: ${{secrets.CF_SERVICE_USER}}
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
+
   deploy-staging:
     concurrency: staging
     name: deploy (staging)
@@ -63,6 +64,14 @@ jobs:
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: bin/smoke.sh
+      - name: deploy-proxy
+        uses: cloud-gov/cg-cli-tools@cli-v8
+        with:
+          command: cf push inventory-proxy --vars-file vars.staging.yml --strategy rolling
+          cf_org: gsa-datagov
+          cf_space: staging
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}
 
   create-cloudgov-services-production:
     name: create services (production)
@@ -79,6 +88,7 @@ jobs:
           cf_space: prod
           cf_username: ${{secrets.CF_SERVICE_USER}}
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
+
   deploy-production:
     concurrency: production
     name: deploy (production)
@@ -105,3 +115,11 @@ jobs:
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: bin/smoke.sh
+      - name: deploy-proxy
+        uses: cloud-gov/cg-cli-tools@cli-v8
+        with:
+          command: cf push inventory-proxy --vars-file vars.production.yml --strategy rolling
+          cf_org: gsa-datagov
+          cf_space: prod
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}

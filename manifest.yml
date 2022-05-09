@@ -6,7 +6,6 @@ applications:
     buildpacks:
       - https://github.com/cloudfoundry/apt-buildpack
       - python_buildpack
-    routes: ((routes))
     services:
       - ((app_name))-db
       - ((app_name))-datastore
@@ -15,6 +14,8 @@ applications:
       - ((app_name))-secrets
       - ((app_name))-solr
       - sysadmin-users
+    routes:
+      - route: ((route_internal))
     timeout: 120
     memory: ((memory_quota))
     disk_quota: ((disk_quota))
@@ -26,7 +27,20 @@ applications:
       CKANEXT__SAML2AUTH__ENTITY_ID: ((ckanext__saml2auth__entity_id))
       CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH: ((ckanext__saml2auth__idp_metadata__local_path))
       CKAN_SITE_ID: inventory
+      CKAN_SITE_URL: https://((route_external))
       NEW_RELIC_APP_NAME: ((new_relic_app_name))
       NEW_RELIC_HOST: gov-collector.newrelic.com
       NEW_RELIC_MONITOR_MODE: ((new_relic_monitor_mode))
       SAML2_CERTIFICATE: ((saml2_certificate))
+
+  - name: ((app_name))-proxy
+    buildpacks:
+      - https://github.com/cloudfoundry/nginx-buildpack
+    path: ./proxy
+    # TODO: tweak with load testing
+    memory: 100M
+    routes:
+      - route: ((route_external))
+    env:
+      route_external: ((route_external))
+      route_internal: ((route_internal))
