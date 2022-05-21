@@ -55,7 +55,7 @@ pika==1.2.0
 polib==1.0.7
 psycopg2==2.8.2
 pycparser==2.21
-PyJWT==1.7.1
+PyJWT==2.4.0
 pyOpenSSL==22.0.0
 pyparsing==3.0.7
 pysaml2==7.0.1
