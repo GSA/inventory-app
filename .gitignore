@@ -61,3 +61,6 @@ e2e/cypress/downloads
 
 # Vim
 *.swp
+
+# VS Code
+.vscode/
