@@ -78,7 +78,7 @@ export CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH="${HOME}/${CKANEXT__SAML2AUT
 # Set up the collection in Solr
 echo Setting up Solr collection
 export SOLR_COLLECTION=ckan
-./solr/migrate-solrcloud-schema.sh $SOLR_COLLECTION
+# ./solr/migrate-solrcloud-schema.sh $SOLR_COLLECTION
 export CKAN_SOLR_URL=$CKAN_SOLR_BASE_URL/solr/$SOLR_COLLECTION
 
 # Edit the config file to validate debug is off and utilizes the correct port
