@@ -61,7 +61,7 @@ done
 [ $NEXT_WAIT_TIME -lt 20 ]
 
 # Add ckan core to solr
-/app/solr/migrate-solrcloud-schema.sh $COLLECTION_NAME
+# /app/solr/migrate-solrcloud-schema.sh $COLLECTION_NAME
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 GSA_prerun.py
