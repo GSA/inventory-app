@@ -6,7 +6,9 @@
  The ASF licenses this file to You under the Apache License, Version 2.0
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
+
      http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -155,11 +157,13 @@ schema. In this case the version should be set to the next CKAN version number.
 
     <field name="indexed_ts" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
 
+    <!-- Required by ckanext-spatial for geospatial searching -->
     <field name="bbox_area" type="float" indexed="true" stored="true" />
     <field name="maxx" type="float" indexed="true" stored="true" />
     <field name="maxy" type="float" indexed="true" stored="true" />
     <field name="minx" type="float" indexed="true" stored="true" />
     <field name="miny" type="float" indexed="true" stored="true" />
+    <!-- Required by ckanext-spatial for geospatial searching -->
 
     <!-- Copy the title field into titleString, and treat as a string
          (rather than text type).  This allows us to sort on the titleString -->
@@ -179,8 +183,8 @@ schema. In this case the version should be set to the next CKAN version number.
 </fields>
 
 <uniqueKey>index_id</uniqueKey>
-<defaultSearchField>text</defaultSearchField>
-<solrQueryParser defaultOperator="AND"/>
+<df>text</df>
+<solrQueryParser q.op="AND"/>
 
 <copyField source="url" dest="urls"/>
 <copyField source="title" dest="title_ngram"/>

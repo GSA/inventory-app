@@ -25,7 +25,7 @@ if ! (curl --get --fail --location-trusted  --user $CKAN_SOLR_USER:$CKAN_SOLR_PA
 
     # Zip solr configSet
     cd solr && zip ckan_2.9_solr_config.zip \
-        currency.xml  elevate.xml  protwords.txt  schema.xml  solrconfig.xml stopwords.txt  synonyms.txt
+        protwords.txt  schema.xml  solrconfig.xml stopwords.txt  synonyms.txt
 
     echo "Uploading config set..."
     curl --fail  --location-trusted --user $CKAN_SOLR_USER:$CKAN_SOLR_PASSWORD \
