@@ -3,7 +3,6 @@ import sys
 import time
 import requests
 try:
-    from urllib.request import urlopen
     from urllib.error import URLError
 except ImportError:
     from urllib2 import URLError
@@ -22,8 +21,7 @@ def check_solr_connection(retry=None):
 
     CKAN_SOLR_USER = os.environ.get("CKAN_SOLR_USER", "")
     CKAN_SOLR_PASSWORD = os.environ.get("CKAN_SOLR_PASSWORD", "")
-    url = os.environ.get("CKAN_SOLR_URL", "").replace('http://',
-            f'http://{CKAN_SOLR_USER}:{CKAN_SOLR_PASSWORD}@')
+    url = os.environ.get("CKAN_SOLR_URL", "").replace('http://', f'http://{CKAN_SOLR_USER}:{CKAN_SOLR_PASSWORD}@')  # NOQA E501
     search_url = "{url}/select/?q=*&wt=json".format(url=url)
 
     try:
