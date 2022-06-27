@@ -6,7 +6,6 @@ try:
     from urllib.request import urlopen
     from urllib.error import URLError
 except ImportError:
-    from urllib2 import urlopen
     from urllib2 import URLError
 
 import prerun as pr
@@ -23,7 +22,8 @@ def check_solr_connection(retry=None):
 
     CKAN_SOLR_USER = os.environ.get("CKAN_SOLR_USER", "")
     CKAN_SOLR_PASSWORD = os.environ.get("CKAN_SOLR_PASSWORD", "")
-    url = os.environ.get("CKAN_SOLR_URL", "").replace('http://', f'http://{CKAN_SOLR_USER}:{CKAN_SOLR_PASSWORD}@')
+    url = os.environ.get("CKAN_SOLR_URL", "").replace('http://',
+            f'http://{CKAN_SOLR_USER}:{CKAN_SOLR_PASSWORD}@')
     search_url = "{url}/select/?q=*&wt=json".format(url=url)
 
     try:
