@@ -255,7 +255,7 @@ Cypress.Commands.add('additionalMetadata', (isparent) => {
     cy.get('#category-option-yes').parent('.form-group').click();
     cy.get('input[name=data_dictionary]').clear().type(chance.url());
     cy.get('select[name=describedByType]').select('text/csv');
-    cy.get('select[name=accrualPeriodicity]').select('R/P7D');
+    cy.get('select[name=accrualPeriodicity]').select('R/P1W');
     cy.get('input[name=homepage_url]').clear().type(chance.url());
     cy.get('select[name=languageSubTag]').select('en');
     cy.get('select[name=languageRegSubTag]').select('US');

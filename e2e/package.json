@@ -9,7 +9,6 @@
     "cypress-downloadfile": "^1.2.1",
     "cypress-file-upload": "^5.0.8"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "CYPRESS_USER_PASSWORD=password CYPRESS_USER=admin CYPRESS_BASE_URL=http://localhost:5000 npx cypress open"
   },

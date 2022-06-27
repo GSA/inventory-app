@@ -10,7 +10,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 # git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
-ckanext-dcat-usmetadata==0.3.0
+ckanext-dcat-usmetadata==0.3.5
 ckanext-envvars
 newrelic
 gunicorn
