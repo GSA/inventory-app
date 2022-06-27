@@ -2,6 +2,6 @@
     "solrImageRepo": "ghcr.io/gsa/catalog.data.gov.solr",
     "solrImageTag": "8-stunnel-root",
     "solrMem": 3072,
-    "solrCpu": 2048,
-    "setupLink": "https://raw.githubusercontent.com/GSA/catalog.data.gov/f22554d5f06bae473fb3f2070d1cf168610ed942/solr/solr_setup.sh"
+    "solrCpu": 1024,
+    "setupLink": "https://raw.githubusercontent.com/GSA/inventory-app/main/solr/solr_setup.sh"
 }
