@@ -62,5 +62,10 @@ e2e/cypress/downloads
 # Vim
 *.swp
 
+# Solr
+solr/ckan_2.9_solr_config.zip
+solr/schema.xml
+
 # VS Code
 .vscode/
+

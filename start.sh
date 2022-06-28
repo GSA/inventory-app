@@ -1,8 +1,6 @@
 #!/bin/bash
 
-set -o errexit
-set -o pipefail
-set -o nounset
+set -e
 
 function wait_for () {
   local host=$1
@@ -21,22 +19,6 @@ wait_for localstack-container 4572
 # check will return successfully.
 sleep 1
 
-# Check if the solr core exists.
-if ! (curl --get --fail --silent http://solr:8983/solr/admin/cores \
-  --data-urlencode action=status \
-  --data-urlencode core=inventory | grep -q segmentsFileSizeInBytes); then
-
-  # Create the solr core
-  curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
-    --data-urlencode action=create \
-    --data-urlencode name=inventory \
-    --data-urlencode configSet=ckan2_8
-
-  # Reload the core
-  curl -v --get --fail --silent http://solr:8983/solr/admin/cores \
-    --data-urlencode action=reload \
-    --data-urlencode core=inventory
-fi
 
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
@@ -66,8 +48,12 @@ ckan config-tool $CKAN_INI -s DEFAULT "debug = true"
 # Run migrations
 ckan db upgrade
 
+# Add ckan core to solr
+# /app/solr/migrate-solrcloud-schema.sh $COLLECTION_NAME
+
 # Run the prerun script to init CKAN and create the default admin user
-python3 prerun.py
+python3 GSA_prerun.py
+
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]
