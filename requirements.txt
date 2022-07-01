@@ -13,7 +13,7 @@ ckanext-dcat-usmetadata==0.3.5
 ckanext-envvars==0.0.1
 -e git+https://github.com/GSA/ckanext-googleanalyticsbasic@c6a425d5e14d658c0fa3661fdc4423162161c3f4#egg=ckanext_googleanalyticsbasic
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@82a63639b0f54f65496661c7120ed85461eade37
-ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@7412ff7aba3d215f95a08f99216410e72e60c5bc
+ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@5a9a3bdd88e944aa6862eb4508a0d3eab46dfcd
 -e git+https://github.com/GSA/ckanext-usmetadata.git@680e6acc3a6c094dd86fd60ea53f6d2083b3b45d#egg=ckanext_usmetadata
 -e git+https://github.com/ckan/ckanext-xloader.git@76eaad75ec5199567b27b5f85ef70105cda95f4c#egg=ckanext_xloader
 ckantoolkit==0.0.4
