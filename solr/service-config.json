@@ -3,5 +3,6 @@
     "solrImageTag": "8-stunnel-root",
     "solrMem": 3072,
     "solrCpu": 1024,
-    "setupLink": "https://raw.githubusercontent.com/GSA/inventory-app/main/solr/solr_setup.sh"
+    "setupLink": "https://raw.githubusercontent.com/GSA/inventory-app/main/solr/solr_setup.sh",
+    "efsProvisionedThroughput": 1
 }
