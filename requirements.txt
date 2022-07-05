@@ -3,8 +3,8 @@ async-timeout==4.0.2
 Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.24.21
-botocore==1.27.21
+boto3==1.24.22
+botocore==1.27.22
 certifi==2022.6.15
 cffi==1.15.1
 chardet==3.0.4
@@ -19,7 +19,7 @@ ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@85a9
 -e git+https://github.com/ckan/ckanext-xloader.git@f40d0d0256ca85405a534684e745cb398ed43f9f#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==7.1.2
-cryptography==37.0.2
+cryptography==37.0.4
 defusedxml==0.7.1
 Deprecated==1.2.13
 dominate==2.4.0
@@ -41,7 +41,7 @@ Jinja2==2.11.3
 jmespath==1.0.1
 json-table-schema==0.2.1
 jsonschema==2.4.0
-lxml==4.6.3
+lxml==4.6.5
 Mako==1.2.1
 Markdown==2.6.7
 MarkupSafe==2.1.1
