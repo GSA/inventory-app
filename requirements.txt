@@ -41,7 +41,7 @@ Jinja2==2.11.3
 jmespath==1.0.1
 json-table-schema==0.2.1
 jsonschema==2.4.0
-lxml==4.6.5
+lxml==4.9.1
 Mako==1.2.1
 Markdown==2.6.7
 MarkupSafe==2.1.1
