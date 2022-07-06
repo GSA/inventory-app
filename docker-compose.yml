@@ -38,9 +38,15 @@ services:
       DB_CKAN_DB: ckan
 
   solr:
-    image: datagov/catalog-solr:inventory2_8
+    image: ghcr.io/gsa/catalog.data.gov.solr:8-stunnel-root
+    command: /app/solr/local_setup.sh
     ports:
       - "8983:8983"
+    deploy:
+      replicas: 1
+    volumes:
+      - solr_data:/var/solr
+      - .:/app
 
   redis:
     image: redis:alpine
@@ -65,3 +71,4 @@ services:
       - "./tmp/localstack/run/docker.sock:/var/run/docker.sock"
 volumes:
   ckan:
+  solr_data:
