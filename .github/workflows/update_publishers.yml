@@ -1,0 +1,40 @@
+---
+name: Update Inventory Publishers List
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-publishers-staging:
+    name: Update Publishers (Staging)
+    environment: staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Get changed files using defaults
+        id: changed-files
+        uses: tj-actions/changed-files@v23.1
+      - name: Check if inventory_publishers has changed
+        if: contains(steps.changed-files.outputs.modified_files, 'inventory_publishers.csv')
+        run: |
+          echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
+      - name: Check if workflow dispatch job
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
+      - name: Update Publishers
+        if: ${{ env.UPDATE_PUBLISHERS }}
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          command: |
+            cf run-task inventory --command 'ckan publishers-import config/data/inventory_publishers.csv' --name 'update-publishers'
+          cf_org: gsa-datagov
+          cf_space: staging
+          cf_username: ${{secrets.CF_SERVICE_USER}}
+          cf_password: ${{secrets.CF_SERVICE_AUTH}}

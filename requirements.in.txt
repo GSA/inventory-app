@@ -10,7 +10,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 # git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
-ckanext-dcat-usmetadata==0.3.5
+ckanext-dcat-usmetadata~=0.3.6
 ckanext-envvars
 newrelic
 gunicorn
@@ -35,7 +35,7 @@ Flask==1.1.1
 Flask-Babel==1.0.0
 flask-multistatic==1.0
 Jinja2==2.11.3
-PyJWT==1.7.1
+PyJWT==2.4.0              # Upgraded to pass security scans
 Markdown==2.6.7
 passlib==1.7.3
 pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
@@ -83,3 +83,6 @@ ckantoolkit
 messytables==0.15.2
 pika>=1.1.0
 Unidecode==1.0.22
+
+# Other pinned dependencies
+itsdangerous==2.0.1
