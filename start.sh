@@ -31,10 +31,16 @@ for i in $CKAN_HOME/src_extensions/*
 do
   if [ -d $i ];
   then
-    owner=$(stat -c '%U' $i);
-    if [ $owner != 'root' ];
+    if [ -f $i/setup.py ];
     then
-      pip3 install -e $i
+        cd $i
+        echo "Found setup.py file in $i"
+        # Uninstall any current implementation of the code
+        echo uninstalling "${PWD##*/}"
+        pip3 uninstall -y "${PWD##*/}"
+        # Install the extension in editable mode
+        pip3 install -e .
+        cd $APP_DIR
     fi
   fi
 done
@@ -52,7 +58,7 @@ ckan db upgrade
 # /app/solr/migrate-solrcloud-schema.sh $COLLECTION_NAME
 
 # Run the prerun script to init CKAN and create the default admin user
-python3 GSA_prerun.py
+python3 ${CKAN_HOME}/GSA_prerun.py
 
 
 # Run any startup scripts provided by images extending this one

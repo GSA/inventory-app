@@ -4,6 +4,7 @@ src/
 vendor/*
 vars.yml
 secrets.json
+!config/data/inventory_publishers.csv
 
 .ropeproject
 node_modules
