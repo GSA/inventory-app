@@ -1,4 +1,4 @@
-.PHONY: all build lint requirements setup test update-dependencies
+.PHONY: all build lint requirements setup test
 
 all: up
 

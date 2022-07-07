@@ -35,7 +35,7 @@ Flask==1.1.1
 Flask-Babel==1.0.0
 flask-multistatic==1.0
 Jinja2==2.11.3
-PyJWT==1.7.1
+PyJWT==2.4.0              # Upgraded to pass security scans
 Markdown==2.6.7
 passlib==1.7.3
 pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
