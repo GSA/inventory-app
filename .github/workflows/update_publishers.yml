@@ -22,11 +22,11 @@ jobs:
         uses: tj-actions/changed-files@v23.1
       - name: List all changed files
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          for file in ${{ steps.changed-files.outputs.modified_files }}; do
             echo "$file was changed"
           done
       - name: Check if inventory_publishers has changed
-        if: contains(steps.changed-files.outputs.modified_files, '**/inventory_publishers.csv')
+        if: contains(steps.changed-files.outputs.modified_files, 'config/data/inventory_publishers.csv')
         run: |
           echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
       - name: Check if workflow dispatch job
