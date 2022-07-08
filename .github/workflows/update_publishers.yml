@@ -21,7 +21,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v23.1
       - name: Check if inventory_publishers has changed
-        if: contains(steps.changed-files.outputs.modified_files, 'inventory_publishers.csv')
+        if: contains(steps.changed-files.outputs.modified_files, '**/inventory_publishers.csv')
         run: |
           echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
       - name: Check if workflow dispatch job
@@ -54,7 +54,7 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v23.1
       - name: Check if inventory_publishers has changed
-        if: contains(steps.changed-files.outputs.modified_files, 'inventory_publishers.csv')
+        if: contains(steps.changed-files.outputs.modified_files, '**/inventory_publishers.csv')
         run: |
           echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
       - name: Check if workflow dispatch job
