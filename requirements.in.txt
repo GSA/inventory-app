@@ -1,8 +1,5 @@
 git+https://github.com/ckan/ckan.git@ckan-2.9.5#egg=ckan
--e git+https://github.com/GSA/ckanext-googleanalyticsbasic#egg=ckanext-googleanalyticsbasic
--e git+https://github.com/GSA/ckanext-usmetadata.git@main#egg=ckanext-usmetadata
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
--e git+https://github.com/GSA/ckanext-datajson.git@main#egg=ckanext-datajson
 git+https://github.com/keitaroinc/ckanext-saml2auth.git@main#egg=ckanext-saml2auth
 # TODO Remove webob fork
 # git+https://github.com/GSA/webob.git@datagov/v1.0.8#egg=webob
@@ -10,8 +7,11 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 # git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
+ckanext-googleanalyticsbasic
+ckanext-usmetadata
+ckanext-datajson
 ckanext-dcat-usmetadata~=0.3.6
-ckanext-envvars
+ckanext-envvars>=0.0.2
 newrelic
 gunicorn
 gevent
@@ -68,12 +68,6 @@ zope.interface==4.7.2
 # defusedxml==0.6.0
 # M2Crypto
 # python-memcached==1.48
-
-# ckanext-datajson dependencies
-future
-jsonschema~=2.4.0
-rfc3987
-# pyyaml # Already installed via CKAN core
 
 # ckanext-s3filestore dependencies
 boto3>=1.4.4
