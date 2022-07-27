@@ -38,7 +38,7 @@ applications:
       - https://github.com/cloudfoundry/nginx-buildpack
     path: ./proxy
     # TODO: tweak with load testing
-    memory: 100M
+    memory: 400M
     routes:
       - route: ((route_external))
     env:
