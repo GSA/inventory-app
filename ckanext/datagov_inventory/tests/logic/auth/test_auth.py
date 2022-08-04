@@ -128,8 +128,8 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         dataset = factories.Dataset(**dataset_params)
         # Return id string for the package and resoruce just created
         return ({'package_id': dataset['id'],
-                'tag_id': dataset_params['tag_string'],
-                'resource_id': dataset['resources'][0]['id']})
+                 'tag_id': dataset_params['tag_string'],
+                 'resource_id': dataset['resources'][0]['id']})
         # 'revision_id': dataset['revision_id']})
 
     def assert_user_authorization(self,
