@@ -20,7 +20,12 @@ jobs:
       - name: restart
         uses: cloud-gov/cg-cli-tools@main
         with:
-          command: cf restart inventory --strategy rolling
+          command: >-
+            cf scale inventory -i 1 &&
+            sleep 5 &&
+            cf restart inventory --strategy rolling &&
+            sleep 5;
+            cf scale inventory -i 2
           cf_org: gsa-datagov
           cf_space: staging
           cf_username: ${{secrets.CF_SERVICE_USER}}
@@ -30,12 +35,7 @@ jobs:
       - name: restart proxy
         uses: cloud-gov/cg-cli-tools@main
         with:
-          command: >
-            cf scale inventory -i 1 &&
-            sleep 5 &&
-            cf restart inventory-proxy --strategy rolling' &&
-            sleep 5;
-            cf scale inventory -i 2
+          command: cf restart inventory-proxy --strategy rolling
           cf_org: gsa-datagov
           cf_space: staging
           cf_username: ${{secrets.CF_SERVICE_USER}}
