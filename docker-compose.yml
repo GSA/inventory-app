@@ -54,7 +54,7 @@ services:
   localstack-container:
     container_name: "localstack-container"
     privileged: true
-    image: localstack/localstack:0.11.0
+    image: localstack/localstack:1.0.4
     ports:
       - "4572:4572"
       - "8081:8081"
