@@ -42,7 +42,7 @@ jmespath==1.0.1
 json-table-schema==0.2.1
 jsonschema==2.4.0
 lxml==4.9.1
-Mako==1.2.1
+Mako==1.2.2
 Markdown==2.6.7
 MarkupSafe==2.0.1
 messytables==0.15.2
