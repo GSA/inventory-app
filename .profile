@@ -46,7 +46,7 @@ export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 # Get sysadmins list by a user-provided-service per environment
 export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-output ".[][] | select(.name == \"sysadmin-users\") | .credentials.CKANEXT__SAML2AUTH__SYSADMINS_LIST")
 
-# ckan reads some environment variables... https://docs.ckan.org/en/2.8/maintaining/configuration.html#environment-variables
+# ckan reads some environment variables... https://docs.ckan.org/en/2.9/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
 export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
 export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service datastore .credentials.uri)
