@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/GSA/inventory-app.svg?style=svg)](https://circleci.com/gh/GSA/inventory-app)
 
-Is a [Docker](https://www.docker.com/)-based [CKAN](http://ckan.org) development environment for [inventory.data.gov](https://inventory.data.gov).
+Is a [Docker](https://www.docker.com/)-based [CKAN](http://ckan.org) development environment for [inventory.data.gov](https://inventory.data.gov).  For details on the system architecture, please see our [data.gov systems list](https://github.com/GSA/data.gov/blob/master/SYSTEMS.md)!
 
 _Note: this is currently a work in progress. We're mainly using this to manage
 the `requirements-freeze.txt` for production dependencies. Very little works beyond that._
