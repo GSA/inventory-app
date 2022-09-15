@@ -3,27 +3,27 @@ async-timeout==4.0.2
 Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.24.30
-botocore==1.27.30
-certifi==2022.6.15
+boto3==1.24.73
+botocore==1.27.73
+certifi==2022.9.14
 cffi==1.15.1
 chardet==3.0.4
 ckan @ git+https://github.com/ckan/ckan.git@65af260bef26ea99981597f872d39da0a3f4f3f9
-ckanext-datajson==0.1.1
+ckanext-datajson==0.1.3
 ckanext-dcat-usmetadata==0.3.7
 ckanext-envvars==0.0.2
-ckanext-googleanalyticsbasic==0.1.0
+ckanext-googleanalyticsbasic==0.2.0
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@8e815a47cd902884ff93fcff96d90349fb6c5459
 ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@85a9a3bdd88e944aa6862eb4508a0d3eab46dfcd
 ckanext-usmetadata==0.2.3
--e git+https://github.com/ckan/ckanext-xloader.git@f40d0d0256ca85405a534684e745cb398ed43f9f#egg=ckanext_xloader
+-e git+https://github.com/ckan/ckanext-xloader.git@9c70786ab8ebb3976abd78f480692526189e5652#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==7.1.2
-cryptography==37.0.4
+cryptography==38.0.1
 defusedxml==0.7.1
 Deprecated==1.2.13
 dominate==2.4.0
-elementpath==2.5.3
+elementpath==3.0.2
 fanstatic==1.1
 feedgen==0.9.0
 Flask==1.1.1
@@ -31,11 +31,11 @@ Flask-Babel==1.0.0
 flask-multistatic==1.0
 future==0.18.2
 gevent==21.12.0
-greenlet==1.1.2
+greenlet==1.1.3
 gunicorn==20.1.0
 html5lib==1.1
 idna==2.10
-importlib-resources==5.8.0
+importlib-resources==5.9.0
 itsdangerous==2.0.1
 Jinja2==2.11.3
 jmespath==1.0.1
@@ -46,7 +46,7 @@ Mako==1.2.2
 Markdown==2.6.7
 MarkupSafe==2.0.1
 messytables==0.15.2
-newrelic==7.14.0.177
+newrelic==8.1.0.180
 nose==1.3.7
 packaging==21.3
 passlib==1.7.3
@@ -91,7 +91,7 @@ WebOb==1.8.7
 Werkzeug==1.0.0
 wrapt==1.14.1
 xlrd==2.0.1
-xmlschema==1.11.3
+xmlschema==2.0.4
 zipp==3.8.1
 zope.event==4.5.0
 zope.interface==4.7.2
