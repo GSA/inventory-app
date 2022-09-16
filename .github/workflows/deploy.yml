@@ -119,7 +119,9 @@ jobs:
           command: >- 
             cf scale inventory -i 1 &&
             sleep 5 &&
-            cf push inventory-proxy --vars-file vars.production.yml --strategy rolling
+            cf push inventory-proxy --vars-file vars.production.yml --strategy rolling &&
+            sleep 5;
+            cf scale inventory -i 2
           cf_org: gsa-datagov
           cf_space: prod
           cf_username: ${{secrets.CF_SERVICE_USER}}
