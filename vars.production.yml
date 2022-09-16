@@ -4,7 +4,7 @@ ckanext__saml2auth__entity_id: urn:gov:gsa:SAML:2.0.profiles:sp:sso:gsa:datagov-
 ckanext__saml2auth__idp_metadata__local_path: config/login.production.idp.xml
 
 # Number of application instances to run in cloud.gov
-instances: 2
+instances: 1 # we need 2, but have to use 1 due to https://github.com/GSA/data.gov/issues/3927
 memory_quota: 1.5G
 disk_quota: 3G
 
