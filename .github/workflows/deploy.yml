@@ -116,7 +116,10 @@ jobs:
       - name: deploy-proxy
         uses: cloud-gov/cg-cli-tools@main
         with:
-          command: cf push inventory-proxy --vars-file vars.production.yml --strategy rolling
+          command: >- 
+            cf scale inventory -i 1 &&
+            sleep 5 &&
+            cf push inventory-proxy --vars-file vars.production.yml --strategy rolling
           cf_org: gsa-datagov
           cf_space: prod
           cf_username: ${{secrets.CF_SERVICE_USER}}
