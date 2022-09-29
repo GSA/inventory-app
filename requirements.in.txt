@@ -43,7 +43,6 @@ pathtools==0.1.2          # via watchdog
 polib==1.0.7
 psycopg2==2.8.6
 python-magic==0.4.15
-pysaml2==7.0.1
 pysolr==3.6.0
 python-dateutil>=1.5.0
 pytz==2016.7
@@ -70,6 +69,7 @@ zope.interface==4.7.2
 # defusedxml==0.6.0
 # M2Crypto
 # python-memcached==1.48
+pysaml2==7.2.1
 
 # ckanext-s3filestore dependencies
 boto3>=1.4.4
