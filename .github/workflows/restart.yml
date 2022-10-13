@@ -16,7 +16,7 @@ jobs:
       APP_URL: https://inventory-stage-datagov.app.cloud.gov
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: restart
         uses: cloud-gov/cg-cli-tools@main
         with:
@@ -50,7 +50,7 @@ jobs:
       APP_URL: https://inventory.data.gov
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: restart
         uses: cloud-gov/cg-cli-tools@main
         with:
