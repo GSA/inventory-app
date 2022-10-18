@@ -40,6 +40,20 @@ jobs:
           cf_space: staging
           cf_username: ${{secrets.CF_SERVICE_USER}}
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: Create Issue if it fails 😢
+        if: ${{ failure() }}
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GITHUB_JOB: ${{ toJson(github)['job'] }}
+          GITHUB_ATTEMPTS: ${{ github.run_attempt }}
+          LAST_COMMIT: ${{ github.sha }}
+          LAST_RUN_BY: ${{ github.actor }}
+          RUN_ID: ${{ github.run_id }}
+        with:
+          filename: .github/restart_failure.md
+          assignees: ${{ github.actor }}
+          update_existing: true
 
   restart-prod:
     concurrency: production
@@ -74,3 +88,17 @@ jobs:
           cf_space: prod
           cf_username: ${{secrets.CF_SERVICE_USER}}
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
+      - name: Create Issue if it fails 😢
+        if: ${{ failure() }}
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GITHUB_JOB: ${{ toJson(github)['job'] }}
+          GITHUB_ATTEMPTS: ${{ github.run_attempt }}
+          LAST_COMMIT: ${{ github.sha }}
+          LAST_RUN_BY: ${{ github.actor }}
+          RUN_ID: ${{ github.run_id }}
+        with:
+          filename: .github/restart_failure.md
+          assignees: ${{ github.actor }}
+          update_existing: true
