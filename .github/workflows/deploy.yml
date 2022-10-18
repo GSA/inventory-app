@@ -21,6 +21,20 @@ jobs:
           name: python-vendored
           path: vendor/
           if-no-files-found: error
+      - name: Create Issue if it fails 😢
+        if: ${{ failure() }}
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GITHUB_JOB: ${{ toJson(github)['job'] }}
+          GITHUB_ATTEMPTS: ${{ github.run_attempt }}
+          LAST_COMMIT: ${{ github.sha }}
+          LAST_RUN_BY: ${{ github.actor }}
+          RUN_ID: ${{ github.run_id }}
+        with:
+          filename: .github/deploy_failure.md
+          assignees: ${{ github.actor }}
+          update_existing: true
 
   create-cloudgov-services-staging:
     name: create services (staging)
@@ -72,6 +86,20 @@ jobs:
           cf_password: ${{secrets.CF_SERVICE_AUTH}}
       - name: smoke test
         run: bin/smoke.sh
+      - name: Create Issue if it fails 😢
+        if: ${{ failure() }}
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GITHUB_JOB: ${{ toJson(github)['job'] }}
+          GITHUB_ATTEMPTS: ${{ github.run_attempt }}
+          LAST_COMMIT: ${{ github.sha }}
+          LAST_RUN_BY: ${{ github.actor }}
+          RUN_ID: ${{ github.run_id }}
+        with:
+          filename: .github/deploy_failure.md
+          assignees: ${{ github.actor }}
+          update_existing: true
 
   create-cloudgov-services-production:
     name: create services (production)
@@ -132,7 +160,7 @@ jobs:
         if: ${{ failure() }}
         uses: JasonEtco/create-an-issue@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
           GITHUB_JOB: ${{ toJson(github)['job'] }}
           GITHUB_ATTEMPTS: ${{ github.run_attempt }}
           LAST_COMMIT: ${{ github.sha }}
