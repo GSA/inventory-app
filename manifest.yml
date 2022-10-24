@@ -31,6 +31,7 @@ applications:
       NEW_RELIC_APP_NAME: ((app_name))-((space_name))
       NEW_RELIC_HOST: gov-collector.newrelic.com
       NEW_RELIC_MONITOR_MODE: ((new_relic_monitor_mode))
+      NEW_RELIC_CONFIG_FILE: /home/vcap/app/config/newrelic.ini
       SAML2_CERTIFICATE: ((saml2_certificate))
 
   - name: ((app_name))-proxy
