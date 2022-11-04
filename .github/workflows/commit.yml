@@ -96,7 +96,6 @@ jobs:
         uses: cloud-gov/cg-cli-tools@main
         with:
           command: >
-            # Unset and save egress proxy
             proxy=$(cf env inventory | grep https_proxy | cut -b14-);
             cf unset-env inventory https_proxy;
             cf push inventory --vars-file vars.development.yml --strategy rolling;
