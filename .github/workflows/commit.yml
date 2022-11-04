@@ -95,7 +95,12 @@ jobs:
       - name: deploy-inventory
         uses: cloud-gov/cg-cli-tools@main
         with:
-          command: cf push inventory --vars-file vars.development.yml --strategy rolling
+          command: >
+            proxy=$(cf env inventory | grep https_proxy | cut -b14-);
+            cf unset-env inventory https_proxy;
+            cf push inventory --vars-file vars.development.yml --strategy rolling;
+            cf set-env inventory https_proxy $proxy;
+            cf rs inventory
           cf_org: gsa-datagov
           cf_space: development
           cf_username: ${{secrets.CF_SERVICE_USER}}

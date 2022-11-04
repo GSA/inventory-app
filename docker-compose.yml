@@ -19,6 +19,7 @@ services:
       - .:/app/
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       - ./src:/srv/app/src_extensions
+      - ./temp:/temp
 
   datastore:
     image: postgres:9.6
