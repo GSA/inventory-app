@@ -75,8 +75,7 @@ jobs:
             proxy=$(cf env inventory | grep https_proxy | cut -b14-);
             cf unset-env inventory https_proxy;
             cf push inventory --vars-file vars.staging.yml --strategy rolling;
-            cf set-env inventory https_proxy $proxy;
-            cf rs inventory
+            if [[ "$proxy" != "" ]]; then cf set-env inventory https_proxy $proxy; cf rs inventory --strategy rolling; fi
           cf_org: gsa-datagov
           cf_space: staging
           cf_username: ${{secrets.CF_SERVICE_USER}}
@@ -145,8 +144,7 @@ jobs:
             proxy=$(cf env inventory | grep https_proxy | cut -b14-);
             cf unset-env inventory https_proxy;
             cf push inventory --vars-file vars.production.yml --strategy rolling;
-            cf set-env inventory https_proxy $proxy;
-            cf rs inventory
+            if [[ "$proxy" != "" ]]; then cf set-env inventory https_proxy $proxy; cf rs inventory --strategy rolling; fi
           cf_org: gsa-datagov
           cf_space: prod
           cf_username: ${{secrets.CF_SERVICE_USER}}
