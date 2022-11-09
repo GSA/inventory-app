@@ -1,6 +1,6 @@
 FROM cloudfoundry/cflinuxfs3
 # Specify Python version
-ARG PY_VERSION=python3.10
+ARG PY_VERSION=python3.11
 
 # Go where the app files are
 RUN cd ~vcap/app
