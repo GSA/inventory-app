@@ -36,7 +36,7 @@ Flask-Babel==1.0.0
 flask-multistatic==1.0
 Jinja2==2.11.3
 PyJWT==2.4.0              # Upgraded to pass security scans
-Markdown==2.6.7
+Markdown==3.4.1           # Upgraded https://github.com/GSA/data.gov/issues/4056
 passlib==1.7.3
 pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
 pathtools==0.1.2          # via watchdog
