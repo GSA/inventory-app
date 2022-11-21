@@ -7,6 +7,13 @@ set -o pipefail
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
+echo "Setting up egress proxy.."
+if [ -z ${proxy_url+x} ]; then
+  echo "Egress proxy is not connected."
+else
+  export https_proxy=$proxy_url
+fi
+
 # Add the current directory to our virtualenv
 pip3 install -e .
 
