@@ -43,14 +43,16 @@ jobs:
     with:
       environ: staging
       app_url: https://inventory-stage-datagov.app.cloud.gov
+    secrets: inherit
 
   deploy-prod:
     name: deploy (prod)
     needs:
       - vendor
+      - deploy-staging
     uses: ./.github/workflows/deploy-template.yml
     with:
       environ: prod
       app_url: https://inventory.data.gov
-
+    secrets: inherit
       
