@@ -58,60 +58,13 @@ jobs:
           path: vendor/
           if-no-files-found: error
 
-  create-cloudgov-services-development:
-    name: create services (development)
-    environment: development
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: create services
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: ./create-cloudgov-services.sh
-          cf_org: gsa-datagov
-          cf_space: development
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-
   deploy-development:
     if: github.ref == 'refs/heads/develop'
     name: deploy (development)
-    environment: development
-    runs-on: ubuntu-latest
     needs:
-      - lint
       - vendor
-      - create-cloudgov-services-development
-    env:
-      APP_URL: https://inventory-dev-datagov.app.cloud.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
-        with:
-          name: python-vendored
-          path: vendor
-      - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: >
-            proxy=$(cf env inventory | grep https_proxy | cut -b14-);
-            cf unset-env inventory https_proxy;
-            cf push inventory --vars-file vars.development.yml --strategy rolling;
-            if [[ "$proxy" != "" ]]; then cf set-env inventory https_proxy $proxy; cf rs inventory; fi
-          cf_org: gsa-datagov
-          cf_space: development
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      - name: deploy proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory-proxy --vars-file vars.development.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: development
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environ: development
+      app_url: https://inventory-dev-datagov.app.cloud.gov
+    secrets: inherit
