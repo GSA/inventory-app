@@ -9,6 +9,14 @@ on:
       app_url:
         required: true
         type: string
+    secrets:
+      CF_SERVICE_USER:
+        required: true
+      CF_SERVICE_AUTH:
+        required: true
+      ADD_TO_PROJECT_PAT:
+        required: true
+
 
 jobs:
   create-cloudgov-services:
