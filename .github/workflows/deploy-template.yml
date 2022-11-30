@@ -17,7 +17,6 @@ on:
       ADD_TO_PROJECT_PAT:
         required: true
 
-
 jobs:
   create-cloudgov-services:
     name: create services ${{ inputs.environ }}
@@ -69,7 +68,7 @@ jobs:
       - name: smoke test
         run: bin/smoke.sh
       - name: Create Issue if it fails 😢
-        if: ${{ failure() }}
+        if: ${{ failure() && github.ref != 'refs/heads/develop'}} 
         uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
