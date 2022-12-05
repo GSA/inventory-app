@@ -19,7 +19,7 @@ ckanext-usmetadata==0.2.3
 -e git+https://github.com/ckan/ckanext-xloader.git@9c70786ab8ebb3976abd78f480692526189e5652#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==7.1.2
-cryptography==38.0.1
+cryptography==38.0.3
 defusedxml==0.7.1
 Deprecated==1.2.13
 dominate==2.4.0
