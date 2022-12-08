@@ -1,4 +1,4 @@
-git+https://github.com/ckan/ckan.git@ckan-2.9.5#egg=ckan
+ckan==2.9.5
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 git+https://github.com/keitaroinc/ckanext-saml2auth.git@main#egg=ckanext-saml2auth
 # TODO Remove webob fork
