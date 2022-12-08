@@ -15,10 +15,13 @@ for k, v in remediations.items():
     print(package, old_version, new_version)
 
     # Remove old version
-    os.system('sed -i "/%s/d" requirements.in.txt' % (package + "==" + old_version))
-    os.system('sed -i "/%s/d" requirements.in.txt' % (package + ">=" + old_version))
+    os.system('sed -i "/%s/d" requirements.in.txt' %
+              (package + "==" + old_version))
+    os.system('sed -i "/%s/d" requirements.in.txt' %
+              (package + ">=" + old_version))
 
     # Add new version
-    os.system("echo '%s' >> requirements.in.txt" % (package + ">=" + new_version))
+    os.system("echo '%s' >> requirements.in.txt" %
+              (package + ">=" + new_version))
 
 # TODO: Handle unfixable results
