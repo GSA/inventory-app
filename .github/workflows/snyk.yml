@@ -39,7 +39,7 @@ jobs:
           rm scan.json
 
           # Update requirements.txt
-          make update-dependencies
+          make requirements
 
           # Fail so that PR is created
           exit 1
