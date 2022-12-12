@@ -15,7 +15,7 @@ ckanext-envvars==0.0.2
 ckanext-googleanalyticsbasic==0.2.0
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@8e815a47cd902884ff93fcff96d90349fb6c5459
 ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@7aac52dece868444798830036dcb8015c53f7f0e
-ckanext-usmetadata==0.2.4
+ckanext-usmetadata==0.2.3
 -e git+https://github.com/ckan/ckanext-xloader.git@9db532439dbb8b88f7c9d11f1e573ff6c164e3b9#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==7.1.2
@@ -94,3 +94,5 @@ xmlschema==2.1.1
 zipp==3.11.0
 zope.event==4.5.0
 zope.interface==4.7.2
+future==0.18.2
+pyparsing==3.0.9
