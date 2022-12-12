@@ -8,8 +8,8 @@ botocore==1.29.27
 certifi==2022.12.7
 cffi==1.15.1
 chardet==3.0.4
-ckan==2.9.5
 ckanext-datajson==0.1.9
+ckan==2.9.7
 ckanext-dcat-usmetadata==0.3.7
 ckanext-envvars==0.0.2
 ckanext-googleanalyticsbasic==0.2.0
