@@ -85,6 +85,8 @@ tabulator==1.53.5
 python-dateutil>=2.8.2
 
 # Other pinned dependencies
+# (most likely for snyk)
 itsdangerous==2.0.1
 MarkupSafe==2.0.1
 certifi>=2022.12.7
+setuptools>=65.5.1
