@@ -8,7 +8,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
 ckanext-googleanalyticsbasic
-ckanext-usmetadata>=0.2.3
+ckanext-usmetadata>=0.2.5
 ckanext-datajson
 ckanext-dcat-usmetadata~=0.3.6
 ckanext-envvars>=0.0.2
@@ -45,7 +45,7 @@ psycopg2==2.8.6
 python-magic==0.4.15
 pysaml2==7.0.1
 pysolr==3.6.0
-python-dateutil>=1.5.0
+# python-dateutil>=1.5.0   # ckanext-xloader requires newer
 pytz==2016.7
 PyUtilib==5.7.1
 pyyaml==5.4
@@ -76,10 +76,17 @@ boto3>=1.4.4
 ckantoolkit
 
 # ckanext-xloader dependencies
+# https://github.com/ckan/ckanext-xloader/blob/master/requirements.txt
 messytables==0.15.2
 pika>=1.1.0
 Unidecode==1.0.22
+requests[security]>=2.11.1
+tabulator==1.53.5
+python-dateutil>=2.8.2
 
 # Other pinned dependencies
+# (most likely for snyk)
 itsdangerous==2.0.1
 MarkupSafe==2.0.1
+certifi>=2022.12.7
+setuptools>=65.5.1
