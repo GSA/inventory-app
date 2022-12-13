@@ -9,7 +9,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 
 ckanext-googleanalyticsbasic
 ckanext-usmetadata>=0.2.5
-ckanext-datajson
+ckanext-datajson>=0.1.10
 ckanext-dcat-usmetadata~=0.3.6
 ckanext-envvars>=0.0.2
 newrelic
