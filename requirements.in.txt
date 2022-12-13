@@ -8,7 +8,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
 ckanext-googleanalyticsbasic
-ckanext-usmetadata>=0.2.3
+ckanext-usmetadata>=0.2.5
 ckanext-datajson
 ckanext-dcat-usmetadata~=0.3.6
 ckanext-envvars>=0.0.2
