@@ -94,5 +94,3 @@ xmlschema==2.1.1
 zipp==3.11.0
 zope.event==4.5.0
 zope.interface==4.7.2
-future==0.18.2
-pyparsing==3.0.9
