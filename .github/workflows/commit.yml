@@ -58,13 +58,25 @@ jobs:
           path: vendor/
           if-no-files-found: error
 
+  # yamllint disable rule:line-length
+  create-cloudgov-services-development:
+    if: github.ref == 'refs/heads/develop'
+    name: create services (development)
+    uses: gsa/data.gov/.github/workflows/create-services-template.yml@deploy-reusable-template
+    with:
+      environ: development
+    secrets: inherit
+
   deploy-development:
     if: github.ref == 'refs/heads/develop'
     name: deploy (development)
     needs:
       - vendor
-    uses: ./.github/workflows/deploy-template.yml
+      - create-cloudgov-services-development
+    uses: gsa/data.gov/.github/workflows/deploy-template.yml@deploy-reusable-template
     with:
       environ: development
       app_url: https://inventory-dev-datagov.app.cloud.gov
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
     secrets: inherit
+    # yamllint enable rule:line-length
