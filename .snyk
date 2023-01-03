@@ -15,10 +15,4 @@ ignore:
           No remediation available yet;
         expires: 2023-07-03T16:20:58.017Z
         created: 2023-01-03T16:20:58.023Z
-  SNYK-PYTHON-FUTURE-3180414:
-    - '*':
-        reason: >-
-          No remediation available yet;
-        expires: 2023-07-03T16:20:58.017Z
-        created: 2023-01-03T16:20:58.023Z
 patch: {}
