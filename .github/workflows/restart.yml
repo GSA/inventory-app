@@ -9,7 +9,7 @@ on:
 jobs:
   restart-dev-for-test:
     name: restart (dev)
-    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
+    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@feature/restarts-reformat # TODO change back to main
     with:
       environ: development
       app_names: >
