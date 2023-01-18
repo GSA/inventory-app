@@ -8,87 +8,25 @@ on:
 
 jobs:
   restart-staging:
-    concurrency: staging
     name: restart (staging)
-    environment: staging
-    runs-on: ubuntu-latest
-    env:
-      APP_URL: https://inventory-stage-datagov.app.cloud.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: restart
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf restart inventory --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      - name: restart proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf restart inventory-proxy --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: Create Issue if it fails 😢
-        if: ${{ failure() }}
-        uses: JasonEtco/create-an-issue@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
-          GITHUB_JOB: ${{ toJson(github)['job'] }}
-          GITHUB_ATTEMPTS: ${{ github.run_attempt }}
-          LAST_COMMIT: ${{ github.sha }}
-          LAST_RUN_BY: ${{ github.actor }}
-          RUN_ID: ${{ github.run_id }}
-        with:
-          filename: .github/restart_failure.md
-          assignees: ${{ github.actor }}
-          update_existing: true
+    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
+    with:
+      environ: staging
+      app_names: >
+        "{\"include\":[
+          {\"app\":\"inventory\"},
+          {\"app\":\"inventory-proxy\"},
+        ]}"
+    secrets: inherit
 
   restart-prod:
-    concurrency: production
     name: restart (prod)
-    environment: production
-    runs-on: ubuntu-latest
-    env:
-      APP_URL: https://inventory.data.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: restart
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf restart inventory --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      - name: restart proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf restart inventory-proxy --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: Create Issue if it fails 😢
-        if: ${{ failure() }}
-        uses: JasonEtco/create-an-issue@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
-          GITHUB_JOB: ${{ toJson(github)['job'] }}
-          GITHUB_ATTEMPTS: ${{ github.run_attempt }}
-          LAST_COMMIT: ${{ github.sha }}
-          LAST_RUN_BY: ${{ github.actor }}
-          RUN_ID: ${{ github.run_id }}
-        with:
-          filename: .github/restart_failure.md
-          assignees: ${{ github.actor }}
-          update_existing: true
+    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
+    with:
+      environ: prod
+      app_names: >
+        "{\"include\":[
+          {\"app\":\"inventory\"},
+          {\"app\":\"inventory-proxy\"},
+        ]}"
+    secrets: inherit
