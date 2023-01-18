@@ -7,11 +7,11 @@ on:
     - cron: '7/15 * * * *'
 
 jobs:
-  restart-staging:
-    name: restart (staging)
+  restart-dev-for-test:
+    name: restart (dev)
     uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
     with:
-      environ: staging
+      environ: development
       app_names: >
         "{\"include\":[
           {\"app\":\"inventory\"},
@@ -19,14 +19,3 @@ jobs:
         ]}"
     secrets: inherit
 
-  restart-prod:
-    name: restart (prod)
-    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
-    with:
-      environ: prod
-      app_names: >
-        "{\"include\":[
-          {\"app\":\"inventory\"},
-          {\"app\":\"inventory-proxy\"},
-        ]}"
-    secrets: inherit
