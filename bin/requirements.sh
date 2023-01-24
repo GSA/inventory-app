@@ -16,4 +16,4 @@ pip3 install virtualenv
 virtualenv $venv
 ${venv}/bin/pip3 install -r /app/requirements.in.txt
 
-${venv}/bin/pip3 freeze --quiet > /app/requirements.txt
+${venv}/bin/pip3 freeze --all > /app/requirements.txt
