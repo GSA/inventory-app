@@ -19,6 +19,6 @@ jobs:
     name: restart (prod)
     uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
     with:
-      environ: production
+      environ: prod
       app_names: "{\"include\":[{\"app\":\"inventory\"},{\"app\":\"inventory-proxy\"},]}"
     secrets: inherit
