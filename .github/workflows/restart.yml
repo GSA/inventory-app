@@ -7,14 +7,18 @@ on:  # yamllint disable-line rule:truthy
     - cron: '7/15 * * * *'  # every 15 mins
 
 jobs:
-  restart-dev:
-    name: restart (dev)
+  restart-staging:
+    name: restart (staging)
     uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
     with:
-      environ: development
-      app_names: >
-        {\"include\": [
-          {\"app\":\"inventory\"},
-          {\"app\":\"inventory-proxy\"},
-        ]}
+      environ: staging
+      app_names: "{\"include\":[{\"app\":\"inventory\"},{\"app\":\"inventory-proxy\"},]}"
+    secrets: inherit
+
+  restart-prod:
+    name: restart (prod)
+    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
+    with:
+      environ: production
+      app_names: "{\"include\":[{\"app\":\"inventory\"},{\"app\":\"inventory-proxy\"},]}"
     secrets: inherit
