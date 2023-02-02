@@ -35,7 +35,6 @@ jobs:
       environ: prod
     secrets: inherit
 
-  # yamllint disable rule:line-length
   deploy-staging:
     name: deploy (staging)
     needs:
@@ -45,7 +44,7 @@ jobs:
     with:
       environ: staging
       app_url: https://inventory-stage-datagov.app.cloud.gov
-      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"   # yamllint disable-line rule:line-length
     secrets: inherit
 
   deploy-prod:
@@ -58,6 +57,5 @@ jobs:
     with:
       environ: prod
       app_url: https://inventory.data.gov
-      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"   # yamllint disable-line rule:line-length
     secrets: inherit
-    # yamllint enable rule:line-length

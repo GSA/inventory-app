@@ -58,7 +58,6 @@ jobs:
           path: vendor/
           if-no-files-found: error
 
-  # yamllint disable rule:line-length
   create-cloudgov-services-development:
     if: github.ref == 'refs/heads/develop'
     name: create services (development)
@@ -77,6 +76,5 @@ jobs:
     with:
       environ: development
       app_url: https://inventory-dev-datagov.app.cloud.gov
-      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"  # yamllint disable-line rule:line-length
     secrets: inherit
-    # yamllint enable rule:line-length
