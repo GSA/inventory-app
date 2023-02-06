@@ -67,7 +67,7 @@ services:
       - DEFAULT_REGION=us-east-1
       - START_WEB=1
     volumes:
-      - "./tmp/localstack:/tmp/localstack"
+      - "./tmp/localstack:/var/lib/localstack"
       - "./tmp/localstack/run/docker.sock:/var/run/docker.sock"
 volumes:
   ckan:
