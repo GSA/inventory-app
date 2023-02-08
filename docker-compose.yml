@@ -13,10 +13,11 @@ services:
     ports:
       - "5000:5000"
     env_file: .env
-    environment:
-      CKAN_SITE_URL: http://localhost:5000
     volumes:
       - .:/app/
+      - ./config/ckan.ini:/srv/app/ckan.ini
+      # TODO: get saml2auth working locally again
+      # - ./saml2:/srv/app/saml2
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       - ./src:/srv/app/src_extensions
       - ./temp:/temp
@@ -34,6 +35,7 @@ services:
     image: datagov/catalog-db:inventory2_8
     environment:
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
       DB_CKAN_USER: ckan
       DB_CKAN_PASSWORD: pass
       DB_CKAN_DB: ckan
