@@ -3,6 +3,17 @@
 set -o errexit
 set -o pipefail
 
+# Configure vars for egress-proxy
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+echo "Setting up egress proxy.."
+if [ -z ${proxy_url+x} ]; then
+  echo "Egress proxy is not connected."
+else
+  export https_proxy=$proxy_url
+fi
+
 # Add the current directory to our virtualenv
 pip3 install -e .
 
@@ -46,7 +57,7 @@ export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 # Get sysadmins list by a user-provided-service per environment
 export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-output ".[][] | select(.name == \"sysadmin-users\") | .credentials.CKANEXT__SAML2AUTH__SYSADMINS_LIST")
 
-# ckan reads some environment variables... https://docs.ckan.org/en/2.8/maintaining/configuration.html#environment-variables
+# ckan reads some environment variables... https://docs.ckan.org/en/2.9/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
 export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
 export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service datastore .credentials.uri)

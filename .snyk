@@ -1,30 +1,19 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
+version: v1.25.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   SNYK-PYTHON-BEAKER-575115:
     - '*':
         reason: >-
-          Beaker is used as a local cache; since the machines
-          are rebooted/recreated every 15 minutes the risk is
-          extremely minimal.
-        expires: 2021-12-30T06:00:00.000Z
-  SNYK-PYTHON-IPADDRESS-1290073:
+          No remediation available yet; Not affecting us since the storage is
+          not accessible to any other client
+        expires: 2023-06-30T16:20:58.017Z
+        created: 2022-12-08T16:20:58.023Z
+  SNYK-PYTHON-CRYPTOGRAPHY-3172287:
     - '*':
         reason: >-
-          All input into system is from trusted and verified
-          government users (requires piv card), so risk is low.
-        expires: 2021-12-30T06:00:00.000Z
-  SNYK-PYTHON-IPADDRESS-590065:
-    - '*':
-        reason: >-
-          Dev-only requirement; hash conflict not a concern
-          in dev mode.
-        expires: 2021-11-25T06:00:00.000Z
-  SNYK-PYTHON-IPADDRESS-1041793:
-    - '*':
-        reason: >-
-          Dev-only requirement; Denial of service attack not
-          a concern in dev mode
-        expires: 2021-11-25T06:00:00.000Z
+          No remediation available yet; Issue tracked in github:
+          https://github.com/GSA/data.gov/issues/4144
+        expires: 2023-07-03T16:20:58.017Z
+        created: 2023-01-03T16:20:58.023Z
 patch: {}

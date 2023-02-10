@@ -1,76 +1,24 @@
 ---
 name: restart application
 
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
   schedule:
-    - cron: '7/15 * * * *'
+    - cron: '7/15 * * * *'  # every 15 mins
 
 jobs:
   restart-staging:
-    concurrency: staging
     name: restart (staging)
-    environment: staging
-    runs-on: ubuntu-latest
-    env:
-      APP_URL: https://inventory-stage-datagov.app.cloud.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: restart
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: >-
-            cf scale inventory -i 1 &&
-            sleep 5 &&
-            cf restart inventory --strategy rolling &&
-            sleep 5;
-            cf scale inventory -i 2
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      - name: restart proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf restart inventory-proxy --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
+    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
+    with:
+      environ: staging
+      app_names: "{\"include\":[{\"app\":\"inventory\"},{\"app\":\"inventory-proxy\"},]}"
+    secrets: inherit
 
   restart-prod:
-    concurrency: production
     name: restart (prod)
-    environment: production
-    runs-on: ubuntu-latest
-    env:
-      APP_URL: https://inventory.data.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: restart
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: >-
-            cf scale inventory -i 1 &&
-            sleep 5 &&
-            cf restart inventory --strategy rolling &&
-            sleep 5;
-            cf scale inventory -i 2
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      - name: restart proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf restart inventory-proxy --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
+    uses: gsa/data.gov/.github/workflows/app-restart-template.yml@main
+    with:
+      environ: prod
+      app_names: "{\"include\":[{\"app\":\"inventory\"},{\"app\":\"inventory-proxy\"},]}"
+    secrets: inherit

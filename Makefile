@@ -36,7 +36,7 @@ test_extension:
 	docker-compose exec -T ckan pytest --cov=ckanext.datagov_inventory --disable-warnings /app/ckanext/datagov_inventory/tests/
 
 up:
-	docker-compose up
+	docker-compose up $(ARGS)
 
 clear-solr-volume:
 	# Destructive

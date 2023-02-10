@@ -1,6 +1,6 @@
 FROM openknowledge/ckan-dev:2.9
-# Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.8/Dockerfile
-# And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.8/Dockerfile
+# Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.9/Dockerfile
+# And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.9/Dockerfile
 
 ENV GIT_BRANCH=2.9
 ENV CKAN_HOME /srv/app

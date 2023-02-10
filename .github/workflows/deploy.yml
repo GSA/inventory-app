@@ -6,17 +6,16 @@ on:
     branches:
       - main
 
-
 jobs:
   vendor:
     name: vendor dependencies
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: vendor dependencies
         run: ./vendor-requirements.sh build
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: python-vendored
           path: vendor/
@@ -24,103 +23,41 @@ jobs:
 
   create-cloudgov-services-staging:
     name: create services (staging)
-    environment: staging
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: create services
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: ./create-cloudgov-services.sh
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
+    uses: gsa/data.gov/.github/workflows/create-services-template.yml@main
+    with:
+      environ: staging
+    secrets: inherit
 
+  create-cloudgov-services-prod:
+    name: create services (prod)
+    uses: gsa/data.gov/.github/workflows/create-services-template.yml@main
+    with:
+      environ: prod
+    secrets: inherit
+
+  # yamllint disable rule:line-length
   deploy-staging:
-    concurrency: staging
     name: deploy (staging)
-    environment: staging
-    runs-on: ubuntu-latest
+    needs:
+      - create-cloudgov-services-staging
+      - vendor
+    uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
+    with:
+      environ: staging
+      app_url: https://inventory-stage-datagov.app.cloud.gov
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+    secrets: inherit
+
+  deploy-prod:
+    name: deploy (prod)
     needs:
       - vendor
-      - create-cloudgov-services-staging
-    env:
-      APP_URL: https://inventory-stage-datagov.app.cloud.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: python-vendored
-      - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory --vars-file vars.staging.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: deploy-proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory-proxy --vars-file vars.staging.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: staging
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-
-  create-cloudgov-services-production:
-    name: create services (production)
-    environment: production
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: create services
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: ./create-cloudgov-services.sh
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-
-  deploy-production:
-    concurrency: production
-    name: deploy (production)
-    environment: production
-    runs-on: ubuntu-latest
-    needs:
+      - create-cloudgov-services-prod
       - deploy-staging
-      - create-cloudgov-services-production
-    env:
-      APP_URL: https://inventory.data.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: python-vendored
-      - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory --vars-file vars.production.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: deploy-proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory-proxy --vars-file vars.production.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: prod
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      
+    uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
+    with:
+      environ: prod
+      app_url: https://inventory.data.gov
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+    secrets: inherit
+    # yamllint enable rule:line-length

@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['2.x', '3.x']
+        python-version: ['3.x']
     steps:
       - name: checkout
-        uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: lint
@@ -30,13 +30,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: test
         run: make build test
       - name: test extension
         run: make test_extension
       - name: cypress-artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-artifacts
@@ -49,65 +49,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: vendor dependencies
         run: ./vendor-requirements.sh build
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: python-vendored
           path: vendor/
           if-no-files-found: error
 
+  # yamllint disable rule:line-length
   create-cloudgov-services-development:
+    if: github.ref == 'refs/heads/develop'
     name: create services (development)
-    environment: development
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: create services
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: ./create-cloudgov-services.sh
-          cf_org: gsa-datagov
-          cf_space: development
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
+    uses: gsa/data.gov/.github/workflows/create-services-template.yml@main
+    with:
+      environ: development
+    secrets: inherit
 
   deploy-development:
     if: github.ref == 'refs/heads/develop'
     name: deploy (development)
-    environment: development
-    runs-on: ubuntu-latest
     needs:
-      - lint
       - vendor
       - create-cloudgov-services-development
-    env:
-      APP_URL: https://inventory-dev-datagov.app.cloud.gov
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: python-vendored
-          path: vendor
-      - name: deploy-inventory
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory --vars-file vars.development.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: development
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-      - name: smoke test
-        run: bin/smoke.sh
-      - name: deploy proxy
-        uses: cloud-gov/cg-cli-tools@main
-        with:
-          command: cf push inventory-proxy --vars-file vars.development.yml --strategy rolling
-          cf_org: gsa-datagov
-          cf_space: development
-          cf_username: ${{secrets.CF_SERVICE_USER}}
-          cf_password: ${{secrets.CF_SERVICE_AUTH}}
-
+    uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
+    with:
+      environ: development
+      app_url: https://inventory-dev-datagov.app.cloud.gov
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+    secrets: inherit
+    # yamllint enable rule:line-length
