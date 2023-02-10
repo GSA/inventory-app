@@ -36,4 +36,14 @@ test_extension:
 	docker-compose exec -T ckan pytest --cov=ckanext.datagov_inventory --disable-warnings /app/ckanext/datagov_inventory/tests/
 
 up:
-	docker-compose up
+	docker-compose up $(ARGS)
+
+clear-solr-volume:
+	# Destructive
+	docker stop $(shell docker volume rm catalogdatagov_solr_data 2>&1 | cut -d "[" -f2 | cut -d "]" -f1)
+	docker rm $(shell docker volume rm catalogdatagov_solr_data 2>&1 | cut -d "[" -f2 | cut -d "]" -f1)
+	docker volume rm catalogdatagov_solr_data
+
+unlock-solr-volume:
+	# Corruptible
+	docker-compose run solr /bin/bash -c "rm -rf /var/solr/data/ckan/data/index/write.lock"

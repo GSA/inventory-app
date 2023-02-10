@@ -11,9 +11,15 @@ function wait_for () {
   done
 }
 
+echo -n "Waiting for Solr..."
 wait_for solr 8983
+echo "ok"
+echo -n "Waiting for DB..."
 wait_for db 5432
-wait_for localstack-container 4572
+echo "ok"
+echo -n "Waiting for Localstack..."
+wait_for localstack-container 4566
+echo "ok"
 
 # Even though solr is listening, it needs a moment before the core status
 # check will return successfully.
@@ -56,6 +62,14 @@ ckan db upgrade
 
 # Add ckan core to solr
 # /app/solr/migrate-solrcloud-schema.sh $COLLECTION_NAME
+
+# Reference: https://github.com/okfn/docker-ckan/commit/4746d8cc9d1a6ecb0c209cdf501b8d0f4f3cd224
+echo "Setting beaker.session.secret in ini file"
+ckan config-tool $CKAN_INI "beaker.session.secret=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
+ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
+JWT_SECRET=$(python3 -c 'import secrets; print("string:" + secrets.token_urlsafe())')
+ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=$JWT_SECRET"
+ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=$JWT_SECRET"
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 ${CKAN_HOME}/GSA_prerun.py

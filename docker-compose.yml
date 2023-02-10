@@ -13,10 +13,9 @@ services:
     ports:
       - "5000:5000"
     env_file: .env
-    environment:
-      CKAN_SITE_URL: http://localhost:5000
     volumes:
       - .:/app/
+      # To test datagov_inventory changes in realtime, the following mount can be used
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       - ./src:/srv/app/src_extensions
       - ./temp:/temp
@@ -34,6 +33,7 @@ services:
     image: datagov/catalog-db:inventory2_8
     environment:
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
       DB_CKAN_USER: ckan
       DB_CKAN_PASSWORD: pass
       DB_CKAN_DB: ckan
@@ -55,9 +55,9 @@ services:
   localstack-container:
     container_name: "localstack-container"
     privileged: true
-    image: localstack/localstack:0.11.0
+    image: localstack/localstack:1.3.1
     ports:
-      - "4572:4572"
+      - "4566:4566"
       - "8081:8081"
     environment:
       - SERVICES=s3
@@ -68,8 +68,7 @@ services:
       - DEFAULT_REGION=us-east-1
       - START_WEB=1
     volumes:
-      - "./tmp/localstack:/tmp/localstack"
-      - "./tmp/localstack/run/docker.sock:/var/run/docker.sock"
+      - "./tmp/localstack:/var/lib/localstack"
 volumes:
   ckan:
   solr_data:
