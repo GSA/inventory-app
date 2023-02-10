@@ -69,7 +69,6 @@ services:
       - START_WEB=1
     volumes:
       - "./tmp/localstack:/var/lib/localstack"
-      - "./tmp/localstack/run/docker.sock:/var/run/docker.sock"
 volumes:
   ckan:
   solr_data:
