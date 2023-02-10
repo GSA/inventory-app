@@ -15,8 +15,6 @@ services:
     env_file: .env
     volumes:
       - .:/app/
-      # TESTING: this may be necessary, will clean up later
-      # - ./config/ckan.ini:/srv/app/ckan.ini
       # TODO: get saml2auth working locally again
       # - ./saml2:/srv/app/saml2
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
