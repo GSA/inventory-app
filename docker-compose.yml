@@ -15,8 +15,7 @@ services:
     env_file: .env
     volumes:
       - .:/app/
-      # TODO: get saml2auth working locally again
-      # - ./saml2:/srv/app/saml2
+      # To test datagov_inventory changes in realtime, the following mount can be used
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       - ./src:/srv/app/src_extensions
       - ./temp:/temp
