@@ -11,9 +11,15 @@ function wait_for () {
   done
 }
 
+echo -n "Waiting for Solr..."
 wait_for solr 8983
+echo "ok"
+echo -n "Waiting for DB..."
 wait_for db 5432
-wait_for localstack-container 4572
+echo "ok"
+echo -n "Waiting for Localstack..."
+wait_for localstack-container 4566
+echo "ok"
 
 # Even though solr is listening, it needs a moment before the core status
 # check will return successfully.

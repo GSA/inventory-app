@@ -55,9 +55,9 @@ services:
   localstack-container:
     container_name: "localstack-container"
     privileged: true
-    image: localstack/localstack:0.11.0
+    image: localstack/localstack:1.3.1
     ports:
-      - "4572:4572"
+      - "4566:4566"
       - "8081:8081"
     environment:
       - SERVICES=s3
@@ -68,8 +68,7 @@ services:
       - DEFAULT_REGION=us-east-1
       - START_WEB=1
     volumes:
-      - "./tmp/localstack:/tmp/localstack"
-      - "./tmp/localstack/run/docker.sock:/var/run/docker.sock"
+      - "./tmp/localstack:/var/lib/localstack"
 volumes:
   ckan:
   solr_data:
