@@ -19,7 +19,7 @@ ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@b2c6
 ckanext-usmetadata==0.2.5
 -e git+https://github.com/ckan/ckanext-xloader.git@9db532439dbb8b88f7c9d11f1e573ff6c164e3b9#egg=ckanext_xloader
 ckantoolkit==0.0.7
-click==7.1.2
+click==8.0
 cryptography==39.0.1
 defusedxml==0.7.1
 dominate==2.4.0
