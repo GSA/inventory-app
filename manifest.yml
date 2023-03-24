@@ -5,7 +5,7 @@ applications:
     instances: ((instances))
     buildpacks:
       - https://github.com/cloudfoundry/apt-buildpack
-      - https://github.com/cloudfoundry/python-buildpack.git#v1.8.7
+      - https://github.com/cloudfoundry/python-buildpack.git#v1.8.4
     services:
       - ((app_name))-db
       - ((app_name))-datastore
