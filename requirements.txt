@@ -10,7 +10,7 @@ certifi==2022.12.7
 cffi==1.15.1
 chardet==3.0.4
 ckan==2.9.8
-ckanext-datajson==0.1.14
+ckanext-datajson==0.1.15
 ckanext-dcat-usmetadata==0.3.8
 ckanext-envvars==0.0.2
 ckanext-googleanalyticsbasic==0.2.0
