@@ -70,6 +70,7 @@ ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; pr
 JWT_SECRET=$(python3 -c 'import secrets; print("string:" + secrets.token_urlsafe())')
 ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=$JWT_SECRET"
 ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=$JWT_SECRET"
+ckan config-tool $CKAN_INI "ckanext.datajson.inventory_links_enabled=True"
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 ${CKAN_HOME}/GSA_prerun.py
