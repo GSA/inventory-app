@@ -40,5 +40,13 @@
   "title": "Draft Dataset 2",
   "name": "draft-dataset-2",
   "program_code": "010:003",
-  "extras": [{"key": "publishing_status", "value": "Draft"}]
+  "extras": [{"key": "publishing_status", "value": "Draft"},
+              {"key": "bureau_code", "value": "010:00"},
+              {"key": "program_code", "value": "010:003"},
+              {"key": "modified", "value": "2020-12-18"},
+              {"key": "publisher", "value": "Department of the Interior"},
+              {"key": "unique_id", "value": "doi-123456789-222"},
+              {"key": "public_access_level", "value": "public"},
+              {"key": "contact_name", "value": "Tester"},
+              {"key": "contact_email", "value": "tester@fake.com"}]
 }

@@ -39,5 +39,13 @@
     "unique_id": "doi-123456789",
     "title": "Test Dataset 1",
     "name": "test-dataset-1",
-    "program_code": "010:001"
+    "program_code": "010:001",
+    "extras": [{"key": "bureau_code", "value": "010:00"},
+                {"key": "program_code", "value": "010:001"},
+                {"key": "modified", "value": "2020-12-18"},
+                {"key": "publisher", "value": "Department of the Interior"},
+                {"key": "unique_id", "value": "doi-123456789"},
+                {"key": "public_access_level", "value": "public"},
+                {"key": "contact_name", "value": "Tester"},
+                {"key": "contact_email", "value": "tester@fake.com"}]
 }
