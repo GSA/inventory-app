@@ -15,7 +15,7 @@ for k, v in remediations.items():
     print(package, old_version, new_version)
 
     # Remove old version
-    os.system('sed -i "/^%s\\(=\\|>\\|$\\)/Id" ' 
+    os.system('sed -i "/^%s\\(=\\|>\\|$\\)/Id" '
               'requirements.in.txt' % (package))
 
     # Add new version
