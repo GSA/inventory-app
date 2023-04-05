@@ -1,11 +1,11 @@
 alembic==1.0.0
 async-timeout==4.0.2
 attrs==22.2.0
-Babel==2.12.1
+Babel==2.9.1
 Beaker==1.11.0
 bleach==3.3.0
-boto3==1.26.105
-botocore==1.29.105
+boto3==1.26.107
+botocore==1.29.107
 certifi==2022.12.7
 cffi==1.15.1
 chardet==3.0.4
@@ -27,8 +27,8 @@ elementpath==4.1.0
 et-xmlfile==1.1.0
 fanstatic==1.1
 feedgen==0.9.0
-Flask==2.2.3
-flask-babel==3.0.1
+Flask==2.0.0
+Flask-Babel==1.0.0
 Flask-Login==0.6.2
 flask-multistatic==1.0
 Flask-WTF==1.0.1
@@ -71,7 +71,7 @@ pysolr==3.6.0
 python-dateutil==2.8.2
 python-editor==1.0.4
 python-magic==0.4.15
-pytz==2022.7.1
+pytz==2023.3
 PyUtilib==5.7.1
 PyYAML==5.4
 redis==4.5.4
@@ -97,7 +97,7 @@ watchdog==3.0.0
 webassets==0.12.1
 webencodings==0.5.1
 WebOb==1.8.7
-Werkzeug==2.2.3
+Werkzeug==2.0.0
 wheel==0.38.4
 WTForms==3.0.1
 xlrd==2.0.1
