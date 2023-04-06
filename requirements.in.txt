@@ -36,7 +36,7 @@ Flask==2.0.0
 Flask-Babel==1.0.0
 Flask-Login==0.6.2
 Flask-WTF==1.0.1
-Jinja2==3.1.2
+Jinja2==3.0.3
 PyJWT==2.4.0              # Upgraded to pass security scans
 Markdown==3.4.1           # Upgraded https://github.com/GSA/data.gov/issues/4056
 passlib==1.7.3

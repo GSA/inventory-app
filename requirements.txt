@@ -14,7 +14,7 @@ ckanext-datajson==0.1.17
 ckanext-dcat-usmetadata==0.3.8
 ckanext-envvars==0.0.3
 ckanext-googleanalyticsbasic==0.2.0
-ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@8e815a47cd902884ff93fcff96d90349fb6c5459
+ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@8c52a07355f110e9896df582f2d3c5ecb5eab907
 ckanext-saml2auth @ git+https://github.com/keitaroinc/ckanext-saml2auth.git@b2c6cfc2f9d6179601017f2d6530cf4ee5331f00
 ckanext-usmetadata==0.2.6
 -e git+https://github.com/ckan/ckanext-xloader.git@c062f547e8e5dd80fd5dae6d184fe268ccb4b32e#egg=ckanext_xloader
@@ -41,7 +41,7 @@ ijson==3.2.0.post0
 importlib-metadata==6.1.0
 importlib-resources==5.12.0
 itsdangerous==2.0.1
-Jinja2==3.1.2
+Jinja2==3.0.3
 jmespath==1.0.1
 json-table-schema==0.2.1
 jsonlines==3.1.0
