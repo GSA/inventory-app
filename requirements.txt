@@ -95,7 +95,7 @@ watchdog==2.2.1
 webassets==0.12.1
 webencodings==0.5.1
 WebOb==1.8.7
-Werkzeug==1.0.0
+Werkzeug==2.0.3
 wheel==0.38.4
 xlrd==2.0.1
 xmlschema==2.2.1
