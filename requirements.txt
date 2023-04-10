@@ -72,7 +72,7 @@ python-magic==0.4.15
 pytz==2016.7
 PyUtilib==5.7.1
 PyYAML==5.4
-redis==4.5.3
+redis==4.5.4
 repoze.lru==0.7
 repoze.who==2.3
 requests==2.25.0
