@@ -1,6 +1,6 @@
 ckan==2.9.8
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
-git+https://github.com/keitaroinc/ckanext-saml2auth.git@main#egg=ckanext-saml2auth
+git+https://github.com/GSA/ckanext-saml2auth.git@create_user_via_saml#egg=ckanext-saml2auth
 # TODO Remove webob fork
 # git+https://github.com/GSA/webob.git@datagov/v1.0.8#egg=webob
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
