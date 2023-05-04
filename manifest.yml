@@ -27,5 +27,5 @@ applications:
       CKANEXT__SAML2AUTH__ENTITY_ID: ((ckanext__saml2auth__entity_id))
       CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH: ((ckanext__saml2auth__idp_metadata__local_path))
       CKAN_SITE_ID: inventory
-      CKAN_SITE_URL: https://inventorynew-prod-datagov.apps.internal/
+      CKAN_SITE_URL: https://inventory.data.gov/
       SAML2_CERTIFICATE: ((saml2_certificate))
