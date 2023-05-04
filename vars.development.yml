@@ -1,4 +1,4 @@
-app_name: inventory
+app_name: inventorynew
 space_name: development
 
 ckanext__saml2auth__entity_id: urn:gov:gsa:SAML:2.0.profiles:sp:sso:gsa:datagov-development-inventory
@@ -11,8 +11,7 @@ disk_quota: 1G
 
 new_relic_monitor_mode: false
 
-route_external: inventory-dev-datagov.app.cloud.gov
-route_internal: inventory-dev-datagov.apps.internal
+route_internal: inventorynew-dev-datagov.apps.internal
 
 saml2_certificate: |
   -----BEGIN CERTIFICATE-----

@@ -7,11 +7,11 @@ applications:
       - https://github.com/cloudfoundry/apt-buildpack
       - https://github.com/cloudfoundry/python-buildpack.git#v1.8.4
     services:
-      - ((app_name))-db
-      - ((app_name))-datastore
-      - ((app_name))-s3
-      - ((app_name))-redis
-      - ((app_name))-secrets
+      - inventory-db
+      - inventory-datastore
+      - inventory-s3
+      - inventory-redis
+      - inventory-secrets
       - ((app_name))-solr
       - sysadmin-users
     routes:
@@ -27,21 +27,5 @@ applications:
       CKANEXT__SAML2AUTH__ENTITY_ID: ((ckanext__saml2auth__entity_id))
       CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH: ((ckanext__saml2auth__idp_metadata__local_path))
       CKAN_SITE_ID: inventory
-      CKAN_SITE_URL: https://((route_external))
-      NEW_RELIC_APP_NAME: ((app_name))-((space_name))
-      NEW_RELIC_HOST: gov-collector.newrelic.com
-      NEW_RELIC_MONITOR_MODE: ((new_relic_monitor_mode))
-      NEW_RELIC_CONFIG_FILE: /home/vcap/app/config/newrelic.ini
+      CKAN_SITE_URL: https://inventorynew-prod-datagov.apps.internal/
       SAML2_CERTIFICATE: ((saml2_certificate))
-
-  - name: ((app_name))-proxy
-    buildpacks:
-      - https://github.com/cloudfoundry/nginx-buildpack
-    path: ./proxy
-    # TODO: tweak with load testing
-    memory: 400M
-    routes:
-      - route: ((route_external))
-    env:
-      route_external: ((route_external))
-      route_internal: ((route_internal))

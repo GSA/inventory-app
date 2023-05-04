@@ -21,7 +21,11 @@ function vcap_get_service () {
   local path name
   name="$1"
   path="$2"
-  service_name=${APP_NAME}-${name}
+  appname="inventory"
+  if [ $name == "solr" ]; then
+    appname="inventorynew"
+  fi
+  service_name=$appname-${name}
   echo $VCAP_SERVICES | jq --raw-output --arg service_name "$service_name" ".[][] | select(.name == \$service_name) | $path"
 }
 
