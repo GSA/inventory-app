@@ -90,10 +90,6 @@ _TODO: add details about running and editing extension tests here._
 
 Copy `vars.yml.template` to `vars.yml`, and customize the values in that file. Then, assuming you're logged in for the Cloud Foundry CLI:
 
-Update and cache all the Python package requirements
-
-    ./vendor-requirements.sh
-
 Create the database used by datastore. `${app_name}` should be the same as what you have in vars.yml.
 
     cf create-service aws-rds micro-psql ${app_name}-datastore --wait
