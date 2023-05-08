@@ -6,6 +6,7 @@ ENV GIT_BRANCH=2.9
 ENV CKAN_HOME /srv/app
 ENV CKAN_CONFIG /app/config
 ENV APP_DIR /app
+ENV VENV /app/venv
 # ENV CKAN_ENV docker
 
 # TODO: Figure out if these things are necessary?
@@ -15,12 +16,14 @@ ENV APP_DIR /app
 # Install vim and zip
 RUN apk add vim zip
 
-COPY requirements.txt requirements-dev.txt ${APP_DIR}/
-ADD setup.py README.md ${APP_DIR}/
-ADD ckanext ${APP_DIR}/ckanext/
+ADD README.md setup.py ${APP_DIR}/
+ADD ckanext ${APP_DIR}/ckanext
+ADD requirements.txt requirements-dev.txt ${APP_DIR}/
+RUN pip3 install virtualenv && \
+  virtualenv $VENV && \
+  ${VENV}/bin/pip3 install --ignore-installed -r ${APP_DIR}/requirements.txt && \
+  ${VENV}/bin/pip3 install --ignore-installed -r ${APP_DIR}/requirements-dev.txt
 
-RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements.txt
-RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements-dev.txt
 # COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
 # What saml2 info do we need?

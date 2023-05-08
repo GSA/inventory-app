@@ -11,6 +11,8 @@ function wait_for () {
   done
 }
 
+. /app/venv/bin/activate
+
 echo -n "Waiting for Solr..."
 wait_for solr 8983
 echo "ok"
@@ -24,7 +26,6 @@ echo "ok"
 # Even though solr is listening, it needs a moment before the core status
 # check will return successfully.
 sleep 1
-
 
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
@@ -94,4 +95,4 @@ exec ckan jobs worker &
 
 echo starting ckan...
 # sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
-exec $CKAN_CONFIG/server_start.sh
+$CKAN_CONFIG/server_start.sh

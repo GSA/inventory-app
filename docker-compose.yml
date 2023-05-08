@@ -14,7 +14,12 @@ services:
       - "5000:5000"
     env_file: .env
     volumes:
-      - .:/app/
+      - ./start.sh:/app/start.sh
+      - ./ckanext:/app/ckanext
+      - ./setup.py:/app/setup.py
+      - ./config:/app/config
+      - ./bin:/app/bin
+      - ./src:/app/src
       # To test datagov_inventory changes in realtime, the following mount can be used
       #- ./ckanext-datagov_inventory:/usr/lib/ckan/src/ckanext-datagov_inventory
       - ./src:/srv/app/src_extensions
