@@ -11,7 +11,7 @@ function wait_for () {
   done
 }
 
-. /app/venv/bin/activate
+. $VENV/bin/activate
 
 echo -n "Waiting for Solr..."
 wait_for solr 8983
@@ -95,4 +95,4 @@ exec ckan jobs worker &
 
 echo starting ckan...
 # sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0
-$CKAN_CONFIG/server_start.sh
+exec $CKAN_CONFIG/server_start.sh
