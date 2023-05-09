@@ -1,37 +1,35 @@
-FROM openknowledge/ckan-dev:2.9
-# Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.9/Dockerfile
-# And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.9/Dockerfile
+FROM python:3.9
 
-ENV GIT_BRANCH=2.9
-ENV CKAN_HOME /srv/app
-ENV CKAN_CONFIG /app/config
-ENV APP_DIR /app
-# ENV CKAN_ENV docker
+RUN apt-get update -y && \
+  apt-get install -y vim zip
 
-# TODO: Figure out if these things are necessary?
-# add dependencies for cryptography and vim
-# RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
+ADD README.md setup.py ${APP_DIR}/
+ADD ckanext ${APP_DIR}/ckanext
+ADD requirements.txt requirements-dev.txt ${APP_DIR}/
+RUN pip3 install --upgrade pip && \
+  pip3 install -r ${APP_DIR}/requirements.txt --ignore-installed && \
+  pip3 install -r ${APP_DIR}/requirements-dev.txt --ignore-installed
 
-# Install vim and zip
-RUN apk add vim zip
+COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
-COPY requirements.txt requirements-dev.txt ${APP_DIR}/
-ADD setup.py README.md ${APP_DIR}/
-ADD ckanext ${APP_DIR}/ckanext/
 
-RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements.txt
-RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements-dev.txt
-# COPY docker-entrypoint.d/* /docker-entrypoint.d/
+# CKAN Setup Variables
+ENV APP_DIR=/srv/app
+ENV SRC_DIR=/srv/app/src
+ENV SRC_EXTENSIONS_DIR=/srv/app/src_extensions
+ENV CKAN_INI=${APP_DIR}/ckan.ini
+ENV PIP_SRC=${SRC_DIR}
+ENV CKAN_STORAGE_PATH=/var/lib/ckan
+RUN mkdir -p $CKAN_STORAGE_PATH $APP_DIR $SRC_EXTENSIONS_DIR
 
-# What saml2 info do we need?
-# COPY saml2 ${APP_DIR}/saml2
+# CKAN Setup Files
+# Our production ckan.ini messes with local login
+# (so we need to generate a new one)
+COPY config/prerun.py ${APP_DIR}/
+RUN ckan generate config ${CKAN_INI}
+COPY config/who.ini ${APP_DIR}/
+COPY config/login.sandbox.idp.xml ${APP_DIR}/saml2
 
-# COPY the ini test file to the container 
-# COPY test-catalog-next.ini ${SRC_DIR}/ckan
-
-# Not currently in use in development
-COPY config/gunicorn.conf.py $CKAN_CONFIG/
-COPY config/server_start.sh $CKAN_CONFIG/
-
-# Custom prerun script for Solr 8
-COPY config/GSA_prerun.py ${CKAN_HOME}/
+# In order for dependencies to be managed, python
+# needs to be mapped to python3
+RUN ln -s /usr/bin/python3 /usr/bin/python
