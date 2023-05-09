@@ -3,12 +3,7 @@ import requests
 import sys
 import subprocess
 import psycopg2
-try:
-    from urllib.request import urlopen
-    from urllib.error import URLError
-except ImportError:
-    from urllib2 import urlopen
-    from urllib2 import URLError
+from urllib.error import URLError
 
 import time
 import re
@@ -23,7 +18,8 @@ def update_plugins():
     plugins = os.environ.get("CKAN__PLUGINS", "")
     print(("[prerun] Setting the following plugins in {}:".format(ckan_ini)))
     print(plugins)
-    cmd = ["ckan", "config-tool", ckan_ini, "ckan.plugins = {}".format(plugins)]
+    cmd = ["ckan", "config-tool", ckan_ini,
+           "ckan.plugins = {}".format(plugins)]
     subprocess.check_output(cmd, stderr=subprocess.STDOUT)
     print("[prerun] Plugins set.")
 
@@ -73,7 +69,8 @@ def check_solr_connection(retry=None):
 
     CKAN_SOLR_USER = os.environ.get("CKAN_SOLR_USER", "")
     CKAN_SOLR_PASSWORD = os.environ.get("CKAN_SOLR_PASSWORD", "")
-    url = os.environ.get("CKAN_SOLR_URL", "").replace('http://', f'http://{CKAN_SOLR_USER}:{CKAN_SOLR_PASSWORD}@')
+    url = os.environ.get("CKAN_SOLR_URL", "") \
+        .replace('http://', f'http://{CKAN_SOLR_USER}:{CKAN_SOLR_PASSWORD}@')
     search_url = "{url}/select/?q=*&wt=json".format(url=url)
 
     try:
@@ -119,7 +116,8 @@ def init_datastore_db():
         print("[prerun] Skipping datastore initialization")
         return
 
-    datastore_perms_command = ["ckan", "-c", ckan_ini, "datastore", "set-permissions"]
+    datastore_perms_command = ["ckan", "-c", ckan_ini,
+                               "datastore", "set-permissions"]
 
     connection = psycopg2.connect(conn_str)
     cursor = connection.cursor()
@@ -171,7 +169,7 @@ def create_sysadmin():
         command = ["ckan", "-c", ckan_ini, "user", "show", name]
 
         out = subprocess.check_output(command)
-        if b"User:None" not in re.sub(b"\s", b"", out):
+        if b"User:None" not in re.sub(b"\\s", b"", out):
             print("[prerun] Sysadmin user exists, skipping creation")
             return
 
