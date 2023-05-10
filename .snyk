@@ -23,4 +23,11 @@ ignore:
           https://github.com/GSA/data.gov/issues/4217
         expires: 2023-04-30T16:20:58.017Z
         created: 2023-02-15T16:20:58.023Z
+  SNYK-PYTHON-SETUPTOOLS-3180412:
+    - '*':
+        reason: >-
+          It is in our requirements-dev.txt and not actually
+          affecting anything
+          expires: 2030-05-10T16:20:58.017Z
+          created: 2023-05-10T16:20:58.023Z
 patch: {}
