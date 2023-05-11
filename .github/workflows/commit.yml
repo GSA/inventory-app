@@ -44,20 +44,6 @@ jobs:
             ./e2e/cypress/screenshots/
             ./e2e/cypress/videos/
 
-  vendor:
-    name: vendor dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-      - name: vendor dependencies
-        run: ./vendor-requirements.sh build
-      - uses: actions/upload-artifact@v3
-        with:
-          name: python-vendored
-          path: vendor/
-          if-no-files-found: error
-
   # yamllint disable rule:line-length
   create-cloudgov-services-development:
     if: github.ref == 'refs/heads/develop'
@@ -71,7 +57,6 @@ jobs:
     if: github.ref == 'refs/heads/develop'
     name: deploy (development)
     needs:
-      - vendor
       - create-cloudgov-services-development
     uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
     with:
