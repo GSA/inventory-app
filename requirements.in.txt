@@ -88,3 +88,5 @@ itsdangerous==2.0.1
 MarkupSafe==2.0.1
 certifi>=2022.12.7
 setuptools>=65.5.1
+flask>=2.2.5
+werkzeug>=2.2.3
