@@ -11,7 +11,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 # ckanext-googleanalyticsbasic
 # ckanext-usmetadata>=0.2.6
 # ckanext-datajson>=0.1.15
-ckanext-dcat-usmetadata~=0.4.0
+ckanext-dcat-usmetadata~=0.4.1
 -e git+https://github.com/gsa/ckanext-datajson.git@ckan-210#egg=ckanext-datajson
 -e git+https://github.com/gsa/ckanext-googleanalyticsbasic.git@ckan-2.10#egg=ckanext-googleanalyticsbasic
 -e git+https://github.com/gsa/ckanext-usmetadata.git@ckan-2.10#egg=ckanext-usmetadata
