@@ -25,6 +25,8 @@ echo "ok"
 # check will return successfully.
 sleep 1
 
+echo "Set up ckan.datapusher.api_token"
+ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add ckan_admin datapusher | tail -n 1 | tr -d '\t')"
 
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
@@ -71,6 +73,7 @@ JWT_SECRET=$(python3 -c 'import secrets; print("string:" + secrets.token_urlsafe
 ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=$JWT_SECRET"
 ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=$JWT_SECRET"
 ckan config-tool $CKAN_INI "ckanext.datajson.inventory_links_enabled=True"
+
 
 # Run the prerun script to init CKAN and create the default admin user
 python3 ${CKAN_HOME}/GSA_prerun.py

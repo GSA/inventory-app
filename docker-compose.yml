@@ -1,7 +1,7 @@
 version: '3'
 services:
   ckan:
-    image: datagov/inventory-app:2.9
+    image: datagov/inventory-app:2.10
     build: .
     command: /app/start.sh
     depends_on:
