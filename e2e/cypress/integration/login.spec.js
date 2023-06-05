@@ -2,7 +2,7 @@ describe('Login', () => {
     
     it('Invalid user login attempt', () => {
         cy.login('not-user', 'not-password', true)
-        cy.contains('Login Failed.')
+        cy.contains('Login failed.')
     });
 
     it('Valid login attempt', () => {
