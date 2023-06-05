@@ -54,7 +54,7 @@ describe('Dataset', () => {
         // Open resource dropdown
         cy.get('.dropdown-toggle').click()
         // Download resource file
-        cy.get('a[href*="ckan_resource.csv"]').click()
+        cy.get('a[href*="ckan_resource.csv"]').click({force: true})
         // check downloaded file matches uploaded file header
         cy.task('isExistFile', 'ckan_resource.csv').should('contain', 'for,testing,purposes');
     });
@@ -68,7 +68,7 @@ describe('Dataset', () => {
         // Open resource dropdown
         cy.get('.dropdown-toggle').click();
         // Download resource file
-        cy.get('a[href*="ckan_resource.csv"]').click().should('have.attr', 'href').then((href) => {
+        cy.get('a[href*="ckan_resource.csv"]').click({force: true}).should('have.attr', 'href').then((href) => {
             cy.logout();
             cy.request(href).then((response) => {
               cy.writeFile('cypress/downloads/ckan_resource2.csv', response.body)
