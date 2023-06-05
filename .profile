@@ -59,9 +59,11 @@ export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-outpu
 
 # ckan reads some environment variables... https://docs.ckan.org/en/2.9/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
+export CKAN_SQLALCHEMY_URL=${CKAN_SQLALCHEMY_URL/postgres/postgresql}
 export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
 export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service datastore .credentials.uri)
-export CKAN_DATASTORE_READ_URL=postgres://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
+export CKAN_DATASTORE_WRITE_URL=${CKAN_DATASTORE_WRITE_URL/postgres/postgresql}
+export CKAN_DATASTORE_READ_URL=postgresql://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
 export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
 export CKAN_STORAGE_PATH=${SHARED_DIR}/files
 export CKAN_SOLR_BASE_URL=https://$(vcap_get_service solr .credentials.domain)
@@ -77,6 +79,7 @@ export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.
 export CKANEXT__S3FILESTORE__AWS_STORAGE_PATH=datagov/inventory-next
 # xloader uses the same db as datastore
 export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service datastore .credentials.uri)
+export CKANEXT__XLOADER__JOBS_DB__URI=${CKANEXT__XLOADER__JOBS_DB__URI/postgres/postgresql}
 
 # Write out any files and directories
 mkdir -p $CKAN_STORAGE_PATH
