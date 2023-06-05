@@ -27,7 +27,7 @@ describe('Organization', () => {
         cy.visit('/organization/edit/cypress-test-org')
 
         // Hide flask debug toolbar
-        cy.get('#flHideToolBarButton').click();
+        cy.get('#flDebugHideToolBarButton').click();
 
         cy.get('#field-description').clear()
         cy.get('#field-description').type('the new description')

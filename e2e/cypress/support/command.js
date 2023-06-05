@@ -34,7 +34,7 @@ Cypress.Commands.add('login', (userName, password, loginTest) => {
     }
 
     // Hide flask debug toolbar
-    cy.get('#flHideToolBarButton').click();
+    cy.get('#flDebugHideToolBarButton').click();
 
     cy.get('#field-login').type(userName);
     cy.get('#field-password').type(password);
