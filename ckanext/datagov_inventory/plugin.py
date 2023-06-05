@@ -2,7 +2,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 from ckan.model import User
-from ckan.common import _, request as ckan_request
+from ckan.common import _, current_user, request as ckan_request
 from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
 import ckan.authz as authz
@@ -21,6 +21,8 @@ def datagov_disallow_anonymous_access(func=None):
     @toolkit.chained_auth_function
     @toolkit.auth_disallow_anonymous_access
     def _wrapper(next_auth, context, dict_data=None):
+        if current_user.is_anonymous:
+            return {'success': False}
         if func:
             # We're called in the decorator context, call the function
             return func(next_auth, context, dict_data)
