@@ -86,7 +86,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                      {'name': 'gsa_member', 'capacity': 'member'}]
         factories.Organization(users=org_users, name='gsa')
 
-        # Create gsa organization and add users
+        # Create doi organization and add users
         org_users = [{'name': 'doi_admin', 'capacity': 'admin'},
                      {'name': 'doi_member', 'capacity': 'member'}]
         factories.Organization(users=org_users, name='doi')
