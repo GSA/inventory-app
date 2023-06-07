@@ -371,28 +371,40 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         })
 
     def test_auth_user_list(self):
+        '''
+        IMPORTANT CHANGE: This test allowed all users access to the 'user_list'
+        function until CKAN 2.10.  We don't know why the functionality
+        changed.  But only sysadmin can access this function in tests.
+        From the UI, it seems like all users have access to this operation.
+        '''
         # Create test users and test data
         self.setup_test_orgs_users()
 
         self.assert_user_authorization('user_list', {
-            'gsa_admin': is_allowed,
-            'gsa_editor': is_allowed,
-            'gsa_member': is_allowed,
-            'doi_admin': is_allowed,
-            'doi_member': is_allowed,
+            'gsa_admin': is_denied,
+            'gsa_editor': is_denied,
+            'gsa_member': is_denied,
+            'doi_admin': is_denied,
+            'doi_member': is_denied,
             'anonymous': is_denied
         })
 
     def test_auth_user_show(self):
+        '''
+        IMPORTANT CHANGE: This test allowed all users access to the 'user_show'
+        function until CKAN 2.10.  We don't know why the functionality
+        changed.  But only sysadmin can access this function in tests.
+        From the UI, it seems like all users have access to this operation.
+        '''
         # Create test users and test data
         self.setup_test_orgs_users()
 
         self.assert_user_authorization('user_show', {
-            'gsa_admin': is_allowed,
-            'gsa_editor': is_allowed,
-            'gsa_member': is_allowed,
-            'doi_admin': is_allowed,
-            'doi_member': is_allowed,
+            'gsa_admin': is_denied,
+            'gsa_editor': is_denied,
+            'gsa_member': is_denied,
+            'doi_admin': is_denied,
+            'doi_member': is_denied,
             'anonymous': is_denied
         })
 
