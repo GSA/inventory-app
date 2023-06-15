@@ -11,8 +11,9 @@ certifi==2023.5.7
 cffi==1.15.1
 chardet==5.1.0
 charset-normalizer==2.1.1
-# ckan @ git+https://github.com/gsa/ckan.git@48f03eb6afcf4aed688120d2f26e4f15945fc21a
-ckan @ git+https://github.com/gsa/ckan.git@838b97e7ee14885af5cc4efed98d992b024d37d2
+ckan==2.10.1
+# # ckan @ git+https://github.com/gsa/ckan.git@48f03eb6afcf4aed688120d2f26e4f15945fc21a
+# ckan @ git+https://github.com/gsa/ckan.git@9915ba0022b9a74a65e61c097b2fee584b044087
 -e git+https://github.com/gsa/ckanext-datajson.git@4d6d09b79d8f932303056747706a31aacd195cf6#egg=ckanext_datajson
 ckanext-dcat_usmetadata==0.4.1
 ckanext-envvars==0.0.3

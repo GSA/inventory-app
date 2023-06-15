@@ -113,3 +113,4 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     # render our custom 403 template
     def update_config(self, config):
         toolkit.add_template_directory(config, 'templates')
+        toolkit.add_resource('fanstatic', 'datagov_inventory')
