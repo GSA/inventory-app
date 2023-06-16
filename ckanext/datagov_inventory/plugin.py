@@ -32,10 +32,17 @@ def datagov_disallow_anonymous_access(func=None):
     return _wrapper
 
 
+@toolkit.auth_allow_anonymous_access
+def test_func(context, data_dict):
+    log.info('*** here ***')
+    return {'success': True}
+
 # Comes from
 # https://github.com/ckan/ckan/blob/master/ckan/logic/auth/get.py#L129-L145
 # Anonymous users rely on public/private package info to have access
 # CKAN users utilize normal process
+
+
 @toolkit.auth_allow_anonymous_access
 def inventory_resource_show(context, data_dict):
     model = context['model']
@@ -92,14 +99,14 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
 
     def get_auth_functions(self):
         return {'format_autocomplete': datagov_disallow_anonymous_access(),
-                'group_list': datagov_disallow_anonymous_access(),
+                'group_list': test_func,
                 'license_list': datagov_disallow_anonymous_access(),
                 'member_roles_list': datagov_disallow_anonymous_access(),
-                'organization_list': datagov_disallow_anonymous_access(),
+                'organization_list': test_func,
                 'package_list': datagov_disallow_anonymous_access(),
                 'package_search': datagov_disallow_anonymous_access(),
-                'package_show': inventory_package_show,
-                'resource_show': inventory_resource_show,
+                'package_show': datagov_disallow_anonymous_access(),
+                'resource_show': datagov_disallow_anonymous_access(),
                 'site_read': datagov_disallow_anonymous_access(),
                 'tag_list': datagov_disallow_anonymous_access(),
                 'tag_show': datagov_disallow_anonymous_access(),
