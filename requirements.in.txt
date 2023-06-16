@@ -31,7 +31,6 @@ click==7.1.2
 dominate==2.4.0
 fanstatic==1.1
 feedgen==0.9.0
-Flask==1.1.1
 Flask-Babel==1.0.0
 flask-multistatic==1.0
 Jinja2==2.11.3
@@ -88,3 +87,6 @@ itsdangerous==2.0.1
 MarkupSafe==2.0.1
 certifi>=2022.12.7
 setuptools>=65.5.1
+cryptography>=41.0.0
+flask>=2.2.5
+werkzeug>=2.2.3
