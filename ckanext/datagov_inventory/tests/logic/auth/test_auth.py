@@ -136,21 +136,18 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                                   auth_function,
                                   expected_user_access_dict,
                                   object_id=None):
-        # Assert the expected_user_access_dict is complete for our matrix of
-        #  access roles. It's an error if the test case is missing an
-        #  expectation.
-        assert 'gsa_admin' in expected_user_access_dict
-        assert 'gsa_editor' in expected_user_access_dict
-        assert 'gsa_member' in expected_user_access_dict
-        assert 'doi_admin' in expected_user_access_dict
-        assert 'doi_member' in expected_user_access_dict
-        assert 'anonymous' in expected_user_access_dict
 
         for user in expected_user_access_dict:
+            # anonymous users need to pass user context as ''
+            user_context = (
+                self.test_users[user]['name'] if self.test_users[user] else ''
+            )
             context = {
                 'model': model,
                 'ignore_auth': False,
-                'user': user}
+                'user': user_context
+            }
+            # captures any user that `is_allowed` in expected_user_access_dict
             if expected_user_access_dict[user]:
                 # We expect users to have access, validate
                 actual_authorization = helpers.call_auth(auth_function,

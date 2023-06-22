@@ -98,6 +98,7 @@ export CKAN_SOLR_URL=$CKAN_SOLR_BASE_URL/solr/$SOLR_COLLECTION
 # Edit the config file to validate debug is off and utilizes the correct port
 export CKAN_INI="${HOME}/config/ckan.ini"
 # ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
+ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
 ckan config-tool $CKAN_INI --section DEFAULT --edit debug=false
 
 echo "Setting up the datastore user"
