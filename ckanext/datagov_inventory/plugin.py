@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 @toolkit.auth_allow_anonymous_access
 @toolkit.chained_auth_function
 def restrict_anon_access(next_auth, context, data_dict):
-    if current_user.is_authenticated:
+    if context["user"]:
         return next_auth(context, data_dict)
     else:
         return {'success': False}
@@ -76,15 +76,29 @@ def inventory_package_show(context, data_dict):
     else:
         return package_show(context, data_dict)
 
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
-    plugins.implements(plugins.IAuthenticator, inherit=True)
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurer)
 
     def get_auth_functions(self):
-        return {'group_list': restrict_anon_access,
+        return {'format_autocomplete': restrict_anon_access,
+                'group_list': restrict_anon_access,
+                'license_list': restrict_anon_access,
+                'member_roles_list': restrict_anon_access,
                 'organization_list': restrict_anon_access,
+                'package_list': restrict_anon_access,
+                'package_search': restrict_anon_access,
+                'package_show': inventory_package_show,
+                'resource_show': inventory_resource_show,
                 'site_read': restrict_anon_access,
+                'tag_list': restrict_anon_access,
+                'tag_show': restrict_anon_access,
+                'task_status_show': restrict_anon_access,
+                'user_list': restrict_anon_access,
+                'user_show': restrict_anon_access,
+                'vocabulary_list': restrict_anon_access,
+                'vocabulary_show': restrict_anon_access,
                 }
 
     # render our custom 403 template

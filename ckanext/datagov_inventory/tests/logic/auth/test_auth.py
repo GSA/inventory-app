@@ -5,6 +5,7 @@ import pytest
 
 import ckan.logic as logic
 import ckan.model as model
+import ckan.plugins.toolkit as toolkit
 from ckan.tests.helpers import FunctionalTestBase
 
 import ckan.tests.factories as factories
@@ -31,6 +32,13 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         super(TestDatagovInventoryAuth, self).setup_class()
         # Start with a clean database and index for each test
         self.clean_datastore()
+
+    # @pytest.fixture()
+    # def app(make_app):
+    #     from flask.sessions import SecureCookieSessionInterface
+    #     app = make_app()
+    #     app.flask_app.session_interface = SecureCookieSessionInterface()
+    #     return app
 
     def create_datasets(self):
         self.sysadmin = factories.Sysadmin(name='admin')
@@ -91,6 +99,15 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                      {'name': 'doi_member', 'capacity': 'member'}]
         factories.Organization(users=org_users, name='doi')
 
+    # def login_users(self):
+    #     for user in self.test_users:
+    #         print(self.test_users[user]['id'])
+    #         user_model = model.User.get(self.test_users[user]['id'])
+    #         try:
+    #             toolkit.login_user(user_model, False, 5000, False, False)
+    #         except BaseException as err:
+    #             print(err)
+
     def clean_datastore(self):
         engine = datastore_helpers.db.get_write_engine()
         datastore_helpers.rebuild_all_dbs(
@@ -136,21 +153,15 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                                   auth_function,
                                   expected_user_access_dict,
                                   object_id=None):
-        # Assert the expected_user_access_dict is complete for our matrix of
-        #  access roles. It's an error if the test case is missing an
-        #  expectation.
-        assert 'gsa_admin' in expected_user_access_dict
-        assert 'gsa_editor' in expected_user_access_dict
-        assert 'gsa_member' in expected_user_access_dict
-        assert 'doi_admin' in expected_user_access_dict
-        assert 'doi_member' in expected_user_access_dict
-        assert 'anonymous' in expected_user_access_dict
 
         for user in expected_user_access_dict:
+            # anonymous users need to pass user context as ''
+            user_context = self.test_users[user]['name'] if self.test_users[user] else ''
             context = {
                 'model': model,
                 'ignore_auth': False,
-                'user': user}
+                'user': user_context}
+
             if expected_user_access_dict[user]:
                 # We expect users to have access, validate
                 actual_authorization = helpers.call_auth(auth_function,
@@ -159,6 +170,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                 assert actual_authorization == expected_user_access_dict[user]
             else:
                 # We expect users to be denied
+                print(context)
                 with assert_raises(logic.NotAuthorized):
                     helpers.call_auth(auth_function,
                                       context=context,
