@@ -1,4 +1,4 @@
-describe.skip('Public Access', () => {
+describe('Public Access', () => {
     before(() => {
         cy.logout();
         cy.login();
