@@ -147,7 +147,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                 'ignore_auth': False,
                 'user': user_context
             }
-            # FYI this captures any user that `is_allowed` in expected_user_access_dict
+            # captures any user that `is_allowed` in expected_user_access_dict
             if expected_user_access_dict[user]:
                 # We expect users to have access, validate
                 actual_authorization = helpers.call_auth(auth_function,
