@@ -5,7 +5,6 @@ from ckan.model import User
 from ckan.common import _, request as ckan_request
 from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
-from ckan.common import current_user
 import ckan.authz as authz
 import logging
 import re

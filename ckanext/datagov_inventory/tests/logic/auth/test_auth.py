@@ -5,7 +5,6 @@ import pytest
 
 import ckan.logic as logic
 import ckan.model as model
-import ckan.plugins.toolkit as toolkit
 from ckan.tests.helpers import FunctionalTestBase
 
 import ckan.tests.factories as factories
@@ -32,13 +31,6 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         super(TestDatagovInventoryAuth, self).setup_class()
         # Start with a clean database and index for each test
         self.clean_datastore()
-
-    # @pytest.fixture()
-    # def app(make_app):
-    #     from flask.sessions import SecureCookieSessionInterface
-    #     app = make_app()
-    #     app.flask_app.session_interface = SecureCookieSessionInterface()
-    #     return app
 
     def create_datasets(self):
         self.sysadmin = factories.Sysadmin(name='admin')
@@ -99,15 +91,6 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
                      {'name': 'doi_member', 'capacity': 'member'}]
         factories.Organization(users=org_users, name='doi')
 
-    # def login_users(self):
-    #     for user in self.test_users:
-    #         print(self.test_users[user]['id'])
-    #         user_model = model.User.get(self.test_users[user]['id'])
-    #         try:
-    #             toolkit.login_user(user_model, False, 5000, False, False)
-    #         except BaseException as err:
-    #             print(err)
-
     def clean_datastore(self):
         engine = datastore_helpers.db.get_write_engine()
         datastore_helpers.rebuild_all_dbs(
@@ -156,7 +139,9 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
 
         for user in expected_user_access_dict:
             # anonymous users need to pass user context as ''
-            user_context = self.test_users[user]['name'] if self.test_users[user] else ''
+            user_context = (
+                self.test_users[user]['name'] if self.test_users[user] else ''
+            )
             context = {
                 'model': model,
                 'ignore_auth': False,
