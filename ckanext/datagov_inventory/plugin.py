@@ -2,14 +2,19 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 from ckan.model import User
-from ckan.common import _, request as ckan_request
+from ckan.common import _, g, current_user, request as ckan_request
+import ckan.lib.base as base
 from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
+from ckan.plugins.toolkit import config
 import ckan.authz as authz
+
+from flask import Blueprint, redirect
 import logging
 import re
 
 log = logging.getLogger(__name__)
+pusher = Blueprint('datagov_inventory', __name__)
 
 
 @toolkit.auth_allow_anonymous_access
@@ -79,6 +84,7 @@ def inventory_package_show(context, data_dict):
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IBlueprint)
 
     def get_auth_functions(self):
         return {'format_autocomplete': restrict_anon_access,
@@ -104,3 +110,18 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     def update_config(self, config):
         toolkit.add_template_directory(config, 'templates')
         toolkit.add_resource('fanstatic', 'datagov_inventory')
+
+    # IBlueprint
+    def get_blueprint(self):
+        return pusher
+
+
+def redirect_homepage():
+    if current_user.is_authenticated or g.user:
+        CKAN_SITE_URL = config.get("ckan.site_url")
+        return redirect(CKAN_SITE_URL + '/dataset', code=302)
+    else:
+        return base.render(u'error/anonymous.html')
+
+
+pusher.add_url_rule('/', view_func=redirect_homepage)
