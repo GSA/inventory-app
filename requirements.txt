@@ -5,27 +5,27 @@ Babel==2.10.3
 Beaker==1.11.0
 bleach==5.0.1
 blinker==1.5
-boto3==1.26.146
-botocore==1.29.146
+boto3==1.26.160
+botocore==1.29.160
 certifi==2023.5.7
 cffi==1.15.1
 chardet==5.1.0
-charset-normalizer==2.1.1
+charset-normalizer==3.1.0
 ckan==2.10.1
 -e git+https://github.com/gsa/ckanext-datajson.git@4d6d09b79d8f932303056747706a31aacd195cf6#egg=ckanext_datajson
-ckanext-dcat_usmetadata==0.4.1
+ckanext-dcat-usmetadata==0.4.1
 ckanext-envvars==0.0.3
 -e git+https://github.com/gsa/ckanext-googleanalyticsbasic.git@0de6406608a3156ac368ba3ac14ca21be519a2dd#egg=ckanext_googleanalyticsbasic
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@caf88c0352ffe7b4432d3d55ddfb0a71249ceddd
 ckanext-saml2auth @ git+https://github.com/GSA/ckanext-saml2auth.git@c2b12a94430034c522b25d282323a064e2d6a03a
--e git+https://github.com/gsa/ckanext-usmetadata.git@287569be360e1ca448827e2e3941599ddc9bce6e#egg=ckanext_usmetadata
+-e git+https://github.com/gsa/ckanext-usmetadata.git@dbadd6335fe1f1aa318bdf21e23b821cae8862e4#egg=ckanext_usmetadata
 -e git+https://github.com/ckan/ckanext-xloader.git@c062f547e8e5dd80fd5dae6d184fe268ccb4b32e#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==8.1.3
 cryptography==41.0.1
 defusedxml==0.7.1
 dominate==2.7.0
-elementpath==4.1.2
+elementpath==4.1.3
 et-xmlfile==1.1.0
 feedgen==0.9.0
 Flask==2.0.3
@@ -38,8 +38,7 @@ greenlet==2.0.2
 gunicorn==20.1.0
 html5lib==1.1
 idna==3.4
-ijson==3.2.0.post0
-importlib-metadata==6.6.0
+ijson==3.2.2
 importlib-resources==5.12.0
 itsdangerous==2.0.1
 Jinja2==3.1.2
@@ -53,7 +52,7 @@ Mako==1.2.4
 Markdown==3.4.1
 MarkupSafe==2.0.1
 messytables==0.15.2
-mypy==1.3.0
+mypy==1.4.1
 mypy-extensions==1.0.0
 newrelic==8.8.0
 nose==1.3.7
@@ -75,12 +74,12 @@ pytz==2023.3
 pytz-deprecation-shim==0.1.0.post0
 PyUtilib==6.0.0
 PyYAML==6.0
-redis==4.5.5
+redis==4.6.0
 requests==2.31.0
 rfc3987==1.3.8
 rq==1.11.0
 s3transfer==0.6.1
-setuptools==67.7.2
+setuptools==67.8.0
 simplejson==3.18.0
 six==1.16.0
 SQLAlchemy==1.4.41
@@ -101,7 +100,6 @@ Werkzeug==2.0.3
 wheel==0.40.0
 WTForms==3.0.1
 xlrd==2.0.1
-xmlschema==2.3.0
-zipp==3.15.0
-zope.event==4.6
+xmlschema==2.3.1
+zope.event==5.0
 zope.interface==5.4.0

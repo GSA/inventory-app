@@ -1,5 +1,4 @@
-# git+https://github.com/gsa/ckan.git@ckan-2.9.8-momentjs#egg=ckan
-git+https://github.com/gsa/ckan.git@ckan-210-temp#egg=ckan
+ckan==2.10.1
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 git+https://github.com/GSA/ckanext-saml2auth.git@create_user_via_saml#egg=ckanext-saml2auth
 # TODO Remove webob fork
