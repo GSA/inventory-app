@@ -12,13 +12,13 @@ cffi==1.15.1
 chardet==5.1.0
 charset-normalizer==3.1.0
 ckan==2.10.1
--e git+https://github.com/gsa/ckanext-datajson.git@4d6d09b79d8f932303056747706a31aacd195cf6#egg=ckanext_datajson
+ckanext-datajson==0.1.19
 ckanext-dcat-usmetadata==0.4.1
 ckanext-envvars==0.0.3
--e git+https://github.com/gsa/ckanext-googleanalyticsbasic.git@0de6406608a3156ac368ba3ac14ca21be519a2dd#egg=ckanext_googleanalyticsbasic
+ckanext-googleanalyticsbasic==0.2.1
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@caf88c0352ffe7b4432d3d55ddfb0a71249ceddd
 ckanext-saml2auth @ git+https://github.com/GSA/ckanext-saml2auth.git@c2b12a94430034c522b25d282323a064e2d6a03a
--e git+https://github.com/gsa/ckanext-usmetadata.git@dbadd6335fe1f1aa318bdf21e23b821cae8862e4#egg=ckanext_usmetadata
+ckanext-usmetadata==0.3.0
 -e git+https://github.com/ckan/ckanext-xloader.git@c062f547e8e5dd80fd5dae6d184fe268ccb4b32e#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==8.1.3
