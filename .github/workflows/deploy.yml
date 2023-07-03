@@ -14,12 +14,12 @@ jobs:
       environ: staging
     secrets: inherit
 
-  # create-cloudgov-services-prod:
-  #   name: create services (prod)
-  #   uses: gsa/data.gov/.github/workflows/create-services-template.yml@main
-  #   with:
-  #     environ: prod
-  #   secrets: inherit
+  create-cloudgov-services-prod:
+    name: create services (prod)
+    uses: gsa/data.gov/.github/workflows/create-services-template.yml@main
+    with:
+      environ: prod
+    secrets: inherit
 
   # yamllint disable rule:line-length
   deploy-staging:
@@ -33,15 +33,15 @@ jobs:
       app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
     secrets: inherit
 
-  # deploy-prod:
-  #   name: deploy (prod)
-  #   needs:
-  #     - create-cloudgov-services-prod
-  #     - deploy-staging
-  #   uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
-  #   with:
-  #     environ: prod
-  #     app_url: https://inventory.data.gov
-  #     app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
-  #   secrets: inherit
-  #   # yamllint enable rule:line-length
+  deploy-prod:
+    name: deploy (prod)
+    needs:
+      - create-cloudgov-services-prod
+      - deploy-staging
+    uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
+    with:
+      environ: prod
+      app_url: https://inventory.data.gov
+      app_names: "{\"include\":[{\"app\":\"inventory\",\"smoketest\":true},{\"app\":\"inventory-proxy\"}]}"
+    secrets: inherit
+    # yamllint enable rule:line-length
