@@ -51,6 +51,7 @@ Mako==1.2.4
 Markdown==3.4.1
 MarkupSafe==2.1.3
 messytables==0.15.2
+git+https://github.com/nickumia-reisys/multistatic-copy.git@e46da39614127bfa996e29994d969b8b7486ed21#egg=flask-multistatic
 mypy==1.4.1
 mypy-extensions==1.0.0
 newrelic==8.8.1
