@@ -30,7 +30,6 @@ dominate==2.7.0
 feedgen==0.9.0
 Flask>=2.2.5
 Flask-Babel==1.0.0
-flask-multistatic==1.0
 Flask-Login==0.6.2
 Flask-WTF==1.1.1
 Jinja2==3.1.2
