@@ -3,12 +3,12 @@
 set -e
 
 function wait_for () {
-  local host=$1
-  local port=$2
-
-  while ! nc -z -w 5 "$host" "$port"; do
-    sleep 1
-  done
+    local host=$1
+    local port=$2
+    
+    while ! nc -z -w 5 "$host" "$port"; do
+        sleep 1
+    done
 }
 
 echo -n "Waiting for Solr..."
@@ -25,6 +25,8 @@ echo "ok"
 # check will return successfully.
 sleep 1
 
+echo "Set up ckan.datapusher.api_token"
+ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add ckan_admin datapusher | tail -n 1 | tr -d '\t')"
 
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
@@ -35,20 +37,20 @@ sleep 1
 # these are mapped via docker volume and need to be installed in container
 for i in $CKAN_HOME/src_extensions/*
 do
-  if [ -d $i ];
-  then
-    if [ -f $i/setup.py ];
+    if [ -d $i ];
     then
-        cd $i
-        echo "Found setup.py file in $i"
-        # Uninstall any current implementation of the code
-        echo uninstalling "${PWD##*/}"
-        pip3 uninstall -y "${PWD##*/}"
-        # Install the extension in editable mode
-        pip3 install -e .
-        cd $APP_DIR
+        if [ -f $i/setup.py ];
+        then
+            cd $i
+            echo "Found setup.py file in $i"
+            # Uninstall any current implementation of the code
+            echo uninstalling "${PWD##*/}"
+            pip3 uninstall -y "${PWD##*/}"
+            # Install the extension in editable mode
+            pip3 install -e .
+            cd $APP_DIR
+        fi
     fi
-  fi
 done
 
 pip3 install -e /app/.
@@ -72,6 +74,7 @@ ckan config-tool $CKAN_INI "api_token.jwt.encode.secret=$JWT_SECRET"
 ckan config-tool $CKAN_INI "api_token.jwt.decode.secret=$JWT_SECRET"
 ckan config-tool $CKAN_INI "ckanext.datajson.inventory_links_enabled=True"
 
+
 # Run the prerun script to init CKAN and create the default admin user
 python3 ${CKAN_HOME}/GSA_prerun.py
 
@@ -90,7 +93,7 @@ then
 fi
 
 echo starting xloader worker...
-exec ckan jobs worker & 
+exec ckan jobs worker &
 
 echo starting ckan...
 # sudo -u ckan -EH ckan -c $CKAN_INI run -H 0.0.0.0

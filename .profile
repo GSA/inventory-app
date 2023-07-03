@@ -52,7 +52,7 @@ export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 # We need the secret credentials for various application components (DB configuration, license keys, etc)
 DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
-export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
+export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION_SECRET)
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 
 # Get sysadmins list by a user-provided-service per environment
@@ -60,9 +60,11 @@ export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-outpu
 
 # ckan reads some environment variables... https://docs.ckan.org/en/2.9/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
+export CKAN_SQLALCHEMY_URL=${CKAN_SQLALCHEMY_URL/postgres/postgresql}
 export CKAN___BEAKER__SESSION__URL=${CKAN_SQLALCHEMY_URL}
 export CKAN_DATASTORE_WRITE_URL=$(vcap_get_service datastore .credentials.uri)
-export CKAN_DATASTORE_READ_URL=postgres://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
+export CKAN_DATASTORE_WRITE_URL=${CKAN_DATASTORE_WRITE_URL/postgres/postgresql}
+export CKAN_DATASTORE_READ_URL=postgresql://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
 export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
 export CKAN_STORAGE_PATH=${SHARED_DIR}/files
 export CKAN_SOLR_BASE_URL=https://$(vcap_get_service solr .credentials.domain)
@@ -78,6 +80,7 @@ export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.
 export CKANEXT__S3FILESTORE__AWS_STORAGE_PATH=datagov/inventory-next
 # xloader uses the same db as datastore
 export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service datastore .credentials.uri)
+export CKANEXT__XLOADER__JOBS_DB__URI=${CKANEXT__XLOADER__JOBS_DB__URI/postgres/postgresql}
 
 # Write out any files and directories
 mkdir -p $CKAN_STORAGE_PATH
@@ -96,6 +99,7 @@ export CKAN_SOLR_URL=$CKAN_SOLR_BASE_URL/solr/$SOLR_COLLECTION
 # Edit the config file to validate debug is off and utilizes the correct port
 export CKAN_INI="${HOME}/config/ckan.ini"
 # ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
+ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
 ckan config-tool $CKAN_INI --section DEFAULT --edit debug=false
 
 echo "Setting up the datastore user"

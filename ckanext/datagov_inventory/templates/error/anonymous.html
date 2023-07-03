@@ -1,0 +1,22 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ gettext('Error %(error_code)s', error_code=code) }}{% endblock %}
+
+{% block primary %}
+  <article class="module">
+    <div class="module-content">
+      <h1>Authorized Access Only</h1>
+      <p>Inventory.data.gov is a non-public website used by federal agencies to create and maintain metadata intended for publication on the Data.gov <a href="https://catalog.data.gov/dataset">catalog</a>. Agency users who need access to inventory.data.gov should contact the team at <a href="mailto:datagov@gsa.gov">datagov@gsa.gov.</a></p>
+    </div>
+  </article>
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block flash %}
+  {# eat the flash messages caused by the 404 #}
+  {% set flash_messages = h.get_flashed_messages() %}
+{% endblock %}
+
+{% block secondary %}{% endblock %}

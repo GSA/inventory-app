@@ -1,5 +1,4 @@
 describe('Public Access', () => {
-    
     before(() => {
         cy.logout();
         cy.login();
@@ -11,33 +10,31 @@ describe('Public Access', () => {
                 expect(response.body).to.have.property('success', true);
             });
         });
-    })
+    });
 
     after(() => {
         cy.login();
         cy.wait(2000);
-        cy.delete_dataset('test-dataset-1')
-        cy.delete_organization('test-organization')
-    })
+        cy.delete_dataset('test-dataset-1');
+        cy.delete_organization('test-organization');
+    });
 
     it('Cannot access the standard public pages', () => {
         cy.logout();
         cy.request({
             url: '/dataset',
-            failOnStatusCode: false
+            failOnStatusCode: false,
         }).then((response) => {
-            expect(response.status).to.eq(403)
-        })
-        
-    })
+            expect(response.status).to.eq(403);
+        });
+    });
 
     it('Cannot access the dataset pages', () => {
         cy.request({
             url: '/dataset/test-dataset-1',
-            failOnStatusCode: false
+            failOnStatusCode: false,
         }).then((response) => {
-            expect(response.status).to.eq(404)
-        })
-        
-    })
-})
+            expect(response.status).to.eq(404);
+        });
+    });
+});

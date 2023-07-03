@@ -1,11 +1,10 @@
 describe('CKAN Extensions', () => {
-    
-    it('Uses CKAN 2.9', () => {
+    it('Uses CKAN 2.10', () => {
         cy.request('/api/action/status_show').should((response) => {
             expect(response.body).to.have.property('success', true);
-            expect(response.body.result).to.have.property('ckan_version', '2.9.8');
+            expect(response.body.result).to.have.property('ckan_version', '2.10.1');
         });
-    })
+    });
 
     it('Has all necessary extensions installed', () => {
         cy.request('/api/action/status_show').should((response) => {
@@ -26,5 +25,5 @@ describe('CKAN Extensions', () => {
             // TODO: Re-integrate saml2auth when automated testing is created for it
             // expect(installed_extensions).to.include('saml2auth');
         });
-    })
-})
+    });
+});

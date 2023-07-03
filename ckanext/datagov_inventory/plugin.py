@@ -2,40 +2,35 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 from ckan.model import User
-from ckan.common import _, request as ckan_request
+from ckan.common import _, g, current_user, request as ckan_request
+import ckan.lib.base as base
 from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
+from ckan.plugins.toolkit import config
 import ckan.authz as authz
+
+from flask import Blueprint, redirect
 import logging
 import re
 
-
 log = logging.getLogger(__name__)
-
-# starting auth functions.
-# Most auth functions should only allow logged in users to access.
+pusher = Blueprint('datagov_inventory', __name__)
 
 
-# Implemented as a decorator
-def datagov_disallow_anonymous_access(func=None):
-    @toolkit.chained_auth_function
-    @toolkit.auth_disallow_anonymous_access
-    def _wrapper(next_auth, context, dict_data=None):
-        if func:
-            # We're called in the decorator context, call the function
-            return func(next_auth, context, dict_data)
-        else:
-            # We were called as a function, just call the next_auth function
-            return next_auth(context, dict_data)
-
-    # We're always applying the auth_disallow_anonymous_access decorator.
-    return _wrapper
-
+@toolkit.auth_allow_anonymous_access
+@toolkit.chained_auth_function
+def restrict_anon_access(next_auth, context, data_dict):
+    if context["user"]:
+        return next_auth(context, data_dict)
+    else:
+        return {'success': False}
 
 # Comes from
 # https://github.com/ckan/ckan/blob/master/ckan/logic/auth/get.py#L129-L145
 # Anonymous users rely on public/private package info to have access
 # CKAN users utilize normal process
+
+
 @toolkit.auth_allow_anonymous_access
 def inventory_resource_show(context, data_dict):
     model = context['model']
@@ -89,27 +84,44 @@ def inventory_package_show(context, data_dict):
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IBlueprint)
 
     def get_auth_functions(self):
-        return {'format_autocomplete': datagov_disallow_anonymous_access(),
-                'group_list': datagov_disallow_anonymous_access(),
-                'license_list': datagov_disallow_anonymous_access(),
-                'member_roles_list': datagov_disallow_anonymous_access(),
-                'organization_list': datagov_disallow_anonymous_access(),
-                'package_list': datagov_disallow_anonymous_access(),
-                'package_search': datagov_disallow_anonymous_access(),
+        return {'format_autocomplete': restrict_anon_access,
+                'group_list': restrict_anon_access,
+                'license_list': restrict_anon_access,
+                'member_roles_list': restrict_anon_access,
+                'organization_list': restrict_anon_access,
+                'package_list': restrict_anon_access,
+                'package_search': restrict_anon_access,
                 'package_show': inventory_package_show,
                 'resource_show': inventory_resource_show,
-                'site_read': datagov_disallow_anonymous_access(),
-                'tag_list': datagov_disallow_anonymous_access(),
-                'tag_show': datagov_disallow_anonymous_access(),
-                'task_status_show': datagov_disallow_anonymous_access(),
-                'user_list': datagov_disallow_anonymous_access(),
-                'user_show': datagov_disallow_anonymous_access(),
-                'vocabulary_list': datagov_disallow_anonymous_access(),
-                'vocabulary_show': datagov_disallow_anonymous_access(),
+                'site_read': restrict_anon_access,
+                'tag_list': restrict_anon_access,
+                'tag_show': restrict_anon_access,
+                'task_status_show': restrict_anon_access,
+                'user_list': restrict_anon_access,
+                'user_show': restrict_anon_access,
+                'vocabulary_list': restrict_anon_access,
+                'vocabulary_show': restrict_anon_access,
                 }
 
     # render our custom 403 template
     def update_config(self, config):
         toolkit.add_template_directory(config, 'templates')
+        toolkit.add_resource('fanstatic', 'datagov_inventory')
+
+    # IBlueprint
+    def get_blueprint(self):
+        return pusher
+
+
+def redirect_homepage():
+    if current_user.is_authenticated or g.user:
+        CKAN_SITE_URL = config.get("ckan.site_url")
+        return redirect(CKAN_SITE_URL + '/dataset', code=302)
+    else:
+        return base.render(u'error/anonymous.html')
+
+
+pusher.add_url_rule('/', view_func=redirect_homepage)

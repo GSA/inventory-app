@@ -1,17 +1,14 @@
-git+https://github.com/gsa/ckan.git@ckan-2.9.8-momentjs#egg=ckan
+ckan==2.10.1
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 git+https://github.com/GSA/ckanext-saml2auth.git@create_user_via_saml#egg=ckanext-saml2auth
-# TODO Remove webob fork
-# git+https://github.com/GSA/webob.git@datagov/v1.0.8#egg=webob
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
-# git+https://github.com/GSA/pysaml2.git@datagov/v4.9.0#egg=pysaml2
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
 ckanext-googleanalyticsbasic
-ckanext-usmetadata>=0.2.6
-ckanext-datajson>=0.1.15
-ckanext-dcat-usmetadata~=0.3.8
-ckanext-envvars>=0.0.2
+ckanext-usmetadata>=0.3.0
+ckanext-datajson>=0.1.19
+ckanext-dcat-usmetadata~=0.4.2
+ckanext-envvars>=0.0.3
 newrelic
 gunicorn
 gevent
@@ -23,46 +20,43 @@ urllib3==1.26.5
 # Jinja2==2.11.3
 
 # Add necessary CKAN core libraries
-alembic==1.0.0
-Babel==2.9.1
+alembic==1.8.0
+Babel==2.10.3
 Beaker==1.11.0
-bleach==3.3.0
-click==7.1.2
-dominate==2.4.0
-fanstatic==1.1
+bleach==5.0.1
+blinker==1.5
+click==8.1.3
+dominate==2.7.0
 feedgen==0.9.0
-Flask==1.1.1
+Flask==2.0.3
 Flask-Babel==1.0.0
 flask-multistatic==1.0
-Jinja2==2.11.3
+Flask-Login==0.6.1
+Flask-WTF==1.0.1
+Jinja2==3.1.2
 PyJWT==2.4.0              # Upgraded to pass security scans
 Markdown==3.4.1           # Upgraded https://github.com/GSA/data.gov/issues/4056
-passlib==1.7.3
-pastedeploy==2.0.1        # manually kept - remove when #4802 is complete
+passlib==1.7.4
 pathtools==0.1.2          # via watchdog
-polib==1.0.7
-psycopg2==2.8.6
-python-magic==0.4.15
+polib==1.1.1
+psycopg2==2.9.3
+python-magic==0.4.27
 pysaml2==7.0.1
-pysolr==3.6.0
-# python-dateutil>=1.5.0   # ckanext-xloader requires newer
-pytz==2016.7
-PyUtilib==5.7.1
-pyyaml==5.4
-repoze.who==2.3
+pysolr==3.9.0
+pytz
+PyUtilib==6.0.0
+pyyaml==6.0
 requests==2.31.0
-Routes==1.13
-rq==1.0
+rq==1.11.0
 simplejson==3.18.0 # ckan 2.9.5 requires 3.10.0 only
 # Following can be ignored: https://github.com/ckan/ckan/pull/4450
 # sqlalchemy-migrate==0.12.0
-SQLAlchemy==1.3.5
+SQLAlchemy[mypy]==1.4.41
 sqlparse==0.4.4
-tzlocal==1.3
-unicodecsv>=0.9
-webassets==0.12.1
+tzlocal==4.2
+webassets==2.0
 Werkzeug[watchdog]==2.0.3
-zope.interface==4.7.2
+zope.interface==5.4.0
 
 # # ckanext-saml2 dependencies
 # defusedxml==0.6.0
