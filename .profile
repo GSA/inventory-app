@@ -53,6 +53,7 @@ export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
 export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION_SECRET)
+export CKAN___WTF_CSRF_SECRET_KEY=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 
 # Get sysadmins list by a user-provided-service per environment
@@ -99,7 +100,6 @@ export CKAN_SOLR_URL=$CKAN_SOLR_BASE_URL/solr/$SOLR_COLLECTION
 # Edit the config file to validate debug is off and utilizes the correct port
 export CKAN_INI="${HOME}/config/ckan.ini"
 # ckan config-tool $CKAN_INI -s server:main -e port=${PORT}
-ckan config-tool $CKAN_INI "WTF_CSRF_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_urlsafe())')"
 ckan config-tool $CKAN_INI --section DEFAULT --edit debug=false
 
 echo "Setting up the datastore user"
