@@ -52,7 +52,7 @@ export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 # We need the secret credentials for various application components (DB configuration, license keys, etc)
 DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
-export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION_SECRET)
+export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
 export CKAN___WTF_CSRF_SECRET_KEY=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 

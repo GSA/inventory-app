@@ -129,7 +129,7 @@ Tips on managing
 When creating the service for the first time, use `create-user-provided-service`
 instead of update.
 
-    cf update-user-provided-service ${app_name}-secrets -p "CKAN___BEAKER__SESSION_SECRET, CKAN___WTF_CSRF_SECRET_KEY, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
+    cf update-user-provided-service ${app_name}-secrets -p "CKAN___BEAKER__SESSION__SECRET, CKAN___WTF_CSRF_SECRET_KEY, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
 
 Name | Description | Where to find
 ---- | ----------- | -------------
