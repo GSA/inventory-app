@@ -1,3 +1,19 @@
 #flDebug .flDebugPanelContent {
     overflow: scroll;
 }
+[class^=icon-],
+[class*=" icon-"] {
+  display: inline-block;
+  text-align: right;
+  font-size: 14px;
+  line-height: 1;
+  width: 14px;
+}
+.label-inverse {
+    background-color: #555555;
+    color: #fff;
+    font-size: 75%;
+    font-weight: 700;
+    float: right;
+    padding-right: 5px;
+}
