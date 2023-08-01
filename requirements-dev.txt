@@ -18,7 +18,7 @@ pycodestyle==2.5.0
 pip-tools==5.1.2
 pyfakefs==3.2
 responses==0.10.14
-Sphinx==3.0.4
+Sphinx==3.3.0
 sphinx-rtd-theme==0.4.3
 pygments>=2.7.4 # not directly required, pinned by Snyk to avoid a vulnerability
 ipython>=8.10.0  # not directly required, pinned by Snyk to avoid a vulnerability
