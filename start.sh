@@ -77,6 +77,9 @@ ckan config-tool $CKAN_INI "ckanext.datajson.inventory_links_enabled=True"
 # Run the prerun script to init CKAN and create the default admin user
 python3 ${CKAN_HOME}/GSA_prerun.py
 
+# Hack to place favicon
+echo "!!!!!!!!!! PLACING FAVICON !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+cp /app/ckanext/datagov_inventory/public/images/icons/favicon.ico /usr/lib/python3.10/site-packages/ckanext/usmetadata/public/base/images/
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]
