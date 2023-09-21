@@ -11,7 +11,6 @@ ckanext-dcat-usmetadata~=0.5.0
 ckanext-envvars>=0.0.3
 newrelic
 gunicorn
-gevent
 
 # CKAN core library dependency upgrade pin
 lxml==4.9.1
@@ -84,4 +83,4 @@ certifi>=2022.12.7
 setuptools>=65.5.1
 
 # avoid ImportError error https://github.com/GSA/data.gov/issues/4396
-importlib-resources<6.0
+importlib-resources<6.0gevent>=23.9.0
