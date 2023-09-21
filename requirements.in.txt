@@ -80,7 +80,7 @@ python-dateutil>=2.8.2
 itsdangerous==2.0.1
 MarkupSafe==2.0.1
 certifi>=2022.12.7
-setuptools>=65.5.1
+setuptools>=65.5.1,!=68.1.*,!=68.2.*
 
 # avoid ImportError error https://github.com/GSA/data.gov/issues/4396
 importlib-resources<6.0
