@@ -33,12 +33,13 @@ Flask-Babel==1.0.0
 Flask-Login==0.6.1
 flask-multistatic==1.0
 Flask-WTF==1.0.1
+gevent==23.9.1
 greenlet==2.0.2
 gunicorn==21.2.0
 html5lib==1.1
 idna==3.4
 ijson==3.2.3
-importlib-resources==6.0.0
+importlib-resources==5.13.0
 itsdangerous==2.0.1
 Jinja2==3.1.2
 jmespath==1.0.1
@@ -101,5 +102,6 @@ Werkzeug==2.0.3
 wheel==0.41.2
 WTForms==3.0.1
 xlrd==2.0.1
-xmlschema==2.4.0
+xmlschema==2.5.0
+zope.event==5.0
 zope.interface==5.4.0
