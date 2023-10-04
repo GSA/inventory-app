@@ -14,7 +14,6 @@ gunicorn
 
 # CKAN core library dependency upgrade pin
 lxml==4.9.1
-urllib3==1.26.5
 # bleach==3.3.0
 # Jinja2==2.11.3
 
@@ -85,3 +84,4 @@ setuptools>=65.5.1,!=68.1.*,!=68.2.*
 # avoid ImportError error https://github.com/GSA/data.gov/issues/4396
 importlib-resources<6.0
 gevent>=23.9.0
+urllib3>=1.26.17
