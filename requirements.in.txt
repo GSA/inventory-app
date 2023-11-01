@@ -87,3 +87,4 @@ gevent>=23.9.0
 urllib3~=1.26.17
 cryptography>=41.0.5
 pip>=23.3
+werkzeug>=3.0.1
