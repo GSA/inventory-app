@@ -13,7 +13,7 @@ chardet==5.2.0
 charset-normalizer==3.3.2
 ckan==2.10.1
 ckanext-datajson==0.1.22
-ckanext-dcat-usmetadata==0.5.0
+ckanext-dcat-usmetadata==0.6.0
 ckanext-envvars==0.0.3
 ckanext-googleanalyticsbasic==0.2.1
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@caf88c0352ffe7b4432d3d55ddfb0a71249ceddd
