@@ -52,3 +52,7 @@ ignore:
         expires: 2024-02-8T00:00:00.000Z
         created: 2023-11-16T20:31:20.590Z
 patch: {}
+# specify the directories or files to be excludeed from import:
+exclude:
+ global:
+   - requirements-dev.txt
