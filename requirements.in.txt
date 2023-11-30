@@ -85,5 +85,5 @@ setuptools>=65.5.1,!=68.1.*,!=68.2.*
 importlib-resources<6.0
 gevent>=23.9.0
 urllib3~=1.26.17
-cryptography>=41.0.5
+cryptography>=41.0.6
 pip>=23.3
