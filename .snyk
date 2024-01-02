@@ -7,14 +7,14 @@ ignore:
         reason: >-
           Upgrade path is complex, Issue tracked in github:
           https://github.com/GSA/data.gov/issues/4217
-        expires: 2023-12-31T13:35:17.967Z
+        expires: 2024-03-31T13:35:17.967Z
         created: 2023-11-01T13:35:17.972Z
   SNYK-PYTHON-BEAKER-575115:
     - '*':
         reason: >-
           No remediation available yet; Not affecting us since the storage is
           not accessible to any other client
-        expires: 2023-12-30T16:20:58.017Z
+        expires: 2024-03-30T16:20:58.017Z
         created: 2022-12-08T16:20:58.023Z
   SNYK-PYTHON-WERKZEUG-3319936:
     - '*':
@@ -42,7 +42,7 @@ ignore:
         reason: >-
           Upgrade path is complex, Issue tracked in github:
           https://github.com/GSA/data.gov/issues/4217
-        expires: 2023-12-31T16:44:37.234Z
+        expires: 2024-03-31T16:44:37.234Z
         created: 2023-11-01T16:44:37.239Z
   SNYK-PYTHON-CRYPTOGRAPHY-6050294:
     - '*':
