@@ -8,4 +8,4 @@ DIR="$(dirname "${BASH_SOURCE[0]}")"
 # start xloader
 exec ckan jobs worker &
 # Fire it up!
-exec newrelic-admin run-program gunicorn "wsgi:application" --config "$DIR/gunicorn.conf.py" -b "0.0.0.0:$PORT" --chdir $DIR  --timeout 120 --forwarded-allow-ips='*'
+exec newrelic-admin run-program gunicorn "wsgi:application" --config "$DIR/gunicorn.conf.py" -b "0.0.0.0:$PORT" --chdir $DIR  --timeout 120 --workers 2 --forwarded-allow-ips='*'
