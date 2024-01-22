@@ -9,17 +9,24 @@ on:   # yamllint disable-line rule:truthy
 jobs:
   snyk:
     name: snyk test
-    runs-on: ubuntu-20.04   # Pin to have access to Python 3.8
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
       - name: Install Dependencies
         run: |
           npm install snyk -g
           sudo apt-get update -y
           sudo apt-get install -y \
             openssl libssl-dev libffi-dev pkg-config libxml2-dev \
-            libxmlsec1-dev libxmlsec1-openssl libgeos-dev proj-bin
+            libxmlsec1-dev libxmlsec1-openssl libgeos-dev proj-bin \
+            libpq-dev
           pip3 install -r requirements.txt
       # yamllint disable rule:line-length
       - name: Run Snyk Scan
@@ -35,18 +42,24 @@ jobs:
           # Update requirements.in with the snyk fix suggestions
           python bin/snyk-update.py
 
-          # Remove unnecessary file so that it doesn't get added to the repo
-          rm scan.json
-
           # Update requirements.txt
           make requirements
+
+          # Check if there are any changes
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Found vulnerable issues but no upgrade or patch available"
+            cat scan.json | jq '[.vulnerabilities[] | .id] | unique[]'
+          else
+            echo "Changes made to add into PR: "
+            git diff
+          fi
 
           # Fail so that PR is created
           exit 1
       - name: Create Pull Request
         if: ${{ failure() }}
         id: scpr
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           commit-message: Update Pip Requirements
@@ -66,6 +79,5 @@ jobs:
             requirements
             automated pr
             snyk
-          team-reviewers: data-gov-team
           draft: false
           # yamllint enable rule:line-length
