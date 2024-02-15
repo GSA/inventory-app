@@ -27,7 +27,7 @@ is_denied = False
 @pytest.mark.usefixtures("with_request_context")
 class TestDatagovInventoryAuth(FunctionalTestBase):
 
-    def setup(self):
+    def setup_method(self):
         super(TestDatagovInventoryAuth, self).setup_class()
         # Start with a clean database and index for each test
         self.clean_datastore()
