@@ -1,0 +1,4246 @@
+{
+  "vulnerabilities": [
+    {
+      "id": "SNYK-PYTHON-CKAN-6124881",
+      "title": "Improper Handling of Length Parameter Inconsistency",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:U/C:N/I:N/A:H",
+      "credit": [
+        "thorge"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[2.0,2.9.10)",
+          "[2.10.0,2.10.3)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "2.9.10",
+        "2.10.3"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 4.5,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "ckan",
+      "references": [
+        {
+          "url": "https://github.com/ckan/ckan/commit/bd02018b65c5b81d7ede195d00d0fcbac3aa33be",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "NVD",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-03-11T09:54:12.541563Z"
+        }
+      ],
+      "description": "## Overview\n[ckan](https://pypi.org/project/ckan/) is a world’s leading Open Source data portal platform.\r\n\r\nIt powers dozens of Open Data portals around the world, including data.gov, open.canada.ca and europeandataportal.eu but also regional, research and community organizations.\r\n\r\nIt makes easy to publish, share and find data online and is fully customizable via extensions and plugins.\n\nAffected versions of this package are vulnerable to Improper Handling of Length Parameter Inconsistency via the `/dataset/new` endpoint when submitting a POST request with a specially-crafted field. An attacker can create an out-of-memory error on the hosting server by submitting a malicious payload.\n\n**Note:**\nThis is only exploitable if the user has permissions to create or edit datasets.\n## Remediation\nUpgrade `ckan` to version 2.9.10, 2.10.3 or higher.\n## References\n- [GitHub Commit](https://github.com/ckan/ckan/commit/bd02018b65c5b81d7ede195d00d0fcbac3aa33be)\n",
+      "epssDetails": {
+        "percentile": "0.11211",
+        "probability": "0.00044",
+        "modelVersion": "v2023.03.01"
+      },
+      "identifiers": {
+        "CVE": [
+          "CVE-2023-50248"
+        ],
+        "CWE": [
+          "CWE-130"
+        ],
+        "GHSA": [
+          "GHSA-7fgc-89cx-w8j5"
+        ]
+      },
+      "packageName": "ckan",
+      "proprietary": false,
+      "creationTime": "2023-12-14T10:32:26.667303Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2023-12-13T23:08:35Z",
+      "packageManager": "pip",
+      "publicationTime": "2023-12-14T10:32:26.872898Z",
+      "modificationTime": "2024-03-11T09:54:12.541563Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "ckan@2.10.1"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "ckan",
+      "version": "2.10.1"
+    },
+    {
+      "id": "SNYK-PYTHON-CKAN-6437666",
+      "title": "Improper Output Neutralization for Logs",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+      "credit": [
+        "ZuhairORZaki"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,2.9.11)",
+          "[2.10.0,2.10.4)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "2.9.11",
+        "2.10.4"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 4.3,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "ckan",
+      "references": [
+        {
+          "url": "https://github.com/ckan/ckan/commit/5fa133e7e9019573066455b5d442e93c62b3fc93",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://github.com/ckan/ckan/commit/81b56c55e5e3651d7fcf9642cd5a489a9b62212c",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://github.com/ckan/ckan/commit/d81f411bff2da7347c343a83e17f5814475b5b64",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://docs.ckan.org/en/2.10/changelog.html%23v-2-10-4-2024-03-13",
+          "title": "Release Notes"
+        }
+      ],
+      "cvssDetails": [],
+      "description": "## Overview\n[ckan](https://pypi.org/project/ckan/) is a world’s leading Open Source data portal platform.\r\n\r\nIt powers dozens of Open Data portals around the world, including data.gov, open.canada.ca and europeandataportal.eu but also regional, research and community organizations.\r\n\r\nIt makes easy to publish, share and find data online and is fully customizable via extensions and plugins.\n\nAffected versions of this package are vulnerable to Improper Output Neutralization for Logs due to the user endpoint not performing filtering on an incoming parameter, which was added directly to the application log. An attacker can inject false log entries or corrupt the log file format by sending crafted input.\n\n\n## Workaround\n\nOverride the `/user/reset` endpoint to filter the `id` parameter in order to exclude newlines.\n## Remediation\nUpgrade `ckan` to version 2.9.11, 2.10.4 or higher.\n## References\n- [GitHub Commit](https://github.com/ckan/ckan/commit/5fa133e7e9019573066455b5d442e93c62b3fc93)\n- [GitHub Commit](https://github.com/ckan/ckan/commit/81b56c55e5e3651d7fcf9642cd5a489a9b62212c)\n- [GitHub Commit](https://github.com/ckan/ckan/commit/d81f411bff2da7347c343a83e17f5814475b5b64)\n- [Release Notes](https://docs.ckan.org/en/2.10/changelog.html#v-2-10-4-2024-03-13)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-27097"
+        ],
+        "CWE": [
+          "CWE-117"
+        ],
+        "GHSA": [
+          "GHSA-8g38-3m6v-232j"
+        ]
+      },
+      "packageName": "ckan",
+      "proprietary": false,
+      "creationTime": "2024-03-14T11:36:01.056862Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-03-13T15:30:03Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-03-14T11:36:01.261212Z",
+      "modificationTime": "2024-03-14T11:36:01.342111Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "ckan@2.10.1"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "ckan",
+      "version": "2.10.1"
+    }
+  ],
+  "ok": false,
+  "dependencyCount": 108,
+  "org": "data.gov",
+  "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\n# ignores vulnerabilities until expiry date; change duration by modifying expiry date\nignore:\n  SNYK-PYTHON-WERKZEUG-6035177:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-03-31T13:35:17.967Z\n        created: 2023-11-01T13:35:17.972Z\n        source: cli\n  SNYK-PYTHON-BEAKER-575115:\n    - '*':\n        reason: >-\n          No remediation available yet; Not affecting us since the storage is\n          not accessible to any other client\n        expires: 2024-03-30T16:20:58.017Z\n        created: 2022-12-08T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-3319936:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-02-15T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-3319935:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-02-15T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-FLASK-5490129:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4303\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-05-08T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-6041510:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-03-31T16:44:37.234Z\n        created: 2023-11-01T16:44:37.239Z\n        source: cli\n  SNYK-PYTHON-CRYPTOGRAPHY-6050294:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4532\n        expires: 2024-02-08T00:00:00.000Z\n        created: 2023-11-16T20:31:20.590Z\n        source: cli\n  SNYK-PYTHON-CKAN-6124881:\n    - '*':\n        reason: >-\n          Remediation blocked by CKAN upgrade to 2.10.3:\n          https://github.com/GSA/data.gov/issues/4571\n        expires: 2024-03-14T00:00:00.000Z\n        created: 2023-12-14T00:00:00.000Z\n        source: cli\n  SNYK-PYTHON-CRYPTOGRAPHY-6126975:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4532\n        expires: 2024-03-14T00:00:00.000Z\n        created: 2023-12-14T00:00:00.000Z\n        source: cli\n  SNYK-PYTHON-CRYPTOGRAPHY-6149518:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4532\n        expires: 2024-04-10T19:28:50.100Z\n        created: 2024-01-11T19:28:50.103Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6149520:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4532\n        expires: 2024-04-10T19:29:54.032Z\n        created: 2024-01-11T19:29:54.039Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6157250:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4591\n        expires: 2024-04-10T19:29:54.032Z\n        source: cli\n  SNYK-PYTHON-CRYPTOGRAPHY-6157248:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4590\n        expires: 2024-04-10T19:29:54.032Z\n        source: cli\npatch: {}\nexclude:\n  global:\n    - requirements-dev.txt\n",
+  "isPrivate": true,
+  "licensesPolicy": {
+    "severities": {},
+    "orgLicenseRules": {
+      "AGPL-1.0": {
+        "licenseType": "AGPL-1.0",
+        "severity": "high",
+        "instructions": ""
+      },
+      "AGPL-3.0": {
+        "licenseType": "AGPL-3.0",
+        "severity": "high",
+        "instructions": ""
+      },
+      "Artistic-1.0": {
+        "licenseType": "Artistic-1.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "Artistic-2.0": {
+        "licenseType": "Artistic-2.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "CDDL-1.0": {
+        "licenseType": "CDDL-1.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "CPOL-1.02": {
+        "licenseType": "CPOL-1.02",
+        "severity": "high",
+        "instructions": ""
+      },
+      "EPL-1.0": {
+        "licenseType": "EPL-1.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "GPL-2.0": {
+        "licenseType": "GPL-2.0",
+        "severity": "high",
+        "instructions": ""
+      },
+      "GPL-3.0": {
+        "licenseType": "GPL-3.0",
+        "severity": "high",
+        "instructions": ""
+      },
+      "LGPL-2.0": {
+        "licenseType": "LGPL-2.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "LGPL-2.1": {
+        "licenseType": "LGPL-2.1",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "LGPL-3.0": {
+        "licenseType": "LGPL-3.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "LGPL-2.1+": {
+        "licenseType": "LGPL-2.1+",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "LGPL-3.0+": {
+        "licenseType": "LGPL-3.0+",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "MPL-1.1": {
+        "licenseType": "MPL-1.1",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "MPL-2.0": {
+        "licenseType": "MPL-2.0",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "MS-RL": {
+        "licenseType": "MS-RL",
+        "severity": "medium",
+        "instructions": ""
+      },
+      "SimPL-2.0": {
+        "licenseType": "SimPL-2.0",
+        "severity": "high",
+        "instructions": ""
+      }
+    }
+  },
+  "packageManager": "pip",
+  "ignoreSettings": {
+    "adminOnly": false,
+    "reasonRequired": false,
+    "disregardFilesystemIgnores": false
+  },
+  "summary": "35 vulnerable dependency paths",
+  "remediation": {
+    "unresolved": [
+      {
+        "id": "SNYK-PYTHON-CKAN-6124881",
+        "title": "Improper Handling of Length Parameter Inconsistency",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:U/C:N/I:N/A:H",
+        "credit": [
+          "thorge"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[2.0,2.9.10)",
+            "[2.10.0,2.10.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.9.10",
+          "2.10.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 4.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "ckan",
+        "references": [
+          {
+            "url": "https://github.com/ckan/ckan/commit/bd02018b65c5b81d7ede195d00d0fcbac3aa33be",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:54:12.541563Z"
+          }
+        ],
+        "description": "## Overview\n[ckan](https://pypi.org/project/ckan/) is a world’s leading Open Source data portal platform.\r\n\r\nIt powers dozens of Open Data portals around the world, including data.gov, open.canada.ca and europeandataportal.eu but also regional, research and community organizations.\r\n\r\nIt makes easy to publish, share and find data online and is fully customizable via extensions and plugins.\n\nAffected versions of this package are vulnerable to Improper Handling of Length Parameter Inconsistency via the `/dataset/new` endpoint when submitting a POST request with a specially-crafted field. An attacker can create an out-of-memory error on the hosting server by submitting a malicious payload.\n\n**Note:**\nThis is only exploitable if the user has permissions to create or edit datasets.\n## Remediation\nUpgrade `ckan` to version 2.9.10, 2.10.3 or higher.\n## References\n- [GitHub Commit](https://github.com/ckan/ckan/commit/bd02018b65c5b81d7ede195d00d0fcbac3aa33be)\n",
+        "epssDetails": {
+          "percentile": "0.11211",
+          "probability": "0.00044",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-50248"
+          ],
+          "CWE": [
+            "CWE-130"
+          ],
+          "GHSA": [
+            "GHSA-7fgc-89cx-w8j5"
+          ]
+        },
+        "packageName": "ckan",
+        "proprietary": false,
+        "creationTime": "2023-12-14T10:32:26.667303Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-12-13T23:08:35Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-12-14T10:32:26.872898Z",
+        "modificationTime": "2024-03-11T09:54:12.541563Z",
+        "socialTrendAlert": false,
+        "packagePopularityRank": 71,
+        "from": [
+          "inventory-app@0.0.0",
+          "ckan@2.10.1"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "isPinnable": true,
+        "isRuntime": false,
+        "name": "ckan",
+        "version": "2.10.1",
+        "severityWithCritical": "medium"
+      },
+      {
+        "id": "SNYK-PYTHON-CKAN-6437666",
+        "title": "Improper Output Neutralization for Logs",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "ZuhairORZaki"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.9.11)",
+            "[2.10.0,2.10.4)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.9.11",
+          "2.10.4"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 4.3,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "ckan",
+        "references": [
+          {
+            "url": "https://github.com/ckan/ckan/commit/5fa133e7e9019573066455b5d442e93c62b3fc93",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/ckan/ckan/commit/81b56c55e5e3651d7fcf9642cd5a489a9b62212c",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/ckan/ckan/commit/d81f411bff2da7347c343a83e17f5814475b5b64",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://docs.ckan.org/en/2.10/changelog.html%23v-2-10-4-2024-03-13",
+            "title": "Release Notes"
+          }
+        ],
+        "cvssDetails": [],
+        "description": "## Overview\n[ckan](https://pypi.org/project/ckan/) is a world’s leading Open Source data portal platform.\r\n\r\nIt powers dozens of Open Data portals around the world, including data.gov, open.canada.ca and europeandataportal.eu but also regional, research and community organizations.\r\n\r\nIt makes easy to publish, share and find data online and is fully customizable via extensions and plugins.\n\nAffected versions of this package are vulnerable to Improper Output Neutralization for Logs due to the user endpoint not performing filtering on an incoming parameter, which was added directly to the application log. An attacker can inject false log entries or corrupt the log file format by sending crafted input.\n\n\n## Workaround\n\nOverride the `/user/reset` endpoint to filter the `id` parameter in order to exclude newlines.\n## Remediation\nUpgrade `ckan` to version 2.9.11, 2.10.4 or higher.\n## References\n- [GitHub Commit](https://github.com/ckan/ckan/commit/5fa133e7e9019573066455b5d442e93c62b3fc93)\n- [GitHub Commit](https://github.com/ckan/ckan/commit/81b56c55e5e3651d7fcf9642cd5a489a9b62212c)\n- [GitHub Commit](https://github.com/ckan/ckan/commit/d81f411bff2da7347c343a83e17f5814475b5b64)\n- [Release Notes](https://docs.ckan.org/en/2.10/changelog.html#v-2-10-4-2024-03-13)\n",
+        "epssDetails": null,
+        "identifiers": {
+          "CVE": [
+            "CVE-2024-27097"
+          ],
+          "CWE": [
+            "CWE-117"
+          ],
+          "GHSA": [
+            "GHSA-8g38-3m6v-232j"
+          ]
+        },
+        "packageName": "ckan",
+        "proprietary": false,
+        "creationTime": "2024-03-14T11:36:01.056862Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-03-13T15:30:03Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-03-14T11:36:01.261212Z",
+        "modificationTime": "2024-03-14T11:36:01.342111Z",
+        "socialTrendAlert": false,
+        "packagePopularityRank": 71,
+        "from": [
+          "inventory-app@0.0.0",
+          "ckan@2.10.1"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "isPinnable": true,
+        "isRuntime": false,
+        "name": "ckan",
+        "version": "2.10.1",
+        "severityWithCritical": "medium"
+      }
+    ],
+    "upgrade": {},
+    "patch": {},
+    "ignore": {},
+    "pin": {
+      "ckan@2.10.1": {
+        "upgradeTo": "ckan@2.10.4",
+        "vulns": [
+          "SNYK-PYTHON-CKAN-6124881",
+          "SNYK-PYTHON-CKAN-6437666"
+        ],
+        "isTransitive": false
+      }
+    }
+  },
+  "filesystemPolicy": true,
+  "filtered": {
+    "ignore": [
+      {
+        "id": "SNYK-PYTHON-BEAKER-575115",
+        "title": "Deserialization of Untrusted Data",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "credit": [
+          "Matheus Bratfisch"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "critical",
+        "cvssScore": 9.8,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "beaker",
+        "references": [
+          {
+            "url": "https://github.com/bbangert/beaker/issues/191",
+            "title": "GitHub Issue"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 6.8,
+            "modificationTime": "2024-03-11T09:46:25.448976Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:H/I:L/A:L",
+            "cvssV3BaseScore": 5.7,
+            "modificationTime": "2024-03-11T09:52:03.907458Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Deserialization of Untrusted Data which could lead to arbitrary code execution.\n## Remediation\nThere is no fixed version for `Beaker`.\n## References\n- [GitHub Issue](https://github.com/bbangert/beaker/issues/191)\n",
+        "epssDetails": {
+          "percentile": "0.12909",
+          "probability": "0.00045",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2013-7489"
+          ],
+          "CWE": [
+            "CWE-502"
+          ]
+        },
+        "packageName": "beaker",
+        "proprietary": false,
+        "creationTime": "2020-07-01T15:53:02.903673Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2020-07-01T15:48:38Z",
+        "packageManager": "pip",
+        "publicationTime": "2020-07-01T16:02:51.973144Z",
+        "modificationTime": "2024-03-11T09:52:03.907458Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "critical",
+        "from": [
+          "inventory-app@0.0.0",
+          "beaker@1.11.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "beaker",
+        "version": "1.11.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Not affecting us since the storage is not accessible to any other client",
+              "expires": "2024-03-30T16:20:58.017Z",
+              "created": "2022-12-08T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-FLASK-5490129",
+        "title": "Information Exposure",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "credit": [
+          "Tom Most"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.5)",
+            "[2.3.0,2.3.2)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.5",
+          "2.3.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "flask",
+        "references": [
+          {
+            "url": "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/pull/5109",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.2.5",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.3.2",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://flask.palletsprojects.com/en/2.3.x/api/%23flask.session.permanent",
+            "title": "Session Cookie Documentation"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:13.063402Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:15.543763Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:54:01.212992Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
+        "epssDetails": {
+          "percentile": "0.40105",
+          "probability": "0.00100",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-30861"
+          ],
+          "CWE": [
+            "CWE-200"
+          ],
+          "GHSA": [
+            "GHSA-m2qf-hxjv-5gpq"
+          ]
+        },
+        "packageName": "flask",
+        "proprietary": false,
+        "creationTime": "2023-05-02T05:56:52.780757Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-05-01T19:22:20Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-05-02T07:57:54.707419Z",
+        "modificationTime": "2024-03-11T09:54:01.212992Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "flask",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4303",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-05-08T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-FLASK-5490129",
+        "title": "Information Exposure",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "credit": [
+          "Tom Most"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.5)",
+            "[2.3.0,2.3.2)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.5",
+          "2.3.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "flask",
+        "references": [
+          {
+            "url": "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/pull/5109",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.2.5",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.3.2",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://flask.palletsprojects.com/en/2.3.x/api/%23flask.session.permanent",
+            "title": "Session Cookie Documentation"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:13.063402Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:15.543763Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:54:01.212992Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
+        "epssDetails": {
+          "percentile": "0.40105",
+          "probability": "0.00100",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-30861"
+          ],
+          "CWE": [
+            "CWE-200"
+          ],
+          "GHSA": [
+            "GHSA-m2qf-hxjv-5gpq"
+          ]
+        },
+        "packageName": "flask",
+        "proprietary": false,
+        "creationTime": "2023-05-02T05:56:52.780757Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-05-01T19:22:20Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-05-02T07:57:54.707419Z",
+        "modificationTime": "2024-03-11T09:54:01.212992Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-babel@1.0.0",
+          "flask@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "flask",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4303",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-05-08T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-FLASK-5490129",
+        "title": "Information Exposure",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "credit": [
+          "Tom Most"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.5)",
+            "[2.3.0,2.3.2)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.5",
+          "2.3.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "flask",
+        "references": [
+          {
+            "url": "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/pull/5109",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.2.5",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.3.2",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://flask.palletsprojects.com/en/2.3.x/api/%23flask.session.permanent",
+            "title": "Session Cookie Documentation"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:13.063402Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:15.543763Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:54:01.212992Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
+        "epssDetails": {
+          "percentile": "0.40105",
+          "probability": "0.00100",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-30861"
+          ],
+          "CWE": [
+            "CWE-200"
+          ],
+          "GHSA": [
+            "GHSA-m2qf-hxjv-5gpq"
+          ]
+        },
+        "packageName": "flask",
+        "proprietary": false,
+        "creationTime": "2023-05-02T05:56:52.780757Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-05-01T19:22:20Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-05-02T07:57:54.707419Z",
+        "modificationTime": "2024-03-11T09:54:01.212992Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "flask@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "flask",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4303",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-05-08T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-FLASK-5490129",
+        "title": "Information Exposure",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "credit": [
+          "Tom Most"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.5)",
+            "[2.3.0,2.3.2)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.5",
+          "2.3.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "flask",
+        "references": [
+          {
+            "url": "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/pull/5109",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.2.5",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.3.2",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://flask.palletsprojects.com/en/2.3.x/api/%23flask.session.permanent",
+            "title": "Session Cookie Documentation"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:13.063402Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:15.543763Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:54:01.212992Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
+        "epssDetails": {
+          "percentile": "0.40105",
+          "probability": "0.00100",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-30861"
+          ],
+          "CWE": [
+            "CWE-200"
+          ],
+          "GHSA": [
+            "GHSA-m2qf-hxjv-5gpq"
+          ]
+        },
+        "packageName": "flask",
+        "proprietary": false,
+        "creationTime": "2023-05-02T05:56:52.780757Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-05-01T19:22:20Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-05-02T07:57:54.707419Z",
+        "modificationTime": "2024-03-11T09:54:01.212992Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-multistatic@1.0",
+          "flask@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "flask",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4303",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-05-08T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-FLASK-5490129",
+        "title": "Information Exposure",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "credit": [
+          "Tom Most"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.5)",
+            "[2.3.0,2.3.2)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.5",
+          "2.3.2"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "flask",
+        "references": [
+          {
+            "url": "https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/flask/pull/5109",
+            "title": "GitHub PR"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.2.5",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://github.com/pallets/flask/releases/tag/2.3.2",
+            "title": "GitHub Release"
+          },
+          {
+            "url": "https://flask.palletsprojects.com/en/2.3.x/api/%23flask.session.permanent",
+            "title": "Session Cookie Documentation"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:13.063402Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:53:15.543763Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-03-11T09:54:01.212992Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
+        "epssDetails": {
+          "percentile": "0.40105",
+          "probability": "0.00100",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-30861"
+          ],
+          "CWE": [
+            "CWE-200"
+          ],
+          "GHSA": [
+            "GHSA-m2qf-hxjv-5gpq"
+          ]
+        },
+        "packageName": "flask",
+        "proprietary": false,
+        "creationTime": "2023-05-02T05:56:52.780757Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-05-01T19:22:20Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-05-02T07:57:54.707419Z",
+        "modificationTime": "2024-03-11T09:54:01.212992Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-wtf@1.0.1",
+          "flask@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "flask",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4303",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-05-08T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-PYOPENSSL-6149520",
+        "title": "Use of a Broken or Risky Cryptographic Algorithm",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Sverker Eriksson"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[22.0.0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 5.9,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "pyopenssl",
+        "references": [
+          {
+            "url": "https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240109.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2257571",
+            "title": "RedHat Bugzilla Bug"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:44.514581Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:47.519039Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:50.449769Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
+        "epssDetails": {
+          "percentile": "0.23728",
+          "probability": "0.00061",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-6129"
+          ],
+          "CWE": [
+            "CWE-328"
+          ]
+        },
+        "packageName": "pyopenssl",
+        "proprietary": false,
+        "creationTime": "2024-01-10T13:39:49.598360Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-01-09T00:00:00Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-01-10T15:08:56.516899Z",
+        "modificationTime": "2024-03-11T09:49:50.449769Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "pyopenssl@24.0.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "pyopenssl",
+        "version": "24.0.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Issue tracked in github: https://github.com/GSA/data.gov/issues/4532",
+              "expires": "2024-04-10T19:29:54.032Z",
+              "created": "2024-01-11T19:29:54.039Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-PYOPENSSL-6157250",
+        "title": "Resource Exhaustion",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "OSS-Fuzz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[22.0.0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 5.9,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "pyopenssl",
+        "references": [
+          {
+            "url": "https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240115.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2258502",
+            "title": "RedHat Bugzilla Bug"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 5.9,
+            "modificationTime": "2024-03-11T09:49:24.605584Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 5.9,
+            "modificationTime": "2024-03-11T09:49:44.652172Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
+        "epssDetails": null,
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-6237"
+          ],
+          "CWE": [
+            "CWE-400"
+          ]
+        },
+        "packageName": "pyopenssl",
+        "proprietary": false,
+        "creationTime": "2024-01-16T07:48:33.039346Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-01-15T00:00:00Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-01-16T10:17:36.325521Z",
+        "modificationTime": "2024-03-13T11:51:46.976202Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "pyopenssl@24.0.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "pyopenssl",
+        "version": "24.0.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Issue tracked in github: https://github.com/GSA/data.gov/issues/4591",
+              "expires": "2024-04-10T19:29:54.032Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-PYOPENSSL-6149520",
+        "title": "Use of a Broken or Risky Cryptographic Algorithm",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Sverker Eriksson"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[22.0.0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 5.9,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "pyopenssl",
+        "references": [
+          {
+            "url": "https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240109.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2257571",
+            "title": "RedHat Bugzilla Bug"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:44.514581Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:47.519039Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:50.449769Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
+        "epssDetails": {
+          "percentile": "0.23728",
+          "probability": "0.00061",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-6129"
+          ],
+          "CWE": [
+            "CWE-328"
+          ]
+        },
+        "packageName": "pyopenssl",
+        "proprietary": false,
+        "creationTime": "2024-01-10T13:39:49.598360Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-01-09T00:00:00Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-01-10T15:08:56.516899Z",
+        "modificationTime": "2024-03-11T09:49:50.449769Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "pysaml2@7.0.1",
+          "pyopenssl@24.0.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "pyopenssl",
+        "version": "24.0.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Issue tracked in github: https://github.com/GSA/data.gov/issues/4532",
+              "expires": "2024-04-10T19:29:54.032Z",
+              "created": "2024-01-11T19:29:54.039Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-PYOPENSSL-6157250",
+        "title": "Resource Exhaustion",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "OSS-Fuzz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[22.0.0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 5.9,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "pyopenssl",
+        "references": [
+          {
+            "url": "https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240115.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2258502",
+            "title": "RedHat Bugzilla Bug"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 5.9,
+            "modificationTime": "2024-03-11T09:49:24.605584Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 5.9,
+            "modificationTime": "2024-03-11T09:49:44.652172Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
+        "epssDetails": null,
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-6237"
+          ],
+          "CWE": [
+            "CWE-400"
+          ]
+        },
+        "packageName": "pyopenssl",
+        "proprietary": false,
+        "creationTime": "2024-01-16T07:48:33.039346Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-01-15T00:00:00Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-01-16T10:17:36.325521Z",
+        "modificationTime": "2024-03-13T11:51:46.976202Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "pysaml2@7.0.1",
+          "pyopenssl@24.0.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "pyopenssl",
+        "version": "24.0.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Issue tracked in github: https://github.com/GSA/data.gov/issues/4591",
+              "expires": "2024-04-10T19:29:54.032Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-PYOPENSSL-6149520",
+        "title": "Use of a Broken or Risky Cryptographic Algorithm",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Sverker Eriksson"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[22.0.0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 5.9,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "pyopenssl",
+        "references": [
+          {
+            "url": "https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240109.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2257571",
+            "title": "RedHat Bugzilla Bug"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:44.514581Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:47.519039Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-03-11T09:49:50.449769Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
+        "epssDetails": {
+          "percentile": "0.23728",
+          "probability": "0.00061",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-6129"
+          ],
+          "CWE": [
+            "CWE-328"
+          ]
+        },
+        "packageName": "pyopenssl",
+        "proprietary": false,
+        "creationTime": "2024-01-10T13:39:49.598360Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-01-09T00:00:00Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-01-10T15:08:56.516899Z",
+        "modificationTime": "2024-03-11T09:49:50.449769Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "ckanext-saml2auth@1.3.0",
+          "pysaml2@7.0.1",
+          "pyopenssl@24.0.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "pyopenssl",
+        "version": "24.0.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Issue tracked in github: https://github.com/GSA/data.gov/issues/4532",
+              "expires": "2024-04-10T19:29:54.032Z",
+              "created": "2024-01-11T19:29:54.039Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-PYOPENSSL-6157250",
+        "title": "Resource Exhaustion",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "OSS-Fuzz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[22.0.0,]"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 5.9,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "pyopenssl",
+        "references": [
+          {
+            "url": "https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240115.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2258502",
+            "title": "RedHat Bugzilla Bug"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 5.9,
+            "modificationTime": "2024-03-11T09:49:24.605584Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 5.9,
+            "modificationTime": "2024-03-11T09:49:44.652172Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
+        "epssDetails": null,
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-6237"
+          ],
+          "CWE": [
+            "CWE-400"
+          ]
+        },
+        "packageName": "pyopenssl",
+        "proprietary": false,
+        "creationTime": "2024-01-16T07:48:33.039346Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-01-15T00:00:00Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-01-16T10:17:36.325521Z",
+        "modificationTime": "2024-03-13T11:51:46.976202Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "ckanext-saml2auth@1.3.0",
+          "pysaml2@7.0.1",
+          "pyopenssl@24.0.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "pyopenssl",
+        "version": "24.0.0",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "No remediation available yet; Issue tracked in github: https://github.com/GSA/data.gov/issues/4591",
+              "expires": "2024-04-10T19:29:54.032Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-babel@1.0.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-babel@1.0.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-babel@1.0.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-login@0.6.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-multistatic@1.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-multistatic@1.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-multistatic@1.0",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319935",
+        "title": "Access Restriction Bypass",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "credit": [
+          "Marco Squarcina"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "low",
+        "cvssScore": 2.6,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 3.5,
+            "modificationTime": "2024-03-11T09:52:56.001212Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "low",
+            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+            "cvssV3BaseScore": 2.6,
+            "modificationTime": "2024-03-11T09:53:48.578251Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.14309",
+          "probability": "0.00046",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-23934"
+          ],
+          "CWE": [
+            "CWE-284"
+          ],
+          "GHSA": [
+            "GHSA-px8h-6qxv-m22q"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:37:04Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:22:04.062534Z",
+        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "low",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-wtf@1.0.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-3319936",
+        "title": "Denial of Service (DoS)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Jakob Ackermann"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.2.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.2.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-02-24T01:10:17.734628Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-03-30T11:03:40.768284Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:42:47.858361Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "epssDetails": {
+          "percentile": "0.22406",
+          "probability": "0.00059",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-25577"
+          ],
+          "CWE": [
+            "CWE-770"
+          ],
+          "GHSA": [
+            "GHSA-xg9f-g7g7-2323"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-02-15T09:07:54.915104Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-02-15T08:36:53Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-02-15T09:23:26.929186Z",
+        "modificationTime": "2023-11-08T09:42:47.858361Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-wtf@1.0.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-06-01T16:20:58.017Z",
+              "created": "2023-02-15T16:20:58.023Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6035177",
+        "title": "Inefficient Algorithmic Complexity",
+        "CVSSv3": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Paweł Srokosz"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,2.3.8)",
+            "[3.0.0,3.0.1)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "2.3.8",
+          "3.0.1"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-01T11:06:21.611437Z"
+          },
+          {
+            "assigner": "NVD",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-02T01:10:54.852387Z"
+          },
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2023-11-08T09:43:51.445258Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
+        "epssDetails": {
+          "percentile": "0.18728",
+          "probability": "0.00053",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2023-46136"
+          ],
+          "CWE": [
+            "CWE-407"
+          ],
+          "GHSA": [
+            "GHSA-hrfv-mqp8-q5rw"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2023-10-25T22:30:29.895488Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2023-10-25T17:47:19Z",
+        "packageManager": "pip",
+        "publicationTime": "2023-10-26T08:50:03.628406Z",
+        "modificationTime": "2024-03-06T14:09:26.243423Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "medium",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-wtf@1.0.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
+              "expires": "2024-03-31T13:35:17.967Z",
+              "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "patch": []
+  },
+  "uniqueCount": 2,
+  "projectName": "inventory-app",
+  "foundProjectCount": 2,
+  "displayTargetFile": "requirements.txt",
+  "hasUnknownVersions": false,
+  "path": "/home/runner/work/inventory-app/inventory-app"
+}
