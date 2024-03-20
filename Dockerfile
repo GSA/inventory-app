@@ -12,7 +12,7 @@ ENV APP_DIR /app
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
 # Install vim and zip
-RUN apk add vim zip
+RUN apk add vim zip xmlsec-dev
 
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
@@ -33,3 +33,5 @@ COPY config/server_start.sh $CKAN_CONFIG/
 
 # Custom prerun script for Solr 8
 COPY config/GSA_prerun.py ${CKAN_HOME}/
+
+COPY config/saml2 ${CKAN_HOME}/saml2
