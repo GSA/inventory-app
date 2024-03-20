@@ -1,4 +1,4 @@
-FROM openknowledge/ckan-dev:2.10.1
+FROM ckan/ckan-dev:2.10.4
 # Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.10/Dockerfile
 # And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.10/Dockerfile
 
