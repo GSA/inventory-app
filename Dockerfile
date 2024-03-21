@@ -12,7 +12,7 @@ ENV APP_DIR /app
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
 # Install vim and zip
-RUN apk add vim zip
+RUN apk add vim zip xmlsec
 
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
