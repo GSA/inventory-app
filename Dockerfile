@@ -1,4 +1,4 @@
-FROM openknowledge/ckan-dev:2.10.1
+FROM ckan/ckan-dev:2.10.4
 # Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.10/Dockerfile
 # And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.10/Dockerfile
 
@@ -12,7 +12,7 @@ ENV APP_DIR /app
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
 # Install vim and zip
-RUN apk add vim zip xmlsec-dev
+RUN apk add vim zip xmlsec
 
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
