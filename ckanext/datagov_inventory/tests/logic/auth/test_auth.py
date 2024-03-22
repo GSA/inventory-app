@@ -378,11 +378,11 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         self.setup_test_orgs_users()
 
         self.assert_user_authorization('user_list', {
-            'gsa_admin': is_denied,
-            'gsa_editor': is_denied,
-            'gsa_member': is_denied,
-            'doi_admin': is_denied,
-            'doi_member': is_denied,
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_admin': is_allowed,
+            'doi_member': is_allowed,
             'anonymous': is_denied
         })
 
@@ -397,11 +397,11 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         self.setup_test_orgs_users()
 
         self.assert_user_authorization('user_show', {
-            'gsa_admin': is_denied,
-            'gsa_editor': is_denied,
-            'gsa_member': is_denied,
-            'doi_admin': is_denied,
-            'doi_member': is_denied,
+            'gsa_admin': is_allowed,
+            'gsa_editor': is_allowed,
+            'gsa_member': is_allowed,
+            'doi_admin': is_allowed,
+            'doi_member': is_allowed,
             'anonymous': is_denied
         })
 
