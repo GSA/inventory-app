@@ -33,3 +33,5 @@ COPY config/server_start.sh $CKAN_CONFIG/
 
 # Custom prerun script for Solr 8
 COPY config/GSA_prerun.py ${CKAN_HOME}/
+
+COPY config/saml2 ${CKAN_HOME}/saml2
