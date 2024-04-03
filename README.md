@@ -27,15 +27,15 @@ Open CKAN to verify it's working
 
 If you would like to seed data into the system, examine the test framework (`e2e/cypress/support/command.js`) for some examples of creating organizations and/or datasets with resources.
 
-### Docker-compose commands
+### docker compose commands
 
 To enter into the app container in interactive mode as root, you will need to run the following:
 
-    docker-compose exec app /bin/bash
+    docker compose exec app /bin/bash
 
 To run a one off command inside the container:
 
-    docker-compose exec app {command}
+    docker compose exec app {command}
 
 ### Update dependencies
 
