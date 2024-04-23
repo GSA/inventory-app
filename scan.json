@@ -61,7 +61,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -152,7 +156,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -244,7 +252,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -336,7 +348,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -429,7 +445,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -522,7 +542,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -556,6 +580,630 @@
       "version": "42.0.5"
     },
     {
+      "id": "SNYK-PYTHON-GUNICORN-6615672",
+      "title": "HTTP Request Smuggling",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N/E:P",
+      "credit": [
+        "Yadhu Krishna M"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,22.0.0)"
+        ]
+      },
+      "exploit": "Proof of Concept",
+      "fixedIn": [
+        "22.0.0"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "high",
+      "cvssScore": 7.5,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "gunicorn",
+      "references": [
+        {
+          "url": "https://github.com/benoitc/gunicorn/blob/430dcdd997b955fa1a8569a07d9cdcbac686fb35/gunicorn/http/message.py%23L134",
+          "title": "Vulnerable Code"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "high",
+          "cvssV3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+          "cvssV3BaseScore": 7.5,
+          "modificationTime": "2024-04-18T13:33:12.751076Z"
+        }
+      ],
+      "description": "## Overview\n[gunicorn](http://gunicorn.org/) is a Python WSGI HTTP Server for UNIX\n\nAffected versions of this package are vulnerable to HTTP Request Smuggling due to the improper validation of `Transfer-Encoding` headers. An attacker can bypass security restrictions and access restricted endpoints by crafting requests with conflicting `Transfer-Encoding` headers. \r\n\r\n**Notes:**\r\n\r\n1) This is only exploitable if users have a network path which does not filter out invalid requests;\r\n\r\n2) Users are advised to block access to restricted endpoints via a firewall or other mechanism until a fix can be developed.\r\n\r\n3) This issue arises from the application's incorrectly processing of requests with multiple, conflicting `Transfer-Encoding` headers, treating them as chunked regardless of the final encoding specified.\n## Remediation\nUpgrade `gunicorn` to version 22.0.0 or higher.\n## References\n- [Vulnerable Code](https://github.com/benoitc/gunicorn/blob/430dcdd997b955fa1a8569a07d9cdcbac686fb35/gunicorn/http/message.py#L134)\n",
+      "epssDetails": {
+        "percentile": "0.08124",
+        "probability": "0.00043",
+        "modelVersion": "v2023.03.01"
+      },
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-1135"
+        ],
+        "CWE": [
+          "CWE-444"
+        ],
+        "GHSA": [
+          "GHSA-w3h3-4rj7-4ph4"
+        ]
+      },
+      "packageName": "gunicorn",
+      "proprietary": false,
+      "creationTime": "2024-04-16T06:25:02.882232Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-16T00:30:32Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-16T08:54:07.325544Z",
+      "modificationTime": "2024-04-18T13:33:12.751076Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "high",
+      "from": [
+        "inventory-app@0.0.0",
+        "gunicorn@21.2.0"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "gunicorn",
+      "version": "21.2.0"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "requests@2.31.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "pysaml2@7.3.1",
+        "requests@2.31.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "messytables@0.15.2",
+        "requests@2.31.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "pysolr@3.9.0",
+        "requests@2.31.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "tabulator@1.53.5",
+        "requests@2.31.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
+      "id": "SNYK-PYTHON-IDNA-6597975",
+      "title": "Resource Exhaustion",
+      "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "credit": [
+        "Guido Vranken"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,3.7)"
+        ]
+      },
+      "exploit": "Not Defined",
+      "fixedIn": [
+        "3.7"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "medium",
+      "cvssScore": 6.2,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "idna",
+      "references": [
+        {
+          "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [
+        {
+          "assigner": "Red Hat",
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+          "cvssV3BaseScore": 6.5,
+          "modificationTime": "2024-04-13T13:34:24.252619Z"
+        }
+      ],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [
+          "CVE-2024-3651"
+        ],
+        "CWE": [
+          "CWE-400"
+        ],
+        "GHSA": [
+          "GHSA-jjg7-2v4v-x38h"
+        ]
+      },
+      "packageName": "idna",
+      "proprietary": false,
+      "creationTime": "2024-04-12T07:07:33.284260Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-11T21:32:40Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-12T07:20:32.228734Z",
+      "modificationTime": "2024-04-13T13:34:24.252619Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "medium",
+      "from": [
+        "inventory-app@0.0.0",
+        "ckanext-saml2auth@1.3.0",
+        "pysaml2@7.3.1",
+        "requests@2.31.0",
+        "idna@3.6"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "idna",
+      "version": "3.6"
+    },
+    {
       "id": "SNYK-PYTHON-PYOPENSSL-6592766",
       "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
       "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
@@ -616,7 +1264,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -707,7 +1359,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -799,7 +1455,11 @@
         }
       ],
       "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": null,
+      "epssDetails": {
+        "percentile": "0.14042",
+        "probability": "0.00045",
+        "modelVersion": "v2023.03.01"
+      },
       "identifiers": {
         "CVE": [
           "CVE-2024-2511"
@@ -830,6 +1490,72 @@
       "isPatchable": false,
       "name": "pyopenssl",
       "version": "24.1.0"
+    },
+    {
+      "id": "SNYK-PYTHON-SQLPARSE-6615674",
+      "title": "Uncontrolled Recursion",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+      "credit": [
+        "uriyay-jfrog"
+      ],
+      "semver": {
+        "vulnerable": [
+          "[,0.5.0)"
+        ]
+      },
+      "exploit": "Proof of Concept",
+      "fixedIn": [
+        "0.5.0"
+      ],
+      "patches": [],
+      "insights": {
+        "triageAdvice": null
+      },
+      "language": "python",
+      "severity": "high",
+      "cvssScore": 7.5,
+      "functions": [],
+      "malicious": false,
+      "isDisputed": false,
+      "moduleName": "sqlparse",
+      "references": [
+        {
+          "url": "https://github.com/andialbrecht/sqlparse/commit/b4a39d9850969b4e1d6940d32094ee0b42a2cf03",
+          "title": "GitHub Commit"
+        }
+      ],
+      "cvssDetails": [],
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Recursion due to the parsing of heavily nested lists. An attacker can cause the application to crash by submitting a specially crafted list that triggers a `RecursionError`.\r\n\r\n**Note:**\r\nThe impact depends on the use, so anyone parsing a user input with `sqlparse.parse()` is affected.\n## PoC\n```py\r\n\r\nimport sqlparse\r\nsqlparse.parse('[' * 10000 + ']' * 10000)\r\n```\n## Remediation\nUpgrade `sqlparse` to version 0.5.0 or higher.\n## References\n- [GitHub Commit](https://github.com/andialbrecht/sqlparse/commit/b4a39d9850969b4e1d6940d32094ee0b42a2cf03)\n",
+      "epssDetails": null,
+      "identifiers": {
+        "CVE": [],
+        "CWE": [
+          "CWE-674"
+        ],
+        "GHSA": [
+          "GHSA-2m57-hf25-phgg"
+        ]
+      },
+      "packageName": "sqlparse",
+      "proprietary": false,
+      "creationTime": "2024-04-16T08:38:43.653546Z",
+      "functions_new": [],
+      "alternativeIds": [],
+      "disclosureTime": "2024-04-15T20:21:25Z",
+      "packageManager": "pip",
+      "publicationTime": "2024-04-16T09:04:08.013755Z",
+      "modificationTime": "2024-04-16T09:04:08.014226Z",
+      "socialTrendAlert": false,
+      "severityWithCritical": "high",
+      "from": [
+        "inventory-app@0.0.0",
+        "sqlparse@0.4.4"
+      ],
+      "upgradePath": [],
+      "isUpgradable": false,
+      "isPatchable": false,
+      "name": "sqlparse",
+      "version": "0.4.4"
     }
   ],
   "ok": false,
@@ -938,7 +1664,7 @@
     "reasonRequired": false,
     "disregardFilesystemIgnores": false
   },
-  "summary": "42 vulnerable dependency paths",
+  "summary": "51 vulnerable dependency paths",
   "remediation": {
     "unresolved": [
       {
@@ -1002,7 +1728,11 @@
           }
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-        "epssDetails": null,
+        "epssDetails": {
+          "percentile": "0.14042",
+          "probability": "0.00045",
+          "modelVersion": "v2023.03.01"
+        },
         "identifiers": {
           "CVE": [
             "CVE-2024-2511"
@@ -1037,6 +1767,171 @@
         "name": "cryptography",
         "version": "42.0.5",
         "severityWithCritical": "low"
+      },
+      {
+        "id": "SNYK-PYTHON-GUNICORN-6615672",
+        "title": "HTTP Request Smuggling",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N/E:P",
+        "credit": [
+          "Yadhu Krishna M"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,22.0.0)"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "22.0.0"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "gunicorn",
+        "references": [
+          {
+            "url": "https://github.com/benoitc/gunicorn/blob/430dcdd997b955fa1a8569a07d9cdcbac686fb35/gunicorn/http/message.py%23L134",
+            "title": "Vulnerable Code"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-04-18T13:33:12.751076Z"
+          }
+        ],
+        "description": "## Overview\n[gunicorn](http://gunicorn.org/) is a Python WSGI HTTP Server for UNIX\n\nAffected versions of this package are vulnerable to HTTP Request Smuggling due to the improper validation of `Transfer-Encoding` headers. An attacker can bypass security restrictions and access restricted endpoints by crafting requests with conflicting `Transfer-Encoding` headers. \r\n\r\n**Notes:**\r\n\r\n1) This is only exploitable if users have a network path which does not filter out invalid requests;\r\n\r\n2) Users are advised to block access to restricted endpoints via a firewall or other mechanism until a fix can be developed.\r\n\r\n3) This issue arises from the application's incorrectly processing of requests with multiple, conflicting `Transfer-Encoding` headers, treating them as chunked regardless of the final encoding specified.\n## Remediation\nUpgrade `gunicorn` to version 22.0.0 or higher.\n## References\n- [Vulnerable Code](https://github.com/benoitc/gunicorn/blob/430dcdd997b955fa1a8569a07d9cdcbac686fb35/gunicorn/http/message.py#L134)\n",
+        "epssDetails": {
+          "percentile": "0.08124",
+          "probability": "0.00043",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2024-1135"
+          ],
+          "CWE": [
+            "CWE-444"
+          ],
+          "GHSA": [
+            "GHSA-w3h3-4rj7-4ph4"
+          ]
+        },
+        "packageName": "gunicorn",
+        "proprietary": false,
+        "creationTime": "2024-04-16T06:25:02.882232Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-04-16T00:30:32Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-04-16T08:54:07.325544Z",
+        "modificationTime": "2024-04-18T13:33:12.751076Z",
+        "socialTrendAlert": false,
+        "packagePopularityRank": 99,
+        "from": [
+          "inventory-app@0.0.0",
+          "gunicorn@21.2.0"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "isPinnable": true,
+        "isRuntime": false,
+        "name": "gunicorn",
+        "version": "21.2.0",
+        "severityWithCritical": "high"
+      },
+      {
+        "id": "SNYK-PYTHON-IDNA-6597975",
+        "title": "Resource Exhaustion",
+        "CVSSv3": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "credit": [
+          "Guido Vranken"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,3.7)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "3.7"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "medium",
+        "cvssScore": 6.2,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "idna",
+        "references": [
+          {
+            "url": "https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+            "cvssV3BaseScore": 6.5,
+            "modificationTime": "2024-04-13T13:34:24.252619Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `idna.encode` function. An attacker can consume significant resources and potentially cause a denial-of-service by supplying specially crafted arguments to this function. \r\n\r\n**Note:**\r\nThis is triggered by arbitrarily large inputs that would not occur in normal usage but may be passed to the library assuming there is no preliminary input validation by the higher-level application.\n## Remediation\nUpgrade `idna` to version 3.7 or higher.\n## References\n- [GitHub Commit](https://github.com/kjd/idna/commit/5beb28b9dd77912c0dd656d8b0fdba3eb80222e7)\n",
+        "epssDetails": null,
+        "identifiers": {
+          "CVE": [
+            "CVE-2024-3651"
+          ],
+          "CWE": [
+            "CWE-400"
+          ],
+          "GHSA": [
+            "GHSA-jjg7-2v4v-x38h"
+          ]
+        },
+        "packageName": "idna",
+        "proprietary": false,
+        "creationTime": "2024-04-12T07:07:33.284260Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-04-11T21:32:40Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-04-12T07:20:32.228734Z",
+        "modificationTime": "2024-04-13T13:34:24.252619Z",
+        "socialTrendAlert": false,
+        "packagePopularityRank": 99,
+        "from": [
+          "inventory-app@0.0.0",
+          "ckanext-saml2auth@1.3.0",
+          "pysaml2@7.3.1",
+          "requests@2.31.0",
+          "idna@3.6"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "isPinnable": true,
+        "isRuntime": false,
+        "name": "idna",
+        "version": "3.6",
+        "severityWithCritical": "medium"
       },
       {
         "id": "SNYK-PYTHON-PYOPENSSL-6592766",
@@ -1099,7 +1994,11 @@
           }
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-        "epssDetails": null,
+        "epssDetails": {
+          "percentile": "0.14042",
+          "probability": "0.00045",
+          "modelVersion": "v2023.03.01"
+        },
         "identifiers": {
           "CVE": [
             "CVE-2024-2511"
@@ -1133,12 +2032,103 @@
         "name": "pyopenssl",
         "version": "24.1.0",
         "severityWithCritical": "low"
+      },
+      {
+        "id": "SNYK-PYTHON-SQLPARSE-6615674",
+        "title": "Uncontrolled Recursion",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H/E:P",
+        "credit": [
+          "uriyay-jfrog"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,0.5.0)"
+          ]
+        },
+        "exploit": "Proof of Concept",
+        "fixedIn": [
+          "0.5.0"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "sqlparse",
+        "references": [
+          {
+            "url": "https://github.com/andialbrecht/sqlparse/commit/b4a39d9850969b4e1d6940d32094ee0b42a2cf03",
+            "title": "GitHub Commit"
+          }
+        ],
+        "cvssDetails": [],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Recursion due to the parsing of heavily nested lists. An attacker can cause the application to crash by submitting a specially crafted list that triggers a `RecursionError`.\r\n\r\n**Note:**\r\nThe impact depends on the use, so anyone parsing a user input with `sqlparse.parse()` is affected.\n## PoC\n```py\r\n\r\nimport sqlparse\r\nsqlparse.parse('[' * 10000 + ']' * 10000)\r\n```\n## Remediation\nUpgrade `sqlparse` to version 0.5.0 or higher.\n## References\n- [GitHub Commit](https://github.com/andialbrecht/sqlparse/commit/b4a39d9850969b4e1d6940d32094ee0b42a2cf03)\n",
+        "epssDetails": null,
+        "identifiers": {
+          "CVE": [],
+          "CWE": [
+            "CWE-674"
+          ],
+          "GHSA": [
+            "GHSA-2m57-hf25-phgg"
+          ]
+        },
+        "packageName": "sqlparse",
+        "proprietary": false,
+        "creationTime": "2024-04-16T08:38:43.653546Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-04-15T20:21:25Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-04-16T09:04:08.013755Z",
+        "modificationTime": "2024-04-16T09:04:08.014226Z",
+        "socialTrendAlert": false,
+        "packagePopularityRank": 99,
+        "from": [
+          "inventory-app@0.0.0",
+          "sqlparse@0.4.4"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "isPinnable": true,
+        "isRuntime": false,
+        "name": "sqlparse",
+        "version": "0.4.4",
+        "severityWithCritical": "high"
       }
     ],
     "upgrade": {},
     "patch": {},
     "ignore": {},
-    "pin": {}
+    "pin": {
+      "gunicorn@21.2.0": {
+        "upgradeTo": "gunicorn@22.0.0",
+        "vulns": [
+          "SNYK-PYTHON-GUNICORN-6615672"
+        ],
+        "isTransitive": false
+      },
+      "idna@3.6": {
+        "upgradeTo": "idna@3.7",
+        "vulns": [
+          "SNYK-PYTHON-IDNA-6597975"
+        ],
+        "isTransitive": false
+      },
+      "sqlparse@0.4.4": {
+        "upgradeTo": "sqlparse@0.5.0",
+        "vulns": [
+          "SNYK-PYTHON-SQLPARSE-6615674"
+        ],
+        "isTransitive": false
+      }
+    }
   },
   "filesystemPolicy": true,
   "filtered": {
@@ -1192,7 +2182,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Deserialization of Untrusted Data which could lead to arbitrary code execution.\n## Remediation\nThere is no fixed version for `Beaker`.\n\n## References\n- [GitHub Issue](https://github.com/bbangert/beaker/issues/191)\n",
         "epssDetails": {
-          "percentile": "0.13811",
+          "percentile": "0.14284",
           "probability": "0.00045",
           "modelVersion": "v2023.03.01"
         },
@@ -1318,7 +2308,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49200",
+          "percentile": "0.49499",
           "probability": "0.00142",
           "modelVersion": "v2023.03.01"
         },
@@ -1447,7 +2437,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49200",
+          "percentile": "0.49499",
           "probability": "0.00142",
           "modelVersion": "v2023.03.01"
         },
@@ -1577,7 +2567,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49200",
+          "percentile": "0.49499",
           "probability": "0.00142",
           "modelVersion": "v2023.03.01"
         },
@@ -1707,7 +2697,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49200",
+          "percentile": "0.49499",
           "probability": "0.00142",
           "modelVersion": "v2023.03.01"
         },
@@ -1837,7 +2827,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49200",
+          "percentile": "0.49499",
           "probability": "0.00142",
           "modelVersion": "v2023.03.01"
         },
@@ -1963,7 +2953,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
         "epssDetails": {
-          "percentile": "0.24307",
+          "percentile": "0.24714",
           "probability": "0.00061",
           "modelVersion": "v2023.03.01"
         },
@@ -2195,7 +3185,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
         "epssDetails": {
-          "percentile": "0.24307",
+          "percentile": "0.24714",
           "probability": "0.00061",
           "modelVersion": "v2023.03.01"
         },
@@ -2429,7 +3419,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
         "epssDetails": {
-          "percentile": "0.24307",
+          "percentile": "0.24714",
           "probability": "0.00061",
           "modelVersion": "v2023.03.01"
         },
@@ -2644,7 +3634,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -2755,7 +3745,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -2868,7 +3858,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -2972,7 +3962,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -3084,7 +4074,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -3198,7 +4188,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -3303,7 +4293,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -3415,7 +4405,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -3529,7 +4519,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -3634,7 +4624,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -3747,7 +4737,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -3862,7 +4852,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -3968,7 +4958,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -4081,7 +5071,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -4196,7 +5186,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -4302,7 +5292,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -4415,7 +5405,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -4530,7 +5520,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -4636,7 +5626,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.17521",
+          "percentile": "0.17999",
           "probability": "0.00050",
           "modelVersion": "v2023.03.01"
         },
@@ -4749,7 +5739,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48210",
+          "percentile": "0.48508",
           "probability": "0.00136",
           "modelVersion": "v2023.03.01"
         },
@@ -4864,7 +5854,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19412",
+          "percentile": "0.19854",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -4918,7 +5908,7 @@
     ],
     "patch": []
   },
-  "uniqueCount": 2,
+  "uniqueCount": 5,
   "projectName": "inventory-app",
   "foundProjectCount": 2,
   "displayTargetFile": "requirements.txt",
