@@ -37,7 +37,7 @@ gevent==24.2.1
 greenlet==2.0.2
 gunicorn==21.2.0
 html5lib==1.1
-idna==3.6
+idna==3.7
 ijson==3.2.3
 importlib-resources==5.13.0
 itsdangerous==2.0.1
