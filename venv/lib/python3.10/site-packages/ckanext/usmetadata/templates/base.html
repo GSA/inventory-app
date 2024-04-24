@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block body_extras %}
+  {{ super() }}
+
+  {# Import example_theme.css using Fanstatic.
+     'example_theme/' is the name that the example_theme/fanstatic directory
+     was registered with when the toolkit.add_resource() function was called.
+     'example_theme.css' is the path to the CSS file, relative to the root of
+     the fanstatic directory. #}
+  {% asset 'usmetadata/js' %}
+{% endblock %}

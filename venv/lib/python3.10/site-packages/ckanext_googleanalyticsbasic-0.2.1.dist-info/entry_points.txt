@@ -1,0 +1,3 @@
+
+        [ckan.plugins]
+        googleanalyticsbasic=ckanext.googleanalyticsbasic.plugin:GoogleAnalyticsBasicPlugin

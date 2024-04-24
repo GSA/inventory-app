@@ -1,0 +1,107 @@
+{# See https://resources.data.gov/schemas/dcat-us/v1.1/#dataset-fields #}
+
+{% import "macros/form.html" as form %}
+
+{% set data = data or {} %}
+{% set errors = errors or {} %}
+
+{% block package_expanded_metadata %}
+
+{{ form.input('category', label=_('Theme (Category)'), id='field-category', placeholder=_('vegetables, non_starchy, green'), value=data.common_core.category, error=errors.category, classes=['exempt-allowed', 'control-medium'], attrs={'title': 'Main thematic category of the dataset. '} )}}
+
+{{ form.input('data_dictionary', label=_('Described By (Data Dictionary)'), id='field-data_dictionary', placeholder=_('http://www.my.gov/datadictionary'), value=data.common_core.data_dictionary, error=errors.data_dictionary, classes=['exempt-allowed', 'control-full'], attrs={'title': 'URL to the data dictionary for the dataset or API. Note that documentation other than a Data Dictionary can be referenced using Related Documents as shown in the expanded fields.'}) }}
+
+{% set format_attrs = {'data-module': 'autocomplete', 'data-module-source': '/api/2/util/resource/media_autocomplete?incomplete=?'} %}
+
+<div title="The machine-readable file format (IANA Media Type or MIME Type) of the distribution’s Described By URL.">
+{% call form.input('data_dictionary_type', id='field-data_dictionary_type', label=_('Described By Type (Data Dictionary Type)'), placeholder=_('e.g. text/csv, application/xml, or application/json'),
+    value=data.common_core.data_dictionary_type, error=errors.data_dictionary_type, classes=['exempt-allowed', 'control-medium'], attrs=format_attrs) %}
+{% endcall %}
+</div>
+
+<div class="exempt-allowed control-group control-medium">
+  <label class="control-label" for="field-accrual_periodicity">
+      {{ _("Accrual Periodicity (Frequency)") }}</label>
+  <div class="controls" title="Frequency with which dataset is published.">
+    <select id="field-accrual_periodicity" name="accrual_periodicity" title="Frequency with which dataset is published.">
+      <option value=""></option>
+        {% for level in h.accrual_periodicity %}
+      <option value="{{ level }}" {% if level == data.common_core.accrual_periodicity %}selected{% endif %} >
+        {{ level }}
+      </option>
+        {% endfor %}
+    </select>
+  </div>
+</div>
+
+
+{{ form.input('conforms_to', label=_('Conforms To (Data Standard)'), id='field-conforms_to', placeholder=_('http://www.agency.gov/widget-data-standard/'), value=data.common_core.conforms_to, error=errors.conforms_to, classes=['exempt-allowed', 'control-full'], is_required=false, attrs={'title': 'This is used to identify the schema version using a URI. The URI for version 1.1 of the schema is https://resources.data.gov/schemas/dcat-us/v1.1/'}) }}
+
+{{ form.input('homepage_url', label=_('Landing Page (Homepage URL)'), id='field-homepage_url', placeholder=_('http://www.agency.gov/vegetables'), value=data.common_core.homepage_url, error=errors.homepage_url, classes=['exempt-allowed', 'control-full'], attrs={'title': 'Alternative landing page used to redirect user to a contextual, Agency-hosted homepage for the Dataset or API when selecting this resource from the Data.gov user interface.his field is not intended for an agency homepage (e.g. www.agency.gov), but rather if a dataset has a human-friendly hub or landing page that users should be directed to for all resources tied to the dataset. This allows agencies to better specify what a visitor receives after selecting one of the agency datasets on Data.gov or in third-party mashups.'} )}}
+
+{{ form.input('language', label=_('Language'), id='field-language', placeholder=_('us-EN'), value=data.common_core.language, error=errors.language, classes=['exempt-allowed', 'control-medium'], attrs={'title': 'The language of the dataset.'} )}}
+
+{{ form.input('primary_it_investment_uii', label=_('Primary IT Investment UII'), id='field-primary-it-investment-uii', placeholder=_('021-352204052'), value=data.common_core.primary_it_investment_uii, error=errors.primary_it_investment_uii, classes=['exempt-allowed', 'control-medium'], attrs={'title': 'For linking a dataset with an IT Unique Investment Identifier (UII)'} )}}
+
+{{ form.input('related_documents', label=_('References (Related Documents)'), id='field-related_documents', placeholder=_('http://www.agency.gov/fruits/fruits.csv, http://www.agency.gov/legumes/legumes.csv'), value=data.common_core.related_documents, error=errors.related, classes=['exempt-allowed', 'control-full'], attrs={'title': 'Related documents such as technical information about a dataset, developer documentation, etc. References not in the data dictionary go here. Separate multiple URLs with commas.'} )}}
+
+{{ form.input('release_date', label=_('Issued (Release Date)'), id='field-release_date', placeholder=_('2012-01-15'), value=data.common_core.release_date, error=errors.release_date, classes=['exempt-allowed', 'control-medium'], attrs={'title': 'Date of formal issuance.Dates should be formatted as YYYY-MM-DD. Specify "01" as the day if unknown. If the file is brand-new, enter the issued date here.'} )}}
+
+{{ form.input('system_of_records', label=_('System of Records'), id='field-system_of_records', placeholder=_('http://www.my.gov/systemofrecords'), value=data.common_core.system_of_records, error=errors.system_of_records, classes=['exempt-allowed', 'control-full'], attrs={'title': 'If the systems is designated as a system of records under the Privacy Act of 1974, provide the URL to the System of Records Notice related to this dataset.'} )}}
+
+<div class="control-group">
+    <label class="control-label" for="field-is_parent">
+      {{ _("Is parent") }}
+    </label>
+    <div class="controls" title="This dataset will be used to link other datasets in a collection">
+        <select id="field-is_parent"
+                name="is_parent"
+                title="This dataset will be used to link other datasets in a collection">
+
+            {% for id, desc in h.is_parent_options.items() %}
+                <option value="{{ id }}" {% if id == data.common_core.is_parent %} selected {% endif %} >
+                    {{ desc }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="control-group control-group-dataset-parent control-full">
+  <label class="control-label" for="field-parent_dataset">
+      {{ _("Parent dataset (for isPartOf)") }}</label>
+  <div class="controls" title="Parent Dataset.">
+    <select id="field-parent_dataset" name="parent_dataset" data-module="autocomplete" title="Parent dataset.">
+        <option value="" {% if not data.common_core %} selected="selected" {% endif %}>{{ _('No Parent dataset') }}</option>
+
+        {% for dataset_id,dataset_title in data.parent_dataset_options.items() %}
+      <option value="{{ dataset_id }}" {% if dataset_id == data.common_core.parent_dataset %}selected{% endif %} >
+        {{ dataset_title }}
+      </option>
+        {% endfor %}
+    </select>
+  </div>
+</div>
+
+<div class="control-group control-medium">
+  <label class="control-label" for="field-publishing_status">
+      {{ _("Publishing Status") }}</label>
+  <div class="controls" title="Draft datasets will not be included in EDL and PDL json">
+    <select id="field-publishing_status" name="publishing_status" title="Publishing Status (Draft datasets will not be included in Unredacted & Redacted)">
+
+        {% for publishing_status_id in h.publishing_status_options %}
+            <option value="{{ publishing_status_id }}" {% if publishing_status_id == data.common_core.publishing_status %} selected {% endif %} >
+                {{ publishing_status_id }}
+            </option>
+        {% endfor %}
+    </select>
+    <div>Draft datasets will not be included in Unredacted & Redacted</div>
+  </div>
+</div>
+
+{% if 'redacted_json' in data %}
+    <input type="hidden" id="redacted_json" name="redacted_json" value="{{ data.redacted_json }}" />
+{% endif %}
+
+{% endblock package_expanded_metadata %}
+

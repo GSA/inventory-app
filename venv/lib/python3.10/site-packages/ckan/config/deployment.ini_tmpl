@@ -1,0 +1,56 @@
+#
+# CKAN configuration
+#
+# These are some of the configuration options available for your CKAN
+# instance. Check the documentation in 'doc/configuration.rst' or at the
+# following URL for a description of what they do and the full list of
+# available options:
+#
+# http://docs.ckan.org/en/latest/maintaining/configuration.html
+#
+# The %(here)s variable will be replaced with the parent directory of this file
+#
+[DEFAULT]
+$default_section
+[app:main]
+$app_main_section
+## Logging configuration
+[loggers]
+keys = root, ckan, ckanext, werkzeug
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = WARNING
+handlers = console
+
+[logger_werkzeug]
+level = WARNING
+handlers = console
+qualname = werkzeug
+propagate = 0
+
+[logger_ckan]
+level = INFO
+handlers = console
+qualname = ckan
+propagate = 0
+
+[logger_ckanext]
+level = DEBUG
+handlers = console
+qualname = ckanext
+propagate = 0
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(asctime)s %(levelname)-5.5s [%(name)s] %(message)s

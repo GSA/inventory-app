@@ -1,0 +1,7 @@
+
+        [ckan.plugins]
+        dcat_usmetadata=ckanext.dcat_usmetadata.plugin:Dcat_UsmetadataPlugin
+
+        [babel.extractors]
+        ckan = ckan.lib.extract:extract_ckan
+    

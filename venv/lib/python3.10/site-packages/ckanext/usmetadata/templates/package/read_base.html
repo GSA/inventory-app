@@ -1,0 +1,14 @@
+{% ckan_extends %}
+
+{% block subtitle %}{{ h.usmetadata_filter(super(), '') }}{% endblock %}
+
+{% block content_action %}
+    {{ super() }}
+
+    {% if h.check_access('package_update', {'id':pkg.id }) %}
+        {% link_for _('Clone'), controller='usmetadata', action='cc_clone_dataset_metadata', id=pkg.name, class_='btn', icon='wrench' %}
+    {% endif %}
+{% endblock %}
+
+{% block package_social %}
+{% endblock %}

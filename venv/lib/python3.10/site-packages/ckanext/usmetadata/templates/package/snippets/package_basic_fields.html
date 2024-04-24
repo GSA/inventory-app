@@ -1,0 +1,136 @@
+{% ckan_extends %}
+{% set always_private = h.always_private %}
+
+{% block package_basic_fields_title %}
+    <h1>Required DCAT-US Metadata</h1>
+    {{ form.input('title', id='field-title', label=_('Title'), placeholder=_('e.g. A descriptive title'), value=data.title, error=errors.title, classes=['control-full', 'control-large'], attrs={'data-module': 'slug-preview-target', 'title': 'Human-readable name of the asset. Should be in plain English and include sufficient detail to facilitate search and discovery.'}, is_required=true) }}
+{% endblock package_basic_fields_title %}
+
+{% block package_basic_fields_url %}
+    {% set prefix = h.url_for(controller='dataset', action='read', id='') %}
+    {% set domain = h.url_for(controller='dataset', action='read', id='', qualified=true) %}
+    {% set domain = domain|replace("http://", "")|replace("https://", "") %}
+    {% set attrs = {'data-module': 'usmetadata-slug-preview-slug', 'data-module-prefix': domain, 'data-module-placeholder': '<dataset>'} %}
+    {% set dataset_is_draft = data.get('state', 'draft').startswith('draft') or data.get('state', 'none') ==  'none' %}
+    {% if dataset_is_draft %}
+        <input type="hidden" id="dataset_status_id" name="dataset_status" value="draft"/>
+    {% endif %}
+
+    {{ form.prepend('name', id='field-name', label=_('URL (Name)'), prepend=prefix, placeholder=_('e.g. my-dataset'), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
+{% endblock %}
+
+{% block package_basic_fields_license %}
+    {# Hiding the license block, it's moved down below #}
+{% endblock package_basic_fields_license %}
+
+{% block package_basic_fields_description %}
+    {{ form.markdown('notes', id='field-notes', label=_('Description (Notes)'), placeholder=_('e.g. Some useful notes about the data'), value=data.notes, error=errors.notes, attrs={'title' : 'Human-readable description (e.g., an abstract) with sufficient detail to enable a user to quickly understand whether the asset is of interest.'}, is_required=true) }}
+{% endblock package_basic_fields_description %}
+
+{% block package_basic_fields_tags %}
+    {% set tag_attrs = {'data-module': 'autocomplete', 'data-module-tags': '', 'data-module-source': '/api/2/util/tag/autocomplete?incomplete=?', 'title':'Tags (or keywords) help users discover your dataset, please include terms that would be used by technical and non-technical users.'} %}
+    <div title="Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.">
+        {{ form.input('tag_string', id='field-tags', label=_('Keywords (Tags)'), placeholder=_('e.g. economy, mental health, government'), value=data.tag_string, error=errors.tag_string, classes=['control-full'], attrs=tag_attrs, is_required=true) }}
+    </div>
+
+{% endblock package_basic_fields_tags %}
+
+{% block package_basic_fields_org %}
+    <div>
+        {# if we have a default group then this wants remembering #}
+        {% if data.group_id %}
+            <input type="hidden" name="groups__0__id" value="{{ data.group_id }}"/>
+        {% endif %}
+
+        {% set dataset_is_draft = data.get('state', 'draft').startswith('draft') or data.get('state', 'none') ==  'none' %}
+        {% set dataset_has_organization = data.owner_org or data.group_id %}
+        {% set organizations_available = h.organizations_available('create_dataset') %}
+        {% set user_is_sysadmin = h.check_access('sysadmin') %}
+        {% if dataset_has_organization %}
+            {% set user_is_org_admin = h.check_access('organization_update', {'id': dataset_has_organization}) %}
+        {% endif %}
+        {% set show_organizations_selector = organizations_available and (user_is_sysadmin or dataset_is_draft or user_is_org_admin) %}
+        {% set show_visibility_selector = dataset_has_organization or (organizations_available and (user_is_sysadmin or dataset_is_draft)) %}
+
+        {% if show_organizations_selector and show_visibility_selector %}
+            <div data-module="dataset-visibility">
+        {% endif %}
+
+        {% if show_organizations_selector %}
+            {% set existing_org = data.owner_org or data.group_id %}
+            <div class="control-group">
+                <label for="field-organizations" class="control-label">{{ _('Organization') }}</label>
+
+                <div class="controls" title="The publishing entity">
+                    <select id="field-organizations" name="owner_org" data-module="autocomplete">
+                        {% if h.check_config_permission('create_unowned_dataset') %}
+                            <option value="" {% if not selected_org and data.id %}
+                                    selected="selected" {% endif %}>{{ _('No organization') }}</option>
+                        {% endif %}
+                        {% for organization in organizations_available %}
+                            {# get out first org from users list only if there is not an existing org #}
+                            {% set selected_org = (existing_org and existing_org == organization.id) or (not existing_org and not data.id and organization.id == organizations_available[0].id) %}
+                            <option value="{{ organization.id }}" {% if selected_org %}
+                                    selected="selected" {% endif %}>{{ organization.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {# private datasets must have an org, so add the owner_org tag in to pass validation #}
+        {% elif data.owner_org %}
+            <input type="hidden" name="owner_org" value="{{ data.owner_org }}"/>
+        {% endif %}
+
+        {% if show_visibility_selector %}
+            {% block package_metadata_fields_visibility %}
+
+                {% set data = h.load_data_into_dict(data) %}
+                {% set active = data.state == 'active' %}
+
+                {% if always_private %}
+                    <input type="hidden" id="field-private" name="private" value="true">
+                {% else %}
+                    {{ super() }}
+                {% endif %}
+
+                {% snippet 'package/snippets/required_common_core_fields.html', data=data, errors=errors %}
+
+                <h1>Required-If-Applicable DCAT-US Metadata</h1>
+                {% snippet 'package/snippets/required_if_applicable_common_core_fields.html', data=data, errors=errors %}
+
+                {% block license %}
+                    <input type="hidden" name="license_id" value="{{ data.get('license_id', 'notspecified') }}"/>
+                {% endblock license %}
+
+                {{ form.input('spatial', label=_('Spatial'), id='field-spatial', placeholder=_('Lincoln, Nebraska'), value=data.common_core.spatial, error=errors.spatial, classes=['control-medium'], attrs={'title': 'The range of spatial applicability of a dataset. Could include a spatial region like a bounding box or a named place.'}) }}
+
+                {{ form.input('temporal', label=_('Temporal'), id='field-temporal', placeholder=_('2000-01-15/2010-01-15'), value=data.common_core.temporal, error=errors.temporal, classes=['control-medium'], attrs={'title': 'The range of temporal applicability of a dataset (i.e., a start and end date of applicability for the data).'}) }}
+
+                <h1>Expanded DCAT-US Metadata</h1>
+                {% snippet 'package/snippets/expanded_common_core_fields.html', data=data, errors=errors %}
+
+
+            {% endblock package_metadata_fields_visibility %}
+        {% endif %}
+
+        {% if show_organizations_selector and show_visibility_selector %}
+            </div>
+        {% endif %}
+
+
+        {% if data.id and h.check_access('package_delete', {'id': data.id}) and data.state != 'active' %}
+            <div class="control-group">
+                <label for="field-state" class="control-label">{{ _('State') }}</label>
+
+                <div class="controls">
+                    <select id="field-state" name="state">
+                        <option value="active" {% if data.get('state', 'none') == 'active' %}
+                                selected="selected" {% endif %}>{{ _('Active') }}</option>
+                        <option value="deleted" {% if data.get('state', 'none') == 'deleted' %}
+                                selected="selected" {% endif %}>{{ _('Deleted') }}</option>
+                    </select>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

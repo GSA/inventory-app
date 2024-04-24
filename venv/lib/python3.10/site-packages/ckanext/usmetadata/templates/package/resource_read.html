@@ -1,0 +1,142 @@
+{% ckan_extends %}
+
+{% block subtitle %}{{ h.usmetadata_filter(h.dataset_display_name(c.package), '') }} - {{ h.usmetadata_filter(h.resource_display_name(res), '') }}{% endblock %}
+
+{% block breadcrumb_content_selected %}{% endblock %}
+
+{% block pre_primary %}
+  {% block resource %}
+    <section class="module module-resource">
+      <div class="module-content">
+        <div class="actions">
+          {% block resource_actions %}
+          <ul>
+            {% block resource_actions_inner %}
+            {% if h.check_access('package_update', {'id':pkg.id }) %}
+              <li>{% link_for _('Manage'), controller='resource', action='edit', id=pkg.name, resource_id=res.id, class_='btn', icon='wrench' %}</li>
+            {% endif %}
+            {% if res.url %}
+              <li>
+                <a class="btn btn-primary resource-url-analytics resource-type-{{ res.resource_type }}" href="{{ res.url }}">
+                  {% if res.resource_type in ('listing', 'service') %}
+                    <i class="icon-eye-open"></i> {{ _('View') }}
+                  {% elif  res.resource_type == 'api' %}
+                    <i class="icon-key"></i> {{ _('API Endpoint') }}
+                  {% elif not res.can_be_previewed %}
+                    <i class="icon-external-link"></i> {{ _('Go to resource') }}
+                  {% else %}
+                    <i class="icon-download"></i> {{ _('Download') }}
+                  {% endif %}
+                </a>
+              </li>
+            {% endif %}
+            {% if 'datastore' in g.plugins %}
+              <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
+            {% endif %}
+            {% endblock %}
+          </ul>
+          {% endblock %}
+        </div>
+        {% block resource_content %}
+          {% block resource_read_title %}
+              {{ h.resource_redacted_icon(c.package,res,'name')|safe }}
+              <h1 class="page-heading redacted-md">
+                {{ h.usmetadata_filter(h.resource_display_name(res)) | truncate(50) }}
+              </h1>
+          {% endblock %}
+          {% block resource_read_url %}
+            {% if res.url %}
+              <p class="muted ellipsis">
+                  {{ h.resource_redacted_icon(c.package,res,'url')|safe }}
+                  {{ _('URL:') }}
+                  <a class="redacted-md" href="{{ h.usmetadata_filter(res.url,'') }}" title="{{ h.usmetadata_filter(res.url,'') }}">
+                    {{ h.usmetadata_filter(res.url) }}
+                  </a>
+              </p>
+            {% endif %}
+          {% endblock %}
+          <div class="prose notes" property="rdfs:label">
+            {% if res.description %}
+                {{ h.resource_redacted_icon(c.package,res,'description')|safe }}
+                <span class="redacted-md">{{ h.usmetadata_filter(h.render_markdown(res.description)) }}</span>
+            {% endif %}
+            {% if not res.description and c.package.notes %}
+              <h3>{{ _('From the dataset abstract') }}</h3>
+              <blockquote>{{ h.markdown_extract(c.package.get('notes')) }}</blockquote>
+              {% if c.userobj %}
+                <p>{% trans dataset=c.package.title, url=h.url_for(controller='dataset', action='read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+              {% endif %}
+            {% endif %}
+          {% endblock %}
+        </div>
+      </div>
+      {% block data_preview %}
+      {% endblock %}
+    </section>
+  {% endblock %}
+{% endblock %}
+
+{% block primary_content %}
+  {% block resource_additional_information %}
+    {% if res %}
+      <section class="module">
+        <div class="module-content">
+          <h2>{{ _('Additional Information') }}</h2>
+          <table class="table table-striped table-bordered table-condensed" data-module="table-toggle-more">
+            <thead>
+              <tr>
+                <th scope="col">{{ _('Field') }}</th>
+                <th scope="col">{{ _('Value') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">{{ _('Last updated') }}</th>
+                <td>{{ h.render_datetime(res.last_modified) or h.render_datetime(res.revision_timestamp) or h.render_datetime(res.created) or _('unknown') }}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ _('Created') }}</th>
+                <td>{{ h.render_datetime(res.created) or _('unknown') }}</td>
+              </tr>
+              <tr>
+                <th scope="row">{{ _('Format') }}</th>
+                <td>
+                    {{ h.resource_redacted_icon(c.package,res,'format')|safe }}
+                    <span class="redacted-md">{{ h.usmetadata_filter(res.mimetype_inner or res.mimetype or res.format or _('unknown')) }}</span>
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">{{ _('License') }}</th>
+                <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
+              </tr>
+
+              {% for key, value in h.format_resource_items(res.items()) %}
+                {% if key != 'labels' and 'redacted ' not in key %}
+                  {% if res[key] %}
+                    <tr class="toggle-more">
+                        <th scope="row">
+                            {{ res[key] }}
+                        </th>
+                        <td>
+                            {{ h.resource_redacted_icon(c.package,res,key)|safe }}
+                            <span class="redacted-md">{{ h.usmetadata_filter(value|string) }}</span>
+                        </td>
+                    </tr>
+                  {% else %}
+                    <tr class="toggle-more">
+                        <th scope="row">{{ key }}</th>
+                        <td>
+                            {{ h.resource_redacted_icon(c.package,res,key)|safe }}
+                            <span class="redacted-md">{{ h.usmetadata_filter(value|string) }}</span>
+                        </td>
+                    </tr>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    {% endif %}
+  {% endblock %}
+{% endblock %}

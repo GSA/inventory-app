@@ -1,0 +1,8 @@
+[
+  ["_comment",
+   "JSON field order as follows:",
+   ["Format", "Description", "Mimetype"],
+   " * This is a mimetype list additional to CKAN list at ckan/ckan/config/resource_formats.json. "
+  ],
+  ["GEOTIFF", "Geographic Tagged Image File Format", "image/tiff"]
+]

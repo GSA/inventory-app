@@ -1,0 +1,166 @@
+{
+  "validation_enabled": false,
+  "catalog_headers": {
+    "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+    "describedBy": "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
+    "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+    "@type": "dcat:Catalog"
+  },
+  "dataset_fields_map": {
+    "title": {
+      "field": "title"
+    },
+    "description": {
+      "field": "notes"
+    },
+    "modified": {
+      "field": "metadata_modified"
+    },
+    "accessLevel": {
+      "extra": true,
+      "field": "Access Level",
+      "default": "public"
+    },
+    "identifier": {
+      "extra": true,
+      "field": "identifier"
+    },
+    "dataQuality": {
+      "extra": true,
+      "field": "Data Quality"
+    },
+    "conformsTo": {
+      "extra": true,
+      "field": "Conforms To"
+    },
+    "describedBy": {
+      "extra": true,
+      "field": "Described by"
+    },
+    "describedByType": {
+      "extra": true,
+      "field": "Described by Type"
+    },
+    "issued": {
+      "extra": true,
+      "field": "issued"
+    },
+    "landingPage": {
+      "extra": true,
+      "field": "landingPage"
+    },
+    "license": {
+      "extra": true,
+      "field": "license"
+    },
+    "primaryITInvestmentUII": {
+      "extra": true,
+      "field": "Primary It Investment Uii"
+    },
+    "rights": {
+      "extra": true,
+      "field": "rights"
+    },
+    "systemOfRecords": {
+      "extra": true,
+      "field": "System Of Records"
+    },
+    "spatial": {
+      "extra": true,
+      "field": "Spatial"
+    },
+    "temporal": {
+      "extra": true,
+      "field": "Temporal"
+    },
+    "publisher": {
+      "extra": true,
+      "field": "publisher",
+      "wrapper": "catalog_publisher"
+    },
+    "accrualPeriodicity": {
+      "extra": true,
+      "field": "Accrual Periodicity",
+      "wrapper": "fix_accrual_periodicity"
+    },
+    "contactPoint": {
+      "wrapper": "build_contact_point",
+      "map": {
+        "fn": {
+          "extra": true,
+          "field": "Responsible Party"
+        },
+        "hasEmail": {
+          "extra": true,
+          "field": "Contact Email"
+        }
+      }
+    },
+    "distribution": {
+      "wrapper": "generate_distribution",
+      "map": {
+        "accessURL": {
+          "field": "url"
+        },
+        "mediaType": {
+          "field": "mimetype"
+        },
+        "format": {
+          "field": "format"
+        },
+        "title": {
+          "field": "name"
+        },
+        "description": {
+          "field": "description"
+        },
+        "conformsTo": {
+          "field": "conformsTo"
+        },
+        "describedBy": {
+          "field": "describedBy"
+        },
+        "describedByType": {
+          "field": "describedByType"
+        }
+      }
+    },
+    "keyword": {
+      "extra": true,
+      "type": "array",
+      "field": "tags",
+      "split": ","
+    },
+    "bureauCode": {
+      "type": "array",
+      "extra": true,
+      "field": "Bureau Code",
+      "split": ",",
+      "wrapper": "bureau_code"
+    },
+    "programCode": {
+      "type": "array",
+      "extra": true,
+      "field": "Program Code",
+      "split": ","
+    },
+    "language": {
+      "type": "array",
+      "extra": true,
+      "field": "Language",
+      "split": ","
+    },
+    "references": {
+      "type": "array",
+      "extra": true,
+      "field": "references",
+      "split": ","
+    },
+    "theme": {
+      "type": "array",
+      "extra": true,
+      "field": "theme",
+      "split": ","
+    }
+  }
+}

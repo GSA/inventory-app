@@ -1,0 +1,42 @@
+<section class="additional-info">
+  <h3>{{ _('DCAT-US Metadata') }}</h3>
+
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th scope="col">{{ _('Field') }}</th>
+        <th scope="col">{{ _('Value') }}</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% block package_common_core %}
+
+      {% for meta in pkg_dict.ordered_common_core %}
+
+        <tr rel="dc:relation" resource="_:extra{{ i }}">
+            {% if pkg_dict.labels[meta] %}
+            <th scope="row" class="dataset-label" property="rdfs:label">{{ pkg_dict.labels[meta] }}</th>
+            {% else %}
+            <th scope="row" class="dataset-label" property="rdfs:label">{{ _(meta) }}</th>
+            {% endif %}
+
+            {% if meta == "data_quality" and  pkg_dict.common_core[meta] == "true" %}
+                <td class="dataset-details" property="rdf:value">Yes</td>
+            {% elif meta == "data_quality" and  pkg_dict.common_core[meta] == "false" %}
+                <td class="dataset-details" property="rdf:value">No</td>
+            {% else %}
+                <td class="dataset-details" property="rdf:value">
+                    {{ h.redacted_icon(pkg_dict, meta)|safe }}
+                    <div class="redacted-md">
+                        {{ h.usmetadata_filter(pkg_dict.common_core[meta]) }}
+                    </div>
+                </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+
+      {% endblock package_common_core %}
+    </tbody>
+  </table>
+</section>

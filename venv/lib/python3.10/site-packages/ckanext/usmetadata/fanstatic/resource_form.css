@@ -1,0 +1,92 @@
+.btn-remove-url, .hidden {
+    display: none
+}
+
+.controls .radio.inline {
+    padding-left: 3px;
+    padding-top: 0
+}
+
+.controls input[type="radio"] {
+    top: 0
+}
+
+.controls .ckan-icon {
+    top: 0
+}
+
+.controls .radio.inline {
+    padding-left: 3px;
+    padding-right: 15px;
+    padding-top: 0;
+}
+
+.bad, .red {
+    color: red;
+}
+
+.good {
+    color: green;
+}
+
+.weird {
+    color: darkslategrey;
+}
+
+.warning {
+    font-style: italic;
+}
+
+.redacted-icon {
+    margin: 4px;
+    /*font-size:1.5em;*/
+    float: left;
+    width: 20px;
+}
+
+.icon-eye-open {
+    color: #005d7a;
+}
+
+.icon-eye-close {
+    color: #005d7a;
+}
+
+.dataset-form.form-horizontal .controls {
+    margin-left: 150px;
+}
+
+.exemption_reason {
+    margin: 3px;
+    background: black;
+    color: white;
+}
+
+.partial-redaction-buttons {
+    float: right;
+    margin-top: 5px;
+}
+
+.redacted-marker, .redacted-clear {
+    width: 26px;
+}
+
+.controls .exemption_reason {
+    width: -moz-calc(100% - 60px);
+    width: -webkit-calc(100% - 60px);
+    width: calc(100% - 60px);
+}
+
+.redactions-legend .legend-redacted-icon {
+    width: 20px;
+}
+
+.redactions-legend-read-more {
+    float: right;
+}
+.ie8 .controls .exemption_reason {
+  width:85%;
+}
+.ie8 .partial-redaction-buttons{
+width:65px;
+}

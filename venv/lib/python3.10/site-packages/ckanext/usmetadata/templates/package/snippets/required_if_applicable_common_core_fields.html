@@ -1,0 +1,40 @@
+{# See https://resources.data.gov/schemas/dcat-us/v1.1/#dataset-fields #}
+
+{% import "macros/form.html" as form %}
+
+{% set data = data or {} %}
+{% set errors = errors or {} %}
+
+{% block package_required_if_applicable_metadata %}
+
+{{ form.input('access_level_comment', label=_('Rights'), id='field-access-level-comment', placeholder=_('An explanation for the access level field.'),
+value=data.common_core.access_level_comment, error=errors.access_level_comment, classes=['control-full'],
+attrs={'title': 'An explanation for the selected “accessLevel” including instructions for how to access a restricted file, if applicable, or explanation
+for why a “non-public” or “restricted public” data assetis not “public,” if applicable. Text, 255 characters.'}) }}
+
+<div class="exempt-allowed control-group control-medium">
+    <label class="control-label" for="field-data_quality">
+      {{ _("Meets Agency Data Quality") }}
+    </label>
+    <div class="controls" title="Whether the dataset meets the agency Information Quality Guidelines">
+        <select id="field-data_quality"
+                name="data_quality"
+                title="Whether the dataset meets the agency Information Quality Guidelines">
+
+            {% for data_quality_id, data_quality_desc in h.data_quality_options.items() %}
+                <option value="{{ data_quality_id }}" {% if data_quality_id == data.common_core.data_quality %} selected {% endif %} >
+                    {{ data_quality_desc }}
+                </option>
+            {% endfor %}
+
+        </select>
+  </div>
+</div>
+
+{% set url_format_attrs = {'data-module-title':'URL','data-module': 'autocomplete', 'data-module-source': '/api/2/util/resource/license_url_autocomplete?incomplete=?'} %}
+<div title="License url of the dataset. For example http://creativecommons.org/publicdomain/zero/1.0/">
+{% call form.input('license_new', id='field-license-new', label=_('License URL'), placeholder=_('e.g. https://creativecommons.org/licenses/by/4.0'),
+    value=data.common_core.license_new, error=errors.license_new, classes=['exempt-allowed', 'control-full'], attrs=url_format_attrs) %}
+{% endcall %}
+</div>
+{% endblock package_required_if_applicable_metadata %}

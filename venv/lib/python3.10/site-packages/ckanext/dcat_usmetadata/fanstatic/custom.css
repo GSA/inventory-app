@@ -1,0 +1,4 @@
+/* Hide original "Add dataset" button */
+.page_primary_action > a.btn-primary:nth-of-type(2) {
+    display: none !important;
+}

@@ -1,0 +1,11 @@
+<div
+  id="root"
+  data-apiUrl="{{g.site_url}}/api/3/action/"
+  data-ownerOrg="{{request.args.get('group')}}"
+  data-datasetId="{{id or ''}}"
+></div>
+<meta name="{{ g.csrf_field_name }}" content="{{ csrf_token() }}" />
+<link rel="stylesheet" href="/assets/index.css" type="text/css" />
+<script src="/assets/index.js" type="module"></script>
+<!-- - we're using type="module" for the react script in new-metadata.html. this can pose as an issue.
+- resource: https://github.com/vitejs/vite/issues/7128#issuecomment-1065293699 -->

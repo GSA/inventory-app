@@ -1,0 +1,55 @@
+{% ckan_extends %}
+
+{# override core template to hide private icon on dataset page. #}
+{% block package_description %}
+    {% for extra in pkg.extras  %}
+        {% if extra['key'] == 'public_access_level' and extra['value'] == 'public' %}
+            <span class="dataset-private label label-inverse pull-right">
+                <i class="icon-unlock"></i>
+                {{ _('Public') }}
+            </span>
+        {% endif %}
+        {% if extra['key'] == 'public_access_level' and extra['value'] == 'non-public' %}
+            <span class="dataset-private label label-inverse pull-right">
+                <i class="icon-lock"></i>
+                {{ _('Non-public') }}
+            </span>
+        {% endif %}
+        {% if extra['key'] == 'public_access_level' and extra['value'] == 'restricted public' %}
+            <span class="dataset-private label label-inverse pull-right">
+                <i class="icon-lock"></i>
+                {{ _('restricted public') }}
+            </span>
+        {% endif %}
+    {% endfor %}
+    <h1>
+      {% block page_heading %}
+        {{ h.redacted_icon(pkg,'title')|safe }}
+          <div class="redacted-md">{{ h.usmetadata_filter(pkg.title) or pkg.name }}</div>
+        {% if pkg.state.startswith('draft') %}
+          [{{ _('Draft') }}]
+        {% endif %}
+      {% endblock %}
+    </h1>
+    {% block package_notes %}
+      {% if c.pkg_notes_formatted %}
+      {{ h.redacted_icon(pkg,'notes')|safe }}
+        <div class="notes embedded-content redacted-md">
+          {{ h.usmetadata_filter(c.pkg_notes_formatted) }}
+        </div>
+      {% endif %}
+    {% endblock %}
+    {# FIXME why is this here? seems wrong #}
+    <span class="insert-comment-thread"></span>
+{% endblock %}
+
+{% block package_additional_info %}
+
+    {% set pkg = h.load_data_into_dict(pkg) %}
+
+    {# display DCAT-US metadata #}
+    {% snippet "package/snippets/metadata_info.html", pkg_dict=pkg %}
+
+    {% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}
+{% endblock %}
+

@@ -1,0 +1,19 @@
+{% ckan_extends %}
+
+{% block package_metadata_author %}{# Hiding the inputs #}{% endblock package_metadata_author%}
+
+{% block package_metadata_fields_maintainer %}{# Hiding the inputs #}{% endblock package_metadata_fields_maintainer %}
+
+{# hiding extra fields added in new version of ckan Issue # 129 #}
+{% block package_metadata_fields_url %}{# Hiding the inputs #}{% endblock %}
+
+{% block package_metadata_fields_version %}{# Hiding the inputs #}{% endblock %}
+
+{% block custom_fields %}
+{% endblock %}
+
+{% block package_metadata_fields_custom %}
+    {{ super() }}
+{% endblock package_metadata_fields_custom %}
+
+{% block dataset_fields %}{# Hiding the inputs #}{% endblock dataset_fields%}

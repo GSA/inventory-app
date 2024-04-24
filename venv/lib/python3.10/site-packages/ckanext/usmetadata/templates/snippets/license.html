@@ -1,0 +1,11 @@
+{% for item in pkg_dict['extras']%}
+  {% if item['key'] == 'license_new' %}
+    <section class="module module-narrow module-shallow license">
+      {% if not text_only %}
+      <h2 class="module-heading"><i class="icon-medium icon-lock"></i> {{ _('License') }}</h2>
+        <p class="module-content">
+      {% endif %}
+    <a href="{{ item['value'] }}" rel="dc:rights">License URL</a>
+    </section>
+  {% endif %}
+{% endfor %}

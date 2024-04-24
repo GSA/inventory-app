@@ -1,0 +1,6 @@
+{% ckan_extends %} {% block page_primary_action %} {% if h.check_access('package_create',
+{'owner_org': c.group_dict.id}) %}
+<a class="btn btn-primary" href="/dataset/new-metadata?group={{ c.group_dict.id }}"
+  >{{ _('Add Dataset') }}</a
+>
+{% endif %} {{ super() }} {% endblock %}

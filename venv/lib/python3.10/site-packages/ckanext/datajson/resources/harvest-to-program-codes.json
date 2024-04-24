@@ -1,0 +1,326 @@
+[
+  {
+    "Harvest Source Code":"nodc-waf-iso",
+    "Harvest Source Name":"NODC WAF (ISO)",
+    "Harvest Source URL":"http://data.nodc.noaa.gov/nodc/archive/metadata/approved/iso/",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"coris-fgdc-metadata",
+    "Harvest Source Name":"CoRIS FGDC Metadata",
+    "Harvest Source URL":"http://www.coris.noaa.gov/metadata/records/xml/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"uaf-waf",
+    "Harvest Source Name":"UAF WAF",
+    "Harvest Source URL":"http://ferret.pmel.noaa.gov/uafwaf/iso/",
+    "Program Code":"006:057"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h00001-h02000-waf",
+    "Harvest Source Name":"NGDC NOS H00001-H02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H00001-H02000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h02001-h04000-waf",
+    "Harvest Source Name":"NGDC NOS H02001-H04000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H02001-H04000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h04001-h06000-waf",
+    "Harvest Source Name":"NGDC NOS H04001-H06000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H04001-H06000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h08001-h10000-waf",
+    "Harvest Source Name":"NGDC NOS H08001-H10000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H08001-H10000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h06001-h08000-waf",
+    "Harvest Source Name":"NGDC NOS H06001-H08000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H06001-H08000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-l00001-l02000-waf",
+    "Harvest Source Name":"NGDC NOS L00001-L02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/L00001-L02000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h10001-h12000-waf",
+    "Harvest Source Name":"NGDC NOS H10001-H12000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H10001-H12000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nos-csc-waf",
+    "Harvest Source Name":"NOS CSC WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/csc/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"nos-nccos-waf",
+    "Harvest Source Name":"NOS NCCOS WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/nccos/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"nos-orr-waf",
+    "Harvest Source Name":"NOS ORR WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/orr/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-f00001-f02000-waf",
+    "Harvest Source Name":"NGDC NOS F00001-F02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/F00001-F02000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-h12001-h14000-waf",
+    "Harvest Source Name":"NGDC NOS H12001-H14000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/H12001-H14000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-l02001-l04000-waf",
+    "Harvest Source Name":"NGDC NOS L02001-L04000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/L02001-L04000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ncdc-iso-waf",
+    "Harvest Source Name":"NCDC ISO WAF",
+    "Harvest Source URL":"http://www1.ncdc.noaa.gov/pub/data/metadata/published/geoportal/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-b00001-b02000-waf",
+    "Harvest Source Name":"NGDC NOS B00001-B02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/B00001-B02000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ncddc-oer-waf",
+    "Harvest Source Name":"NCDDC OER WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/oer-waf/ISO/Resolved/",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nos-ngs-waf",
+    "Harvest Source Name":"NOS NGS WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/ngs/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-dem-waf",
+    "Harvest Source Name":"NGDC MGG DEM WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/DEM/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-w00001-w02000-waf",
+    "Harvest Source Name":"NGDC NOS W00001-W02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/W00001-W02000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nos-nmsp-waf",
+    "Harvest Source Name":"NOS NMSP WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/nmsp/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ncddc-ims-waf",
+    "Harvest Source Name":"NCDDC IMS WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/ncddc_ims/",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nmfs-nwfsc",
+    "Harvest Source Name":"NMFS NWFSC",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/NWFSC/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-lidar-waf",
+    "Harvest Source Name":"NGDC MGG Lidar WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Lidar/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-d00001-d02000-waf",
+    "Harvest Source Name":"NGDC NOS D00001-D02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/D00001-D02000/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-hazard-photos-waf",
+    "Harvest Source Name":"NGDC MGG Hazard Photos WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Hazard_Photos/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-geophysics-waf",
+    "Harvest Source Name":"NGDC MGG Geophysics WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Geophysics/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nmfs-afsc",
+    "Harvest Source Name":"NMFS AFSC",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/AFSC/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"nmfs-pifsc",
+    "Harvest Source Name":"NMFS PIFSC",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/PIFSC/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"nmfs-sefsc",
+    "Harvest Source Name":"NMFS SEFSC",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/SEFSC/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"nos-special-projects-waf",
+    "Harvest Source Name":"NOS Special Projects WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/special_projects/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-sonar-water-column-waf",
+    "Harvest Source Name":"NGDC MGG Sonar Water Column WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Sonar_Water_Column/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-geology-waf",
+    "Harvest Source Name":"NGDC MGG Geology WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Geology/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nmfs-garfo",
+    "Harvest Source Name":"NMFS GARFO",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/GARFO/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"coris-native-iso-metadata",
+    "Harvest Source Name":"CoRIS Native ISO Metadata",
+    "Harvest Source URL":"http://www.coris.noaa.gov/metadata/records/ISO/xml/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-stp-solar-waf",
+    "Harvest Source Name":"NGDC STP Solar WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/STP/Solar/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nos-ocs-waf",
+    "Harvest Source Name":"NOS OCS WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/ocs/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-stp-geomag-waf",
+    "Harvest Source Name":"NGDC STP Geomag WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/STP/Geomag/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nos-ocrm-mpa-waf",
+    "Harvest Source Name":"NOS OCRM MPA WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/OCRM_MPA/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-collection-waf",
+    "Harvest Source Name":"NGDC Collection WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/Collection/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nmfs-osf",
+    "Harvest Source Name":"NMFS OSF",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/OSF/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"ngdc-stp-indices-waf",
+    "Harvest Source Name":"NGDC STP Indices WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/STP/Indices/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-hazards-waf",
+    "Harvest Source Name":"NGDC MGG Hazards WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Hazards/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nos-coops-waf",
+    "Harvest Source Name":"NOS COOPS WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/coops/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-mgg-geophysical-models-waf",
+    "Harvest Source Name":"NGDC MGG Geophysical Models WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/Geophysical_Models/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nmfs-swfsc",
+    "Harvest Source Name":"NMFS SWFSC",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/SWFSC/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"ngdc-stp-space-weather-waf",
+    "Harvest Source Name":"NGDC STP Space Weather WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/STP/Space_Weather/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"ngdc-stp-ionosonde-waf",
+    "Harvest Source Name":"NGDC STP Ionosonde WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/STP/Ionosonde/iso/xml",
+    "Program Code":"006:059"
+  },
+  {
+    "Harvest Source Code":"nmfs-ost",
+    "Harvest Source Name":"NMFS OST",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/OST/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"nmfs-sero",
+    "Harvest Source Name":"NMFS SERO",
+    "Harvest Source URL":"https://inport.nmfs.noaa.gov/inport-metadata/NOAA/NMFS/SERO/iso19115/xml/",
+    "Program Code":"006:056"
+  },
+  {
+    "Harvest Source Code":"nos-geodata-waf",
+    "Harvest Source Name":"NOS GeoData WAF",
+    "Harvest Source URL":"http://www.ncddc.noaa.gov/approved_recs/nos_de/geodata/",
+    "Program Code":"006:055"
+  },
+  {
+    "Harvest Source Code":"ngdc-nos-t00001-t02000-waf",
+    "Harvest Source Name":"NGDC NOS T00001-T02000 WAF",
+    "Harvest Source URL":"http://www.ngdc.noaa.gov/metadata/published/NOAA/NESDIS/NGDC/MGG/NOS/T00001-T02000/iso/xml",
+    "Program Code":"006:059"
+  }
+]

@@ -1,0 +1,92 @@
+{% ckan_extends %}
+
+{% block basic_fields_url %}
+    <p>Disclaimer: Uploading any file will automatically make this dataset public.</p>
+    {% set is_upload = (data.url_type == 'upload') %}
+    <div style="display: block">
+        <label style="padding-top:0" class="control-label">Resource</label>
+
+        <div class="controls"{% if allow_upload %} data-module="resource-upload-field"{% endif %}>
+            <input id="field-resource-type-file" type="radio" name="resource_type"
+                    {% if data.resource_type =='file'
+                   or not data.resource_type %} checked="checked" {% endif %} value="file"/>
+            <label class="radio inline" for="field-resource-type-file">{{ _('Link to a file') }}</label>
+            <input id="field-resource-type-upload" type="radio" name="resource_type"
+                    {% if data.resource_type =='upload' %} checked="checked" {% endif %} value="upload"/>
+            <label class="radio inline" for="field-resource-type-upload">{{ _('Upload a file') }}</label>
+            <input id="field-resource-type-api" type="radio" name="resource_type"
+                    {% if data.resource_type =='api' %} checked="checked" {% endif %} value="api"/>
+            <label class="radio inline" for="field-resource-type-api">{{ _('Link to an API') }}</label>
+            <input id="field-resource-type-accessurl" type="radio" name="resource_type"
+                    {% if data.resource_type =='accessurl' %} checked="checked" {% endif %} value="accessurl"/>
+            <label class="radio inline" for="field-resource-type-accessurl">{{ _('Access URL') }}</label>
+        </div>
+    </div>
+    <br/>
+
+    <div class="image-upload" is-upload="{% if is_upload %}true{% endif %}" data-module="image-upload"
+         data-module-is_url="{{ 'true' }}"
+         data-module-field_url="url" data-module-field_upload="upload" data-module-field_clear="clear_upload"
+         data-module-upload_label="{{ _('File') }}">
+
+        {{ form.input('url', label=_('URL'), id='field-image-url', placeholder=_('eg. http://example.com/gold-prices-jan-2011.json'),
+                value=data.url, error=errors.get('url'), classes=['exempt-allowed', 'control-full', 'resource-url'], is_required=true) }}
+
+        {{ form.input('upload', label=_('File'), id='field-image-upload', type='file', placeholder='', value='', error='', classes=['control-full','resource-upload']) }}
+        {% if is_upload %}
+            {{ form.checkbox('clear_upload', label=_('Clear Upload'), id='field-clear-upload', value='true', error='', classes=['control-full']) }}
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+{% block basic_fields_name %}
+
+    {{ form.input('name', id='field-name', label=_('Name'), placeholder=_('e.g. January 2011 Gold Prices'),
+            value=data.name, error=errors.name, classes=['exempt-allowed', 'control-full']) }}
+
+{% endblock %}
+
+{% block basic_fields_format %}
+    {% set format_attrs = {'data-module': 'autocomplete', 'data-module-source': '/api/2/util/resource/media_autocomplete?incomplete=?'} %}
+
+    {% call form.input('format', id='field-format', label=_('Media Type'), placeholder=_('e.g. text/csv, application/xml, or application/json'),value=data.format, error=errors.format, classes=['exempt-allowed','control-medium'], attrs=format_attrs, is_required=false) %}
+    {% endcall %}
+
+    {% call form.input('formatReadable', id='field-format-readable', label=_('Format'), placeholder=_('e.g. csv, xml, json'),
+        value=data.formatReadable, error=errors.formatReadable, classes=['exempt-allowed', 'control-medium'],
+        is_required=false) %}
+    {% endcall %}
+
+    {{ form.input('describedBy', id='field-describedBy', label=_('Data Dictionary'), placeholder=_('http://www.agency.gov/widgets/schema.json'),
+            value=data.describedBy, error=errors.describedBy, classes=['exempt-allowed', 'control-medium'], is_required=false) }}
+
+    {% call form.input('describedByType', id='field-describedByType', label=_('Data Dictionary Type'), placeholder=_('e.g. text/csv, application/xml, or application/json'),
+        value=data.describedByType, error=errors.describedByType, classes=['exempt-allowed', 'control-medium'],
+        attrs=format_attrs,
+        is_required=false) %}
+    {% endcall %}
+
+    {{ form.input('conformsTo', id='field-conformsTo', label=_('Conforms To (Data Standard)'), placeholder=_('http://www.agency.gov/widget-data-standard/'),
+            value=data.conformsTo, error=errors.conformsTo, classes=['exempt-allowed', 'control-medium'], is_required=false) }}
+
+    <script type="text/javascript">
+        var redacted_json_raw = {
+            {% for field in data %}{% if 'redacted_' in field %}
+            '{{ field }}': '{{ data[field] }}',
+            {% endif %}{% endfor %}
+            'empty': 'value'
+        };
+    </script>
+
+{% endblock %}
+
+{% block basic_fields_name_2 %}
+
+{% endblock %}
+
+{% block save_button %}
+    <button class="btn btn-primary" name="save" value="go-metadata" type="submit">
+        {% block save_button_text %}{{ _('Finish') }}{% endblock %}</button>
+{% endblock %}

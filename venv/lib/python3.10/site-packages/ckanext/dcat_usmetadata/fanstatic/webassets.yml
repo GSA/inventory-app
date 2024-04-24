@@ -1,0 +1,5 @@
+---
+styles:
+  output: dcat_usmetadata_styles/extension.css
+  contents:
+    - custom.css

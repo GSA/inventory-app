@@ -1,0 +1,33 @@
+{% ckan_extends %}
+
+{% block page_primary_action %}
+    {{ super() }}
+    {% if h.check_access('package_create', {'owner_org': c.group_dict.id}) %}
+        {% if h.datajson_inventory_links_enabled() %}
+        <button id="btnUnredacted" class="btn btn-secondary">Unredacted Inventory</button>
+        <button id="btnRedacted" class="btn btn-secondary">Redacted Inventory</button>
+        <button id="btnDraft" class="btn btn-secondary">Export Drafts</button>
+
+        <form id="formUnredacted" action="{{c.group_dict.id + '/unredacted.json' }}"></form>
+        <form id="formRedacted" action="{{c.group_dict.id + '/redacted.json' }}"></form>
+        <form id="formDraft" action="{{c.group_dict.id + '/draft.json' }}"></form>
+
+        <script type="text/javascript" src="/base/vendor/jquery.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#btnUnredacted').click(function () {
+                    $('#formUnredacted').submit();
+                });
+
+                $('#btnRedacted').click(function () {
+                    $('#formRedacted').submit();
+                });
+
+                $('#btnDraft').click(function () {
+                    $('#formDraft').submit();
+                });
+            });
+        </script>
+        {% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+js:
+  filters: rjsmin
+  output: usmetadata/extension.js
+  contents:
+    - add_subagency.js
+    - dataset_edit_form.js
+    - dataset_url.js
+    - redactions.js
+    - resource_form.js
+
+styles:
+  output: usmetadata/extension.css
+  contents: # list of files that are included into asset
+    - resource_form.css

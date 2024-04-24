@@ -1,0 +1,28 @@
+{% ckan_extends %}
+
+{% set can_edit = h.check_access('package_update', {'id':pkg.id }) %}
+{% set url_action = 'edit' if url_is_edit and can_edit else 'read' %}
+{% set url = h.url_for(controller='resource', action=url_action, id=pkg.name, resource_id=res.id) %}
+
+<li class="resource-item" data-id="{{ res.id }}">
+  {% block resource_item_title %}
+  <a class="heading" href="{{ url }}" title="{{ res.name or res.description }}">
+      <div>
+          {{ h.resource_redacted_icon(pkg,res,'name')|safe }}
+          <span class="redacted-md">
+              {{ h.usmetadata_filter(h.resource_display_name(res)) | truncate(50) }}
+          </span>
+      </div>
+      <span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span>
+    {{ h.popular('views', res.tracking_summary.total, min=10) }}
+  </a>
+  {% endblock %}
+  <p class="description">
+    {% if res.description %}
+    {{ h.resource_redacted_icon(pkg,res,'description')|safe }}
+      <span class="redacted-md">
+        {{ h.markdown_extract(h.usmetadata_filter(res.description), extract_length=80) }}
+      </span>
+    {% endif %}
+  </p>
+</li>

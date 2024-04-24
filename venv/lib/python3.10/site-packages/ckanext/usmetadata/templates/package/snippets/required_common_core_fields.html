@@ -1,0 +1,57 @@
+{# See https://resources.data.gov/schemas/dcat-us/v1.1/#dataset-fields #}
+
+{% import "macros/form.html" as form %}
+
+{% set data = data or {} %}
+{% set errors = errors or {} %}
+
+{% block package_required_metadata %}
+    {{ form.input('modified', id='field-modified', label=_('Modified (Last Update)'), placeholder=_('2014-01-15'), value=data.common_core.modified, error=errors.modified, classes=['control-medium'], attrs={'title': 'Most recent date on which the dataset was changed, updated or modified. Dates should be formatted as YYYY-MM-DD. Specify "01" as the day if unknown.'}, is_required=true) }}
+{#    {{ form.input('publisher', id='field-publisher', label=_('Publishing Agency'), placeholder=_('Federal Bureau of Investigation'), value=data.common_core.publisher, error=errors.publisher, classes=['control-full', 'control-medium'], attrs={'title': 'The publishing agency.'}, is_required=true) }}#}
+
+    <div class="exempt-allowed control-group control-full control-medium {{ "error" if error }}">
+        <label class="control-label" for="field-publisher"><span title="This field is required" class="control-required">*</span> Publisher</label>
+        <div class="controls ">
+            <input id="field-publisher" type="text" name="publisher" value="{{ data.common_core.publisher }}" placeholder="Federal Bureau of Investigation"  title="The publishing agency." />
+            <a id="add-sub-agency" class="btn btn-primary" href="javascript:;">
+                <i class="icon-plus-sign-alt"></i>
+                Add sub-agency
+            </a>
+        </div>
+    </div>
+
+    {# TODO:Find dynamic may of doing things in Jinja #}
+    {{ form.input('publisher_1', id='field-publisher_1', label=_('Sub-agency'), placeholder=_('Federal Bureau of Investigation'), value=data.common_core.publisher_1, error=errors.publisher_1, classes=['control-full', 'control-medium', 'field-publisher_1'], attrs={'title': 'The publishing agency.'}, is_required=false) }}
+    {{ form.input('publisher_2', id='field-publisher_2', label=_('Sub-agency'), placeholder=_('Federal Bureau of Investigation'), value=data.common_core.publisher_2, error=errors.publisher_2, classes=['control-full', 'control-medium', 'field-publisher_2'], attrs={'title': 'The publishing agency.'}, is_required=false) }}
+    {{ form.input('publisher_3', id='field-publisher_3', label=_('Sub-agency'), placeholder=_('Federal Bureau of Investigation'), value=data.common_core.publisher_3, error=errors.publisher_3, classes=['control-full', 'control-medium', 'field-publisher_3'], attrs={'title': 'The publishing agency.'}, is_required=false) }}
+    {{ form.input('publisher_4', id='field-publisher_4', label=_('Sub-agency'), placeholder=_('Federal Bureau of Investigation'), value=data.common_core.publisher_4, error=errors.publisher_4, classes=['control-full', 'control-medium', 'field-publisher_4'], attrs={'title': 'The publishing agency.'}, is_required=false) }}
+    {{ form.input('publisher_5', id='field-publisher_5', label=_('Sub-agency'), placeholder=_('Federal Bureau of Investigation'), value=data.common_core.publisher_5, error=errors.publisher_5, classes=['control-full', 'control-medium', 'field-publisher_5'], attrs={'title': 'The publishing agency.'}, is_required=false) }}
+
+    {{ form.input('unique_id', id='field-unique_id', label=_('Identifier (Unique ID)'), placeholder=_('doj-a327-73809'), value=data.common_core.unique_id, error=errors.unique_id, classes=['control-full', 'control-medium'], attrs={'title': 'A unique identifier for the dataset or API as maintained within an Agency catalog or database. It is essential that this ID be unique within the Department or Agency and that it remains consistent.'}, is_required=true) }}
+
+    <div class="control-group control-medium">
+      <label class="control-label" for="field-public_access_level">
+          <span title="This field is required" class="control-required">*</span>
+          {{ _("Public Access Level") }}</label>
+      <div class="controls" title="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available. Choices: public (Data asset is or could be made publicly available to all without restrictions), restricted public (Data asset is available under certain use restrictions), or non-public (Data asset is not available to members of the public).">
+        <select id="field-public_access_level" name="public_access_level" title="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available. Choices: public (Data asset is or could be made publicly available to all without restrictions), restricted public (Data asset is available under certain use restrictions), or non-public (Data asset is not available to members of the public).">
+            {% for level in h.public_access_levels %}
+          <option value="{{ level }}" {% if level == data.common_core.public_access_level %}selected{% endif %} >
+            {{ level }}
+          </option>
+            {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    {# moving bureau and program code fields under required fields. We are validating these fields though Github-121 #}
+    {{ form.input('bureau_code', label=_('Bureau Code'), id='field-bureau-code', placeholder=_('001:40'), value=data.common_core.bureau_code, error=errors.bureau_code, classes=['exempt-allowed', 'control-medium'], attrs={'title': 'Federal agencies, combined agency and bureau code from OMB Circular A-11, Appendix C in the format of 015:10.'}, is_required=true) }}
+
+    {{ form.input('program_code', label=_('Program Code'), id='field-program-code', placeholder=_('015:010'), value=data.common_core.program_code, error=errors.program_code, classes=['exempt-allowed', 'control-medium'], attrs={'title': 'Federal agencies, list the primary program related to this data asset, from the Federal Program Inventory. Use the format of 015:001'}, is_required=true) }}
+
+        <h3>Contact Point</h3>
+    {{ form.input('contact_name', id='field-contact_name', label=_('Contact Name'), placeholder=_('John Smith'), value=data.common_core.contact_name, error=errors.contact_name, classes=['exempt-allowed', 'control-full', 'control-medium'], attrs={'title': "Contact person's name for the asset."}, is_required=true) }}
+
+    {{ form.input('contact_email', id='field-contact_email', label=_('Contact Email'), placeholder=_('john.smith@fbi.gov'), value=data.common_core.contact_email, error=errors.contact_email, classes=['exempt-allowed', 'control-full', 'control-medium'], attrs={'title': " Contact person's email address. "}, is_required=true) }}
+
+{% endblock package_required_metadata %}
