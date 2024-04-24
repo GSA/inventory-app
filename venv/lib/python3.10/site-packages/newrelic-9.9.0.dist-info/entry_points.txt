@@ -1,2 +1,0 @@
-[console_scripts]
-newrelic-admin = newrelic.admin:main
