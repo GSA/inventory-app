@@ -11,7 +11,7 @@ certifi==2024.2.2
 cffi==1.16.0
 chardet==5.2.0
 charset-normalizer==3.3.2
-ckan==2.10.4
+ckan @ git+https://github.com/GSA/ckan.git@7159a872ba740069b768fcd2a43cde81a57ee492
 ckanext-datajson==0.1.24
 ckanext-dcat-usmetadata==0.6.0
 ckanext-envvars==0.0.3
