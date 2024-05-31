@@ -1,11 +1,11 @@
 {
   "vulnerabilities": [
     {
-      "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -19,88 +19,88 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "cryptography",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "cryptography",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.618537Z",
+      "creationTime": "2024-05-29T14:38:52.978166Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.784166Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.068451Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
-        "cryptography@42.0.5"
+        "cryptography@42.0.7"
       ],
       "upgradePath": [],
       "isUpgradable": false,
       "isPatchable": false,
       "name": "cryptography",
-      "version": "42.0.5"
+      "version": "42.0.7"
     },
     {
-      "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -114,89 +114,89 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "cryptography",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "cryptography",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.618537Z",
+      "creationTime": "2024-05-29T14:38:52.978166Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.784166Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.068451Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "pyopenssl@24.1.0",
-        "cryptography@42.0.5"
+        "cryptography@42.0.7"
       ],
       "upgradePath": [],
       "isUpgradable": false,
       "isPatchable": false,
       "name": "cryptography",
-      "version": "42.0.5"
+      "version": "42.0.7"
     },
     {
-      "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -210,89 +210,89 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "cryptography",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "cryptography",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.618537Z",
+      "creationTime": "2024-05-29T14:38:52.978166Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.784166Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.068451Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "pysaml2@7.3.1",
-        "cryptography@42.0.5"
+        "cryptography@42.0.7"
       ],
       "upgradePath": [],
       "isUpgradable": false,
       "isPatchable": false,
       "name": "cryptography",
-      "version": "42.0.5"
+      "version": "42.0.7"
     },
     {
-      "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -306,90 +306,90 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "cryptography",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "cryptography",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.618537Z",
+      "creationTime": "2024-05-29T14:38:52.978166Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.784166Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.068451Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "pysaml2@7.3.1",
         "pyopenssl@24.1.0",
-        "cryptography@42.0.5"
+        "cryptography@42.0.7"
       ],
       "upgradePath": [],
       "isUpgradable": false,
       "isPatchable": false,
       "name": "cryptography",
-      "version": "42.0.5"
+      "version": "42.0.7"
     },
     {
-      "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -403,90 +403,90 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "cryptography",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "cryptography",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.618537Z",
+      "creationTime": "2024-05-29T14:38:52.978166Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.784166Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.068451Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "ckanext-saml2auth@1.3.0",
         "pysaml2@7.3.1",
-        "cryptography@42.0.5"
+        "cryptography@42.0.7"
       ],
       "upgradePath": [],
       "isUpgradable": false,
       "isPatchable": false,
       "name": "cryptography",
-      "version": "42.0.5"
+      "version": "42.0.7"
     },
     {
-      "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -500,91 +500,91 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "cryptography",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "cryptography",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.618537Z",
+      "creationTime": "2024-05-29T14:38:52.978166Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.784166Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.068451Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "ckanext-saml2auth@1.3.0",
         "pysaml2@7.3.1",
         "pyopenssl@24.1.0",
-        "cryptography@42.0.5"
+        "cryptography@42.0.7"
       ],
       "upgradePath": [],
       "isUpgradable": false,
       "isPatchable": false,
       "name": "cryptography",
-      "version": "42.0.5"
+      "version": "42.0.7"
     },
     {
-      "id": "SNYK-PYTHON-PYOPENSSL-6592766",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-PYOPENSSL-7161590",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -598,72 +598,72 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "pyopenssl",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "pyopenssl",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.442290Z",
+      "creationTime": "2024-05-29T14:38:53.929803Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.604558Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.682608Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "pyopenssl@24.1.0"
@@ -675,11 +675,11 @@
       "version": "24.1.0"
     },
     {
-      "id": "SNYK-PYTHON-PYOPENSSL-6592766",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-PYOPENSSL-7161590",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -693,72 +693,72 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "pyopenssl",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "pyopenssl",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.442290Z",
+      "creationTime": "2024-05-29T14:38:53.929803Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.604558Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.682608Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "pysaml2@7.3.1",
@@ -771,11 +771,11 @@
       "version": "24.1.0"
     },
     {
-      "id": "SNYK-PYTHON-PYOPENSSL-6592766",
-      "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "id": "SNYK-PYTHON-PYOPENSSL-7161590",
+      "title": "Use After Free",
+      "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
       "credit": [
-        "Manish Patidar"
+        "William Ahern"
       ],
       "semver": {
         "vulnerable": [
@@ -789,72 +789,72 @@
         "triageAdvice": null
       },
       "language": "python",
-      "severity": "low",
-      "cvssScore": 3.7,
+      "severity": "high",
+      "cvssScore": 8.1,
       "functions": [],
       "malicious": false,
       "isDisputed": false,
       "moduleName": "pyopenssl",
       "references": [
         {
-          "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+          "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+          "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+          "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+          "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
           "title": "GitHub Commit"
         },
         {
-          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+          "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+          "title": "GitHub Commit"
+        },
+        {
+          "url": "https://www.openssl.org/news/secadv/20240528.txt",
+          "title": "OpenSSL Advisory"
+        },
+        {
+          "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
           "title": "RedHat Bugzilla Bug"
-        },
-        {
-          "url": "https://www.openssl.org/news/secadv/20240408.txt",
-          "title": "Vulnerability Advisory"
         }
       ],
       "cvssDetails": [
         {
           "assigner": "Red Hat",
-          "severity": "low",
-          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-          "cvssV3BaseScore": 3.7,
-          "modificationTime": "2024-04-09T14:00:48.135216Z"
+          "severity": "medium",
+          "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+          "cvssV3BaseScore": 5.6,
+          "modificationTime": "2024-05-30T14:20:07.477260Z"
         }
       ],
-      "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-      "epssDetails": {
-        "percentile": "0.14042",
-        "probability": "0.00045",
-        "modelVersion": "v2023.03.01"
-      },
+      "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+      "epssDetails": null,
       "identifiers": {
         "CVE": [
-          "CVE-2024-2511"
+          "CVE-2024-4741"
         ],
         "CWE": [
-          "CWE-400"
+          "CWE-416"
         ]
       },
       "packageName": "pyopenssl",
       "proprietary": false,
-      "creationTime": "2024-04-09T13:16:35.442290Z",
+      "creationTime": "2024-05-29T14:38:53.929803Z",
       "functions_new": [],
       "alternativeIds": [],
-      "disclosureTime": "2024-04-08T00:00:00Z",
+      "disclosureTime": "2024-05-28T00:00:00Z",
       "packageManager": "pip",
-      "publicationTime": "2024-04-09T13:16:35.604558Z",
-      "modificationTime": "2024-04-10T06:18:14.313269Z",
+      "publicationTime": "2024-05-29T14:43:16.682608Z",
+      "modificationTime": "2024-05-30T14:20:07.477260Z",
       "socialTrendAlert": false,
-      "severityWithCritical": "low",
+      "severityWithCritical": "high",
       "from": [
         "inventory-app@0.0.0",
         "ckanext-saml2auth@1.3.0",
@@ -871,7 +871,7 @@
   "ok": false,
   "dependencyCount": 108,
   "org": "data.gov",
-  "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\n# ignores vulnerabilities until expiry date; change duration by modifying expiry date\nignore:\n  SNYK-PYTHON-WERKZEUG-6035177:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T13:35:17.967Z\n        created: 2023-11-01T13:35:17.972Z\n        source: cli\n  SNYK-PYTHON-BEAKER-575115:\n    - '*':\n        reason: >-\n          No remediation available yet; Not affecting us since the storage is\n          not accessible to any other client\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2022-12-08T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-3319936:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-02-15T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-3319935:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-02-15T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-FLASK-5490129:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4303\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-05-08T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6149520:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4532\n        expires: 2024-06-01T19:29:54.032Z\n        created: 2024-01-11T19:29:54.039Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6157250:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4591\n        expires: 2024-06-01T19:29:54.032Z\n        source: cli\npatch: {}\nexclude:\n  global:\n    - requirements-dev.txt\n",
+  "policy": "# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.\nversion: v1.25.1\n# ignores vulnerabilities until expiry date; change duration by modifying expiry date\nignore:\n  SNYK-PYTHON-WERKZEUG-6035177:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T13:35:17.967Z\n        created: 2023-11-01T13:35:17.972Z\n        source: cli\n  SNYK-PYTHON-BEAKER-575115:\n    - '*':\n        reason: >-\n          No remediation available yet; Not affecting us since the storage is\n          not accessible to any other client\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2022-12-08T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-3319936:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-02-15T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-3319935:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4217\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-02-15T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-FLASK-5490129:\n    - '*':\n        reason: >-\n          Upgrade path is complex, Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4303\n        expires: 2024-06-01T16:20:58.017Z\n        created: 2023-05-08T16:20:58.023Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6149520:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4532\n        expires: 2024-06-01T19:29:54.032Z\n        created: 2024-01-11T19:29:54.039Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6157250:\n    - '*':\n        reason: >-\n          No remediation available yet; Issue tracked in github:\n          https://github.com/GSA/data.gov/issues/4591\n        expires: 2024-06-01T19:29:54.032Z\n        source: cli\n  SNYK-PYTHON-CRYPTOGRAPHY-6592767:\n    - '*':\n        reason: No remediation available yet; Low severity.\n        expires: 2024-10-24T17:21:30.083Z\n        created: 2024-04-24T17:21:30.089Z\n        source: cli\n  SNYK-PYTHON-PYOPENSSL-6592766:\n    - '*':\n        reason: No remediation available yet; Low severity.\n        expires: 2024-10-24T17:24:47.251Z\n        created: 2024-04-24T17:24:47.257Z\n        source: cli\n  SNYK-PYTHON-WERKZEUG-6808933:\n    - '*':\n        reason: Not affecting us since no debugger is enabled in cloud.gov apps\n        expires: 2024-07-01T16:20:58.017Z\n        source: cli\npatch: {}\nexclude:\n  global:\n    - requirements-dev.txt\n",
   "isPrivate": true,
   "licensesPolicy": {
     "severities": {},
@@ -974,15 +974,16 @@
     "reasonRequired": false,
     "disregardFilesystemIgnores": false
   },
-  "summary": "42 vulnerable dependency paths",
+  "summary": "42 medium or high or critical severity vulnerable dependency paths",
+  "severityThreshold": "medium",
   "remediation": {
     "unresolved": [
       {
-        "id": "SNYK-PYTHON-CRYPTOGRAPHY-6592767",
-        "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+        "id": "SNYK-PYTHON-CRYPTOGRAPHY-7161587",
+        "title": "Use After Free",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "credit": [
-          "Manish Patidar"
+          "William Ahern"
         ],
         "semver": {
           "vulnerable": [
@@ -996,70 +997,70 @@
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 3.7,
+        "severity": "high",
+        "cvssScore": 8.1,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "cryptography",
         "references": [
           {
-            "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+            "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+            "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+            "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+            "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+            "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240528.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
             "title": "RedHat Bugzilla Bug"
-          },
-          {
-            "url": "https://www.openssl.org/news/secadv/20240408.txt",
-            "title": "Vulnerability Advisory"
           }
         ],
         "cvssDetails": [
           {
             "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-            "cvssV3BaseScore": 3.7,
-            "modificationTime": "2024-04-09T14:00:48.135216Z"
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+            "cvssV3BaseScore": 5.6,
+            "modificationTime": "2024-05-30T14:20:07.477260Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-        "epssDetails": {
-          "percentile": "0.14042",
-          "probability": "0.00045",
-          "modelVersion": "v2023.03.01"
-        },
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nA fix was pushed into the `master` branch but not yet published.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+        "epssDetails": null,
         "identifiers": {
           "CVE": [
-            "CVE-2024-2511"
+            "CVE-2024-4741"
           ],
           "CWE": [
-            "CWE-400"
+            "CWE-416"
           ]
         },
         "packageName": "cryptography",
         "proprietary": false,
-        "creationTime": "2024-04-09T13:16:35.618537Z",
+        "creationTime": "2024-05-29T14:38:52.978166Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2024-04-08T00:00:00Z",
+        "disclosureTime": "2024-05-28T00:00:00Z",
         "packageManager": "pip",
-        "publicationTime": "2024-04-09T13:16:35.784166Z",
-        "modificationTime": "2024-04-10T06:18:14.313269Z",
+        "publicationTime": "2024-05-29T14:43:16.068451Z",
+        "modificationTime": "2024-05-30T14:20:07.477260Z",
         "socialTrendAlert": false,
         "packagePopularityRank": 99,
         "from": [
@@ -1067,7 +1068,7 @@
           "ckanext-saml2auth@1.3.0",
           "pysaml2@7.3.1",
           "pyopenssl@24.1.0",
-          "cryptography@42.0.5"
+          "cryptography@42.0.7"
         ],
         "upgradePath": [],
         "isUpgradable": false,
@@ -1075,15 +1076,15 @@
         "isPinnable": false,
         "isRuntime": false,
         "name": "cryptography",
-        "version": "42.0.5",
-        "severityWithCritical": "low"
+        "version": "42.0.7",
+        "severityWithCritical": "high"
       },
       {
-        "id": "SNYK-PYTHON-PYOPENSSL-6592766",
-        "title": "Uncontrolled Resource Consumption ('Resource Exhaustion')",
-        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
+        "id": "SNYK-PYTHON-PYOPENSSL-7161590",
+        "title": "Use After Free",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
         "credit": [
-          "Manish Patidar"
+          "William Ahern"
         ],
         "semver": {
           "vulnerable": [
@@ -1097,70 +1098,70 @@
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 3.7,
+        "severity": "high",
+        "cvssScore": 8.1,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "pyopenssl",
         "references": [
           {
-            "url": "https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d",
+            "url": "https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006",
+            "url": "https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044",
+            "url": "https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed",
+            "url": "https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2274020",
+            "url": "https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://www.openssl.org/news/secadv/20240528.txt",
+            "title": "OpenSSL Advisory"
+          },
+          {
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2283757",
             "title": "RedHat Bugzilla Bug"
-          },
-          {
-            "url": "https://www.openssl.org/news/secadv/20240408.txt",
-            "title": "Vulnerability Advisory"
           }
         ],
         "cvssDetails": [
           {
             "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:L",
-            "cvssV3BaseScore": 3.7,
-            "modificationTime": "2024-04-09T14:00:48.135216Z"
+            "severity": "medium",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+            "cvssV3BaseScore": 5.6,
+            "modificationTime": "2024-05-30T14:20:07.477260Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Uncontrolled Resource Consumption ('Resource Exhaustion') due to the session cache entering an incorrect state and failing to flush properly as it fills, leading to uncontrolled memory consumption. This condition is triggered under certain server configurations when processing TLSv1.3 sessions. Specifically, this occurs if the non-default `SSL_OP_NO_TICKET` option is enabled, but not if early_data support is configured along with the default anti-replay protection. A malicious client could deliberately create this scenario to force a service disruption. It may also occur accidentally in normal operation.\r\n\r\n**Note:**\r\n\r\nThis issue is only exploitable if the server supports TLSv1.3 and is configured with the `SSL_OP_NO_TICKET` option enabled.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/21df7f04f6c4a560b4de56d10e1e58958c7e566d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/4a3e8f08306c64366318e26162ae0a0eb7b1a006)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/7984fa683e9dfac0cad50ef2a9d5a13330222044)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/42192fab0a96b484089021148ed1eaa12053f7ed)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2274020)\n- [Vulnerability Advisory](https://www.openssl.org/news/secadv/20240408.txt)\n",
-        "epssDetails": {
-          "percentile": "0.14042",
-          "probability": "0.00045",
-          "modelVersion": "v2023.03.01"
-        },
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Use After Free via the `SSL_free_buffers` function. An attacker can execute arbitrary code, corrupt valid data or cause a crash by exploiting the freed memory area.\r\n\r\nThe `SSL_free_buffers` function is used to free the internal OpenSSL buffer used when processing an incoming record from the network. The call is only expected to succeed if the buffer is not currently in use. However, two scenarios have been identified where the buffer is freed even when still in use.\r\n\r\n1) The first scenario occurs where a record header has been received from the network and processed by OpenSSL, but the full record body has not yet arrived. In this case calling `SSL_free_buffers` will succeed even though a record has only been partially processed and the buffer is still in use.\r\n\r\n2) The second scenario occurs where a full record containing application data has been received and processed by OpenSSL but the application has only read part of this data. Again a call to `SSL_free_buffers` will succeed even though the buffer is still in use.\r\n\r\nWhile these scenarios could occur accidentally during normal operation a malicious attacker could attempt to engineer a situation where this occurs.\r\n\r\n**Note:**\r\n\r\nThe FIPS modules in 3.3, 3.2, 3.1 and 3.0 are not affected by this issue.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/704f725b96aa373ee45ecfb23f6abfe8be8d9177)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/b3f0eb0a295f58f16ba43ba99dad70d4ee5c437d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/c88c3de51020c37e8706bf7a682a162593053aac)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/e5093133c35ca82874ad83697af76f4b0f7e3bd8)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/97e7d54ecd6b3f51c226eaf54507dedd0478b325)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240528.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2283757)\n",
+        "epssDetails": null,
         "identifiers": {
           "CVE": [
-            "CVE-2024-2511"
+            "CVE-2024-4741"
           ],
           "CWE": [
-            "CWE-400"
+            "CWE-416"
           ]
         },
         "packageName": "pyopenssl",
         "proprietary": false,
-        "creationTime": "2024-04-09T13:16:35.442290Z",
+        "creationTime": "2024-05-29T14:38:53.929803Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2024-04-08T00:00:00Z",
+        "disclosureTime": "2024-05-28T00:00:00Z",
         "packageManager": "pip",
-        "publicationTime": "2024-04-09T13:16:35.604558Z",
-        "modificationTime": "2024-04-10T06:18:14.313269Z",
+        "publicationTime": "2024-05-29T14:43:16.682608Z",
+        "modificationTime": "2024-05-30T14:20:07.477260Z",
         "socialTrendAlert": false,
         "packagePopularityRank": 95,
         "from": [
@@ -1176,7 +1177,7 @@
         "isRuntime": false,
         "name": "pyopenssl",
         "version": "24.1.0",
-        "severityWithCritical": "low"
+        "severityWithCritical": "high"
       }
     ],
     "upgrade": {},
@@ -1236,7 +1237,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Deserialization of Untrusted Data which could lead to arbitrary code execution.\n## Remediation\nThere is no fixed version for `Beaker`.\n\n## References\n- [GitHub Issue](https://github.com/bbangert/beaker/issues/191)\n",
         "epssDetails": {
-          "percentile": "0.14306",
+          "percentile": "0.15300",
           "probability": "0.00045",
           "modelVersion": "v2023.03.01"
         },
@@ -1362,8 +1363,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49499",
-          "probability": "0.00142",
+          "percentile": "0.55139",
+          "probability": "0.00180",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -1491,8 +1492,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49499",
-          "probability": "0.00142",
+          "percentile": "0.55139",
+          "probability": "0.00180",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -1621,8 +1622,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49499",
-          "probability": "0.00142",
+          "percentile": "0.55139",
+          "probability": "0.00180",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -1751,8 +1752,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49499",
-          "probability": "0.00142",
+          "percentile": "0.55139",
+          "probability": "0.00180",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -1881,8 +1882,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Information Exposure in the form of exposing the permanent session cookie, when all of the following conditions are met:\r\n\r\n1) The application is hosted behind a caching proxy that does not strip cookies or ignore responses with cookies.\r\n\r\n2) The application sets `session.permanent = True`.\r\n\r\n3) The application does not access or modify the session at any point during a request.\r\n\r\n4) `SESSION_REFRESH_EACH_REQUEST` is enabled (the default).\r\n\r\n5) The application does not set a `Cache-Control` header to indicate that a page is private or should not be cached.\r\n\r\nA response containing data intended for one client may be cached and sent to other clients. If the proxy also caches `Set-Cookie` headers, it may send one client's `session` cookie to other clients. Under these conditions, the `Vary: Cookie` header is not set when a session is refreshed (re-sent to update the expiration) without being accessed or modified.\n## Remediation\nUpgrade `flask` to version 2.2.5, 2.3.2 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/flask/commit/70f906c51ce49c485f1d355703e9cc3386b1cc2b)\n- [GitHub Commit](https://github.com/pallets/flask/commit/afd63b16170b7c047f5758eb910c416511e9c965)\n- [GitHub PR](https://github.com/pallets/flask/pull/5109)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.2.5)\n- [GitHub Release](https://github.com/pallets/flask/releases/tag/2.3.2)\n- [Session Cookie Documentation](https://flask.palletsprojects.com/en/2.3.x/api/#flask.session.permanent)\n",
         "epssDetails": {
-          "percentile": "0.49499",
-          "probability": "0.00142",
+          "percentile": "0.55139",
+          "probability": "0.00180",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -2007,8 +2008,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
         "epssDetails": {
-          "percentile": "0.24714",
-          "probability": "0.00061",
+          "percentile": "0.50959",
+          "probability": "0.00149",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -2120,8 +2121,12 @@
             "modificationTime": "2024-03-11T09:49:44.652172Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
-        "epssDetails": null,
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
+        "epssDetails": {
+          "percentile": "0.15011",
+          "probability": "0.00045",
+          "modelVersion": "v2023.03.01"
+        },
         "identifiers": {
           "CVE": [
             "CVE-2023-6237"
@@ -2239,8 +2244,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
         "epssDetails": {
-          "percentile": "0.24714",
-          "probability": "0.00061",
+          "percentile": "0.50959",
+          "probability": "0.00149",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -2353,8 +2358,12 @@
             "modificationTime": "2024-03-11T09:49:44.652172Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
-        "epssDetails": null,
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
+        "epssDetails": {
+          "percentile": "0.15011",
+          "probability": "0.00045",
+          "modelVersion": "v2023.03.01"
+        },
         "identifiers": {
           "CVE": [
             "CVE-2023-6237"
@@ -2473,8 +2482,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Use of a Broken or Risky Cryptographic Algorithm due to an issue in the `POLY1305` MAC implementation on PowerPC CPUs. An attacker can corrupt the application state and cause incorrect calculations or potential denial of service by influencing the use of the `POLY1305` MAC algorithm.\r\n\r\n**Note:**\r\n\r\nThis is only exploitable if the attacker has the ability to affect the algorithm's usage and the application relies on non-volatile XMM registers.\n## Remediation\nThere is no fixed version for `pyOpenSSL`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/050d26383d4e264966fb83428e72d5d48f402d35)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/5b139f95c9a47a55a0c54100f3837b1eee942b04)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/f3fc5808fe9ff74042d639839610d03b8fdcc015)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/89d0d56fb104ac4e0e6db63d78fc22b8c53d27e9)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240109.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2257571)\n",
         "epssDetails": {
-          "percentile": "0.24714",
-          "probability": "0.00061",
+          "percentile": "0.50959",
+          "probability": "0.00149",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -2588,8 +2597,12 @@
             "modificationTime": "2024-03-11T09:49:44.652172Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
-        "epssDetails": null,
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Resource Exhaustion via the `EVP_PKEY_public_check` function. When the function is called in RSA public keys, a computation is done to confirm that the RSA modulus, n, is composite. For valid RSA keys, n is a product of two or more large primes and this computation completes quickly. However, if n is a large prime, this computation takes a long time. An attacker can cause a denial of service by supplying a specially crafted RSA key that triggers extensive computation.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nThere is no fixed version for `pyopenssl`.\n\n## References\n- [GitHub Commit](https://github.com/openssl/openssl/commit/0b0f7abfb37350794a4b8960fafc292cd5d1b84d)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/18c02492138d1eb8b6548cb26e7b625fb2414a2a)\n- [GitHub Commit](https://github.com/openssl/openssl/commit/a830f551557d3d66a84bbb18a5b889c640c36294)\n- [GitHub Commit](https://github.com/pyca/cryptography/commit/4b5be7b0032ade70e09a43f9d857708e36170bbc)\n- [OpenSSL Advisory](https://www.openssl.org/news/secadv/20240115.txt)\n- [RedHat Bugzilla Bug](https://bugzilla.redhat.com/show_bug.cgi?id=2258502)\n",
+        "epssDetails": {
+          "percentile": "0.15011",
+          "probability": "0.00045",
+          "modelVersion": "v2023.03.01"
+        },
         "identifiers": {
           "CVE": [
             "CVE-2023-6237"
@@ -2634,110 +2647,6 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-        "credit": [
-          "Marco Squarcina"
-        ],
-        "semver": {
-          "vulnerable": [
-            "[,2.2.3)"
-          ]
-        },
-        "exploit": "Not Defined",
-        "fixedIn": [
-          "2.2.3"
-        ],
-        "patches": [],
-        "insights": {
-          "triageAdvice": null
-        },
-        "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
-        "functions": [],
-        "malicious": false,
-        "isDisputed": false,
-        "moduleName": "werkzeug",
-        "references": [
-          {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
-            "title": "GitHub Commit"
-          },
-          {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
-            "title": "GitHub Release"
-          }
-        ],
-        "cvssDetails": [
-          {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
-          },
-          {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
-          }
-        ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
-        "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
-          "modelVersion": "v2023.03.01"
-        },
-        "identifiers": {
-          "CVE": [
-            "CVE-2023-23934"
-          ],
-          "CWE": [
-            "CWE-284"
-          ],
-          "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
-          ]
-        },
-        "packageName": "werkzeug",
-        "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
-        "functions_new": [],
-        "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
-        "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
-        "socialTrendAlert": false,
-        "severityWithCritical": "low",
-        "from": [
-          "inventory-app@0.0.0",
-          "werkzeug@2.0.3"
-        ],
-        "upgradePath": [],
-        "isUpgradable": false,
-        "isPatchable": false,
-        "name": "werkzeug",
-        "version": "2.0.3",
-        "filtered": {
-          "ignored": [
-            {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
-              "source": "cli",
-              "path": [
-                "*"
-              ]
-            }
-          ]
-        }
-      },
-      {
         "id": "SNYK-PYTHON-WERKZEUG-3319936",
         "title": "Denial of Service (DoS)",
         "CVSSv3": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
@@ -2799,8 +2708,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -2912,7 +2821,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -2962,89 +2871,88 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "credit": [
-          "Marco Squarcina"
+          "RyotaK"
         ],
         "semver": {
           "vulnerable": [
-            "[,2.2.3)"
+            "[,3.0.3)"
           ]
         },
         "exploit": "Not Defined",
         "fixedIn": [
-          "2.2.3"
+          "3.0.3"
         ],
         "patches": [],
         "insights": {
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
+        "severity": "high",
+        "cvssScore": 7.5,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "werkzeug",
         "references": [
           {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
             "title": "GitHub Release"
           }
         ],
         "cvssDetails": [
           {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
           },
           {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
         "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
+          "percentile": "0.08704",
+          "probability": "0.00043",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
           "CVE": [
-            "CVE-2023-23934"
+            "CVE-2024-34069"
           ],
           "CWE": [
-            "CWE-284"
+            "CWE-94"
           ],
           "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
+            "GHSA-2g68-c3qc-8985"
           ]
         },
         "packageName": "werkzeug",
         "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "creationTime": "2024-05-06T07:14:00.654405Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
+        "disclosureTime": "2024-05-06T01:48:44Z",
         "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
         "socialTrendAlert": false,
-        "severityWithCritical": "low",
+        "severityWithCritical": "high",
         "from": [
           "inventory-app@0.0.0",
-          "flask@2.0.3",
           "werkzeug@2.0.3"
         ],
         "upgradePath": [],
@@ -3055,9 +2963,8 @@
         "filtered": {
           "ignored": [
             {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
@@ -3128,8 +3035,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -3242,7 +3149,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -3293,89 +3200,89 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "credit": [
-          "Marco Squarcina"
+          "RyotaK"
         ],
         "semver": {
           "vulnerable": [
-            "[,2.2.3)"
+            "[,3.0.3)"
           ]
         },
         "exploit": "Not Defined",
         "fixedIn": [
-          "2.2.3"
+          "3.0.3"
         ],
         "patches": [],
         "insights": {
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
+        "severity": "high",
+        "cvssScore": 7.5,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "werkzeug",
         "references": [
           {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
             "title": "GitHub Release"
           }
         ],
         "cvssDetails": [
           {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
           },
           {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
         "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
+          "percentile": "0.08704",
+          "probability": "0.00043",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
           "CVE": [
-            "CVE-2023-23934"
+            "CVE-2024-34069"
           ],
           "CWE": [
-            "CWE-284"
+            "CWE-94"
           ],
           "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
+            "GHSA-2g68-c3qc-8985"
           ]
         },
         "packageName": "werkzeug",
         "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "creationTime": "2024-05-06T07:14:00.654405Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
+        "disclosureTime": "2024-05-06T01:48:44Z",
         "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
         "socialTrendAlert": false,
-        "severityWithCritical": "low",
+        "severityWithCritical": "high",
         "from": [
           "inventory-app@0.0.0",
-          "flask-login@0.6.1",
+          "flask@2.0.3",
           "werkzeug@2.0.3"
         ],
         "upgradePath": [],
@@ -3386,9 +3293,8 @@
         "filtered": {
           "ignored": [
             {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
@@ -3459,8 +3365,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -3573,7 +3479,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -3624,90 +3530,89 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "credit": [
-          "Marco Squarcina"
+          "RyotaK"
         ],
         "semver": {
           "vulnerable": [
-            "[,2.2.3)"
+            "[,3.0.3)"
           ]
         },
         "exploit": "Not Defined",
         "fixedIn": [
-          "2.2.3"
+          "3.0.3"
         ],
         "patches": [],
         "insights": {
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
+        "severity": "high",
+        "cvssScore": 7.5,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "werkzeug",
         "references": [
           {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
             "title": "GitHub Release"
           }
         ],
         "cvssDetails": [
           {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
           },
           {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
         "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
+          "percentile": "0.08704",
+          "probability": "0.00043",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
           "CVE": [
-            "CVE-2023-23934"
+            "CVE-2024-34069"
           ],
           "CWE": [
-            "CWE-284"
+            "CWE-94"
           ],
           "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
+            "GHSA-2g68-c3qc-8985"
           ]
         },
         "packageName": "werkzeug",
         "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "creationTime": "2024-05-06T07:14:00.654405Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
+        "disclosureTime": "2024-05-06T01:48:44Z",
         "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
         "socialTrendAlert": false,
-        "severityWithCritical": "low",
+        "severityWithCritical": "high",
         "from": [
           "inventory-app@0.0.0",
-          "flask-babel@1.0.0",
-          "flask@2.0.3",
+          "flask-login@0.6.1",
           "werkzeug@2.0.3"
         ],
         "upgradePath": [],
@@ -3718,9 +3623,8 @@
         "filtered": {
           "ignored": [
             {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
@@ -3791,8 +3695,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -3906,7 +3810,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -3958,89 +3862,89 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "credit": [
-          "Marco Squarcina"
+          "RyotaK"
         ],
         "semver": {
           "vulnerable": [
-            "[,2.2.3)"
+            "[,3.0.3)"
           ]
         },
         "exploit": "Not Defined",
         "fixedIn": [
-          "2.2.3"
+          "3.0.3"
         ],
         "patches": [],
         "insights": {
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
+        "severity": "high",
+        "cvssScore": 7.5,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "werkzeug",
         "references": [
           {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
             "title": "GitHub Release"
           }
         ],
         "cvssDetails": [
           {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
           },
           {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
         "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
+          "percentile": "0.08704",
+          "probability": "0.00043",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
           "CVE": [
-            "CVE-2023-23934"
+            "CVE-2024-34069"
           ],
           "CWE": [
-            "CWE-284"
+            "CWE-94"
           ],
           "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
+            "GHSA-2g68-c3qc-8985"
           ]
         },
         "packageName": "werkzeug",
         "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "creationTime": "2024-05-06T07:14:00.654405Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
+        "disclosureTime": "2024-05-06T01:48:44Z",
         "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
         "socialTrendAlert": false,
-        "severityWithCritical": "low",
+        "severityWithCritical": "high",
         "from": [
           "inventory-app@0.0.0",
-          "flask-login@0.6.1",
+          "flask-babel@1.0.0",
           "flask@2.0.3",
           "werkzeug@2.0.3"
         ],
@@ -4052,9 +3956,8 @@
         "filtered": {
           "ignored": [
             {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
@@ -4125,8 +4028,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -4240,7 +4143,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -4292,89 +4195,89 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "credit": [
-          "Marco Squarcina"
+          "RyotaK"
         ],
         "semver": {
           "vulnerable": [
-            "[,2.2.3)"
+            "[,3.0.3)"
           ]
         },
         "exploit": "Not Defined",
         "fixedIn": [
-          "2.2.3"
+          "3.0.3"
         ],
         "patches": [],
         "insights": {
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
+        "severity": "high",
+        "cvssScore": 7.5,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "werkzeug",
         "references": [
           {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
             "title": "GitHub Release"
           }
         ],
         "cvssDetails": [
           {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
           },
           {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
         "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
+          "percentile": "0.08704",
+          "probability": "0.00043",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
           "CVE": [
-            "CVE-2023-23934"
+            "CVE-2024-34069"
           ],
           "CWE": [
-            "CWE-284"
+            "CWE-94"
           ],
           "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
+            "GHSA-2g68-c3qc-8985"
           ]
         },
         "packageName": "werkzeug",
         "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "creationTime": "2024-05-06T07:14:00.654405Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
+        "disclosureTime": "2024-05-06T01:48:44Z",
         "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
         "socialTrendAlert": false,
-        "severityWithCritical": "low",
+        "severityWithCritical": "high",
         "from": [
           "inventory-app@0.0.0",
-          "flask-multistatic@1.0",
+          "flask-login@0.6.1",
           "flask@2.0.3",
           "werkzeug@2.0.3"
         ],
@@ -4386,9 +4289,8 @@
         "filtered": {
           "ignored": [
             {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
@@ -4459,8 +4361,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -4574,7 +4476,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -4626,89 +4528,89 @@
         }
       },
       {
-        "id": "SNYK-PYTHON-WERKZEUG-3319935",
-        "title": "Access Restriction Bypass",
-        "CVSSv3": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
         "credit": [
-          "Marco Squarcina"
+          "RyotaK"
         ],
         "semver": {
           "vulnerable": [
-            "[,2.2.3)"
+            "[,3.0.3)"
           ]
         },
         "exploit": "Not Defined",
         "fixedIn": [
-          "2.2.3"
+          "3.0.3"
         ],
         "patches": [],
         "insights": {
           "triageAdvice": null
         },
         "language": "python",
-        "severity": "low",
-        "cvssScore": 2.6,
+        "severity": "high",
+        "cvssScore": 7.5,
         "functions": [],
         "malicious": false,
         "isDisputed": false,
         "moduleName": "werkzeug",
         "references": [
           {
-            "url": "https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028",
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
             "title": "GitHub Commit"
           },
           {
-            "url": "https://github.com/pallets/werkzeug/releases/tag/2.2.3",
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
             "title": "GitHub Release"
           }
         ],
         "cvssDetails": [
           {
-            "assigner": "NVD",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 3.5,
-            "modificationTime": "2024-03-11T09:52:56.001212Z"
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
           },
           {
-            "assigner": "Red Hat",
-            "severity": "low",
-            "cvssV3Vector": "CVSS:3.1/AV:A/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N",
-            "cvssV3BaseScore": 2.6,
-            "modificationTime": "2024-03-11T09:53:48.578251Z"
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
           }
         ],
-        "description": "## Overview\n\nAffected versions of this package are vulnerable to Access Restriction Bypass that allows a malicious application on an adjacent subdomain to present \"nameless\" cookies that look like `=value` instead of `key=value` and have them accepted by the affected browser. For example, a cookie like `=__Host-test=bad` would be parsed as `__Host-test=bad` and the key treated as valid while the value is ignored.\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/cf275f42acad1b5950c50ffe8ef58fe62cdce028)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
         "epssDetails": {
-          "percentile": "0.17999",
-          "probability": "0.00050",
+          "percentile": "0.08704",
+          "probability": "0.00043",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
           "CVE": [
-            "CVE-2023-23934"
+            "CVE-2024-34069"
           ],
           "CWE": [
-            "CWE-284"
+            "CWE-94"
           ],
           "GHSA": [
-            "GHSA-px8h-6qxv-m22q"
+            "GHSA-2g68-c3qc-8985"
           ]
         },
         "packageName": "werkzeug",
         "proprietary": false,
-        "creationTime": "2023-02-15T09:00:54.002181Z",
+        "creationTime": "2024-05-06T07:14:00.654405Z",
         "functions_new": [],
         "alternativeIds": [],
-        "disclosureTime": "2023-02-15T08:37:04Z",
+        "disclosureTime": "2024-05-06T01:48:44Z",
         "packageManager": "pip",
-        "publicationTime": "2023-02-15T09:22:04.062534Z",
-        "modificationTime": "2024-03-11T09:53:48.578251Z",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
         "socialTrendAlert": false,
-        "severityWithCritical": "low",
+        "severityWithCritical": "high",
         "from": [
           "inventory-app@0.0.0",
-          "flask-wtf@1.0.1",
+          "flask-multistatic@1.0",
           "flask@2.0.3",
           "werkzeug@2.0.3"
         ],
@@ -4720,9 +4622,8 @@
         "filtered": {
           "ignored": [
             {
-              "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
-              "expires": "2024-06-01T16:20:58.017Z",
-              "created": "2023-02-15T16:20:58.023Z",
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
@@ -4793,8 +4694,8 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Denial of Service (DoS) when parsing multipart form data. An attacker can trigger the opening of multipart files containing a large number of file parts, which are processed using `request.data`, `request.form`, `request.files`, or `request.get_data(parse_form_data=False)`, consuming CPU, memory, or file handles resources. The amount of CPU time required can block worker processes from handling other requests. The amount of RAM required can trigger an out-of-memory and crash the process.\n\n## Details\n\nDenial of Service (DoS) describes a family of attacks, all aimed at making a system inaccessible to its intended and legitimate users.\n\nUnlike other vulnerabilities, DoS attacks usually do not aim at breaching security. Rather, they are focused on making websites and services unavailable to genuine users resulting in downtime.\n\nOne popular Denial of Service vulnerability is DDoS (a Distributed Denial of Service), an attack that attempts to clog network pipes to the system by generating a large volume of traffic from many machines.\n\nWhen it comes to open source libraries, DoS vulnerabilities allow attackers to trigger such a crash or crippling of the service by using a flaw either in the application code or from the use of open source libraries.\n\nTwo common types of DoS vulnerabilities:\n\n* High CPU/Memory Consumption- An attacker sending crafted requests that could cause the system to take a disproportionate amount of time to process. For example, [commons-fileupload:commons-fileupload](SNYK-JAVA-COMMONSFILEUPLOAD-30082).\n\n* Crash - An attacker sending crafted requests that could cause the system to crash. For Example,  [npm `ws` package](https://snyk.io/vuln/npm:ws:20171108)\n\n## Remediation\nUpgrade `werkzeug` to version 2.2.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/517cac5a804e8c4dc4ed038bb20dacd038e7a9f1)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/2.2.3)\n",
         "epssDetails": {
-          "percentile": "0.48498",
-          "probability": "0.00136",
+          "percentile": "0.50460",
+          "probability": "0.00146",
           "modelVersion": "v2023.03.01"
         },
         "identifiers": {
@@ -4908,7 +4809,7 @@
         ],
         "description": "## Overview\n\nAffected versions of this package are vulnerable to Inefficient Algorithmic Complexity in multipart data parsing. An attacker can cause a denial of service and block worker processes from handling legitimate requests by sending crafted multipart data to an endpoint that will parse it, eventually exhausting or killing all available workers. \r\n\r\nExploiting this vulnerability is possible if the uploaded file starts with `CR` or `LF` and is followed by megabytes of data without these characters.\n## Remediation\nUpgrade `werkzeug` to version 2.3.8, 3.0.1 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f2300208d5e2a5076cbbb4c2aad71096fd040ef9)\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/f3c803b3ade485a45f12b6d6617595350c0f03e2)\n",
         "epssDetails": {
-          "percentile": "0.19854",
+          "percentile": "0.20813",
           "probability": "0.00053",
           "modelVersion": "v2023.03.01"
         },
@@ -4951,6 +4852,111 @@
               "reason": "Upgrade path is complex, Issue tracked in github: https://github.com/GSA/data.gov/issues/4217",
               "expires": "2024-06-01T13:35:17.967Z",
               "created": "2023-11-01T13:35:17.972Z",
+              "source": "cli",
+              "path": [
+                "*"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "SNYK-PYTHON-WERKZEUG-6808933",
+        "title": "Remote Code Execution (RCE)",
+        "CVSSv3": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "credit": [
+          "RyotaK"
+        ],
+        "semver": {
+          "vulnerable": [
+            "[,3.0.3)"
+          ]
+        },
+        "exploit": "Not Defined",
+        "fixedIn": [
+          "3.0.3"
+        ],
+        "patches": [],
+        "insights": {
+          "triageAdvice": null
+        },
+        "language": "python",
+        "severity": "high",
+        "cvssScore": 7.5,
+        "functions": [],
+        "malicious": false,
+        "isDisputed": false,
+        "moduleName": "werkzeug",
+        "references": [
+          {
+            "url": "https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967",
+            "title": "GitHub Commit"
+          },
+          {
+            "url": "https://github.com/pallets/werkzeug/releases/tag/3.0.3",
+            "title": "GitHub Release"
+          }
+        ],
+        "cvssDetails": [
+          {
+            "assigner": "Red Hat",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-09T13:32:47.011978Z"
+          },
+          {
+            "assigner": "SUSE",
+            "severity": "high",
+            "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+            "cvssV3BaseScore": 7.5,
+            "modificationTime": "2024-05-11T11:02:22.890220Z"
+          }
+        ],
+        "description": "## Overview\n\nAffected versions of this package are vulnerable to Remote Code Execution (RCE) due to insufficient hostname checks and the use of relative paths to resolve requests. When the debugger is enabled, an attacker can convince a user to enter their own PIN to interact with a domain and subdomain they control, and thereby cause malicious code to be executed.\r\n\r\nThe demonstrated attack vector requires a number of conditions that render this attack very difficult to achieve, especially if the victim application is running in the recommended configuration of not having the debugger enabled in production.\n## Remediation\nUpgrade `werkzeug` to version 3.0.3 or higher.\n## References\n- [GitHub Commit](https://github.com/pallets/werkzeug/commit/71b69dfb7df3d912e66bab87fbb1f21f83504967)\n- [GitHub Release](https://github.com/pallets/werkzeug/releases/tag/3.0.3)\n",
+        "epssDetails": {
+          "percentile": "0.08704",
+          "probability": "0.00043",
+          "modelVersion": "v2023.03.01"
+        },
+        "identifiers": {
+          "CVE": [
+            "CVE-2024-34069"
+          ],
+          "CWE": [
+            "CWE-94"
+          ],
+          "GHSA": [
+            "GHSA-2g68-c3qc-8985"
+          ]
+        },
+        "packageName": "werkzeug",
+        "proprietary": false,
+        "creationTime": "2024-05-06T07:14:00.654405Z",
+        "functions_new": [],
+        "alternativeIds": [],
+        "disclosureTime": "2024-05-06T01:48:44Z",
+        "packageManager": "pip",
+        "publicationTime": "2024-05-06T07:25:10.516467Z",
+        "modificationTime": "2024-05-11T11:02:22.890220Z",
+        "socialTrendAlert": false,
+        "severityWithCritical": "high",
+        "from": [
+          "inventory-app@0.0.0",
+          "flask-wtf@1.0.1",
+          "flask@2.0.3",
+          "werkzeug@2.0.3"
+        ],
+        "upgradePath": [],
+        "isUpgradable": false,
+        "isPatchable": false,
+        "name": "werkzeug",
+        "version": "2.0.3",
+        "filtered": {
+          "ignored": [
+            {
+              "reason": "Not affecting us since no debugger is enabled in cloud.gov apps",
+              "expires": "2024-07-01T16:20:58.017Z",
               "source": "cli",
               "path": [
                 "*"
