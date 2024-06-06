@@ -27,7 +27,6 @@ blinker==1.5
 click==8.1.3
 dominate==2.7.0
 feedgen==0.9.0
-Flask==2.0.3
 Flask-Babel==1.0.0
 Flask-Login==0.6.1
 Flask-WTF==1.0.1
@@ -94,4 +93,4 @@ pyparsing # need to avoid solr missing module error on cloud.gov
 
 # duplicate Werkzeug[watchdog]==2.0.3 requrements from ckan list
 # so that snyk doesn't complain about the version mismatch
-Werkzeug==2.0.3
+werkzeug>=2.3.8
