@@ -45,7 +45,6 @@ python-dateutil==2.8.2
 pytz
 PyUtilib==6.0.0
 pyyaml==6.0.1
-requests==2.32.0
 rq==1.11.0
 simplejson==3.18.0
 SQLAlchemy[mypy]==1.4.41
@@ -94,4 +93,4 @@ pyparsing # need to avoid solr missing module error on cloud.gov
 
 # duplicate Werkzeug[watchdog]==2.0.3 requrements from ckan list
 # so that snyk doesn't complain about the version mismatch
-Werkzeug==2.0.3
+Werkzeug==2.0.3requests>=2.32.2
