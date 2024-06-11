@@ -33,11 +33,11 @@ jobs:
         run: |
           # Run scan
           snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --severity-threshold=medium --file=requirements.txt --json-file-output=scan.json || echo "Scan complete"
+          snyk test --severity-threshold=medium --file=requirements.txt --json-file-output=/tmp/scan.json || echo "Scan complete"
 
           # Exit if no vulnerabilities
           # Succeed, so that PR is NOT created
-          [[ "$(jq '.ok' scan.json)" == "true" ]] && exit 0
+          [[ "$(jq '.ok' /tmp/scan.json)" == "true" ]] && exit 0
 
           # Update requirements.in with the snyk fix suggestions
           python bin/snyk-update.py
@@ -48,7 +48,7 @@ jobs:
           # Check if there are any changes
           if [ -z "$(git status --porcelain)" ]; then
             echo "Found vulnerable issues but no upgrade or patch available"
-            cat scan.json | jq '[.vulnerabilities[] | .id] | unique[]'
+            cat /tmp/scan.json | jq '[.vulnerabilities[] | .id] | unique[]'
           else
             echo "Changes made to add into PR: "
             git diff
