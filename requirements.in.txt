@@ -1,6 +1,6 @@
 git+https://github.com/GSA/ckan.git@ckan-2-10-4-fork#egg=ckan
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
-git+https://github.com/GSA/ckanext-saml2auth.git@create_user_via_saml.log_210#egg=ckanext-saml2auth
+git+https://github.com/GSA/ckanext-saml2auth.git@datagov#egg=ckanext-saml2auth
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
 -e git+https://github.com/ckan/ckanext-xloader.git@master#egg=ckanext-xloader
 
