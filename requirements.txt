@@ -12,7 +12,7 @@ cffi==1.16.0
 chardet==5.2.0
 charset-normalizer==3.3.2
 ckan @ git+https://github.com/GSA/ckan.git@7159a872ba740069b768fcd2a43cde81a57ee492
-ckanext-datajson==0.1.24
+ckanext-datajson==0.1.25
 ckanext-dcat-usmetadata==0.6.0
 ckanext-envvars==0.0.3
 ckanext-googleanalyticsbasic==0.2.1
