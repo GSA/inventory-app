@@ -34,7 +34,7 @@ jobs:
       - name: test
         run: make build test
       - name: test extension
-        run: make test_extension
+        run: make test-extension
       - name: cypress-artifacts
         uses: actions/upload-artifact@v3
         if: failure()
