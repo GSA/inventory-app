@@ -47,6 +47,3 @@ unlock-solr-volume:
 
 up:
 	docker compose up $(ARGS)
-
-update-dependencies:
-	docker compose run --rm -T ckan /app/freeze-requirements.sh $(shell id -u) $(shell id -g)
