@@ -94,5 +94,5 @@ pyparsing # need to avoid solr missing module error on cloud.gov
 # duplicate Werkzeug[watchdog]==2.0.3 requrements from ckan list
 # so that snyk doesn't complain about the version mismatch
 Werkzeug==2.0.3
-urllib3>=2.2.2
+urllib3>=1.26.19
 
