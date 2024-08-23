@@ -96,3 +96,4 @@ Werkzeug==2.0.3
 urllib3>=1.26.19
 
 certifi>=2024.7.4
+ckan>=2.10.5
