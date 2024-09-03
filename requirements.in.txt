@@ -1,4 +1,4 @@
-git+https://github.com/GSA/ckan.git@ckan-2-10-4-fork#egg=ckan
+git+https://github.com/GSA/ckan.git@ckan-2-10-5-fork#egg=ckan
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 git+https://github.com/GSA/ckanext-saml2auth.git@datagov#egg=ckanext-saml2auth
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
@@ -34,18 +34,20 @@ Flask-WTF==1.0.1
 flask-multistatic==1.0
 greenlet==2.0.2
 # Jinja2==3.1.2
-PyJWT==2.4.0
 Markdown==3.4.1
+packaging==24.1
 passlib==1.7.4
 polib==1.1.1
 psycopg2==2.9.3
+PyJWT==2.4.0
+pyparsing==3.1.2
 python-magic==0.4.27
 pysolr==3.9.0
 python-dateutil==2.8.2
 pytz
 PyUtilib==6.0.0
 pyyaml==6.0.1
-requests~=2.32.2
+requests~=2.32.3
 rq==1.11.0
 simplejson==3.18.0
 SQLAlchemy[mypy]==1.4.41
