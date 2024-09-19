@@ -80,7 +80,6 @@ python-dateutil>=2.8.2
 # (most likely for snyk)
 itsdangerous==2.0.1
 MarkupSafe==2.0.1
-setuptools>=70.0.0
 wheel==0.42.0
 
 # avoid ImportError error https://github.com/GSA/data.gov/issues/4396
@@ -99,3 +98,4 @@ urllib3>=1.26.19
 
 certifi>=2024.7.4
 cryptography>=43.0.1
+setuptools~=71.0.3
