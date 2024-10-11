@@ -1,4 +1,4 @@
-FROM ckan/ckan-dev:2.10.5
+FROM ckan/ckan-dev:2.11.0
 # Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.10/Dockerfile
 # And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.10/Dockerfile
 
@@ -11,8 +11,8 @@ ENV APP_DIR /app
 # add dependencies for cryptography and vim
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
-# Install vim and zip
-RUN apk add vim zip xmlsec
+RUN apt-get update && apt-get install -y \
+    ncat
 
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
