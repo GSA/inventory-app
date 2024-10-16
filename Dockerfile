@@ -12,7 +12,8 @@ ENV APP_DIR /app
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
 RUN apt-get update && apt-get install -y \
-    ncat
+    ncat \
+    xmlsec1
 
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
