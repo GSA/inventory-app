@@ -89,4 +89,7 @@ urllib3>=1.26.19
 certifi>=2024.7.4
 cryptography>=43.0.1
 setuptools~=71.0.3
+
+# Pin MarkupSafe to avoid button issue data.gov/issues/4954 for logged in user
+# https://github.com/GSA/data.gov/issues/4954
 MarkupSafe==2.*
