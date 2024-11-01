@@ -84,7 +84,6 @@ wheel==0.42.0
 
 # avoid ImportError error https://github.com/GSA/data.gov/issues/4396
 importlib-resources<6.0
-gevent>=23.9.0
 cryptography>42.0.4
 pip>=23.3
 jinja2>=3.1.4
@@ -102,4 +101,4 @@ setuptools~=71.0.3
 
 # Pin MarkupSafe to avoid button issue data.gov/issues/4954 for logged in user
 # https://github.com/GSA/data.gov/issues/4954
-MarkupSafe==2.*
+MarkupSafe==2.*gevent>=24.10.1
