@@ -8,7 +8,7 @@ _Note: this is currently a work in progress. We're mainly using this to manage
 the `requirements-freeze.txt` for production dependencies. Very little works beyond that._
 
 ## Development
-
+ 
 ### Prerequisites
 
 - [Docker and Docker Compose](https://docs.docker.com/compose/)
