@@ -13,9 +13,9 @@ ENV APP_DIR=/app
 # add dependencies for cryptography and vim
 # RUN apk add libressl-dev musl-dev libffi-dev xmlsec vim xmlsec-dev
 
-# Install vim and zip
-RUN apt-get update -y && \ 
-  apt-get install -y vim zip xmlsec1 ncat
+  # Install vim and zip
+  RUN apt-get update -y && \
+    apt-get install -y vim zip xmlsec1 ncat
 
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
