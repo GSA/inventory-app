@@ -86,7 +86,7 @@ wheel==0.42.0
 importlib-resources<6.0
 cryptography>42.0.4
 pip>=23.3
-jinja2>=3.1.4
+jinja2>=3.1.5
 
 # fix for https://security.snyk.io/vuln/SNYK-PYTHON-GEVENT-8320934
 gevent>=24.10.1
