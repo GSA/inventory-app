@@ -41,7 +41,7 @@ idna==3.10
 ijson==3.3.0
 importlib-resources==5.13.0
 itsdangerous==2.0.1
-Jinja2==3.1.4
+Jinja2==3.1.5
 jmespath==1.0.1
 json-table-schema==0.2.1
 jsonlines==4.0.0
