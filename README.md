@@ -166,6 +166,10 @@ environment variable and user-provided service.
 
 The Login.gov IdP metadata is stored in file under `config/`.
 
+## Adding Organizations, Publishers, and Users
+
+See [instructions here](https://github.com/GSA/data.gov/wiki/inventory.data.gov).
+
 ## License and Contributing
 
 We're so glad you're thinking about re-using and/or contributing to Data.gov!
