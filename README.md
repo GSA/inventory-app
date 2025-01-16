@@ -168,7 +168,7 @@ The Login.gov IdP metadata is stored in file under `config/`.
 
 ## Adding Organizations, Publishers, and Users
 
-See [instructions here](https://github.com/GSA/inventory-app/config/data/README.md)
+See [instructions here](https://github.com/GSA/data.gov/wiki/inventory.data.gov).
 
 ## License and Contributing
 
