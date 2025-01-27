@@ -1,8 +1,0 @@
-{
-    "baseUrl": "http://ckan:5000",
-    "reporter": "junit",
-    "reporterOptions": {
-        "mochaFile": "cypress/results/output.xml"
-    },
-    "videoCompression": false
-}
