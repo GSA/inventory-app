@@ -1,11 +1,11 @@
 alembic==1.13.2
-async-timeout==4.0.3
+async-timeout==5.0.0
 attrs==24.2.0
 Babel==2.15.0
 bleach==6.1.0
 blinker==1.8.2
-boto3==1.35.38
-botocore==1.35.38
+boto3==1.35.53
+botocore==1.35.53
 cachelib==0.13.0
 certifi==2024.8.30
 cffi==1.17.1
@@ -22,7 +22,7 @@ ckanext-usmetadata==0.3.2
 -e git+https://github.com/ckan/ckanext-xloader.git@a96ce28c589dfe6b1b850d8eeeb14f1e1dfe9759#egg=ckanext_xloader
 ckantoolkit==0.0.7
 click==8.1.7
-cryptography==43.0.1
+cryptography==43.0.3
 defusedxml==0.7.1
 dominate==2.9.1
 elementpath==4.5.0
