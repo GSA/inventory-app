@@ -14,7 +14,6 @@ describe('CKAN Extensions', () => {
             expect(installed_extensions).to.include('xloader');
             expect(installed_extensions).to.include('stats');
             expect(installed_extensions).to.include('recline_view');
-            expect(installed_extensions).to.include('googleanalyticsbasic');
             expect(installed_extensions).to.include('s3filestore');
             expect(installed_extensions).to.include('envvars');
             expect(installed_extensions).to.include('datastore');

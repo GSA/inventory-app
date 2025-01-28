@@ -1,19 +1,16 @@
 describe('Dataset', () => {
 
     before(() => {
+        cy.create_token();
         cy.logout();
-        cy.login();
         cy.delete_organization('test-organization');
         cy.create_organization('test-organization', 'Test organization');
-    });
-
-    beforeEach(() => {
-        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan');
     });
     
     after(() => {
         cy.delete_dataset('test-dataset-1');
         cy.delete_organization('test-organization');
+        cy.revoke_token();
     });
 
     it('Creates dataset via API', () => {
@@ -25,32 +22,41 @@ describe('Dataset', () => {
     });
 
     it('Has a details page with core metadata', () => {
+        cy.login();
         cy.visit('/dataset/test-dataset-1');
         cy.contains('Test Dataset 1');
         cy.contains('DCAT-US Metadata');
     });
 
     it('Add resource to private dataset via API', () => {
+        const token_data = Cypress.env('token_data');
+        cy.logout();
         cy.fixture('ckan_resource.csv', 'binary').then((ckan_resource) => {
             // File in binary format gets converted to blob so it can be sent as Form data
             const blob = Cypress.Blob.binaryStringToBlob(ckan_resource)
             const formData = new FormData();
-            formData.set('upload', blob, 'ckan_resource.csv'); //adding a file to the form
-            formData.set('package_id', "test-dataset-1");
-            formData.set('name', "test-resource-1");
-            formData.set('resource_type', "CSV");
-            formData.set('format', "CSV");
-            cy.form_request('POST', '/api/action/resource_create', formData, function (response) {
+            formData.append('upload', blob, 'ckan_resource.csv'); //adding a file to the form
+            formData.append('package_id', "test-dataset-1");
+            formData.append('name', "test-resource-1");
+            formData.append('resource_type', "CSV");
+            formData.append('format', "CSV");
+            cy.request({
+                method: 'POST',
+                url: '/api/action/resource_create',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': token_data.api_token
+                }
+            }).then((response) => {
                 expect(response.status).to.eq(200);
             });
         });
-        cy.visit('/dataset');
     });
 
     it('Download resource file', () => {
+        cy.login();
         cy.visit('/dataset/test-dataset-1')
-        // Hide flask debug toolbar
-        cy.get('#flDebugHideToolBarButton').click();
         // Open resource dropdown
         cy.get('.dropdown-toggle').click()
         // Download resource file
@@ -62,9 +68,8 @@ describe('Dataset', () => {
     it('Download resource file', () => {
         // Test download as anonymous user
 
+        cy.login();
         cy.visit('/dataset/test-dataset-1')
-        // Hide flask debug toolbar
-        cy.get('#flDebugHideToolBarButton').click();
         // Open resource dropdown
         cy.get('.dropdown-toggle').click();
         // Download resource file

@@ -1,22 +1,25 @@
 describe('Organization', () => {
     before(() => {
+        cy.create_token();
+    })
+
+    beforeEach(() => {
         cy.login()
     })
-    beforeEach(() => {
-        Cypress.Cookies.preserveOnce('auth_tkt', 'ckan')
-    })
+
     after(() => {
         cy.delete_organization('cypress-test-org')
+        cy.revoke_token()
     })
 
     it('Create Organization', () => {
         cy.visit('/organization')
         cy.get('a[class="btn btn-primary"]').click()
         cy.create_organization_ui('cypress-test-org', 'cypress test description')
-        cy.visit('/organization/cypress-test-org')
     })
 
     it('Contains Organization Information', () => {
+        cy.visit('/organization/cypress-test-org')
         cy.contains('No datasets found')
         cy.contains('cypress test description')
         cy.contains('0')
@@ -25,9 +28,6 @@ describe('Organization', () => {
     
     it('Edit Organization Description', () => {
         cy.visit('/organization/edit/cypress-test-org')
-
-        // Hide flask debug toolbar
-        cy.get('#flDebugHideToolBarButton').click();
 
         cy.get('#field-description').clear()
         cy.get('#field-description').type('the new description')
