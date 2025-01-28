@@ -12,7 +12,11 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       return require('./cypress/plugins/index.js')(on, config)
     },
-    specPattern: 'cypress/integration/*.cy.js',
     baseUrl: 'http://ckan:5000',
+    specPattern: 'cypress/integration/*.cy.js',
+  },
+  retries: {
+    runMode: 2,
+    openMode: 0,
   },
 })

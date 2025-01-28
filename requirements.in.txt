@@ -4,7 +4,6 @@ git+https://github.com/GSA/ckanext-saml2auth.git@datagov#egg=ckanext-saml2auth
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
 -e git+https://github.com/ckan/ckanext-xloader.git@1.2.0#egg=ckanext-xloader
 
-ckanext-googleanalyticsbasic
 ckanext-usmetadata>=0.3.2
 ckanext-datajson>=0.1.19
 ckanext-dcat-usmetadata~=0.6.0

@@ -3,7 +3,7 @@ services:
     environment:
       - CKAN_SITE_URL=http://ckan:5000
   test:
-    image: cypress/included:7.3.0
+    image: cypress/included:12.17.2
     entrypoint: []
     command: /bin/bash -c "
       apt-get update && \
