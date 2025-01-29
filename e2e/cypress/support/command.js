@@ -102,7 +102,7 @@ Cypress.Commands.add('revoke_token', (tokenName) => {
             'Authorization': token_data.api_token,
             'Content-Type': 'application/json'
         },
-        body: '{"jti": "' + token_data.jti + '"}'
+        body: {jti: token_data.jti}
     });
 });
 
