@@ -125,6 +125,7 @@ def redirect_homepage():
 
 pusher.add_url_rule('/', view_func=redirect_homepage)
 
+
 @pusher.before_app_request
 def check_dataset_access():
     if toolkit.request.path in ('/dataset/', '/dataset'):
