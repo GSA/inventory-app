@@ -96,7 +96,6 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'package_search': restrict_anon_access,
                 'package_show': inventory_package_show,
                 'resource_show': inventory_resource_show,
-                'site_read': restrict_anon_access,
                 'tag_list': restrict_anon_access,
                 'tag_show': restrict_anon_access,
                 'task_status_show': restrict_anon_access,
