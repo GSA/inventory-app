@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ckan/ckan-dev:2.10.5-py3.10
+FROM ckan/ckan-dev:2.10.5-py3.10
 # Inherit from here: https://github.com/okfn/docker-ckan/blob/master/ckan-dev/2.10/Dockerfile
 # And then from here: https://github.com/okfn/docker-ckan/blob/master/ckan-base/2.10/Dockerfile
 
