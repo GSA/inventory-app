@@ -3,9 +3,12 @@ import 'cypress-file-upload';
 describe('DCAT-US Export', () => {
     const dataset_title = 'test-dataset-2';
 
+    before(() => {
+        cy.create_token();
+    });
+
     beforeEach(() => {
         cy.logout();
-        cy.login();
         cy.delete_dataset('test-dataset-1');
         cy.delete_dataset('test-dataset-2');
         cy.delete_dataset('test-sub-dataset-1');
@@ -44,9 +47,14 @@ describe('DCAT-US Export', () => {
             });
         });
         cy.exec('rm cypress/downloads/draft*', { failOnNonZeroExit: false });
+        cy.exec('rm cypress/downloads/redacted.zip', { failOnNonZeroExit: false });
+        cy.exec('rm cypress/downloads/data.json', { failOnNonZeroExit: false });
+
+        cy.login();
     });
 
-    afterEach(() => {
+    after(() => {
+        cy.logout();
         cy.delete_dataset('test-dataset-1');
         cy.delete_dataset('test-dataset-2');
         cy.delete_dataset('test-sub-dataset-1');
@@ -55,6 +63,9 @@ describe('DCAT-US Export', () => {
         cy.delete_organization('test-organization');
         cy.delete_organization('test-sub-organization');
         cy.exec('rm cypress/downloads/draft*', { failOnNonZeroExit: false });
+        cy.exec('rm cypress/downloads/redacted.zip', { failOnNonZeroExit: false });
+        cy.exec('rm cypress/downloads/data.json', { failOnNonZeroExit: false });
+        cy.revoke_token();
     });
 
     it('Can create a zip export of the organization drafts', () => {

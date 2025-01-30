@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "chance": "^1.1.8",
-    "cypress": "7.3.0",
     "cypress-downloadfile": "^1.2.1",
     "cypress-file-upload": "^5.0.8"
   },
@@ -24,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/gsa/inventory-app/issues"
   },
-  "homepage": "https://github.com/gsa/inventory-app#readme"
+  "homepage": "https://github.com/gsa/inventory-app#readme",
+  "devDependencies": {
+    "cypress": "^12.17.2"
+  }
 }

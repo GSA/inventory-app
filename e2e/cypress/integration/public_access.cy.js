@@ -1,7 +1,7 @@
 describe('Public Access', () => {
     before(() => {
+        cy.create_token();
         cy.logout();
-        cy.login();
         cy.delete_organization('test-organization');
         cy.create_organization('test-organization', 'Test organization');
         cy.fixture('ckan_dataset.json').then((ckan_dataset) => {
@@ -13,10 +13,9 @@ describe('Public Access', () => {
     });
 
     after(() => {
-        cy.login();
-        cy.wait(2000);
         cy.delete_dataset('test-dataset-1');
         cy.delete_organization('test-organization');
+        cy.revoke_token();
     });
 
     it('Cannot access the standard public pages', () => {
