@@ -1,10 +1,10 @@
 git+https://github.com/ckan/ckan.git@ckan-2.11.0#egg=ckan
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
-git+https://github.com/GSA/ckanext-saml2auth.git@datagov#egg=ckanext-saml2auth
+git+https://github.com/GSA/ckanext-saml2auth.git@ckan-2-11#egg=ckanext-saml2auth
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
 -e git+https://github.com/ckan/ckanext-xloader.git@1.2.0#egg=ckanext-xloader
 
-ckanext-usmetadata>=0.3.2
+ckanext-usmetadata>=0.3.3
 ckanext-datajson>=0.1.19
 ckanext-dcat-usmetadata~=0.6.0
 ckanext-envvars>=0.0.3
