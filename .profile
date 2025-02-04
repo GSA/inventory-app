@@ -81,7 +81,8 @@ export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(vcap_get_service s3 .creden
 export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.bucket)
 export CKANEXT__S3FILESTORE__AWS_STORAGE_PATH=datagov/inventory-next
 # xloader uses the same db as datastore
-export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service datastore .credentials.uri)
+export CKANEXT__XLOADER__API_TOKEN=$(vcap_get_service secrets .credentials.API_TOKEN)
+export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service db .credentials.uri)
 export CKANEXT__XLOADER__JOBS_DB__URI=${CKANEXT__XLOADER__JOBS_DB__URI/postgres/postgresql}
 
 # Write out any files and directories
