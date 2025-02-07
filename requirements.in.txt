@@ -107,3 +107,4 @@ MarkupSafe==2.*
 # avoid conflic dependencies issue
 greenlet>=3.1.1
 pip>=25.0
+ckan>=2.10.7
