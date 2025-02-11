@@ -26,6 +26,13 @@ describe('Public Access', () => {
         }).then((response) => {
             expect(response.status).to.eq(403);
         });
+
+        cy.request({
+            url: '/dataset/',
+            failOnStatusCode: false,
+        }).then((response) => {
+            expect(response.status).to.eq(403);
+        });
     });
 
     it('Cannot access the dataset pages', () => {

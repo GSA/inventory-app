@@ -96,7 +96,6 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'package_search': restrict_anon_access,
                 'package_show': inventory_package_show,
                 'resource_show': inventory_resource_show,
-                'site_read': restrict_anon_access,
                 'tag_list': restrict_anon_access,
                 'tag_show': restrict_anon_access,
                 'task_status_show': restrict_anon_access,
@@ -119,9 +118,16 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
 def redirect_homepage():
     if current_user.is_authenticated or g.user:
         CKAN_SITE_URL = config.get("ckan.site_url")
-        return redirect(CKAN_SITE_URL + '/dataset', code=302)
+        return redirect(CKAN_SITE_URL + '/dataset/', code=302)
     else:
         return base.render(u'error/anonymous.html')
 
 
 pusher.add_url_rule('/', view_func=redirect_homepage)
+
+
+@pusher.before_app_request
+def check_dataset_access():
+    if toolkit.request.path in ('/dataset/', '/dataset'):
+        if not current_user.is_authenticated and not g.user:
+            return base.render(u'error/anonymous.html'), 403

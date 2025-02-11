@@ -53,6 +53,7 @@ export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
 export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
+export CKAN___SECRET_KEY=$(vcap_get_service secrets .credentials.CKAN___SECRET_KEY)
 export CKAN___WTF_CSRF_SECRET_KEY=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 
@@ -80,7 +81,8 @@ export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(vcap_get_service s3 .creden
 export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.bucket)
 export CKANEXT__S3FILESTORE__AWS_STORAGE_PATH=datagov/inventory-next
 # xloader uses the same db as datastore
-export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service datastore .credentials.uri)
+export CKANEXT__XLOADER__API_TOKEN=$(vcap_get_service secrets .credentials.API_TOKEN)
+export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service db .credentials.uri)
 export CKANEXT__XLOADER__JOBS_DB__URI=${CKANEXT__XLOADER__JOBS_DB__URI/postgres/postgresql}
 
 # Write out any files and directories
