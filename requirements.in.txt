@@ -78,7 +78,6 @@ wheel==0.42.0
 # avoid ImportError error https://github.com/GSA/data.gov/issues/4396
 importlib-resources<6.0
 gevent>=24.10.1
-cryptography>42.0.4
 pip>=23.3
 
 pyparsing # need to avoid solr missing module error on cloud.gov
@@ -86,7 +85,6 @@ pyparsing # need to avoid solr missing module error on cloud.gov
 urllib3>=1.26.19
 
 certifi>=2024.7.4
-cryptography>=43.0.1
 setuptools~=71.0.3
 
 # Pin MarkupSafe to avoid button issue data.gov/issues/4954 for logged in user
@@ -94,3 +92,4 @@ setuptools~=71.0.3
 MarkupSafe==2.*
 
 pip>=25.0
+cryptography>=44.0.1
