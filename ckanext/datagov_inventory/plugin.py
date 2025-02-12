@@ -9,7 +9,7 @@ from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
 
-from flask import Blueprint, redirect
+from flask import Blueprint, redirect, session
 import logging
 import re
 
@@ -131,3 +131,9 @@ def check_dataset_access():
     if toolkit.request.path in ('/dataset/', '/dataset'):
         if not current_user.is_authenticated and not g.user:
             return base.render(u'error/anonymous.html'), 403
+
+
+@pusher.before_app_request
+def refresh_session():
+    """ Refresh session expiration time on each request """
+    session.modified = True
