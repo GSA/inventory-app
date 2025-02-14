@@ -32,7 +32,7 @@ describe('CKAN Token', () => {
             method: 'GET',
             url: '/api/action/package_search',
             headers: {
-                'Authorization': token_data.api_token
+                'X-CKAN-API-Key': token_data.api_token
             }
         }).then((response) => {
             expect(response.status).to.eq(200);
