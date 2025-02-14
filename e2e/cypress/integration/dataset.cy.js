@@ -46,7 +46,7 @@ describe('Dataset', () => {
                 body: formData,
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': token_data.api_token
+                    'X-CKAN-API-Key': token_data.api_token
                 }
             }).then((response) => {
                 expect(response.status).to.eq(200);

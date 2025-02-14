@@ -99,7 +99,7 @@ Cypress.Commands.add('revoke_token', (tokenName) => {
         url: '/api/3/action/api_token_revoke',
         method: 'POST',
         headers: {
-            'Authorization': token_data.api_token,
+            'X-CKAN-API-Key': token_data.api_token,
             'Content-Type': 'application/json'
         },
         body: {jti: token_data.jti}
@@ -141,7 +141,7 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc, extras = null) =>
         url: '/api/action/organization_create',
         method: 'POST',
         headers: {
-            'Authorization': token_data.api_token,
+            'X-CKAN-API-Key': token_data.api_token,
             'Content-Type': 'application/json'
         },
         body: {
@@ -180,7 +180,7 @@ Cypress.Commands.add('delete_organization', (orgName) => {
         method: 'POST',
         failOnStatusCode: false,
         headers: {
-            'Authorization': token_data.api_token,
+            'X-CKAN-API-Key': token_data.api_token,
             'Content-Type': 'application/json'
         },
         body: {
@@ -193,7 +193,7 @@ Cypress.Commands.add('delete_organization', (orgName) => {
         method: 'POST',
         failOnStatusCode: false,
         headers: {
-            'Authorization': token_data.api_token,
+            'X-CKAN-API-Key': token_data.api_token,
             'Content-Type': 'application/json'
         },
         body: {
@@ -215,7 +215,7 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
         method: 'POST',
         failOnStatusCode: false,
         headers: {
-            'Authorization': token_data.api_token,
+            'X-CKAN-API-Key': token_data.api_token,
             'Content-Type': 'application/json'
         },
         body: {
@@ -289,7 +289,7 @@ Cypress.Commands.add('create_dataset', (ckan_dataset) => {
         headers: {
             'cache-control': 'no-cache',
             'content-type': 'application/json',
-            'Authorization': token_data.api_token,
+            'X-CKAN-API-Key': token_data.api_token,
         },
         body: JSON.stringify(ckan_dataset),
     };

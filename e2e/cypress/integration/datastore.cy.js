@@ -19,7 +19,7 @@ describe('Datastore', () => {
             method: 'GET',
             url: '/api/3/action/datastore_search?resource_id=_table_metadata',
             headers: {
-                'Authorization': token_data.api_token
+                'X-CKAN-API-Key': token_data.api_token
             }
         }).should((response) => {
             expect(response.body).to.have.property('success', true)
@@ -40,7 +40,7 @@ describe('Datastore', () => {
                     'headers': {
                         'cache-control': 'no-cache',
                         'content-type': 'application/json',
-                        'Authorization': token_data.api_token
+                        'X-CKAN-API-Key': token_data.api_token
                     },
                     body: JSON.stringify({
                         "resource": {"package_id": response.body.result.id},
@@ -61,7 +61,7 @@ describe('Datastore', () => {
             method: 'GET',
             url: '/api/action/package_show?id=test-dataset-1',
             headers: {
-                'Authorization': token_data.api_token
+                'X-CKAN-API-Key': token_data.api_token
             }
         }).then((response) => {
             expect(response.body).to.have.property('success', true);
@@ -70,7 +70,7 @@ describe('Datastore', () => {
                 method: 'GET',
                 url: `/api/action/datastore_search?resource_id=${resource_id}`,
                 headers: {
-                    'Authorization': token_data.api_token
+                    'X-CKAN-API-Key': token_data.api_token
                 }
             }).should((response) => {
                 expect(response.body).to.have.property('success', true);
@@ -85,7 +85,7 @@ describe('Datastore', () => {
             method: 'GET',
             url: '/api/action/package_show?id=test-dataset-1',
             headers: {
-                'Authorization': token_data.api_token
+                'X-CKAN-API-Key': token_data.api_token
             }
         }).then((response) => {
             expect(response.body).to.have.property('success', true);
@@ -97,7 +97,7 @@ describe('Datastore', () => {
                 'headers': {
                     'cache-control': 'no-cache',
                     'content-type': 'application/json',
-                    'Authorization': token_data.api_token
+                    'X-CKAN-API-Key': token_data.api_token
                 },
                 body: JSON.stringify({
                     "resource_id": resource_id,
