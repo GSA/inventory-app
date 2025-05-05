@@ -84,7 +84,7 @@ pyparsing # need to avoid solr missing module error on cloud.gov
 urllib3>=1.26.19
 
 certifi>=2024.7.4
-setuptools>=80.3.1
+setuptools~=71.0.3
 
 # Pin MarkupSafe to avoid button issue data.gov/issues/4954 for logged in user
 # https://github.com/GSA/data.gov/issues/4954
