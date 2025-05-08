@@ -13,7 +13,7 @@ chardet==5.2.0
 charset-normalizer==3.4.2
 ckan @ git+https://github.com/ckan/ckan.git@5bd556eb4370614e0f87dea5aebea7abee42d0a6
 ckanext-datajson==0.1.28
-ckanext-dcat-usmetadata==0.6.2
+ckanext-dcat-usmetadata==0.6.3
 ckanext-envvars==0.0.6
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@caf88c0352ffe7b4432d3d55ddfb0a71249ceddd
 ckanext-saml2auth @ git+https://github.com/GSA/ckanext-saml2auth.git@99f35585c219a5cd39717b8c42cc54cdd959dfb4
