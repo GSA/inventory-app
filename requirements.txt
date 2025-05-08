@@ -11,7 +11,7 @@ certifi==2025.4.26
 cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.4.2
-ckan @ git+https://github.com/ckan/ckan.git@5bd556eb4370614e0f87dea5aebea7abee42d0a6
+ckan @ git+https://github.com/ckan/ckan.git@9714f3d8781719265039a26aad401d8057f92e67
 ckanext-datajson==0.1.28
 ckanext-dcat-usmetadata==0.6.2
 ckanext-envvars==0.0.6

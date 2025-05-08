@@ -1,4 +1,4 @@
-git+https://github.com/ckan/ckan.git@ckan-2.11.2#egg=ckan
+git+https://github.com/ckan/ckan.git@ckan-2.11.3#egg=ckan
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 git+https://github.com/GSA/ckanext-saml2auth.git@ckan-2-11-datagov#egg=ckanext-saml2auth
 git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestore
