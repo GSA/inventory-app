@@ -203,6 +203,96 @@ Cypress.Commands.add('delete_organization', (orgName) => {
 });
 
 
+Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
+    /**
+     * Method to create an user via CKAN API
+     * :RETURN null:
+     */
+    const token_data = Cypress.env('token_data');
+
+    let request_obj = {
+        url: '/api/action/user_create',
+        method: 'POST',
+        failOnStatusCode: false,
+        headers: {
+            'X-CKAN-API-Key': token_data.api_token,
+            'Content-Type': 'application/json'
+        },
+        body: {
+            name: userName,
+            email: userEmail,
+            password: userPassword
+        },
+    };
+
+    cy.request(request_obj).then((response) => {
+        if (response.status === 409 && response.body.error.name.includes("That login name is not available.")) {
+            cy.log("User already exists. Make sure it is active");
+            request_obj.url = '/api/action/user_patch';
+            request_obj.failOnStatusCode = true;
+            request_obj.body = {
+                id: userName,
+                email: userEmail,
+                state: "active"
+            }
+            cy.request(request_obj);
+        }
+    });
+
+});
+
+
+Cypress.Commands.add('assign_user', (orgName, userName, userRole) => {
+    /**
+     * Method to assign an organization role to an user via CKAN API
+     * :RETURN null:
+     */
+    const token_data = Cypress.env('token_data');
+
+    let request_obj = {
+        url: '/api/action/organization_member_create',
+        method: 'POST',
+        failOnStatusCode: true,
+        headers: {
+            'X-CKAN-API-Key': token_data.api_token,
+            'Content-Type': 'application/json'
+        },
+        body: {
+            id: orgName,
+            username: userName,
+            role: userRole
+        },
+    };
+
+    cy.request(request_obj);
+
+});
+
+
+Cypress.Commands.add('delete_user', (userName) => {
+    /**
+     * Method to delete an user via CKAN API
+     * :RETURN null:
+     */
+    const token_data = Cypress.env('token_data');
+
+    let request_obj = {
+        method: 'POST',
+        headers: {
+            'X-CKAN-API-Key': token_data.api_token,
+            'Content-Type': 'application/json'
+        },
+        body: {
+            id: userName
+        },
+    };
+
+    request_obj.url = '/api/action/user_delete'
+    cy.request(request_obj);
+
+});
+
+
 Cypress.Commands.add('delete_dataset', (datasetName) => {
     /**
      * Method to purge a dataset from the current state
@@ -222,63 +312,6 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
             id: datasetName,
         },
     });
-});
-
-Cypress.Commands.add(
-    'create_harvest_source',
-    (dataSourceUrl, harvestTitle, harvestDesc, harvestType, org, harvestTest, invalidTest) => {
-        /**
-         * Method to create a new CKAN harvest source via the CKAN harvest form
-         * :PARAM dataSourceUrl String: URL to source the data that will be harvested
-         * :PARAM harvestTitle String: Title of the organization's harvest
-         * :PARAM harvestDesc String: Description of the harvest being created
-         * :PARAM harvestType String: Harvest source type. Ex: waf, datajson
-         * :PARAM org String: Organization that is creating the harvest source
-         * :PARAM harvestTest Boolean: Determines if to use UI in harvest source creation test or to follow the UI to create a source
-         * :RETURN null:
-         */
-        if (!harvestTest) {
-            cy.visit('/harvest/new');
-        }
-        if (!invalidTest) {
-            cy.get('#field-url').type(dataSourceUrl);
-        }
-        cy.get('#field-title').type(harvestTitle);
-        cy.get('#field-name').then(($field_name) => {
-            if ($field_name.is(':visible')) {
-                $field_name.type(harvestTitle);
-            }
-        });
-
-        cy.get('#field-notes').type(harvestDesc);
-        cy.get('[type="radio"]').check(harvestType);
-        if (harvestType == 'waf') {
-            //cy.get('#text').then($text => {
-            //    if($text.val() == 'Validation'){
-            //
-            //    }
-            //})
-            cy.get('[type="radio"]').check('iso19139ngdc');
-        }
-
-        // Set harvest to be public always, per best practices
-        cy.get('#field-private_datasets').select('False');
-
-        cy.get('input[name=save]').click();
-    }
-);
-
-Cypress.Commands.add('delete_harvest_source', (harvestName) => {
-    cy.visit('/harvest/admin/' + harvestName);
-    cy.contains('Clear').click({ force: true });
-    cy.visit('/harvest/delete/' + harvestName + '?clear=True');
-});
-
-Cypress.Commands.add('start_harvest_job', (harvestName) => {
-    cy.visit('/harvest/' + harvestName);
-    cy.contains('Admin').click();
-    cy.get('.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle)').click({ force: true });
-    verify_element_exists();
 });
 
 Cypress.Commands.add('create_dataset', (ckan_dataset) => {
