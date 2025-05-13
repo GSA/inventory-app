@@ -30,8 +30,10 @@ describe('Dataset', () => {
         cy.login('an_editor', userPassword);
         cy.contains('an_editor');
         cy.visit('/dataset/test-dataset-1');
-        cy.visit('/dataset/edit-new/test-dataset-1');
+        cy.contains('Edit').click();
+        cy.url().should('include', '/dataset/edit-new/test-dataset-1');
         cy.contains('Save and Continue').click();
+        cy.url().should('include', '/dataset/edit-new/test-dataset-1');
         cy.logout();
     });
 

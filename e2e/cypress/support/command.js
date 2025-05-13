@@ -232,6 +232,7 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
             request_obj.failOnStatusCode = true;
             request_obj.body = {
                 id: userName,
+                password: userPassword,
                 email: userEmail,
                 state: "active"
             }
