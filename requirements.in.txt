@@ -92,4 +92,4 @@ MarkupSafe==2.*
 pip>=25.0
 cryptography>=44.0.1
 jinja2>=3.1.6
-requests>=2.32.4
+requests==2.32.4
