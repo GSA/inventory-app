@@ -2,7 +2,7 @@
 
 future
 flake8
-pytest
+pytest==8.3.5
 pytest-ckan
 pytest-cov
 
