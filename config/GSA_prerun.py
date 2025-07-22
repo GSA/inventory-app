@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import requests
+import ast
 try:
     from urllib.error import URLError
 except ImportError:
@@ -35,8 +36,8 @@ def check_solr_connection(retry=None):
     else:
         try:
             pythonified = str(connection.text).replace('true', 'True')
-            eval(pythonified)
-        except TypeError:
+            ast.literal_eval(pythonified)
+        except (ValueError, SyntaxError):
             pass
 
 
