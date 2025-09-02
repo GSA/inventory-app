@@ -1,6 +1,5 @@
 -e /app
 
-future
 flake8
 pytest==8.3.5
 pytest-ckan
