@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 2
       - name: Get changed files using defaults
         id: changed-files
-        uses: tj-actions/changed-files@v46
+        uses: tj-actions/changed-files@v47
       - name: Check if inventory_publishers has changed
         if: contains(steps.changed-files.outputs.modified_files, 'config/data/inventory_publishers.csv')
         run: |
@@ -55,7 +55,7 @@ jobs:
           fetch-depth: 2
       - name: Get changed files using defaults
         id: changed-files
-        uses: tj-actions/changed-files@v46
+        uses: tj-actions/changed-files@v47
       - name: Check if inventory_publishers has changed
         if: contains(steps.changed-files.outputs.modified_files, 'config/data/inventory_publishers.csv')
         run: |
