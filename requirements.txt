@@ -92,11 +92,11 @@ typing_extensions==4.12.2
 tzlocal==5.2
 unicodecsv==0.14.1
 Unidecode==1.0.22
-urllib3==2.6.2
+urllib3==2.6.3
 watchdog==6.0.0
 webassets==2.0
 webencodings==0.5.1
-Werkzeug==3.1.4
+Werkzeug==3.1.5
 wheel==0.42.0
 WTForms==3.2.1
 xlrd==2.0.2
