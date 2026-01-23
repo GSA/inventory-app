@@ -97,7 +97,7 @@ watchdog==6.0.0
 webassets==2.0
 webencodings==0.5.1
 Werkzeug==3.1.5
-wheel==0.42.0
+wheel==0.46.2
 WTForms==3.2.1
 xlrd==2.0.2
 xmlschema==4.2.0
