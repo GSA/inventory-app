@@ -25,6 +25,6 @@
   },
   "homepage": "https://github.com/gsa/inventory-app#readme",
   "devDependencies": {
-    "cypress": "^12.17.2"
+    "cypress": "^13.0.0"
   }
 }

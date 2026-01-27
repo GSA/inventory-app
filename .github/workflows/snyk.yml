@@ -1,23 +1,29 @@
 ---
-name: Check for Snyk Vulnerabilities
+name: Snyk Security
 
-on:   # yamllint disable-line rule:truthy
-  pull_request:
-    branches:
-      - main
+on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *'  # every day at 12pm UTC
+    # Run weekly on Sundays at 2:00 AM EST (7:00 AM UTC)
+    - cron: '0 7 * * 0'
+  push:
+    branches:
+      - main
 
 jobs:
-  snyk:
+  snyk-test:
     name: snyk test
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    permissions:
+      contents: write
+      pull-requests: write
+      security-events: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python 3.10
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.10.14
           cache: 'pip'
@@ -63,7 +69,7 @@ jobs:
       - name: Create Pull Request
         if: ${{ failure() }}
         id: scpr
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: Update Pip Requirements
           signoff: false
@@ -83,3 +89,40 @@ jobs:
             snyk
           draft: false
           # yamllint enable rule:line-length
+
+  snyk-monitor:
+    name: snyk monitor
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.10.14
+          cache: 'pip'
+
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Install Dependencies
+        run: |
+          npm install snyk -g
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            openssl libssl-dev libffi-dev pkg-config libxml2-dev \
+            libxmlsec1-dev libxmlsec1-openssl libgeos-dev proj-bin \
+            libpq-dev
+          pip3 install -r requirements.txt
+
+      - name: Run Snyk Monitor
+        run: |
+          # Authenticate with Snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+
+          # Run snyk monitor to track dependencies
+          snyk monitor --file=requirements.txt
