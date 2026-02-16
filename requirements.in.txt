@@ -45,7 +45,7 @@ rq==1.16.2
 simplejson==3.19.2
 SQLAlchemy[mypy]==1.4.52
 sqlparse==0.5.4
-typing_extensions==4.12.2
+typing_extensions>=4.13.2
 tzlocal==5.2
 webassets==2.0
 Werkzeug[watchdog]==3.1.5
@@ -87,7 +87,7 @@ setuptools~=78.1.1
 # https://github.com/GSA/data.gov/issues/4954
 MarkupSafe==2.*
 
-cryptography>=44.0.1
+cryptography>=46.0.5
 jinja2>=3.1.6
 requests==2.32.4
 urllib3>=2.5.0
