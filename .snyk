@@ -4,19 +4,11 @@ language-settings:
   python: "3.10"
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-PYTHON-CKAN-13774796:
+  SNYK-PYTHON-CKAN-16322869:
     - '*':
         reason: >-
-          postponing in favor of new catalog development/release
-        expires: 2026-01-29T05:30:00.000Z
-        created: 2025-11-10T12:15:00.000Z
-
-  SNYK-PYTHON-CKAN-13774801:
-    - '*':
-        reason: >-
-          postponing in favor of new catalog development/release
-        expires: 2026-01-29T05:30:00.000Z
-        created: 2025-11-10T12:15:00.000Z
+          Ticket created https://github.com/GSA/data.gov/issues/5941
+        expires: 2026-06-04T05:30:00.000Z
 patch: {}
 # specify the directories or files to be excludeed from import:
 exclude:
