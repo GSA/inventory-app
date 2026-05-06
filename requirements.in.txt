@@ -12,7 +12,8 @@ newrelic
 gunicorn
 
 # CKAN core library dependency upgrade pin
-lxml==4.9.1
+# lxml==4.9.1
+lxml>=6.1.0
 # bleach==3.3.0
 # Jinja2==2.11.3
 
