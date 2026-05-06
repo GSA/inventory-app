@@ -6,9 +6,6 @@ on:
   schedule:
     # Run weekly on Sundays at 2:00 AM EST (7:00 AM UTC)
     - cron: '0 7 * * 0'
-  push:
-    branches:
-      - main
 
 jobs:
   snyk-test:
@@ -89,40 +86,3 @@ jobs:
             snyk
           draft: false
           # yamllint enable rule:line-length
-
-  snyk-monitor:
-    name: snyk monitor
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.10.14
-          cache: 'pip'
-
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-
-      - name: Install Dependencies
-        run: |
-          npm install snyk -g
-          sudo apt-get update -y
-          sudo apt-get install -y \
-            openssl libssl-dev libffi-dev pkg-config libxml2-dev \
-            libxmlsec1-dev libxmlsec1-openssl libgeos-dev proj-bin \
-            libpq-dev
-          pip3 install -r requirements.txt
-
-      - name: Run Snyk Monitor
-        run: |
-          # Authenticate with Snyk
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-
-          # Run snyk monitor to track dependencies
-          snyk monitor --file=requirements.txt
