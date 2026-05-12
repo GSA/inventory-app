@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   create-cloudgov-services-staging:
     name: create services (staging)
