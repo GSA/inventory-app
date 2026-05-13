@@ -69,9 +69,9 @@ export CKAN_DATASTORE_WRITE_URL=${CKAN_DATASTORE_WRITE_URL/postgres/postgresql}
 export CKAN_DATASTORE_READ_URL=postgresql://$DS_RO_USER:$DS_RO_PASSWORD@$DS_HOST:$DS_PORT/$DS_DBNAME
 export CKAN_REDIS_URL=rediss://:$REDIS_PASSWORD@$REDIS_HOST:$REDIS_PORT
 export CKAN_STORAGE_PATH=${SHARED_DIR}/files
-export CKAN_SOLR_BASE_URL=https://$(vcap_get_service solr .credentials.domain)
-export CKAN_SOLR_USER=$(vcap_get_service solr .credentials.username)
-export CKAN_SOLR_PASSWORD=$(vcap_get_service solr .credentials.password)
+# export CKAN_SOLR_BASE_URL=https://$(vcap_get_service solr .credentials.domain)
+# export CKAN_SOLR_USER=$(vcap_get_service solr .credentials.username)
+# export CKAN_SOLR_PASSWORD=$(vcap_get_service solr .credentials.password)
 
 # Use ckanext-envvars to import other configurations...
 export CKANEXT__S3FILESTORE__REGION_NAME=$(vcap_get_service s3 .credentials.region)
@@ -93,11 +93,11 @@ echo "$SAML2_CERTIFICATE" > $CKANEXT__SAML2AUTH__CERT_FILE_PATH
 # Update local path with full path
 export CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH="${HOME}/${CKANEXT__SAML2AUTH__IDP_METADATA__LOCAL_PATH}"
 
-# Set up the collection in Solr
-echo Setting up Solr collection
-export SOLR_COLLECTION=ckan
-# ./solr/migrate-solrcloud-schema.sh $SOLR_COLLECTION
-export CKAN_SOLR_URL=$CKAN_SOLR_BASE_URL/solr/$SOLR_COLLECTION
+# # Set up the collection in Solr
+# echo Setting up Solr collection
+# export SOLR_COLLECTION=ckan
+# # ./solr/migrate-solrcloud-schema.sh $SOLR_COLLECTION
+export CKAN_SOLR_URL=http://placeholder-value.local
 
 # Edit the config file to validate debug is off and utilizes the correct port
 export CKAN_INI="${HOME}/config/ckan.ini"
