@@ -8,6 +8,9 @@ on:
     types:
       - completed
 
+permissions:
+  contents: read
+
 jobs:
   update-publishers-staging:
     name: Update Publishers (Staging)

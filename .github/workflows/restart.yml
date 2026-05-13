@@ -6,6 +6,9 @@ on:  # yamllint disable-line rule:truthy
   schedule:
     - cron: '7/15 * * * *'  # every 15 mins
 
+permissions:
+  contents: read
+
 jobs:
   restart-staging:
     name: restart (staging)

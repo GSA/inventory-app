@@ -4,6 +4,9 @@ name: commit
 on:
   push:
 
+permissions:
+  contents: read
+
 
 jobs:
   lint:
