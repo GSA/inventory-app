@@ -52,9 +52,26 @@ export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 # We need the secret credentials for various application components (DB configuration, license keys, etc)
 DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
-export CKAN___BEAKER__SESSION__SECRET=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
-export CKAN___SECRET_KEY=$(vcap_get_service secrets .credentials.CKAN___SECRET_KEY)
-export CKAN___WTF_CSRF_SECRET_KEY=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
+
+
+# required secrets
+beaker_secret=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
+ckan_secret=$(vcap_get_service secrets .credentials.CKAN___SECRET_KEY)
+csrf_secret=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
+
+for secret_name in beaker_secret ckan_secret csrf_secret; do
+  secret_value="${!secret_name}"
+  if [ -z "$secret_value" ] || [ "$secret_value" = "null" ]; then
+    echo "$secret_name is not found in secrets" >&2
+    exit 1
+  fi
+done
+
+export CKAN___BEAKER__SESSION__SECRET=$beaker_secret
+export CKAN___SECRET_KEY=$ckan_secret
+export CKAN___WTF_CSRF_SECRET_KEY=$csrf_secret
+
+
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 
 # Get sysadmins list by a user-provided-service per environment
