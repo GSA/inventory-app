@@ -10,11 +10,16 @@
       th button {
         background: transparent;
         border: 0;
+        color: #005ea8;
         cursor: pointer;
         font: inherit;
         font-weight: bold;
         padding: 0;
+        text-decoration: underline;
       }
+      th.sortable { background: #e7f6ff; }
+      th.sortable button:hover,
+      th.sortable button:focus { color: #1a4480; }
       tr:nth-child(even) { background: #fafafa; }
       h2 { margin-top: 2rem; }
     </style>
@@ -30,7 +35,7 @@
             {% for label in section.labels %}
               {% set column = section.columns[loop.index0] %}
               {% if section.sortable and column in ('user', 'organization') %}
-                <th data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
+                <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
                   <button type="button">{{ label }}</button>
                 </th>
               {% else %}
