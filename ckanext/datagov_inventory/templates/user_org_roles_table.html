@@ -30,12 +30,12 @@
 
     {% for section in sections %}
       <h2>{{ section.title }}</h2>
-      <table{% if section.sortable %} data-section="with-org"{% endif %}>
+      <table{% if section.sortable %} data-sortable-table{% endif %}>
         <thead>
           <tr>
             {% for label in section.labels %}
               {% set column = section.columns[loop.index0] %}
-              {% if section.sortable and column in ('user', 'organization') %}
+              {% if section.sortable and column in ('user', 'email', 'organization', 'role') %}
                 <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
                   <button type="button">{{ label }}</button>
                 </th>
@@ -69,19 +69,11 @@
 
     <script>
       (function () {
-        var table = document.querySelector('table[data-section="with-org"]');
-        if (!table) {
-          return;
-        }
-
-        var sortState = { index: 0, direction: 'asc' };
-        var buttons = table.querySelectorAll('th[data-sort-index] button');
-
         function cellText(row, index) {
           return row.children[index].textContent.trim().toLowerCase();
         }
 
-        function updateHeaders() {
+        function updateHeaders(buttons, sortState) {
           buttons.forEach(function (button) {
             var th = button.closest('th');
             var indicator = '';
@@ -92,7 +84,7 @@
           });
         }
 
-        function sortTable(index) {
+        function sortTable(table, buttons, sortState, index) {
           if (sortState.index === index) {
             sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
           } else {
@@ -111,15 +103,25 @@
           rows.forEach(function (row) {
             tbody.appendChild(row);
           });
-          updateHeaders();
+          updateHeaders(buttons, sortState);
         }
 
-        buttons.forEach(function (button) {
-          button.addEventListener('click', function () {
-            sortTable(Number(button.closest('th').dataset.sortIndex));
+        document.querySelectorAll('table[data-sortable-table]').forEach(function (table) {
+          var sortState = { index: 0, direction: 'asc' };
+          var buttons = table.querySelectorAll('th[data-sort-index] button');
+
+          buttons.forEach(function (button) {
+            button.addEventListener('click', function () {
+              sortTable(
+                table,
+                buttons,
+                sortState,
+                Number(button.closest('th').dataset.sortIndex)
+              );
+            });
           });
+          updateHeaders(buttons, sortState);
         });
-        updateHeaders();
       }());
     </script>
   </body>

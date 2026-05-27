@@ -181,7 +181,8 @@ def user_org_roles_table_sections(users):
                                 ['user', 'email', 'organization', 'role'],
                                 sortable=True),
         _user_org_roles_section('User without orgs', users_without_orgs,
-                                ['user', 'email']),
+                                ['user', 'email'],
+                                sortable=True),
     ]
 
 
@@ -229,11 +230,25 @@ def _user_org_roles_row_values(user, organization, columns):
     return [
         {
             'value': values[column],
-            'url': _organization_manage_members_url(organization)
-            if column == 'organization' else '',
+            'url': _user_org_roles_cell_url(column, user, organization),
         }
         for column in columns
     ]
+
+
+def _user_org_roles_cell_url(column, user, organization):
+    if column == 'user':
+        return _user_url(user)
+    if column == 'organization':
+        return _organization_manage_members_url(organization)
+    return ''
+
+
+def _user_url(user):
+    name = user['name'] or ''
+    if not name:
+        return ''
+    return '/user/{}'.format(quote(name))
 
 
 def _organization_manage_members_url(organization):
