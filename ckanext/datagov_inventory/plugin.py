@@ -1,6 +1,7 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
+import ckan.model as model
 from ckan.model import User
 from ckan.common import _, g, current_user, request as ckan_request
 import ckan.lib.base as base
@@ -136,6 +137,91 @@ def redirect_homepage():
 
 
 pusher.add_url_rule('/', view_func=redirect_homepage)
+
+
+def user_org_roles_table():
+    context = {
+        'model': model,
+        'ignore_auth': False,
+        'user': g.user,
+    }
+    try:
+        users = toolkit.get_action('user_org_roles')(context, {})
+    except logic.NotAuthorized:
+        toolkit.abort(403, _('Not authorized to list user organization roles'))
+
+    return base.render(
+        u'user_org_roles_table.html',
+        {'sections': user_org_roles_table_sections(users)}
+    )
+
+
+pusher.add_url_rule(
+    '/api/action/user_org_roles_table',
+    view_func=user_org_roles_table
+)
+
+
+def user_org_roles_table_sections(users):
+    sysadmins = [user for user in users if user['sysadmin']]
+    users_with_orgs = [
+        user for user in users if not user['sysadmin'] and user['organizations']
+    ]
+    users_without_orgs = [
+        user for user in users if not user['sysadmin'] and not user['organizations']
+    ]
+
+    return [
+        _user_org_roles_section('Sysadmin', sysadmins,
+                                ['user', 'email', 'organization', 'role']),
+        _user_org_roles_section('User with org', users_with_orgs,
+                                ['user', 'email', 'organization', 'role'],
+                                sortable=True),
+        _user_org_roles_section('User without orgs', users_without_orgs,
+                                ['user', 'email']),
+    ]
+
+
+def _user_org_roles_section(title, users, columns, sortable=False):
+    rows = []
+    for user in users:
+        organizations = user['organizations'] or [{
+            'name': '',
+            'title': '',
+            'role': '',
+        }]
+        for organization in organizations:
+            rows.append(_user_org_roles_row_values(user, organization, columns))
+
+    return {
+        'title': title,
+        'columns': columns,
+        'labels': _user_org_roles_column_labels(columns),
+        'rows': rows,
+        'sortable': sortable,
+    }
+
+
+def _user_org_roles_column_labels(columns):
+    labels = {
+        'user': 'User',
+        'email': 'Email',
+        'sysadmin': 'Sysadmin',
+        'organization': 'Organization',
+        'role': 'Role',
+    }
+    return [labels[column] for column in columns]
+
+
+def _user_org_roles_row_values(user, organization, columns):
+    values = {
+        'user': user['name'] or '',
+        'email': user['email'] or '',
+        'sysadmin': 'yes' if user['sysadmin'] else 'no',
+        'organization': organization['name'] or '',
+        'role': organization['role'] or '',
+    }
+    return [values[column] for column in columns]
 
 
 @pusher.before_app_request
