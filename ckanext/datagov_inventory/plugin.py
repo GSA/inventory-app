@@ -176,12 +176,14 @@ def user_org_roles_table_sections(users):
 
     return [
         _user_org_roles_section('Sysadmin', sysadmins,
-                                ['user', 'email', 'organization', 'role']),
+                                ['user', 'email', 'last_active',
+                                 'organization', 'role']),
         _user_org_roles_section('User with org', users_with_orgs,
-                                ['user', 'email', 'organization', 'role'],
+                                ['user', 'email', 'last_active',
+                                 'organization', 'role'],
                                 sortable=True),
         _user_org_roles_section('User without orgs', users_without_orgs,
-                                ['user', 'email'],
+                                ['user', 'email', 'last_active'],
                                 sortable=True),
     ]
 
@@ -212,6 +214,7 @@ def _user_org_roles_column_labels(columns):
     labels = {
         'user': 'User',
         'email': 'Email',
+        'last_active': 'Last Active',
         'sysadmin': 'Sysadmin',
         'organization': 'Organization',
         'role': 'Role',
@@ -223,6 +226,7 @@ def _user_org_roles_row_values(user, organization, columns):
     values = {
         'user': user['name'] or '',
         'email': user['email'] or '',
+        'last_active': user['last_active'] or '',
         'sysadmin': 'yes' if user['sysadmin'] else 'no',
         'organization': organization['name'] or '',
         'role': organization['role'] or '',

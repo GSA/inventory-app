@@ -469,6 +469,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
 
         users = {user['name']: user for user in result}
         assert users['sysadmin']['sysadmin'] is True
+        assert 'last_active' in users['sysadmin']
         assert users['gsa_admin']['organizations'][0]['name'] == 'gsa'
         assert users['gsa_admin']['organizations'][0]['role'] == 'admin'
         assert users['gsa_editor']['organizations'][0]['role'] == 'editor'

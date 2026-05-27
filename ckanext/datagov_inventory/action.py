@@ -23,11 +23,18 @@ def user_org_roles(context, data_dict):
             'name': user.name,
             'fullname': user.fullname,
             'email': user.email,
+            'last_active': _format_datetime(user.last_active),
             'sysadmin': user.sysadmin,
             'organizations': organizations,
         })
 
     return sorted(result, key=_user_sort_key)
+
+
+def _format_datetime(value):
+    if not value:
+        return ''
+    return value.replace(microsecond=0).isoformat(sep=' ')
 
 
 def _org_roles_by_user():

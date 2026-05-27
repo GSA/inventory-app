@@ -35,7 +35,7 @@
           <tr>
             {% for label in section.labels %}
               {% set column = section.columns[loop.index0] %}
-              {% if section.sortable and column in ('user', 'email', 'organization', 'role') %}
+              {% if section.sortable and column in ('user', 'email', 'last_active', 'organization', 'role') %}
                 <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
                   <button type="button">{{ label }}</button>
                 </th>
