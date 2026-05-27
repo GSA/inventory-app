@@ -14,6 +14,7 @@ from ckanext.datagov_inventory import action
 from flask import Blueprint, redirect, session
 import logging
 import re
+from urllib.parse import quote
 
 log = logging.getLogger(__name__)
 pusher = Blueprint('datagov_inventory', __name__)
@@ -221,7 +222,21 @@ def _user_org_roles_row_values(user, organization, columns):
         'organization': organization['name'] or '',
         'role': organization['role'] or '',
     }
-    return [values[column] for column in columns]
+    return [
+        {
+            'value': values[column],
+            'url': _organization_manage_members_url(organization)
+            if column == 'organization' else '',
+        }
+        for column in columns
+    ]
+
+
+def _organization_manage_members_url(organization):
+    name = organization['name'] or ''
+    if not name:
+        return ''
+    return '/organization/manage_members/{}'.format(quote(name))
 
 
 @pusher.before_app_request

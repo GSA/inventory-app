@@ -20,6 +20,7 @@
       th.sortable { background: #e7f6ff; }
       th.sortable button:hover,
       th.sortable button:focus { color: #1a4480; }
+      td a { color: #005ea8; }
       tr:nth-child(even) { background: #fafafa; }
       h2 { margin-top: 2rem; }
     </style>
@@ -47,8 +48,14 @@
         <tbody>
           {% for row in section.rows %}
             <tr>
-              {% for value in row %}
-                <td>{{ value }}</td>
+              {% for cell in row %}
+                <td>
+                  {% if cell.url %}
+                    <a href="{{ cell.url }}">{{ cell.value }}</a>
+                  {% else %}
+                    {{ cell.value }}
+                  {% endif %}
+                </td>
               {% endfor %}
             </tr>
           {% else %}
