@@ -72,6 +72,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
 
         # Create test users
         self.test_users = {
+            'sysadmin': factories.Sysadmin(name='sysadmin'),
             'gsa_admin': factories.User(name='gsa_admin'),
             'gsa_editor': factories.User(name='gsa_editor'),
             'gsa_member': factories.User(name='gsa_member'),
@@ -365,6 +366,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         self.setup_test_orgs_users()
 
         self.assert_user_authorization('user_list', {
+            'sysadmin': is_allowed,
             'gsa_admin': is_allowed,
             'gsa_editor': is_allowed,
             'gsa_member': is_allowed,
@@ -384,6 +386,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         self.setup_test_orgs_users()
 
         self.assert_user_authorization('user_show', {
+            'sysadmin': is_allowed,
             'gsa_admin': is_allowed,
             'gsa_editor': is_allowed,
             'gsa_member': is_allowed,
@@ -439,3 +442,40 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         with self.app.flask_app.test_request_context(test_url):
             assert inventory_package_show(context,
                                           data_dict) == {'success': False}
+
+    def test_auth_user_org_roles(self):
+        self.setup_test_orgs_users()
+
+        self.assert_user_authorization('user_org_roles', {
+            'sysadmin': is_allowed,
+            'gsa_admin': is_denied,
+            'gsa_editor': is_denied,
+            'gsa_member': is_denied,
+            'doi_admin': is_denied,
+            'doi_member': is_denied,
+            'anonymous': is_denied
+        })
+
+    def test_user_org_roles(self):
+        self.setup_test_orgs_users()
+        factories.User(name='no_org_user')
+
+        context = {
+            'model': model,
+            'ignore_auth': False,
+            'user': self.test_users['sysadmin']['name']
+        }
+        result = helpers.call_action('user_org_roles', context=context)
+
+        users = {user['name']: user for user in result}
+        assert users['sysadmin']['sysadmin'] is True
+        assert users['gsa_admin']['organizations'][0]['name'] == 'gsa'
+        assert users['gsa_admin']['organizations'][0]['role'] == 'admin'
+        assert users['gsa_editor']['organizations'][0]['role'] == 'editor'
+        assert users['doi_member']['organizations'][0]['role'] == 'member'
+        assert users['no_org_user']['organizations'] == []
+
+        assert result.index(users['sysadmin']) < result.index(
+            users['gsa_admin'])
+        assert result.index(users['gsa_member']) < result.index(
+            users['no_org_user'])

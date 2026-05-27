@@ -8,6 +8,7 @@ from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
+from ckanext.datagov_inventory import action
 
 from flask import Blueprint, redirect, session
 import logging
@@ -81,8 +82,15 @@ def inventory_package_show(context, data_dict):
         return package_show(context, data_dict)
 
 
+def user_org_roles(context, data_dict):
+    if authz.is_sysadmin(context.get('user')):
+        return {'success': True}
+    return {'success': False}
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
+    plugins.implements(plugins.IActions)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
 
@@ -100,10 +108,14 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'tag_show': restrict_anon_access,
                 'task_status_show': restrict_anon_access,
                 'user_list': restrict_anon_access,
+                'user_org_roles': user_org_roles,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
                 'vocabulary_show': restrict_anon_access,
                 }
+
+    def get_actions(self):
+        return {'user_org_roles': action.user_org_roles}
 
     # render our custom 403 template
     def update_config(self, config):
