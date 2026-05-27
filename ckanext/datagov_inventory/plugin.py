@@ -166,10 +166,12 @@ pusher.add_url_rule(
 def user_org_roles_table_sections(users):
     sysadmins = [user for user in users if user['sysadmin']]
     users_with_orgs = [
-        user for user in users if not user['sysadmin'] and user['organizations']
+        user for user in users
+        if not user['sysadmin'] and user['organizations']
     ]
     users_without_orgs = [
-        user for user in users if not user['sysadmin'] and not user['organizations']
+        user for user in users
+        if not user['sysadmin'] and not user['organizations']
     ]
 
     return [
@@ -192,7 +194,9 @@ def _user_org_roles_section(title, users, columns, sortable=False):
             'role': '',
         }]
         for organization in organizations:
-            rows.append(_user_org_roles_row_values(user, organization, columns))
+            rows.append(
+                _user_org_roles_row_values(user, organization, columns)
+            )
 
     return {
         'title': title,
