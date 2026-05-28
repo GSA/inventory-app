@@ -43,6 +43,30 @@ describe('User organization roles', () => {
             .should('exist');
         cy.get('article.user-org-roles .user-org-roles-section')
             .each(($section) => {
+                const sectionId = $section.attr('id');
+
+                cy.wrap($section)
+                    .find('h2 span')
+                    .invoke('text')
+                    .then((text) => {
+                        const match = text.match(/^(\d+)\s+rows$/);
+                        expect(match, `row count for ${sectionId}`).to.not.be.null;
+
+                        const rowCount = Number(match[1]);
+                        cy.get(`.user-org-roles-summary a[href="#${sectionId}"]`)
+                            .should('contain', `${rowCount} rows`);
+
+                        cy.wrap($section)
+                            .find('tbody tr')
+                            .then(($rows) => {
+                                if (rowCount === 0) {
+                                    expect($rows).to.have.length(1);
+                                    expect($rows.eq(0)).to.contain('No users');
+                                } else {
+                                    expect($rows).to.have.length(rowCount);
+                                }
+                            });
+                    });
                 cy.wrap($section)
                     .contains('a', 'Go to top')
                     .should('have.attr', 'href', '#user-org-roles-top');
