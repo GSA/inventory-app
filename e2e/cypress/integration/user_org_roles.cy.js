@@ -36,8 +36,17 @@ describe('User organization roles', () => {
         cy.get('.user-org-roles-summary')
             .contains('a', 'Users without organizations')
             .should('have.attr', 'href', '#users-without-organizations');
+        cy.get('.user-org-roles-summary')
+            .contains('a', 'Deleted Users')
+            .should('have.attr', 'href', '#deleted-users');
         cy.get('article.user-org-roles table.table-header')
             .should('exist');
+        cy.get('article.user-org-roles .user-org-roles-section')
+            .each(($section) => {
+                cy.wrap($section)
+                    .contains('a', 'Go to top')
+                    .should('have.attr', 'href', '#user-org-roles-top');
+            });
         cy.get('article.user-org-roles .user-org-roles-sort')
             .should('exist');
     });

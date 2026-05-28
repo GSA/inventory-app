@@ -10,7 +10,7 @@
 {% block primary_content %}
   <article class="module user-org-roles">
     <div class="module-content">
-      <h1 class="page-heading">{{ _('User Roles in Organizations') }}</h1>
+      <h1 id="user-org-roles-top" class="page-heading">{{ _('User Roles in Organizations') }}</h1>
 
       <nav class="user-org-roles-summary" aria-label="{{ _('User role sections') }}">
         <ul>
@@ -65,6 +65,9 @@
               </tbody>
             </table>
           </div>
+          <p class="user-org-roles-back-to-top">
+            <a href="#user-org-roles-top">{{ _('Go to top') }}</a>
+          </p>
         </section>
       {% endfor %}
     </div>

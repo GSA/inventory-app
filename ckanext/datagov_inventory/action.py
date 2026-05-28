@@ -4,12 +4,12 @@ import ckan.plugins.toolkit as toolkit
 
 @toolkit.side_effect_free
 def user_org_roles(context, data_dict):
-    """Return active users with organization roles, grouped by priority."""
+    """Return users with organization roles, grouped by priority."""
     toolkit.check_access('user_org_roles', context, data_dict)
 
     org_roles_by_user = _org_roles_by_user()
     users = model.Session.query(model.User).filter(
-        model.User.state == 'active'
+        model.User.state.in_([model.State.ACTIVE, model.State.DELETED])
     ).all()
 
     result = []
@@ -24,6 +24,7 @@ def user_org_roles(context, data_dict):
             'fullname': user.fullname,
             'email': user.email,
             'last_active': _format_datetime(user.last_active),
+            'state': user.state,
             'sysadmin': user.sysadmin,
             'organizations': organizations,
         })
@@ -64,7 +65,9 @@ def _org_roles_by_user():
 
 
 def _user_sort_key(user):
-    if user['sysadmin']:
+    if user['state'] == model.State.DELETED:
+        group = 3
+    elif user['sysadmin']:
         group = 0
     elif user['organizations']:
         group = 1

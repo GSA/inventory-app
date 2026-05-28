@@ -164,13 +164,15 @@ pusher.add_url_rule(
 
 
 def user_org_roles_table_sections(users):
-    sysadmins = [user for user in users if user['sysadmin']]
+    active_users = [user for user in users if user['state'] == 'active']
+    deleted_users = [user for user in users if user['state'] == 'deleted']
+    sysadmins = [user for user in active_users if user['sysadmin']]
     users_with_orgs = [
-        user for user in users
+        user for user in active_users
         if not user['sysadmin'] and user['organizations']
     ]
     users_without_orgs = [
-        user for user in users
+        user for user in active_users
         if not user['sysadmin'] and not user['organizations']
     ]
 
@@ -186,6 +188,10 @@ def user_org_roles_table_sections(users):
         _user_org_roles_section('Users without organizations',
                                 'users-without-organizations',
                                 users_without_orgs,
+                                ['user', 'email', 'last_active'],
+                                sortable=True),
+        _user_org_roles_section('Deleted Users', 'deleted-users',
+                                deleted_users,
                                 ['user', 'email', 'last_active'],
                                 sortable=True),
     ]

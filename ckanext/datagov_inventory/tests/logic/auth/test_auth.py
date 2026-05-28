@@ -459,6 +459,7 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
     def test_user_org_roles(self):
         self.setup_test_orgs_users()
         factories.User(name='no_org_user')
+        factories.User(name='deleted_user', state='deleted')
 
         context = {
             'model': model,
@@ -475,8 +476,12 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
         assert users['gsa_editor']['organizations'][0]['role'] == 'editor'
         assert users['doi_member']['organizations'][0]['role'] == 'member'
         assert users['no_org_user']['organizations'] == []
+        assert users['deleted_user']['state'] == 'deleted'
+        assert users['deleted_user']['organizations'] == []
 
         assert result.index(users['sysadmin']) < result.index(
             users['gsa_admin'])
         assert result.index(users['gsa_member']) < result.index(
             users['no_org_user'])
+        assert result.index(users['no_org_user']) < result.index(
+            users['deleted_user'])
