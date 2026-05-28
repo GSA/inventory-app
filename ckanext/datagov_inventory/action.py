@@ -4,7 +4,7 @@ import ckan.plugins.toolkit as toolkit
 
 @toolkit.side_effect_free
 def user_org_roles(context, data_dict):
-    """Return users with organization roles, grouped by priority."""
+    """Return users with organization roles, grouped by catagories."""
     toolkit.check_access('user_org_roles', context, data_dict)
 
     org_roles_by_user = _org_roles_by_user()
@@ -65,6 +65,14 @@ def _org_roles_by_user():
 
 
 def _user_sort_key(user):
+    """Sort users by display category, then by username within each category.
+
+    The category order is:
+    1. active sysadmins
+    2. active users with at least one organization role
+    3. active users without organization roles
+    4. deleted users
+    """
     if user['state'] == model.State.DELETED:
         group = 3
     elif user['sysadmin']:
