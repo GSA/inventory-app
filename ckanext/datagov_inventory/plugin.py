@@ -175,20 +175,23 @@ def user_org_roles_table_sections(users):
     ]
 
     return [
-        _user_org_roles_section('Sysadmin', sysadmins,
+        _user_org_roles_section('Sysadmins', 'sysadmins', sysadmins,
                                 ['user', 'email', 'last_active',
                                  'organization', 'role']),
-        _user_org_roles_section('User with org', users_with_orgs,
+        _user_org_roles_section('Users with organizations',
+                                'users-with-organizations', users_with_orgs,
                                 ['user', 'email', 'last_active',
                                  'organization', 'role'],
                                 sortable=True),
-        _user_org_roles_section('User without orgs', users_without_orgs,
+        _user_org_roles_section('Users without organizations',
+                                'users-without-organizations',
+                                users_without_orgs,
                                 ['user', 'email', 'last_active'],
                                 sortable=True),
     ]
 
 
-def _user_org_roles_section(title, users, columns, sortable=False):
+def _user_org_roles_section(title, section_id, users, columns, sortable=False):
     rows = []
     for user in users:
         organizations = user['organizations'] or [{
@@ -202,8 +205,10 @@ def _user_org_roles_section(title, users, columns, sortable=False):
             )
 
     return {
+        'id': section_id,
         'title': title,
         'columns': columns,
+        'count': len(rows),
         'labels': _user_org_roles_column_labels(columns),
         'rows': rows,
         'sortable': sortable,

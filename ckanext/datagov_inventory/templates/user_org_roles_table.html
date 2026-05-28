@@ -12,9 +12,22 @@
     <div class="module-content">
       <h1 class="page-heading">{{ _('User Roles in Organizations') }}</h1>
 
+      <nav class="user-org-roles-summary" aria-label="{{ _('User role sections') }}">
+        <ul>
+          {% for section in sections %}
+            <li>
+              <a href="#{{ section.id }}">
+                {{ section.title }}
+                <span>{{ section.count }} {{ _('rows') }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
       {% for section in sections %}
-        <section class="user-org-roles-section">
-          <h2>{{ section.title }}</h2>
+        <section id="{{ section.id }}" class="user-org-roles-section">
+          <h2>{{ section.title }} <span>{{ section.count }} {{ _('rows') }}</span></h2>
           <div class="table-responsive">
             <table class="table table-header table-hover table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
               <thead>
@@ -75,7 +88,7 @@
           var th = button.closest('th');
           var indicator = '';
           if (Number(th.dataset.sortIndex) === sortState.index) {
-            indicator = sortState.direction === 'asc' ? ' (asc)' : ' (desc)';
+            indicator = sortState.direction === 'asc' ? ' ▲' : ' ▼';
           }
           button.textContent = th.dataset.label + indicator;
         });

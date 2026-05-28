@@ -27,6 +27,15 @@ describe('User organization roles', () => {
             .and('not.contain', 'All Users');
         cy.get('article.user-org-roles')
             .should('contain', 'User Roles in Organizations');
+        cy.get('.user-org-roles-summary')
+            .contains('a', 'Sysadmins')
+            .should('have.attr', 'href', '#sysadmins');
+        cy.get('.user-org-roles-summary')
+            .contains('a', 'Users with organizations')
+            .should('have.attr', 'href', '#users-with-organizations');
+        cy.get('.user-org-roles-summary')
+            .contains('a', 'Users without organizations')
+            .should('have.attr', 'href', '#users-without-organizations');
         cy.get('article.user-org-roles table.table-header')
             .should('exist');
         cy.get('article.user-org-roles .user-org-roles-sort')
