@@ -1,4 +1,31 @@
 describe('User organization roles', () => {
+    const orgA = 'cypress-user-org-roles-a';
+    const orgB = 'cypress-user-org-roles-b';
+    const userA = 'gsa_admin';
+    const userB = 'doi_admin';
+    const userPassword = 'Password123!';
+
+    before(() => {
+        cy.create_token();
+        cy.delete_user(userA);
+        cy.delete_user(userB);
+        cy.delete_organization(orgA);
+        cy.delete_organization(orgB);
+        cy.create_organization(orgA, 'Cypress user org roles A');
+        cy.create_organization(orgB, 'Cypress user org roles B');
+        cy.create_user(userA, 'gsa_admin@example.com', userPassword);
+        cy.create_user(userB, 'doi_admin@example.com', userPassword);
+        cy.assign_user(orgA, userA, 'admin');
+        cy.assign_user(orgB, userB, 'admin');
+    });
+
+    after(() => {
+        cy.delete_user(userA);
+        cy.delete_user(userB);
+        cy.delete_organization(orgA);
+        cy.delete_organization(orgB);
+        cy.revoke_token();
+    });
 
     beforeEach(() => {
         cy.login();
@@ -73,6 +100,27 @@ describe('User organization roles', () => {
             });
         cy.get('article.user-org-roles .user-org-roles-sort')
             .should('exist');
+
+        cy.get('#users-with-organizations table[data-sortable-table]')
+            .within(() => {
+                cy.contains('button', 'Organization').click();
+                cy.get('tbody tr').then(($rows) => {
+                    const rowTexts = [...$rows].map((row) => row.innerText);
+                    expect(rowTexts.findIndex((text) => text.includes(userA)))
+                        .to.be.lessThan(
+                            rowTexts.findIndex((text) => text.includes(userB))
+                        );
+                });
+
+                cy.contains('button', 'Organization').click();
+                cy.get('tbody tr').then(($rows) => {
+                    const rowTexts = [...$rows].map((row) => row.innerText);
+                    expect(rowTexts.findIndex((text) => text.includes(userB)))
+                        .to.be.lessThan(
+                            rowTexts.findIndex((text) => text.includes(userA))
+                        );
+                });
+            });
     });
 
 });
