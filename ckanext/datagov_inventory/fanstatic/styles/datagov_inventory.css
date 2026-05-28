@@ -17,3 +17,41 @@
     float: right;
     padding-right: 5px;
 }
+
+.user-org-roles .page-heading {
+    margin-bottom: 24px;
+}
+
+.user-org-roles-section + .user-org-roles-section {
+    margin-top: 32px;
+}
+
+.user-org-roles-section h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.user-org-roles .table {
+    margin-bottom: 0;
+}
+
+.user-org-roles th.sortable {
+    background-color: #f5f5f5;
+}
+
+.user-org-roles-sort {
+    background: transparent;
+    border: 0;
+    color: #005ea8;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 0;
+    text-align: left;
+}
+
+.user-org-roles-sort:hover,
+.user-org-roles-sort:focus {
+    color: #1a4480;
+    text-decoration: underline;
+}

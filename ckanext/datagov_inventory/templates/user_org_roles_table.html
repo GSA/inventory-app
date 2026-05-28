@@ -1,128 +1,124 @@
-<!doctype html>
-<html>
-  <head>
-    <title>User organization roles</title>
-    <style>
-      body { font-family: sans-serif; margin: 2rem; }
-      table { border-collapse: collapse; margin-bottom: 2rem; width: 100%; }
-      th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
-      th { background: #f5f5f5; position: sticky; top: 0; }
-      th button {
-        background: transparent;
-        border: 0;
-        color: #005ea8;
-        cursor: pointer;
-        font: inherit;
-        font-weight: bold;
-        padding: 0;
-        text-decoration: underline;
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('User Roles in Organizations') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  {{ h.build_nav('user.index', _('Users')) }}
+  <li class="active">{{ _('User Roles in Organizations') }}</li>
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module user-org-roles">
+    <div class="module-content">
+      <h1 class="page-heading">{{ _('User Roles in Organizations') }}</h1>
+
+      {% for section in sections %}
+        <section class="user-org-roles-section">
+          <h2>{{ section.title }}</h2>
+          <div class="table-responsive">
+            <table class="table table-header table-hover table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
+              <thead>
+                <tr>
+                  {% for label in section.labels %}
+                    {% set column = section.columns[loop.index0] %}
+                    {% if section.sortable and column in ('user', 'email', 'last_active', 'organization', 'role') %}
+                      <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
+                        <button type="button" class="user-org-roles-sort">{{ label }}</button>
+                      </th>
+                    {% else %}
+                      <th>{{ label }}</th>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in section.rows %}
+                  <tr>
+                    {% for cell in row %}
+                      <td>
+                        {% if cell.url %}
+                          <a href="{{ cell.url }}">{{ cell.value }}</a>
+                        {% else %}
+                          {{ cell.value }}
+                        {% endif %}
+                      </td>
+                    {% endfor %}
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td colspan="{{ section.columns|length }}">{{ _('No users') }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary_content %}
+  {% snippet 'user/snippets/user_search.html' %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    (function () {
+      function cellText(row, index) {
+        return row.children[index].textContent.trim().toLowerCase();
       }
-      th.sortable { background: #e7f6ff; }
-      th.sortable button:hover,
-      th.sortable button:focus { color: #1a4480; }
-      td a { color: #005ea8; }
-      tr:nth-child(even) { background: #fafafa; }
-      h2 { margin-top: 2rem; }
-    </style>
-  </head>
-  <body>
-    <h1>User organization roles</h1>
 
-    {% for section in sections %}
-      <h2>{{ section.title }}</h2>
-      <table{% if section.sortable %} data-sortable-table{% endif %}>
-        <thead>
-          <tr>
-            {% for label in section.labels %}
-              {% set column = section.columns[loop.index0] %}
-              {% if section.sortable and column in ('user', 'email', 'last_active', 'organization', 'role') %}
-                <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
-                  <button type="button">{{ label }}</button>
-                </th>
-              {% else %}
-                <th>{{ label }}</th>
-              {% endif %}
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in section.rows %}
-            <tr>
-              {% for cell in row %}
-                <td>
-                  {% if cell.url %}
-                    <a href="{{ cell.url }}">{{ cell.value }}</a>
-                  {% else %}
-                    {{ cell.value }}
-                  {% endif %}
-                </td>
-              {% endfor %}
-            </tr>
-          {% else %}
-            <tr>
-              <td colspan="{{ section.columns|length }}">No users</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% endfor %}
-
-    <script>
-      (function () {
-        function cellText(row, index) {
-          return row.children[index].textContent.trim().toLowerCase();
-        }
-
-        function updateHeaders(buttons, sortState) {
-          buttons.forEach(function (button) {
-            var th = button.closest('th');
-            var indicator = '';
-            if (Number(th.dataset.sortIndex) === sortState.index) {
-              indicator = sortState.direction === 'asc' ? ' ^' : ' v';
-            }
-            button.textContent = th.dataset.label + indicator;
-          });
-        }
-
-        function sortTable(table, buttons, sortState, index) {
-          if (sortState.index === index) {
-            sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
-          } else {
-            sortState.index = index;
-            sortState.direction = 'asc';
+      function updateHeaders(buttons, sortState) {
+        buttons.forEach(function (button) {
+          var th = button.closest('th');
+          var indicator = '';
+          if (Number(th.dataset.sortIndex) === sortState.index) {
+            indicator = sortState.direction === 'asc' ? ' (asc)' : ' (desc)';
           }
+          button.textContent = th.dataset.label + indicator;
+        });
+      }
 
-          var tbody = table.querySelector('tbody');
-          var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
-          rows.sort(function (left, right) {
-            var leftText = cellText(left, index);
-            var rightText = cellText(right, index);
-            var comparison = leftText.localeCompare(rightText);
-            return sortState.direction === 'asc' ? comparison : -comparison;
-          });
-          rows.forEach(function (row) {
-            tbody.appendChild(row);
-          });
-          updateHeaders(buttons, sortState);
+      function sortTable(table, buttons, sortState, index) {
+        if (sortState.index === index) {
+          sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortState.index = index;
+          sortState.direction = 'asc';
         }
 
-        document.querySelectorAll('table[data-sortable-table]').forEach(function (table) {
-          var sortState = { index: 0, direction: 'asc' };
-          var buttons = table.querySelectorAll('th[data-sort-index] button');
-
-          buttons.forEach(function (button) {
-            button.addEventListener('click', function () {
-              sortTable(
-                table,
-                buttons,
-                sortState,
-                Number(button.closest('th').dataset.sortIndex)
-              );
-            });
-          });
-          updateHeaders(buttons, sortState);
+        var tbody = table.querySelector('tbody');
+        var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+        rows.sort(function (left, right) {
+          var leftText = cellText(left, index);
+          var rightText = cellText(right, index);
+          var comparison = leftText.localeCompare(rightText);
+          return sortState.direction === 'asc' ? comparison : -comparison;
         });
-      }());
-    </script>
-  </body>
-</html>
+        rows.forEach(function (row) {
+          tbody.appendChild(row);
+        });
+        updateHeaders(buttons, sortState);
+      }
+
+      document.querySelectorAll('table[data-sortable-table]').forEach(function (table) {
+        var sortState = { index: 0, direction: 'asc' };
+        var buttons = table.querySelectorAll('th[data-sort-index] button');
+
+        buttons.forEach(function (button) {
+          button.addEventListener('click', function () {
+            sortTable(
+              table,
+              buttons,
+              sortState,
+              Number(button.closest('th').dataset.sortIndex)
+            );
+          });
+        });
+        updateHeaders(buttons, sortState);
+      });
+    }());
+  </script>
+{% endblock %}

@@ -158,7 +158,7 @@ def user_org_roles_table():
 
 
 pusher.add_url_rule(
-    '/api/action/user_org_roles_table',
+    '/user/user-org-roles',
     view_func=user_org_roles_table
 )
 
