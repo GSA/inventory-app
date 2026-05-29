@@ -54,5 +54,5 @@ if __name__ == "__main__":
         pr.check_datastore_db_connection()
         pr.init_datastore_db()
         # This function does not work, but solr is up
-        check_solr_connection()
+        # check_solr_connection()
         pr.create_sysadmin()
