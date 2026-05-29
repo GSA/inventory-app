@@ -17,3 +17,90 @@
     float: right;
     padding-right: 5px;
 }
+
+.user-org-roles .page-heading {
+    margin-bottom: 16px;
+}
+
+.user-org-roles-summary {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+}
+
+.user-org-roles-summary ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-org-roles-summary a {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    padding: 6px 10px;
+}
+
+.user-org-roles-summary a:hover,
+.user-org-roles-summary a:focus {
+    background-color: #fff;
+    border-color: #005ea8;
+    text-decoration: none;
+}
+
+.user-org-roles-summary span,
+.user-org-roles-section h2 span {
+    color: #555;
+    font-size: 14px;
+    font-weight: 400;
+    margin-left: 4px;
+}
+
+.user-org-roles-section + .user-org-roles-section {
+    margin-top: 40px;
+}
+
+.user-org-roles-section h2 {
+    border-bottom: 1px solid #ddd;
+    font-size: 20px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+}
+
+.user-org-roles .table {
+    margin-bottom: 0;
+}
+
+.user-org-roles-back-to-top {
+    margin: 10px 0 0;
+    text-align: right;
+}
+
+.user-org-roles-back-to-top a {
+    font-size: 14px;
+}
+
+.user-org-roles th.sortable {
+    background-color: #f5f5f5;
+}
+
+.user-org-roles-sort {
+    background: transparent;
+    border: 0;
+    color: #005ea8;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    padding: 0;
+    text-align: left;
+}
+
+.user-org-roles-sort:hover,
+.user-org-roles-sort:focus {
+    color: #1a4480;
+    text-decoration: underline;
+}

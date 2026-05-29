@@ -2,3 +2,8 @@ styles:
   output: datagov_inventory/datagov_inventory.css
   contents: # list of files that are included into asset
     - styles/datagov_inventory.css
+
+scripts:
+  output: datagov_inventory/datagov_inventory.js
+  contents:
+    - scripts/datagov_inventory.js

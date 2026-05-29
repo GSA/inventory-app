@@ -279,6 +279,7 @@ Cypress.Commands.add('delete_user', (userName) => {
 
     let request_obj = {
         method: 'POST',
+        failOnStatusCode: false,
         headers: {
             'X-CKAN-API-Key': token_data.api_token,
             'Content-Type': 'application/json'

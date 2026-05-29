@@ -1,6 +1,7 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
+import ckan.model as model
 from ckan.model import User
 from ckan.common import _, g, current_user, request as ckan_request
 import ckan.lib.base as base
@@ -8,10 +9,12 @@ from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
+from ckanext.datagov_inventory import action
 
 from flask import Blueprint, redirect, session
 import logging
 import re
+from urllib.parse import quote
 
 log = logging.getLogger(__name__)
 pusher = Blueprint('datagov_inventory', __name__)
@@ -81,8 +84,15 @@ def inventory_package_show(context, data_dict):
         return package_show(context, data_dict)
 
 
+def user_org_roles(context, data_dict):
+    if authz.is_sysadmin(context.get('user')):
+        return {'success': True}
+    return {'success': False}
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
+    plugins.implements(plugins.IActions)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
 
@@ -100,10 +110,14 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'tag_show': restrict_anon_access,
                 'task_status_show': restrict_anon_access,
                 'user_list': restrict_anon_access,
+                'user_org_roles': user_org_roles,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
                 'vocabulary_show': restrict_anon_access,
                 }
+
+    def get_actions(self):
+        return {'user_org_roles': action.user_org_roles}
 
     # render our custom 403 template
     def update_config(self, config):
@@ -124,6 +138,139 @@ def redirect_homepage():
 
 
 pusher.add_url_rule('/', view_func=redirect_homepage)
+
+
+def user_org_roles_table():
+    context = {
+        'model': model,
+        'ignore_auth': False,
+        'user': g.user,
+    }
+    try:
+        users = toolkit.get_action('user_org_roles')(context, {})
+    except logic.NotAuthorized:
+        toolkit.abort(403, _('Not authorized to list user organization roles'))
+
+    return base.render(
+        u'user_org_roles_table.html',
+        {'sections': user_org_roles_table_sections(users)}
+    )
+
+
+pusher.add_url_rule(
+    '/user/user-org-roles',
+    view_func=user_org_roles_table
+)
+
+
+def user_org_roles_table_sections(users):
+    active_users = [user for user in users if user['state'] == 'active']
+    deleted_users = [user for user in users if user['state'] == 'deleted']
+    sysadmins = [user for user in active_users if user['sysadmin']]
+    users_with_orgs = [
+        user for user in active_users
+        if not user['sysadmin'] and user['organizations']
+    ]
+    users_without_orgs = [
+        user for user in active_users
+        if not user['sysadmin'] and not user['organizations']
+    ]
+
+    return [
+        _user_org_roles_section('Sysadmins', 'sysadmins', sysadmins,
+                                ['user', 'email', 'last_active',
+                                 'organization', 'role']),
+        _user_org_roles_section('Users with organizations',
+                                'users-with-organizations', users_with_orgs,
+                                ['user', 'email', 'last_active',
+                                 'organization', 'role'],
+                                sortable=True),
+        _user_org_roles_section('Users without organizations',
+                                'users-without-organizations',
+                                users_without_orgs,
+                                ['user', 'email', 'last_active'],
+                                sortable=True),
+        _user_org_roles_section('Deleted Users', 'deleted-users',
+                                deleted_users,
+                                ['user', 'email', 'last_active'],
+                                sortable=True),
+    ]
+
+
+def _user_org_roles_section(title, section_id, users, columns, sortable=False):
+    rows = []
+    for user in users:
+        organizations = user['organizations'] or [{
+            'name': '',
+            'title': '',
+            'role': '',
+        }]
+        for organization in organizations:
+            rows.append(
+                _user_org_roles_row_values(user, organization, columns)
+            )
+
+    return {
+        'id': section_id,
+        'title': title,
+        'columns': columns,
+        'count': len(rows),
+        'labels': _user_org_roles_column_labels(columns),
+        'rows': rows,
+        'sortable': sortable,
+    }
+
+
+def _user_org_roles_column_labels(columns):
+    labels = {
+        'user': 'User',
+        'email': 'Email',
+        'last_active': 'Last Active',
+        'sysadmin': 'Sysadmin',
+        'organization': 'Organization',
+        'role': 'Role',
+    }
+    return [labels[column] for column in columns]
+
+
+def _user_org_roles_row_values(user, organization, columns):
+    values = {
+        'user': user['name'] or '',
+        'email': user['email'] or '',
+        'last_active': user['last_active'] or '',
+        'sysadmin': 'yes' if user['sysadmin'] else 'no',
+        'organization': organization['name'] or '',
+        'role': organization['role'] or '',
+    }
+    return [
+        {
+            'value': values[column],
+            'url': _user_org_roles_cell_url(column, user, organization),
+        }
+        for column in columns
+    ]
+
+
+def _user_org_roles_cell_url(column, user, organization):
+    if column == 'user':
+        return _user_url(user)
+    if column == 'organization':
+        return _organization_manage_members_url(organization)
+    return ''
+
+
+def _user_url(user):
+    name = user['name'] or ''
+    if not name:
+        return ''
+    return '/user/{}'.format(quote(name))
+
+
+def _organization_manage_members_url(organization):
+    name = organization['name'] or ''
+    if not name:
+        return ''
+    return '/organization/manage_members/{}'.format(quote(name))
 
 
 @pusher.before_app_request

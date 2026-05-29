@@ -1,0 +1,84 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('User Roles in Organizations') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  {{ h.build_nav('user.index', _('Users')) }}
+  <li class="active">{{ _('User Roles in Organizations') }}</li>
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module user-org-roles">
+    <div class="module-content">
+      <h1 id="user-org-roles-top" class="page-heading">{{ _('User Roles in Organizations') }}</h1>
+
+      <nav class="user-org-roles-summary" aria-label="{{ _('User role sections') }}">
+        <ul>
+          {% for section in sections %}
+            <li>
+              <a href="#{{ section.id }}">
+                {{ section.title }}
+                <span>{{ section.count }} {{ _('rows') }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      {% for section in sections %}
+        <section id="{{ section.id }}" class="user-org-roles-section">
+          <h2>{{ section.title }} <span>{{ section.count }} {{ _('rows') }}</span></h2>
+          <div class="table-responsive">
+            <table class="table table-header table-hover table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
+              <thead>
+                <tr>
+                  {% for label in section.labels %}
+                    {% set column = section.columns[loop.index0] %}
+                    {% if section.sortable and column in ('user', 'email', 'last_active', 'organization', 'role') %}
+                      <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
+                        <button type="button" class="user-org-roles-sort">{{ label }}</button>
+                      </th>
+                    {% else %}
+                      <th>{{ label }}</th>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in section.rows %}
+                  <tr>
+                    {% for cell in row %}
+                      <td>
+                        {% if cell.url %}
+                          <a href="{{ cell.url }}">{{ cell.value }}</a>
+                        {% else %}
+                          {{ cell.value }}
+                        {% endif %}
+                      </td>
+                    {% endfor %}
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td colspan="{{ section.columns|length }}">{{ _('No users') }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <p class="user-org-roles-back-to-top">
+            <a href="#user-org-roles-top">{{ _('Go to top') }}</a>
+          </p>
+        </section>
+      {% endfor %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary_content %}
+  {% snippet 'user/snippets/user_search.html' %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% asset 'datagov_inventory/scripts' %}
+{% endblock %}
