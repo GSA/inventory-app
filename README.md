@@ -108,6 +108,7 @@ Ensure the inventory app can reach the Solr app:
 
 | Name | Description | Where to find |
 |------|-------------|---------------|
+| CKAN___SECRET_KEY | Flask session signing secret used for CKAN security-sensitive tokens and cookie-based sessions | `python -c "import secrets; print(secrets.token_urlsafe(32))"` |
 | CKAN___BEAKER__SESSION__SECRET | Session secret for encrypting CKAN sessions | `pwgen -s 32 1` |
 | CKAN___WTF_CSRF_SECRET_KEY | CSRF secret for generating CSRF tokens | `pwgen -s 32 1` |
 | DS_RO_PASSWORD | Read-only password for the datastore user | Initially randomly generated |
@@ -116,7 +117,7 @@ Ensure the inventory app can reach the Solr app:
 
 To update secrets:
 
-    cf update-user-provided-service ${app_name}-secrets -p "CKAN___BEAKER__SESSION__SECRET, CKAN___WTF_CSRF_SECRET_KEY, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
+    cf update-user-provided-service ${app_name}-secrets -p "CKAN___SECRET_KEY, CKAN___BEAKER__SESSION__SECRET, CKAN___WTF_CSRF_SECRET_KEY, DS_RO_PASSWORD, NEW_RELIC_LICENSE_KEY, SAML2_PRIVATE_KEY"
 
 ### CI configuration
 
