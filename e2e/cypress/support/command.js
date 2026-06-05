@@ -2,6 +2,12 @@ require('cypress-downloadfile/lib/downloadFileCommand');
 import Chance from 'chance';
 const chance = new Chance();
 
+function get_token_jti(api_token) {
+    const token_payload = api_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const decoded_payload = JSON.parse(atob(token_payload));
+    return decoded_payload.jti;
+}
+
 function verify_element_exists() {
     cy.get('td')
         .eq(4)
@@ -70,13 +76,11 @@ Cypress.Commands.add('create_token', (tokenName) => {
     cy.get('body').then($body => {
         cy.get('#name').type('cypress token');
         cy.get('button[value="create"]').click();
-        // find the token in <code> tag and save it for later use
-        // find the token id (jti) somewhere in the form
-        cy.get('div.alert-success code').invoke('text').then((text1) => {
-            cy.get('form[action^="/user/' + userName +'/api-tokens/"]').invoke('attr', 'action').then((text2) => {
-                const jti = text2.split('/')[4]
-                Cypress.env('token_data', { api_token: text1, jti: jti });
-            })
+        // Find the token in the success alert and save its JWT id for revocation.
+        cy.get('div.alert-success code').invoke('text').then((api_token) => {
+            api_token = api_token.trim();
+            const jti = get_token_jti(api_token);
+            Cypress.env('token_data', { api_token: api_token, jti: jti });
         });
         cy.log('cypress token created.');
     });
@@ -103,6 +107,8 @@ Cypress.Commands.add('revoke_token', (tokenName) => {
             'Content-Type': 'application/json'
         },
         body: {jti: token_data.jti}
+    }).then(() => {
+        Cypress.env('token_data', null);
     });
 });
 
