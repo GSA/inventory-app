@@ -16,7 +16,7 @@ ckan @ git+https://github.com/GSA/ckan.git@1af1607e4f74fe4855b4ae4814c60fff1b2d1
 ckanext-datajson==0.1.28
 ckanext-dcat-usmetadata==0.6.3
 ckanext-envvars==0.0.6
-ckanext-pgsearch @ git+https://github.com/GSA/ckanext-pgsearch.git@2d5fe7023cc9caf7192da67e648b7fd9e484ca87
+ckanext-pgsearch @ git+https://github.com/GSA/ckanext-pgsearch.git@2f0b225bee1bdb457dffa9f857cd6e90a504547b
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@e972ae3c36489dcfc716f75063ac64c13cde1146
 ckanext-saml2auth @ git+https://github.com/GSA/ckanext-saml2auth.git@062f26b19a525139bd613ef3654ca9dc64e0a096
 ckanext-usmetadata==0.3.3
