@@ -6,7 +6,6 @@ services:
     depends_on:
       - datastore
       - db
-      - solr
       - redis
       - localstack-container
     ports:
@@ -37,17 +36,6 @@ services:
       DB_CKAN_PASSWORD: pass
       DB_CKAN_DB: ckan
 
-  solr:
-    image: ghcr.io/gsa/catalog.data.gov.solr:8-stunnel-root
-    command: /app/solr/local_setup.sh
-    ports:
-      - "8983:8983"
-    deploy:
-      replicas: 1
-    volumes:
-      - solr_data:/var/solr
-      - .:/app
-
   redis:
     image: redis:alpine
 
@@ -70,4 +58,3 @@ services:
       - "./tmp/localstack:/var/lib/localstack"
 volumes:
   ckan:
-  solr_data:
