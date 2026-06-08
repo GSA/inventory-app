@@ -5,15 +5,12 @@ set -e
 function wait_for () {
     local host=$1
     local port=$2
-    
+
     while ! nc -z -w 5 "$host" "$port"; do
         sleep 1
     done
 }
 
-echo -n "Waiting for Solr..."
-wait_for solr 8983
-echo "ok"
 echo -n "Waiting for DB..."
 wait_for db 5432
 echo "ok"
