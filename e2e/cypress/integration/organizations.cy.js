@@ -1,6 +1,7 @@
 describe('Organization', () => {
     before(() => {
         cy.create_token();
+        cy.delete_organization('cypress-test-org')
     })
 
     beforeEach(() => {

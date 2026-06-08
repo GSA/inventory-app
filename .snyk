@@ -4,26 +4,6 @@ language-settings:
   python: "3.10"
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-PYTHON-CKAN-16322869:
-    - '*':
-        reason: >-
-          Ticket created https://github.com/GSA/data.gov/issues/5941
-        expires: 2026-06-04T05:30:00.000Z
-  SNYK-PYTHON-CKAN-16322864:
-    - '*':
-        reason: >-
-          Ticket created https://github.com/GSA/data.gov/issues/5941
-        expires: 2026-06-04T05:30:00.000Z
-  SNYK-PYTHON-CKAN-16322872:
-    - '*':
-        reason: >-
-          Ticket created https://github.com/GSA/data.gov/issues/5941
-        expires: 2026-06-04T05:30:00.000Z
-  SNYK-PYTHON-CKAN-16427188:
-    - '*':
-        reason: >-
-          Ticket created https://github.com/GSA/data.gov/issues/5941
-        expires: 2026-06-04T05:30:00.000Z
   SNYK-PYTHON-PIP-16964647:
     - '*':
         reason: >-

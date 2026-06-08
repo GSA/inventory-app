@@ -2,6 +2,28 @@ require('cypress-downloadfile/lib/downloadFileCommand');
 import Chance from 'chance';
 const chance = new Chance();
 
+function get_token_jti(api_token) {
+    const token_payload = api_token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const decoded_payload = JSON.parse(atob(token_payload));
+    return decoded_payload.jti;
+}
+
+function api_headers(extra_headers = {}) {
+    const token_data = Cypress.env('token_data');
+    const csrf_token = Cypress.$('meta[name="_csrf_token"]').attr('content');
+    const headers = {
+        'X-CKAN-API-Key': token_data.api_token,
+        'Content-Type': 'application/json',
+        ...extra_headers,
+    };
+
+    if (csrf_token) {
+        headers['X-CSRFToken'] = csrf_token;
+    }
+
+    return headers;
+}
+
 function verify_element_exists() {
     cy.get('td')
         .eq(4)
@@ -70,13 +92,11 @@ Cypress.Commands.add('create_token', (tokenName) => {
     cy.get('body').then($body => {
         cy.get('#name').type('cypress token');
         cy.get('button[value="create"]').click();
-        // find the token in <code> tag and save it for later use
-        // find the token id (jti) somewhere in the form
-        cy.get('div.alert-success code').invoke('text').then((text1) => {
-            cy.get('form[action^="/user/' + userName +'/api-tokens/"]').invoke('attr', 'action').then((text2) => {
-                const jti = text2.split('/')[4]
-                Cypress.env('token_data', { api_token: text1, jti: jti });
-            })
+        // Find the token in the success alert and save its JWT id for revocation.
+        cy.get('div.alert-success code').invoke('text').then((api_token) => {
+            api_token = api_token.trim();
+            const jti = get_token_jti(api_token);
+            Cypress.env('token_data', { api_token: api_token, jti: jti });
         });
         cy.log('cypress token created.');
     });
@@ -98,11 +118,10 @@ Cypress.Commands.add('revoke_token', (tokenName) => {
     cy.request({
         url: '/api/3/action/api_token_revoke',
         method: 'POST',
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {jti: token_data.jti}
+    }).then(() => {
+        Cypress.env('token_data', null);
     });
 });
 
@@ -135,15 +154,10 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc, extras = null) =>
      *      for testing or to visit the organization creation page
      * :RETURN null:
      */
-    const token_data = Cypress.env('token_data');
-
     let request_obj = {
         url: '/api/action/organization_create',
         method: 'POST',
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             description: orgDesc,
             title: orgName,
@@ -173,16 +187,11 @@ Cypress.Commands.add('delete_organization', (orgName) => {
      * :PARAM orgName String: Name of the organization to purge from the current state
      * :RETURN null:
      */
-    const token_data = Cypress.env('token_data');
-
     cy.request({
         url: '/api/action/organization_delete',
         method: 'POST',
         failOnStatusCode: false,
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             id: orgName? orgName: 'test-organization'
         },
@@ -192,10 +201,7 @@ Cypress.Commands.add('delete_organization', (orgName) => {
         url: '/api/action/organization_purge',
         method: 'POST',
         failOnStatusCode: false,
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             id: orgName? orgName: 'test-organization'
         },
@@ -208,16 +214,11 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
      * Method to create an user via CKAN API
      * :RETURN null:
      */
-    const token_data = Cypress.env('token_data');
-
     let request_obj = {
         url: '/api/action/user_create',
         method: 'POST',
         failOnStatusCode: false,
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             name: userName,
             email: userEmail,
@@ -248,16 +249,11 @@ Cypress.Commands.add('assign_user', (orgName, userName, userRole) => {
      * Method to assign an organization role to an user via CKAN API
      * :RETURN null:
      */
-    const token_data = Cypress.env('token_data');
-
     let request_obj = {
         url: '/api/action/organization_member_create',
         method: 'POST',
         failOnStatusCode: true,
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             id: orgName,
             username: userName,
@@ -275,15 +271,10 @@ Cypress.Commands.add('delete_user', (userName) => {
      * Method to delete an user via CKAN API
      * :RETURN null:
      */
-    const token_data = Cypress.env('token_data');
-
     let request_obj = {
         method: 'POST',
         failOnStatusCode: false,
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             id: userName
         },
@@ -301,15 +292,11 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
      * :PARAM datasetName String: Name of the dataset to purge from the current state
      * :RETURN null:
      */
-    const token_data = Cypress.env('token_data');
     cy.request({
         url: '/api/action/dataset_purge',
         method: 'POST',
         failOnStatusCode: false,
-        headers: {
-            'X-CKAN-API-Key': token_data.api_token,
-            'Content-Type': 'application/json'
-        },
+        headers: api_headers(),
         body: {
             id: datasetName,
         },
@@ -317,15 +304,13 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
 });
 
 Cypress.Commands.add('create_dataset', (ckan_dataset) => {
-    const token_data = Cypress.env('token_data');
     var options = {
         method: 'POST',
         url: '/api/3/action/package_create',
-        headers: {
+        headers: api_headers({
             'cache-control': 'no-cache',
             'content-type': 'application/json',
-            'X-CKAN-API-Key': token_data.api_token,
-        },
+        }),
         body: JSON.stringify(ckan_dataset),
     };
 
