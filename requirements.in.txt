@@ -6,7 +6,7 @@ git+https://github.com/keitaroinc/ckanext-s3filestore.git#egg=ckanext-s3filestor
 -e git+https://github.com/ckan/ckanext-xloader.git@1.2.0#egg=ckanext-xloader
 
 ckanext-usmetadata>=0.3.3
-ckanext-datajson>=0.1.19
+ckanext-datajson>=0.1.29
 ckanext-dcat-usmetadata~=0.6.0
 ckanext-envvars>=0.0.3
 newrelic

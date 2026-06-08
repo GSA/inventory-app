@@ -13,7 +13,7 @@ cffi==2.0.0
 chardet==7.4.3
 charset-normalizer==3.4.7
 ckan @ git+https://github.com/GSA/ckan.git@1af1607e4f74fe4855b4ae4814c60fff1b2d199c
-ckanext-datajson==0.1.28
+ckanext-datajson==0.1.29
 ckanext-dcat-usmetadata==0.6.3
 ckanext-envvars==0.0.6
 ckanext-pgsearch @ git+https://github.com/GSA/ckanext-pgsearch.git@2d5fe7023cc9caf7192da67e648b7fd9e484ca87
