@@ -22,9 +22,6 @@ echo "ok"
 # check will return successfully.
 sleep 1
 
-echo "Set up ckan.datapusher.api_token"
-ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add ckan_admin datapusher | tail -n 1 | tr -d '\t')"
-
 # Install dev dependencies after build so freezing dependencies
 # works as expected.
 # Currently not installing properly, leaving out as not required
@@ -74,6 +71,8 @@ ckan config-tool $CKAN_INI "ckanext.datajson.inventory_links_enabled=True"
 # Run the prerun script to init CKAN and create the default admin user
 python3 ${CKAN_HOME}/GSA_prerun.py
 
+echo "Set up ckan.datapusher.api_token"
+ckan config-tool $CKAN_INI "ckan.datapusher.api_token=$(ckan -c $CKAN_INI user token add ${CKAN_SYSADMIN_NAME:-admin} datapusher | tail -n 1 | tr -d '\t')"
 
 # Run any startup scripts provided by images extending this one
 if [[ -d "/docker-entrypoint.d" ]]
