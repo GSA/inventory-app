@@ -54,6 +54,27 @@ DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
 
 
+is_missing_required_value() {
+  local value="$1"
+  if [ -z "$value" ]; then
+    return 0
+  fi
+
+  local normalized
+  normalized=$(echo "$value" | tr '[:upper:]' '[:lower:]' | xargs)
+  if [[ "$normalized" == string:* ]]; then
+    normalized="${normalized#string:}"
+  fi
+
+  case "$normalized" in
+    null|none|nil|undefined|change_me)
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
 # required secrets
 beaker_secret=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
 ckan_secret=$(vcap_get_service secrets .credentials.CKAN___SECRET_KEY)
@@ -61,7 +82,7 @@ csrf_secret=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
 
 for secret_name in beaker_secret ckan_secret csrf_secret; do
   secret_value="${!secret_name}"
-  if [ -z "$secret_value" ] || [ "$secret_value" = "null" ]; then
+  if is_missing_required_value "$secret_value"; then
     echo "$secret_name is not found in secrets" >&2
     exit 1
   fi

@@ -5,6 +5,8 @@ from ckan.config.middleware import make_app
 from ckan.cli import CKANConfigLoader
 from logging.config import fileConfig as loggingFileConfig
 
+from startup_validation import validate_required_env_vars
+
 if os.environ.get(u'CKAN_INI'):
     config_path = os.environ[u'CKAN_INI']
 else:
@@ -13,6 +15,8 @@ else:
 
 if not os.path.exists(config_path):
     raise RuntimeError(u'CKAN config option not found: {}'.format(config_path))
+
+validate_required_env_vars()
 
 loggingFileConfig(config_path)
 config = CKANConfigLoader(config_path).get_config()

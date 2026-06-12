@@ -11,6 +11,9 @@ services:
     ports:
       - "5000:5000"
     env_file: .env
+    environment:
+      CKAN___SECRET_KEY: ${CKAN___SECRET_KEY:-local-dev-secret-key}
+      CKAN___WTF_CSRF_SECRET_KEY: ${CKAN___WTF_CSRF_SECRET_KEY:-local-dev-csrf-secret-key}
     volumes:
       - .:/app/
       # To test datagov_inventory changes in realtime, the following mount can be used
