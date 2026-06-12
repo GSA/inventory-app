@@ -23,7 +23,7 @@ function vcap_get_service () {
   name="$1"
   path="$2"
   service_name=${APP_NAME}-${name}
-  echo $VCAP_SERVICES | jq --raw-output --arg service_name "$service_name" ".[][] | select(.name == \$service_name) | ($path // empty)"
+  echo $VCAP_SERVICES | jq --raw-output --arg service_name "$service_name" ".[][] | select(.name == \$service_name) | ($path | if . == null then empty else . end)"
 }
 
 # Create a staging area for secrets and files
