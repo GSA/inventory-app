@@ -23,7 +23,7 @@ function vcap_get_service () {
   name="$1"
   path="$2"
   service_name=${APP_NAME}-${name}
-  echo $VCAP_SERVICES | jq --raw-output --arg service_name "$service_name" ".[][] | select(.name == \$service_name) | $path"
+  echo $VCAP_SERVICES | jq --raw-output --arg service_name "$service_name" ".[][] | select(.name == \$service_name) | ($path | if . == null then empty else . end)"
 }
 
 # Create a staging area for secrets and files
@@ -75,7 +75,7 @@ export CKAN___WTF_CSRF_SECRET_KEY=$csrf_secret
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
 
 # Get sysadmins list by a user-provided-service per environment
-export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-output ".[][] | select(.name == \"sysadmin-users\") | .credentials.CKANEXT__SAML2AUTH__SYSADMINS_LIST")
+export CKANEXT__SAML2AUTH__SYSADMINS_LIST=$(echo $VCAP_SERVICES | jq --raw-output ".[][] | select(.name == \"sysadmin-users\") | (.credentials.CKANEXT__SAML2AUTH__SYSADMINS_LIST // empty)")
 
 # ckan reads some environment variables... https://docs.ckan.org/en/2.9/maintaining/configuration.html#environment-variables
 export CKAN_SQLALCHEMY_URL=$(vcap_get_service db .credentials.uri)
