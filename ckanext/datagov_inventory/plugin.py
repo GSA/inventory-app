@@ -12,6 +12,7 @@ import ckan.authz as authz
 from ckanext.datagov_inventory import action
 
 from flask import Blueprint, redirect, session
+from datetime import datetime, timezone
 import logging
 import re
 from urllib.parse import quote
@@ -95,6 +96,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
+    plugins.implements(plugins.IResourceController, inherit=True)
 
     def get_auth_functions(self):
         return {'format_autocomplete': restrict_anon_access,
@@ -127,6 +129,37 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     # IBlueprint
     def get_blueprint(self):
         return pusher
+
+    def after_resource_create(self, context, resource):
+        _touch_dataset_modified(context, resource['package_id'])
+
+    def after_resource_update(self, context, resource):
+        _touch_dataset_modified(context, resource['package_id'])
+
+    def before_resource_delete(self, context, resource, resources):
+        resource_id = resource.get('id')
+        for existing_resource in resources:
+            if existing_resource.get('id') == resource_id:
+                context['datagov_inventory_package_id'] = (
+                    existing_resource['package_id']
+                )
+                break
+
+    def after_resource_delete(self, context, resources):
+        package_id = context.pop('datagov_inventory_package_id', None)
+        if package_id:
+            _touch_dataset_modified(context, package_id)
+
+
+def _touch_dataset_modified(context, package_id):
+    """update dataset exported modified date (for any resource change)."""
+    modified = datetime.now(timezone.utc).isoformat(
+        timespec='milliseconds'
+    ).replace('+00:00', 'Z')
+    toolkit.get_action('package_patch')(
+        context,
+        {'id': package_id, 'modified': modified}
+    )
 
 
 def redirect_homepage():
