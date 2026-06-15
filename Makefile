@@ -38,6 +38,9 @@ test:
 test-build:
 	docker compose -f docker-compose.yml -f docker-compose.test.yml build
 
+test-startup-validation:
+	pytest --disable-warnings tests/test_startup_validation.py
+
 test-extension:
 	docker compose run --rm -T ckan pytest --cov=ckanext.datagov_inventory --disable-warnings /app/ckanext/datagov_inventory/tests/
 

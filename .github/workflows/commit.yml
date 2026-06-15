@@ -31,6 +31,10 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
+      - name: Create local env file
+        run: cp .env.sample .env
+      - name: test startup validation
+        run: pip install pytest && pytest tests/test_startup_validation.py
       - name: test
         run: make build test
       - name: test extension

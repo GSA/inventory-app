@@ -15,14 +15,17 @@ For details on the system architecture, please see our [data.gov systems list](h
 
 ### Getting started
 
-Build and bring up the containers.
+Copy the sample environment file and build the containers.
 
+    cp .env.sample .env
     make up
     make up-with-data  # Gives development environment basic user, organization, and dataset
 
 Open CKAN to verify it's working:
 
     open http://localhost:5000
+
+The app validates required environment variables at startup. For local development, `.env.sample` provides defaults for `CKAN___SECRET_KEY`, `CKAN___WTF_CSRF_SECRET_KEY`, and `CKAN_SQLALCHEMY_URL`.
 
 If you would like to seed data into the system, examine the test framework (`e2e/cypress/support/command.js`) for some examples of creating organizations and/or datasets with resources.
 
