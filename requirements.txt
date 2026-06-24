@@ -63,7 +63,7 @@ packaging==24.1
 passlib==1.7.4
 pathspec==1.1.1
 pika==1.4.1
-pip==26.1.1
+pip==26.1.2
 polib==1.2.0
 psycopg2==2.9.11
 pycparser==3.0
