@@ -3,12 +3,7 @@ version: v1.25.0
 language-settings:
   python: "3.10"
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
-ignore:
-  SNYK-PYTHON-PIP-16964647:
-    - '*':
-        reason: >-
-          Ticket created https://github.com/GSA/data.gov/issues/6028
-        expires: 2026-06-28T20:41:19.000Z
+ignore: {}
 patch: {}
 # specify the directories or files to be excludeed from import:
 exclude:
