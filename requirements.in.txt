@@ -15,7 +15,6 @@ gunicorn
 # Add necessary CKAN core libraries
 alembic==1.13.2
 Babel==2.15.0
-bleach==6.1.0
 blinker==1.9.0
 certifi>=2024.7.4
 click==8.1.7
@@ -92,4 +91,5 @@ setuptools~=78.1.1
 MarkupSafe==2.*
 
 urllib3>=2.5.0
-cryptography>=46.0.7
+bleach>=6.4.0
+cryptography>=48.0.1
