@@ -31,9 +31,7 @@ jobs:
           echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
       - name: Update Publishers
         if: ${{ env.UPDATE_PUBLISHERS }}
-        # pinned to cf7 until --wait is available for run-task on cf8...
-        # https://github.com/cloudfoundry/cli/issues/2238
-        uses: cloud-gov/cg-cli-tools@cli-v7
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: |
             cf run-task inventory --command 'ckan dcat-usmetadata import-publishers config/data/inventory_publishers.csv' --wait --name 'update-publishers'
@@ -66,9 +64,7 @@ jobs:
           echo "UPDATE_PUBLISHERS=True" >> $GITHUB_ENV
       - name: Update Publishers
         if: ${{ env.UPDATE_PUBLISHERS }}
-        # pinned to cf7 until --wait is available for run-task on cf8...
-        # https://github.com/cloudfoundry/cli/issues/2238
-        uses: cloud-gov/cg-cli-tools@cli-v7
+        uses: cloud-gov/cg-cli-tools@main
         with:
           command: |
             cf run-task inventory --command 'ckan dcat-usmetadata import-publishers config/data/inventory_publishers.csv' --wait --name 'update-publishers'
