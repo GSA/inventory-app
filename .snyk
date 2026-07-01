@@ -3,7 +3,23 @@ version: v1.25.0
 language-settings:
   python: "3.10"
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
-ignore: {}
+ignore:
+  SNYK-PYTHON-BLEACH-17356127:
+    - "*":
+        reason: >-
+          not vulnerable: Bleach linkification path with parse_email=True is
+          not used.
+          https://github.com/GSA/data.gov/issues/6122
+        expires: 2026-10-01T00:00:00.000Z
+        created: 2026-07-01T00:00:00.000Z
+  SNYK-PYTHON-HTML5LIB-17356104:
+    - "*":
+        reason: >-
+          not vulnerable: html5lib's sanitizer is not used and the formaction
+          attribute is not allowed.
+          https://github.com/GSA/data.gov/issues/6123
+        expires: 2026-10-01T00:00:00.000Z
+        created: 2026-07-01T00:00:00.000Z
 patch: {}
 # specify the directories or files to be excludeed from import:
 exclude:
