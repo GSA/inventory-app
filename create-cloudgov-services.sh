@@ -27,7 +27,7 @@ wait
 # Check that all the services are in a healthy state. (The OSBAPI spec says that
 # the "last operation" should include "succeeded".)
 success=0;
-for service in "${app_name}-datastore" "${app_name}-db" "${app_name}-redis" "${app_name}-solr" "${app_name}-s3"
+for service in "${app_name}-datastore" "${app_name}-db" "${app_name}-redis" "${app_name}-s3"
 do
     status=$(cf service "$service" | grep 'status:\s*.\+$' )
     echo "$service $status"
