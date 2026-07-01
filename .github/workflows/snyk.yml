@@ -14,6 +14,8 @@ jobs:
     uses: GSA/data.gov/.github/workflows/snyk-template.yml@main
     with:
       all_projects: true
+      python_requirements_file: requirements.txt
+      python_version: "3.10"
       severity_threshold: medium
     secrets:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
