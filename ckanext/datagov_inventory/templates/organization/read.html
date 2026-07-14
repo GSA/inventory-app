@@ -1,0 +1,33 @@
+{% ckan_extends %}
+
+{% block page_primary_action %}
+    {% if h.check_access('package_create', {'owner_org': c.group_dict.id}) %}
+        {% snippet 'snippets/add_dataset.html', group=c.group_dict.id %}
+        {% if h.datajson_inventory_links_enabled() %}
+        <button id="btnUnredacted" class="btn btn-secondary">Export data.json</button>
+        <button id="btnDcatV3" class="btn btn-secondary">Export to DCAT-US v3.0</button>
+        <button id="btnDraft" class="btn btn-secondary">Export Drafts</button>
+
+        <form id="formUnredacted" action="{{c.group_dict.id + '/unredacted.json' }}"></form>
+        <form id="formDraft" action="{{c.group_dict.id + '/draft.json' }}"></form>
+
+        <script type="text/javascript" src="/base/vendor/jquery.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#btnUnredacted').click(function () {
+                    $('#formUnredacted').submit();
+                });
+
+                $('#btnDcatV3').click(function () {
+                    // TODO: Implement DCAT-US v3.0 export
+                    console.log('DCAT-US v3.0 export button clicked');
+                });
+
+                $('#btnDraft').click(function () {
+                    $('#formDraft').submit();
+                });
+            });
+        </script>
+        {% endif %}
+    {% endif %}
+{% endblock %}
