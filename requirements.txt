@@ -75,6 +75,7 @@ pysolr==3.11.0
 python-dateutil==2.9.0.post0
 python-magic==0.4.27
 pytz==2026.2
+langcodes==3.5.0
 PyYAML==6.0.1
 redis==8.0.0
 requests==2.33.0
