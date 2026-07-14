@@ -196,6 +196,16 @@ pusher.add_url_rule(
 )
 
 
+def generate_dcat_v3(org_id):
+    return {'message': 'DCAT-US v3.0 export endpoint'}
+
+
+pusher.add_url_rule(
+    '/organization/<org_id>/dcat-v3.json',
+    view_func=generate_dcat_v3
+)
+
+
 def user_org_roles_table_sections(users):
     active_users = [user for user in users if user['state'] == 'active']
     deleted_users = [user for user in users if user['state'] == 'deleted']
