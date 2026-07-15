@@ -38,9 +38,15 @@ class TestDCATv3Transforms:
     @pytest.fixture
     def sample_v1_1_catalog(self):
         return {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
-            "describedBy": "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
+            "describedBy": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.json"
+            ),
             "dataset": []
         }
 
@@ -95,13 +101,17 @@ class TestDCATv3Transforms:
 
     def test_propagate_license(self):
         dataset = {
-            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+            "license": (
+                "https://creativecommons.org/publicdomain/zero/1.0/"
+            ),
             "distribution": [
                 {"accessURL": "https://example.gov/data.csv"}
             ]
         }
         result = transforms.propagate_license(dataset)
-        assert result["distribution"][0]["license"] == "https://creativecommons.org/publicdomain/zero/1.0/"
+        assert result["distribution"][0]["license"] == (
+            "https://creativecommons.org/publicdomain/zero/1.0/"
+        )
 
     def test_transform_rights(self):
         dataset = {"rights": "This data is in the public domain."}
@@ -116,16 +126,21 @@ class TestDCATv3Transforms:
         }
         result = transforms.transform_described_by(dataset)
         assert isinstance(result["describedBy"], dict)
-        assert result["describedBy"]["accessURL"] == "https://example.gov/schema.json"
-        assert result["describedBy"]["mediaType"] == "application/schema+json"
+        url = result["describedBy"]["accessURL"]
+        assert url == "https://example.gov/schema.json"
+        media = result["describedBy"]["mediaType"]
+        assert media == "application/schema+json"
         assert "describedByType" not in result
 
     def test_transform_conforms_to(self):
-        dataset = {"conformsTo": "https://www.iso.org/standard/53798.html"}
+        dataset = {
+            "conformsTo": "https://www.iso.org/standard/53798.html"
+        }
         result = transforms.transform_conforms_to(dataset)
         assert isinstance(result["conformsTo"], list)
         assert result["conformsTo"][0]["@type"] == "Standard"
-        assert result["conformsTo"][0]["identifier"] == "https://www.iso.org/standard/53798.html"
+        ident = result["conformsTo"][0]["identifier"]
+        assert ident == "https://www.iso.org/standard/53798.html"
 
     def test_transform_landing_page(self):
         dataset = {
@@ -135,7 +150,8 @@ class TestDCATv3Transforms:
         result = transforms.transform_landing_page(dataset)
         assert isinstance(result["landingPage"], dict)
         assert result["landingPage"]["@type"] == "Document"
-        assert result["landingPage"]["accessURL"] == "https://example.gov/test-dataset"
+        url = result["landingPage"]["accessURL"]
+        assert url == "https://example.gov/test-dataset"
         assert result["landingPage"]["title"] == "Test Dataset"
 
     def test_transform_issued(self):
@@ -159,5 +175,6 @@ class TestDCATv3Transforms:
             }
         }
         result = transforms.transform_sub_organization_of(dataset)
-        assert isinstance(result["publisher"]["subOrganizationOf"], list)
-        assert result["publisher"]["subOrganizationOf"][0]["name"] == "Parent Agency"
+        sub_org = result["publisher"]["subOrganizationOf"]
+        assert isinstance(sub_org, list)
+        assert sub_org[0]["name"] == "Parent Agency"
