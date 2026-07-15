@@ -89,7 +89,7 @@ class TestDCATConverter:
     def test_convert_dcat_catalog_updates_conforms_to(
         self, sample_v1_1_catalog
     ):
-        result = dcat_converter.convert_dcat_catalog(
+        result, errors = dcat_converter.convert_dcat_catalog(
             sample_v1_1_catalog
         )
         assert "conformsTo" in result
@@ -100,7 +100,7 @@ class TestDCATConverter:
     def test_convert_dcat_catalog_removes_context(
         self, sample_v1_1_catalog
     ):
-        result = dcat_converter.convert_dcat_catalog(
+        result, errors = dcat_converter.convert_dcat_catalog(
             sample_v1_1_catalog
         )
         assert "@context" not in result
@@ -108,7 +108,7 @@ class TestDCATConverter:
     def test_convert_dcat_catalog_removes_described_by(
         self, sample_v1_1_catalog
     ):
-        result = dcat_converter.convert_dcat_catalog(
+        result, errors = dcat_converter.convert_dcat_catalog(
             sample_v1_1_catalog
         )
         assert "describedBy" not in result
@@ -116,7 +116,7 @@ class TestDCATConverter:
     def test_convert_dcat_catalog_normalizes_catalog_modified(
         self, sample_v1_1_catalog
     ):
-        result = dcat_converter.convert_dcat_catalog(
+        result, errors = dcat_converter.convert_dcat_catalog(
             sample_v1_1_catalog
         )
         assert result["modified"].endswith("Z")
@@ -124,7 +124,7 @@ class TestDCATConverter:
     def test_convert_dcat_catalog_preserves_datasets(
         self, sample_v1_1_catalog
     ):
-        result = dcat_converter.convert_dcat_catalog(
+        result, errors = dcat_converter.convert_dcat_catalog(
             sample_v1_1_catalog
         )
         assert "dataset" in result
@@ -133,7 +133,7 @@ class TestDCATConverter:
     def test_convert_dcat_catalog_applies_all_transforms(
         self, sample_v1_1_catalog_with_transforms
     ):
-        result = dcat_converter.convert_dcat_catalog(
+        result, errors = dcat_converter.convert_dcat_catalog(
             sample_v1_1_catalog_with_transforms
         )
         dataset = result["dataset"][0]
@@ -168,7 +168,7 @@ class TestDCATConverter:
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": []
         }
-        result = dcat_converter.convert_dcat_catalog(catalog)
+        result, errors = dcat_converter.convert_dcat_catalog(catalog)
         assert result["dataset"] == []
 
     def test_convert_dcat_catalog_handles_missing_dataset_field(self):
@@ -179,14 +179,16 @@ class TestDCATConverter:
             ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema"
         }
-        result = dcat_converter.convert_dcat_catalog(catalog)
+        result, errors = dcat_converter.convert_dcat_catalog(catalog)
         assert result.get("dataset", []) == []
 
     def test_convert_dcat_catalog_does_not_modify_original(
         self, sample_v1_1_catalog
     ):
         original_conformsTo = sample_v1_1_catalog["conformsTo"]
-        dcat_converter.convert_dcat_catalog(sample_v1_1_catalog)
+        catalog, errors = dcat_converter.convert_dcat_catalog(
+            sample_v1_1_catalog
+        )
         assert sample_v1_1_catalog["conformsTo"] == original_conformsTo
         assert "@context" in sample_v1_1_catalog
 
@@ -246,7 +248,10 @@ class TestDCATConverter:
         assert len(catalog["dataset"]) == 1
 
     def test_convert_dcat_catalog_captures_transformation_errors(self):
-        catalog_with_bad_dataset = {
+        import unittest.mock as mock
+        from ckanext.datagov_inventory.dcat import transforms
+
+        catalog_with_datasets = {
             "@context": (
                 "https://project-open-data.cio.gov/v1.1/schema/"
                 "catalog.jsonld"
@@ -269,8 +274,7 @@ class TestDCATConverter:
                     "title": "Bad Dataset",
                     "identifier": "bad-001",
                     "description": "This will fail transformation",
-                    "modified": "invalid-date-format",
-                    "temporal": "not-a-valid-temporal",
+                    "modified": "2024-01-15",
                     "accessLevel": "public",
                     "publisher": {"name": "Test Agency"},
                     "contactPoint": {
@@ -280,10 +284,23 @@ class TestDCATConverter:
                 }
             ]
         }
-        catalog, errors = dcat_converter.convert_dcat_catalog(
-            catalog_with_bad_dataset
-        )
-        assert len(errors) > 0
+
+        original_transform = transforms.transform_temporal
+
+        def mock_transform_temporal(dataset):
+            if dataset.get("identifier") == "bad-001":
+                raise ValueError("Simulated transformation error")
+            return original_transform(dataset)
+
+        with mock.patch.object(
+            transforms, 'transform_temporal', side_effect=mock_transform_temporal
+        ):
+            catalog, errors = dcat_converter.convert_dcat_catalog(
+                catalog_with_datasets
+            )
+
+        assert len(errors) == 1
+        assert errors[0]["identifier"] == "bad-001"
         assert len(catalog["dataset"]) == 1
         assert catalog["dataset"][0]["identifier"] == "valid-001"
 
@@ -322,6 +339,9 @@ class TestDCATConverter:
             assert "error" in error
 
     def test_convert_dcat_catalog_continues_processing_after_error(self):
+        import unittest.mock as mock
+        from ckanext.datagov_inventory.dcat import transforms
+
         catalog_with_mixed_datasets = {
             "@context": (
                 "https://project-open-data.cio.gov/v1.1/schema/"
@@ -346,7 +366,6 @@ class TestDCATConverter:
                     "identifier": "error-001",
                     "description": "Should fail",
                     "modified": "2024-01-15",
-                    "temporal": {"invalid": "structure"},
                     "accessLevel": "public",
                     "publisher": {"name": "Test Agency"},
                     "contactPoint": {
@@ -368,9 +387,23 @@ class TestDCATConverter:
                 }
             ]
         }
-        catalog, errors = dcat_converter.convert_dcat_catalog(
-            catalog_with_mixed_datasets
-        )
+
+        original_transform = transforms.transform_spatial
+
+        def mock_transform_spatial(dataset):
+            if dataset.get("identifier") == "error-001":
+                raise RuntimeError("Simulated spatial transform error")
+            return original_transform(dataset)
+
+        with mock.patch.object(
+            transforms, 'transform_spatial', side_effect=mock_transform_spatial
+        ):
+            catalog, errors = dcat_converter.convert_dcat_catalog(
+                catalog_with_mixed_datasets
+            )
+
         assert len(catalog["dataset"]) == 2
         assert catalog["dataset"][0]["identifier"] == "valid-001"
         assert catalog["dataset"][1]["identifier"] == "valid-002"
+        assert len(errors) == 1
+        assert errors[0]["identifier"] == "error-001"

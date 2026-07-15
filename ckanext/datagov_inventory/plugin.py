@@ -239,7 +239,9 @@ def generate_dcat_v3(org_id):
 
         catalog_v1_1 = Package2Pod.wrap_json_catalog(output, json_export_map)
 
-        catalog_v3_0 = dcat_converter.convert_dcat_catalog(catalog_v1_1)
+        catalog_v3_0, conversion_errors = dcat_converter.convert_dcat_catalog(
+            catalog_v1_1
+        )
 
         catalog_json = json.dumps(catalog_v3_0, indent=2, ensure_ascii=False)
 

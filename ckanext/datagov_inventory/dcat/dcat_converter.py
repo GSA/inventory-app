@@ -295,9 +295,15 @@ def validate_datasets(
     return valid, invalid, error_count
 
 
-def convert_dcat_catalog(old_catalog: dict) -> dict:
-    """Convert DCAT-US v1.1 catalog to DCAT-US v3.0 catalog."""
+def convert_dcat_catalog(old_catalog: dict) -> tuple[dict, list]:
+    """Convert DCAT-US v1.1 catalog to DCAT-US v3.0 catalog.
+
+    Returns a tuple of (catalog, errors) where:
+    - catalog: dict with successfully transformed datasets
+    - errors: list of dicts with metadata about failed datasets
+    """
     new_catalog = copy.deepcopy(old_catalog)
+    errors = []
 
     # conformsTo on the Catalog
     new_catalog["conformsTo"] = {
@@ -326,8 +332,11 @@ def convert_dcat_catalog(old_catalog: dict) -> dict:
 
     datasets = new_catalog.get("dataset", [])
     click.echo(f"Transforming {len(datasets)} datasets.")
+    transformed_datasets = []
+
     for i, dataset in enumerate(datasets):
         identifier = dataset.get("identifier", f"index {i}")
+        title = dataset.get("title", "Unknown")
         try:
             dataset = transforms.transform_modified(dataset)
             dataset = transforms.transform_temporal(dataset)
@@ -341,13 +350,18 @@ def convert_dcat_catalog(old_catalog: dict) -> dict:
             dataset = transforms.transform_conforms_to(dataset)
             dataset = transforms.transform_landing_page(dataset)
             dataset = transforms.transform_issued(dataset)
-            datasets[i] = dataset
+            transformed_datasets.append(dataset)
         except Exception as e:
-            raise CatalogConversionException(
-                f"Failed to convert dataset {identifier}: {e}"
-            ) from e
+            error_entry = {
+                "identifier": identifier,
+                "title": title,
+                "error": str(e)
+            }
+            errors.append(error_entry)
+            click.echo(f"Error transforming dataset {identifier}: {e}")
 
-    return new_catalog
+    new_catalog["dataset"] = transformed_datasets
+    return new_catalog, errors
 
 
 def export_converted_catalog(catalog: dict, output_dir: str) -> None:
@@ -438,7 +452,15 @@ def main(output_dir, url, dry_run):
             f"{invalid_v1_1} invalid."
         )
 
-        converted_catalog = convert_dcat_catalog(catalog_to_convert)
+        converted_catalog, conversion_errors = convert_dcat_catalog(
+            catalog_to_convert
+        )
+
+        if conversion_errors:
+            click.echo(
+                f"Conversion errors: {len(conversion_errors)} "
+                "datasets failed transformation"
+            )
 
         try:
             validate_catalog(
