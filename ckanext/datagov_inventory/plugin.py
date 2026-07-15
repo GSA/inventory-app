@@ -211,11 +211,16 @@ def generate_dcat_v3(org_id):
         return "Invalid organization id"
 
     try:
-        toolkit.check_access('package_create',
-                           {'model': model, 'user': g.user},
-                           {'owner_org': org_id})
+        toolkit.check_access(
+            'package_create',
+            {'model': model, 'user': g.user},
+            {'owner_org': org_id}
+        )
     except toolkit.NotAuthorized:
-        log.error(f'NotAuthorized to generate DCAT v3.0 for org {org_id} (user: {g.user})')
+        log.error(
+            'NotAuthorized to generate DCAT v3.0 for org %s (user: %s)',
+            org_id, g.user
+        )
         return "Not Authorized"
 
     try:
@@ -226,7 +231,9 @@ def generate_dcat_v3(org_id):
         Package2Pod.seen_identifiers = set()
 
         for pkg in packages:
-            datajson_entry = Package2Pod.convert_package(pkg, json_export_map, redaction_enabled=False)
+            datajson_entry = Package2Pod.convert_package(
+                pkg, json_export_map, redaction_enabled=False
+            )
             if datajson_entry:
                 output.append(datajson_entry)
 
@@ -237,13 +244,19 @@ def generate_dcat_v3(org_id):
         catalog_json = json.dumps(catalog_v3_0, indent=2, ensure_ascii=False)
 
         zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        with zipfile.ZipFile(
+            zip_buffer, 'w', zipfile.ZIP_DEFLATED
+        ) as zip_file:
             zip_file.writestr('data.json', catalog_json.encode('utf-8'))
 
         zip_buffer.seek(0)
 
-        resp = Response(zip_buffer.getvalue(), mimetype='application/octet-stream')
-        resp.headers['Content-Disposition'] = 'attachment; filename="dcat-v3.zip"'
+        resp = Response(
+            zip_buffer.getvalue(), mimetype='application/octet-stream'
+        )
+        resp.headers['Content-Disposition'] = (
+            'attachment; filename="dcat-v3.zip"'
+        )
 
         return resp
 

@@ -18,8 +18,13 @@ from langcodes import Language, find, tag_is_valid
 
 ACCESS_RIGHTS_BY_LEVEL = {
     "public": "public",
-    "restricted public": "Access restricted. Contact the publisher to request access.",
-    "non-public": "Not available for public release. Contact the publisher for more information.",
+    "restricted public": (
+        "Access restricted. Contact the publisher to request access."
+    ),
+    "non-public": (
+        "Not available for public release. "
+        "Contact the publisher for more information."
+    ),
 }
 
 # There are four valid-but-unmapped values for `accrualPeriodicity`:
@@ -138,10 +143,12 @@ def transform_issued(dataset: dict) -> dict:
         # Midnight => no meaningful time component, emit a plain 'date'.
         new_dataset["issued"] = parsed.date().isoformat()  # e.g. 2015-06-02
     else:
-        # Normalize to UTC and format as a valid ISO 8601 date-time string (e.g. 2018-09-28T06:00:00Z).
+        # Normalize to UTC and format as ISO 8601 date-time.
         if parsed.tzinfo is None:
             parsed = parsed.replace(tzinfo=timezone.utc)
-        new_dataset["issued"] = parsed.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        new_dataset["issued"] = parsed.astimezone(
+            timezone.utc
+        ).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     return new_dataset
 
@@ -312,12 +319,14 @@ def transform_temporal(dataset: dict) -> dict:
 
 
 def _as_date(token: str) -> str | None:
-    """Return the date portion of `token` if it (a) is a year, (b) is a year and month,
-    or (c) parses as an ISO 8601 date or datetime, else None."""
+    """Return the date portion of token if parseable, else None."""
     if len(token) == 4 and token.isdigit():
         return token
 
-    if len(token) == 7 and token[4] == "-" and token[:4].isdigit() and token[5:].isdigit():
+    if (
+        len(token) == 7 and token[4] == "-"
+        and token[:4].isdigit() and token[5:].isdigit()
+    ):
         return token
 
     try:
@@ -348,7 +357,7 @@ def _to_valid_date(value: str) -> str:
     if value.endswith("Z"):
         return value
 
-    # Datetime-ish string (e.g. "2022-01-01T00:00:00" or "2022-01-01 00:00:00") — take the date part.
+    # Datetime-ish string — take the date part.
     if ("T" in value or " " in value) and len(value) >= 10:
         return value[:10]
 
@@ -407,12 +416,7 @@ def _wrap_sub_organization_of(organization: dict) -> None:
 
 
 def _parse_bbox(value: str) -> tuple[float, float, float, float] | None:
-    """Return (minLon, minLat, maxLon, maxLat) if `value` is a comma-
-    separated bbox string, otherwise None.
-
-    Note that a more complete implementation of this function is
-    available here: https://github.com/GSA/datagov-harvester/blob/main/harvester/utils/general_utils.py#L885-L955
-    """
+    """Return bbox tuple if value is comma-separated, else None."""
     parts = [p.strip() for p in value.split(",")]
     if len(parts) != 4:
         return None

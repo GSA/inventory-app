@@ -14,8 +14,12 @@ from referencing import Registry, Resource
 from . import transforms
 
 
-V1_1_CATALOG_SCHEMA_ID = "https://project-open-data.cio.gov/v1.1/schema/catalog.json"
-V3_0_CATALOG_SCHEMA_ID = "https://resources.data.gov/dcat-us/3.0.0/definitions/catalog"
+V1_1_CATALOG_SCHEMA_ID = (
+    "https://project-open-data.cio.gov/v1.1/schema/catalog.json"
+)
+V3_0_CATALOG_SCHEMA_ID = (
+    "https://resources.data.gov/dcat-us/3.0.0/definitions/catalog"
+)
 SCRIPT_DIR = Path(__file__).parent
 V1_1_DEFINITIONS_DIR = SCRIPT_DIR / "v1.1_definitions"
 V3_0_DEFINITIONS_DIR = SCRIPT_DIR / "definitions"
@@ -34,7 +38,7 @@ class CatalogConversionException(Exception):
 
 
 def format_path(path):
-    """Format a jsonschema path as a readable string like 'subject[0].inScheme'."""
+    """Format a jsonschema path as a readable string."""
     if not path:
         return "(root)"
     parts = []
@@ -74,10 +78,15 @@ def summarize_error(error, prefix=""):
 
         # If all sub-errors are null-type, we have a different problem
         if not meaningful:
-            return f"{prefix}{path}: field is not null and does not match any allowed type"
+            return (
+                f"{prefix}{path}: field is not null and does not match "
+                "any allowed type"
+            )
 
         # Check if it's a simple "not null and wrong type" case
-        has_null_alternative = any(is_null_type_error(e) for e in error.context)
+        has_null_alternative = any(
+            is_null_type_error(e) for e in error.context
+        )
 
         summaries = []
         for sub_error in meaningful:
@@ -90,15 +99,17 @@ def summarize_error(error, prefix=""):
             if len(summaries) == 1:
                 return f"{prefix}{intro}{summaries[0]}"
             else:
-                return f"{prefix}{intro}does not match alternatives:\n" + "\n".join(
-                    f"{prefix}  - {s}" for s in summaries
+                return (
+                    f"{prefix}{intro}does not match alternatives:\n"
+                    + "\n".join(f"{prefix}  - {s}" for s in summaries)
                 )
         elif summaries:
             if len(summaries) == 1:
                 return f"{prefix}{path}: {summaries[0]}"
             else:
-                return f"{prefix}{path}: does not match any alternative:\n" + "\n".join(
-                    f"{prefix}    - {s}" for s in summaries
+                return (
+                    f"{prefix}{path}: does not match any alternative:\n"
+                    + "\n".join(f"{prefix}    - {s}" for s in summaries)
                 )
 
     # Handle $ref errors - find the expected class
@@ -108,11 +119,16 @@ def summarize_error(error, prefix=""):
             # Dig into what specifically failed
             meaningful = find_meaningful_errors(error.context)
             if meaningful:
-                sub_summaries = [summarize_error(e, prefix="") for e in meaningful]
+                sub_summaries = [
+                    summarize_error(e, prefix="") for e in meaningful
+                ]
                 sub_summaries = [s for s in sub_summaries if s]
                 if sub_summaries:
                     if class_name:
-                        return f"does not conform to {class_name}: {'; '.join(sub_summaries)}"
+                        return (
+                            f"does not conform to {class_name}: "
+                            f"{'; '.join(sub_summaries)}"
+                        )
                     return "; ".join(sub_summaries)
         if class_name:
             return f"does not conform to {class_name}"
@@ -154,7 +170,7 @@ def summarize_error(error, prefix=""):
 
 
 def find_meaningful_errors(errors):
-    """Filter errors to find the meaningful ones, skipping null-type failures."""
+    """Filter errors, skipping null-type failures."""
     meaningful = []
     for error in errors:
         if is_null_type_error(error):
@@ -165,15 +181,15 @@ def find_meaningful_errors(errors):
 
 def is_null_type_error(error):
     """Check if this error is just 'type is not null'."""
-    return (error.validator == "type" and
-            error.validator_value == "null")
+    return (
+        error.validator == "type" and error.validator_value == "null"
+    )
 
 
 def extract_schema_name(schema):
-    """Extract a human-readable schema/class name from a schema definition."""
+    """Extract a human-readable schema/class name."""
     if isinstance(schema, dict):
         if "$ref" in schema:
-            # Extract class name from ref like "/dcat-us/3.0.0/definitions/concept"
             ref = schema["$ref"]
             return ref.split("/")[-1].title()
         if "title" in schema:
@@ -188,13 +204,19 @@ def load_schema_registry(definitions_dir: Path) -> Registry:
             resource = Resource.from_contents(json.load(f))
             registry = resource @ registry
 
-    # Some catalogs reference non-federal_dataset.json directly by filename URI;
+    # Some catalogs reference non-federal_dataset.json directly;
     # register it under that URI as an alias.
     non_federal = definitions_dir / "non-federal_dataset.json"
     if non_federal.exists():
         with non_federal.open() as f:
             contents = json.load(f)
-        contents_copy = {**contents, "$id": "https://project-open-data.cio.gov/v1.1/schema/non-federal_dataset.json"}
+        contents_copy = {
+            **contents,
+            "$id": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "non-federal_dataset.json"
+            )
+        }
         registry = Resource.from_contents(contents_copy) @ registry
 
     return registry
@@ -202,13 +224,15 @@ def load_schema_registry(definitions_dir: Path) -> Registry:
 
 def fetch_dcat_catalog(url: str) -> dict:
     """Fetch a DCAT-US v1.1 catalog to convert to DCAT-US v3.0."""
-    # Some target servers (e.g. usda.gov) reject non-browser TLS/HTTP2 fingerprints, so
-    # we impersonate a real browser using curl_cffi.
+    # Some servers reject non-browser TLS/HTTP2 fingerprints,
+    # so we impersonate a real browser using curl_cffi.
     try:
         response = requests.get(url, timeout=60, impersonate="safari17_0")
         response.raise_for_status()
     except RequestException as e:
-        raise CatalogFetchException(f"Request failed: {type(e).__name__}: {e!r}") from e
+        raise CatalogFetchException(
+            f"Request failed: {type(e).__name__}: {e!r}"
+        ) from e
 
     try:
         text = response.content.decode("utf-8-sig")
@@ -223,13 +247,16 @@ def fetch_dcat_catalog(url: str) -> dict:
 
     if not isinstance(parsed, dict):
         raise CatalogFetchException(
-            f"Expected a JSON object at the catalog root, got {type(parsed).__name__}"
+            f"Expected a JSON object at the catalog root, "
+            f"got {type(parsed).__name__}"
         )
 
     return parsed
 
 
-def validate_catalog(schema_id: str, registry: Registry, catalog: dict) -> None:
+def validate_catalog(
+    schema_id: str, registry: Registry, catalog: dict
+) -> None:
     """Validate a DCAT-US v1.1 or v3.0 catalog."""
     validator = Draft202012Validator(
         {"$ref": schema_id},
@@ -240,13 +267,16 @@ def validate_catalog(schema_id: str, registry: Registry, catalog: dict) -> None:
     if errors:
         version_number = "v1.1" if "v1.1" in schema_id else "v3.0"
         raise CatalogValidationException(
-            f"{version_number} validation failed with {len(errors)} error(s):\n"
+            f"{version_number} validation failed with "
+            f"{len(errors)} error(s):\n"
             + format_validation_errors(errors, indent=2)
         )
 
 
-def validate_datasets(schema_id: str, registry: Registry, datasets: list) -> tuple[int, int, int]:
-    """Validate each dataset individually. Returns (valid_count, invalid_count, error_count)."""
+def validate_datasets(
+    schema_id: str, registry: Registry, datasets: list
+) -> tuple[int, int, int]:
+    """Validate each dataset individually."""
     validator = Draft202012Validator(
         {"$ref": schema_id},
         registry=registry,
@@ -280,15 +310,17 @@ def convert_dcat_catalog(old_catalog: dict) -> dict:
     new_catalog.pop("@context", None)
     new_catalog.pop("describedBy", None)
 
-    # The catalog itself may have a `modified` timestamp so we normalize it to a
-    # timezone-aware date-time string, since v3.0 requires one.
+    # The catalog may have a `modified` timestamp so we normalize
+    # it to a timezone-aware date-time string (v3.0 requires one).
     catalog_modified = new_catalog.get("modified")
     if isinstance(catalog_modified, str):
         try:
             parsed = datetime.fromisoformat(catalog_modified)
             if parsed.tzinfo is None:
                 parsed = parsed.replace(tzinfo=timezone.utc)
-            new_catalog["modified"] = parsed.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            new_catalog["modified"] = parsed.astimezone(
+                timezone.utc
+            ).strftime("%Y-%m-%dT%H:%M:%SZ")
         except ValueError:
             del new_catalog["modified"]
 
@@ -333,9 +365,22 @@ def export_converted_catalog(catalog: dict, output_dir: str) -> None:
 
 
 @click.command()
-@click.option("-o", "--output-dir", help="Output directory", default="converted_dcat_data")
-@click.option("-u", "--url", help="URL of DCAT-US v1.1 catalog to be converted", required=True)
-@click.option("--dry-run", help="Validate and convert DCAT-US v1.1 catalog without saving to disk", is_flag=True, default=False)
+@click.option(
+    "-o", "--output-dir",
+    help="Output directory",
+    default="converted_dcat_data"
+)
+@click.option(
+    "-u", "--url",
+    help="URL of DCAT-US v1.1 catalog to be converted",
+    required=True
+)
+@click.option(
+    "--dry-run",
+    help="Validate and convert without saving to disk",
+    is_flag=True,
+    default=False
+)
 def main(output_dir, url, dry_run):
     """Convert DCAT catalog."""
     v1_1_registry = load_schema_registry(V1_1_DEFINITIONS_DIR)
@@ -344,7 +389,7 @@ def main(output_dir, url, dry_run):
     results = {
         "error": False,
         "conversion_successful": False
-		}
+    }
 
     counts = {
         "datasets": 0,
@@ -362,50 +407,84 @@ def main(output_dir, url, dry_run):
         datasets = catalog_to_convert.get("dataset", [])
 
         try:
-            validate_catalog(V1_1_CATALOG_SCHEMA_ID, v1_1_registry, catalog_to_convert)
+            validate_catalog(
+                V1_1_CATALOG_SCHEMA_ID, v1_1_registry, catalog_to_convert
+            )
             click.echo("Input catalog is valid DCAT-US v1.1.")
         except CatalogValidationException:
-            click.echo("Warning: input catalog failed v1.1 validation — converting anyway.")
+            click.echo(
+                "Warning: input catalog failed v1.1 validation "
+                "— converting anyway."
+            )
 
         # Per-dataset v1.1 validation
-        # The v1.1 catalog schema validates the catalog wrapper, not individual
-        # datasets directly. We use the dataset schema id derived from the catalog.
-        V1_1_DATASET_SCHEMA_ID = "https://project-open-data.cio.gov/v1.1/schema/non-federal_dataset.json"
-        valid_v1_1, invalid_v1_1, validation_errors_v1_1 = validate_datasets(V1_1_DATASET_SCHEMA_ID, v1_1_registry, datasets)
+        # The v1.1 catalog schema validates the catalog wrapper,
+        # not individual datasets directly.
+        V1_1_DATASET_SCHEMA_ID = (
+            "https://project-open-data.cio.gov/v1.1/schema/"
+            "non-federal_dataset.json"
+        )
+        valid_v1_1, invalid_v1_1, validation_errors_v1_1 = (
+            validate_datasets(
+                V1_1_DATASET_SCHEMA_ID, v1_1_registry, datasets
+            )
+        )
         counts["valid_v1_1"] = valid_v1_1
         counts["invalid_v1_1"] = invalid_v1_1
         counts["validation_errors_v1_1"] = validation_errors_v1_1
         counts["datasets"] = valid_v1_1 + invalid_v1_1
-        click.echo(f"Per-dataset v1.1: {valid_v1_1} valid, {invalid_v1_1} invalid.")
+        click.echo(
+            f"Per-dataset v1.1: {valid_v1_1} valid, "
+            f"{invalid_v1_1} invalid."
+        )
 
         converted_catalog = convert_dcat_catalog(catalog_to_convert)
 
         try:
-            validate_catalog(V3_0_CATALOG_SCHEMA_ID, v3_0_registry, converted_catalog)
+            validate_catalog(
+                V3_0_CATALOG_SCHEMA_ID, v3_0_registry, converted_catalog
+            )
         except CatalogValidationException as e:
             click.echo(f"Invalid DCAT-US data: {e}", err=True)
 
         converted_datasets = converted_catalog.get("dataset", [])
-        V3_0_DATASET_SCHEMA_ID = "https://resources.data.gov/dcat-us/3.0.0/definitions/dataset"
-        valid_v3_0, invalid_v3_0, validation_errors_v3_0 = validate_datasets(V3_0_DATASET_SCHEMA_ID, v3_0_registry, converted_datasets)
+        V3_0_DATASET_SCHEMA_ID = (
+            "https://resources.data.gov/dcat-us/3.0.0/definitions/dataset"
+        )
+        valid_v3_0, invalid_v3_0, validation_errors_v3_0 = (
+            validate_datasets(
+                V3_0_DATASET_SCHEMA_ID, v3_0_registry, converted_datasets
+            )
+        )
         counts["valid_v3_0"] = valid_v3_0
         counts["invalid_v3_0"] = invalid_v3_0
         counts["validation_errors_v3_0"] = validation_errors_v3_0
-        click.echo(f"Per-dataset v3.0: {valid_v3_0} valid, {invalid_v3_0} invalid.")
+        click.echo(
+            f"Per-dataset v3.0: {valid_v3_0} valid, "
+            f"{invalid_v3_0} invalid."
+        )
 
         if dry_run:
             click.echo("Dry run complete.")
-        elif results["error"] == False:
+        elif results["error"] is False:
             click.echo("Could not convert.")
         else:
             export_converted_catalog(converted_catalog, output_dir)
 
     except CatalogFetchException as e:
         results["error"] = True
-        click.echo(f"There was an error fetching a DCAT-US v1.1 catalog to convert: {e}", err=True)
+        click.echo(
+            f"There was an error fetching a DCAT-US v1.1 catalog "
+            f"to convert: {e}",
+            err=True
+        )
     except CatalogConversionException as e:
         results["error"] = True
-        click.echo(f"There was an error converting a DCAT-US v1.1 catalog to DCAT-US v3.0: {e}", err=True)
+        click.echo(
+            f"There was an error converting a DCAT-US v1.1 catalog "
+            f"to DCAT-US v3.0: {e}",
+            err=True
+        )
 
     if not results["error"] and counts["datasets"] == counts["valid_v3_0"]:
         results["conversion_successful"] = True
