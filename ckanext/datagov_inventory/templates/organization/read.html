@@ -9,6 +9,7 @@
         <button id="btnDraft" class="btn btn-secondary">Export Drafts</button>
 
         <form id="formUnredacted" action="{{c.group_dict.id + '/unredacted.json' }}"></form>
+        <form id="formDcatV3" action="{{c.group_dict.id + '/dcat-v3.json' }}"></form>
         <form id="formDraft" action="{{c.group_dict.id + '/draft.json' }}"></form>
 
         <script type="text/javascript" src="/base/vendor/jquery.js"></script>
@@ -19,8 +20,7 @@
                 });
 
                 $('#btnDcatV3').click(function () {
-                    // TODO: Implement DCAT-US v3.0 export
-                    console.log('DCAT-US v3.0 export button clicked');
+                    $('#formDcatV3').submit();
                 });
 
                 $('#btnDraft').click(function () {

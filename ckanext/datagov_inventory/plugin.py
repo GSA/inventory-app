@@ -10,7 +10,6 @@ from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
 from ckanext.datagov_inventory import action
-from ckanext.datagov_inventory.dcat import dcat_converter
 from ckanext.datajson.blueprint import get_packages
 from ckanext.datajson.package2pod import Package2Pod
 from ckanext.datajson.helpers import get_export_map_json
@@ -204,6 +203,8 @@ pusher.add_url_rule(
 
 
 def generate_dcat_v3(org_id):
+    from ckanext.datagov_inventory.dcat import dcat_converter
+
     log.debug(f'Generating DCAT-US v3.0 export for org: {org_id}')
 
     if org_id is None:
@@ -225,14 +226,13 @@ def generate_dcat_v3(org_id):
         Package2Pod.seen_identifiers = set()
 
         for pkg in packages:
-            extras = dict([(x['key'], x['value']) for x in pkg.get('extras', {})])
-            pod = Package2Pod(pkg, json_export_map, extras)
-            output.append(pod.as_pod())
+            datajson_entry = Package2Pod.convert_package(pkg, json_export_map, redaction_enabled=False)
+            if datajson_entry:
+                output.append(datajson_entry)
 
         catalog_v1_1 = Package2Pod.wrap_json_catalog(output, json_export_map)
-        catalog_dict = json.loads(catalog_v1_1)
 
-        catalog_v3_0 = dcat_converter.convert_dcat_catalog(catalog_dict)
+        catalog_v3_0 = dcat_converter.convert_dcat_catalog(catalog_v1_1)
 
         catalog_json = json.dumps(catalog_v3_0, indent=2, ensure_ascii=False)
 
