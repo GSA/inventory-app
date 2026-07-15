@@ -247,11 +247,9 @@ def generate_dcat_v3(org_id):
 
         return resp
 
-    except Exception as e:
-        import sys
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        log.error('%s : %s : %s', exc_type, exc_tb.tb_lineno, str(e))
-        return f"Error generating export: {str(e)}"
+    except Exception:
+        log.exception('Error generating DCAT v3.0 export for org %s', org_id)
+        return "Error generating export", 500
 
 
 pusher.add_url_rule(
