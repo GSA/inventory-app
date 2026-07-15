@@ -10,12 +10,18 @@ from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
 from ckanext.datagov_inventory import action
+from ckanext.datajson.blueprint import get_packages
+from ckanext.datajson.package2pod import Package2Pod
+from ckanext.datajson.helpers import get_export_map_json
 
-from flask import Blueprint, redirect, session
+from flask import Blueprint, redirect, session, Response
 from datetime import datetime, timezone
 import logging
 import re
 from urllib.parse import quote
+import json
+import io
+import zipfile
 
 log = logging.getLogger(__name__)
 pusher = Blueprint('datagov_inventory', __name__)
@@ -193,6 +199,75 @@ def user_org_roles_table():
 pusher.add_url_rule(
     '/user/user-org-roles',
     view_func=user_org_roles_table
+)
+
+
+def generate_dcat_v3(org_id):
+    from ckanext.datagov_inventory.dcat import dcat_converter
+
+    log.debug(f'Generating DCAT-US v3.0 export for org: {org_id}')
+
+    if org_id is None:
+        return "Invalid organization id"
+
+    try:
+        toolkit.check_access(
+            'package_create',
+            {'model': model, 'user': g.user},
+            {'owner_org': org_id}
+        )
+    except toolkit.NotAuthorized:
+        log.error(
+            'NotAuthorized to generate DCAT v3.0 for org %s (user: %s)',
+            org_id, g.user
+        )
+        return "Not Authorized"
+
+    try:
+        packages = get_packages(owner_org=org_id, with_private=True)
+
+        json_export_map = get_export_map_json()
+        output = []
+        Package2Pod.seen_identifiers = set()
+
+        for pkg in packages:
+            datajson_entry = Package2Pod.convert_package(
+                pkg, json_export_map, redaction_enabled=False
+            )
+            if datajson_entry:
+                output.append(datajson_entry)
+
+        catalog_v1_1 = Package2Pod.wrap_json_catalog(output, json_export_map)
+
+        catalog_v3_0 = dcat_converter.convert_dcat_catalog(catalog_v1_1)
+
+        catalog_json = json.dumps(catalog_v3_0, indent=2, ensure_ascii=False)
+
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(
+            zip_buffer, 'w', zipfile.ZIP_DEFLATED
+        ) as zip_file:
+            zip_file.writestr('data.json', catalog_json.encode('utf-8'))
+
+        zip_buffer.seek(0)
+
+        resp = Response(
+            zip_buffer.getvalue(), mimetype='application/octet-stream'
+        )
+        resp.headers['Content-Disposition'] = (
+            'attachment; filename="dcat-v3.zip"'
+        )
+
+        return resp
+
+    except Exception:
+        log.exception('Error generating DCAT v3.0 export for org %s', org_id)
+        return "Error generating export", 500
+
+
+pusher.add_url_rule(
+    '/organization/<org_id>/dcat-v3.json',
+    view_func=generate_dcat_v3
 )
 
 
