@@ -243,7 +243,7 @@ def generate_dcat_v3(org_id):
         zip_buffer.seek(0)
 
         resp = Response(zip_buffer.getvalue(), mimetype='application/octet-stream')
-        resp.headers['Content-Disposition'] = f'attachment; filename="dcat-v3-{org_id}.zip"'
+        resp.headers['Content-Disposition'] = 'attachment; filename="dcat-v3.zip"'
 
         return resp
 
