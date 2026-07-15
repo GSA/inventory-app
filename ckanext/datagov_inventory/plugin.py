@@ -248,7 +248,9 @@ def generate_dcat_v3(org_id):
         return resp
 
     except Exception as e:
-        log.error(f'Error generating DCAT v3.0 export for org {org_id}: {e}', exc_info=True)
+        import sys
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        log.error('%s : %s : %s', exc_type, exc_tb.tb_lineno, str(e))
         return f"Error generating export: {str(e)}"
 
 
