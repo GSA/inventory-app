@@ -24,7 +24,7 @@ ckanext-usmetadata==0.3.4
 ckantoolkit==0.0.7
 click==8.1.7
 cryptography==48.0.1
-curl-cffi==0.7.3
+curl-cffi==0.15.0b6
 defusedxml==0.7.1
 dominate==2.9.1
 elementpath==5.1.1
