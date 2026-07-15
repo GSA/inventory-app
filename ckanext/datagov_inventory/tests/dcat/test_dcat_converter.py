@@ -429,6 +429,7 @@ class TestV1ValidationTracking:
                     "identifier": "valid-001",
                     "description": "A valid dataset",
                     "modified": "2024-01-15",
+                    "keyword": ["valid", "test"],
                     "accessLevel": "public",
                     "publisher": {"name": "Test Agency"},
                     "contactPoint": {
@@ -509,6 +510,7 @@ class TestV1ValidationTracking:
                     "identifier": "test-001",
                     "description": "A test dataset",
                     "modified": "2024-01-15",
+                    "keyword": ["test", "dataset"],
                     "accessLevel": "public",
                     "publisher": {"name": "Test Agency"},
                     "contactPoint": {
