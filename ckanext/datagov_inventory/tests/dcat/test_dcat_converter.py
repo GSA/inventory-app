@@ -407,3 +407,114 @@ class TestDCATConverter:
         assert catalog["dataset"][1]["identifier"] == "valid-002"
         assert len(errors) == 1
         assert errors[0]["identifier"] == "error-001"
+
+
+class TestV1ValidationTracking:
+
+    @pytest.fixture
+    def invalid_v1_1_catalog(self):
+        return {
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Missing Required Fields",
+                    "identifier": "invalid-001"
+                },
+                {
+                    "title": "Valid Dataset",
+                    "identifier": "valid-001",
+                    "description": "A valid dataset",
+                    "modified": "2024-01-15",
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test Agency"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                }
+            ]
+        }
+
+    def test_validate_v1_1_catalog_returns_validation_errors(
+        self, invalid_v1_1_catalog
+    ):
+        from ckanext.datagov_inventory.dcat.dcat_converter import (
+            validate_v1_1_catalog
+        )
+
+        errors = validate_v1_1_catalog(invalid_v1_1_catalog)
+        assert isinstance(errors, list)
+        assert len(errors) > 0
+
+    def test_validate_v1_1_catalog_includes_dataset_context(
+        self, invalid_v1_1_catalog
+    ):
+        from ckanext.datagov_inventory.dcat.dcat_converter import (
+            validate_v1_1_catalog
+        )
+
+        errors = validate_v1_1_catalog(invalid_v1_1_catalog)
+        invalid_dataset_errors = [
+            e for e in errors if e.get("identifier") == "invalid-001"
+        ]
+        assert len(invalid_dataset_errors) > 0
+        assert "identifier" in invalid_dataset_errors[0]
+        assert "title" in invalid_dataset_errors[0]
+        assert "errors" in invalid_dataset_errors[0]
+
+    def test_validate_v1_1_catalog_returns_empty_for_valid(
+        self, sample_v1_1_catalog
+    ):
+        from ckanext.datagov_inventory.dcat.dcat_converter import (
+            validate_v1_1_catalog
+        )
+
+        errors = validate_v1_1_catalog(sample_v1_1_catalog)
+        assert errors == []
+
+    def test_validate_v1_1_catalog_counts_valid_and_invalid(
+        self, invalid_v1_1_catalog
+    ):
+        from ckanext.datagov_inventory.dcat.dcat_converter import (
+            validate_v1_1_catalog_with_counts
+        )
+
+        valid, invalid, errors = validate_v1_1_catalog_with_counts(
+            invalid_v1_1_catalog
+        )
+        assert valid == 1
+        assert invalid == 1
+        assert len(errors) == 1
+
+    @pytest.fixture
+    def sample_v1_1_catalog(self):
+        return {
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "describedBy": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.json"
+            ),
+            "modified": "2024-01-15T10:30:00",
+            "dataset": [
+                {
+                    "title": "Test Dataset",
+                    "identifier": "test-001",
+                    "description": "A test dataset",
+                    "modified": "2024-01-15",
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test Agency"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                }
+            ]
+        }
