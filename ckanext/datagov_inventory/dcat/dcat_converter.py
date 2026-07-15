@@ -8,28 +8,27 @@ from pathlib import Path
 import click
 from curl_cffi import requests
 from curl_cffi.requests.exceptions import RequestException
-from jsonschema import Draft202012Validator
-from referencing import Registry, Resource
 
 from . import transforms
+from .validator import (
+    CatalogValidationException,
+    V1_1_CATALOG_SCHEMA_ID,
+    V1_1_DATASET_SCHEMA_ID,
+    V3_0_CATALOG_SCHEMA_ID,
+    V3_0_DATASET_SCHEMA_ID,
+    load_schema_registry,
+    validate_catalog,
+    validate_datasets,
+    format_validation_errors,
+)
 
 
-V1_1_CATALOG_SCHEMA_ID = (
-    "https://project-open-data.cio.gov/v1.1/schema/catalog.json"
-)
-V3_0_CATALOG_SCHEMA_ID = (
-    "https://resources.data.gov/dcat-us/3.0.0/definitions/catalog"
-)
 SCRIPT_DIR = Path(__file__).parent
 V1_1_DEFINITIONS_DIR = SCRIPT_DIR / "v1.1_definitions"
 V3_0_DEFINITIONS_DIR = SCRIPT_DIR / "definitions"
 
 
 class CatalogFetchException(Exception):
-    pass
-
-
-class CatalogValidationException(Exception):
     pass
 
 
