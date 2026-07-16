@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   create-cloudgov-services-staging:
     name: create services (staging)
@@ -26,6 +29,9 @@ jobs:
     name: deploy (staging)
     needs:
       - create-cloudgov-services-staging
+    permissions:
+      actions: write
+      contents: read
     uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
     with:
       environ: staging
@@ -38,6 +44,9 @@ jobs:
     needs:
       - create-cloudgov-services-prod
       - deploy-staging
+    permissions:
+      actions: write
+      contents: read
     uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
     with:
       environ: prod
