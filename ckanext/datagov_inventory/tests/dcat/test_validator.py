@@ -283,3 +283,80 @@ class TestPackage2PodErrorTracking:
 
         assert valid == []
         assert len(errors) == 2
+
+
+class TestErrorLogCapture:
+
+    def test_capture_processing_logs_returns_log_string(self):
+        import logging
+        from ckanext.datagov_inventory.dcat.validator import (
+            capture_processing_logs
+        )
+
+        def processing_function():
+            logger = logging.getLogger(__name__)
+            logger.warning("Processing warning message")
+            logger.error("Processing error message")
+            return "result"
+
+        result, log_output = capture_processing_logs(
+            processing_function,
+            logger_name=__name__
+        )
+
+        assert result == "result"
+        assert isinstance(log_output, str)
+        assert "Processing warning message" in log_output
+        assert "Processing error message" in log_output
+
+    def test_capture_processing_logs_handles_no_logs(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            capture_processing_logs
+        )
+
+        def silent_function():
+            return "done"
+
+        result, log_output = capture_processing_logs(
+            silent_function,
+            logger_name="test"
+        )
+
+        assert result == "done"
+        assert log_output == ""
+
+    def test_capture_processing_logs_preserves_exceptions(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            capture_processing_logs
+        )
+
+        def failing_function():
+            raise ValueError("Test error")
+
+        try:
+            capture_processing_logs(failing_function, logger_name="test")
+            assert False, "Should have raised ValueError"
+        except ValueError as e:
+            assert str(e) == "Test error"
+
+    def test_capture_processing_logs_formats_multiline_output(self):
+        import logging
+        from ckanext.datagov_inventory.dcat.validator import (
+            capture_processing_logs
+        )
+
+        def multi_log_function():
+            logger = logging.getLogger(__name__)
+            logger.warning("Line 1")
+            logger.warning("Line 2")
+            logger.error("Line 3")
+            return "complete"
+
+        result, log_output = capture_processing_logs(
+            multi_log_function,
+            logger_name=__name__
+        )
+
+        assert "Line 1" in log_output
+        assert "Line 2" in log_output
+        assert "Line 3" in log_output

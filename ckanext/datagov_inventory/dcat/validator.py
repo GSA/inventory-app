@@ -425,3 +425,41 @@ def detect_package_conversion_errors(
             valid.append(package)
 
     return valid, errors
+
+
+def capture_processing_logs(processing_function, logger_name):
+    """Capture log output during processing.
+
+    Args:
+        processing_function: Callable that performs processing
+        logger_name: Name of logger to capture
+
+    Returns:
+        Tuple of (result, log_output)
+        - result: return value from processing_function
+        - log_output: string containing captured log messages
+    """
+    import logging
+    import io
+
+    logger = logging.getLogger(logger_name)
+    stream = io.StringIO()
+    handler = logging.StreamHandler(stream)
+    handler.setLevel(logging.WARNING)
+    formatter = logging.Formatter('%(levelname)s: %(message)s')
+    handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
+    original_level = logger.level
+    logger.setLevel(logging.WARNING)
+
+    try:
+        result = processing_function()
+        handler.flush()
+        log_output = stream.getvalue()
+        return result, log_output
+    finally:
+        logger.removeHandler(handler)
+        logger.setLevel(original_level)
+        handler.close()
+        stream.close()
