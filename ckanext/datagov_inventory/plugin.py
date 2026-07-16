@@ -203,7 +203,9 @@ pusher.add_url_rule(
 
 
 def generate_dcat_v3(org_id):
-    from ckanext.datagov_inventory.dcat import dcat_converter
+    from ckanext.datagov_inventory.dcat.validator import (
+        process_export_with_error_tracking
+    )
 
     log.debug(f'Generating DCAT-US v3.0 export for org: {org_id}')
 
@@ -239,22 +241,10 @@ def generate_dcat_v3(org_id):
 
         catalog_v1_1 = Package2Pod.wrap_json_catalog(output, json_export_map)
 
-        catalog_v3_0, conversion_errors = dcat_converter.convert_dcat_catalog(
-            catalog_v1_1
-        )
-
-        catalog_json = json.dumps(catalog_v3_0, indent=2, ensure_ascii=False)
-
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(
-            zip_buffer, 'w', zipfile.ZIP_DEFLATED
-        ) as zip_file:
-            zip_file.writestr('data.json', catalog_json.encode('utf-8'))
-
-        zip_buffer.seek(0)
+        zip_binary = process_export_with_error_tracking(catalog_v1_1)
 
         resp = Response(
-            zip_buffer.getvalue(), mimetype='application/octet-stream'
+            zip_binary, mimetype='application/octet-stream'
         )
         resp.headers['Content-Disposition'] = (
             'attachment; filename="dcat-v3.zip"'
