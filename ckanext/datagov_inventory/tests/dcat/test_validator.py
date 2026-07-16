@@ -188,3 +188,98 @@ class TestV3ValidationTracking:
         assert valid == 1
         assert invalid == 1
         assert len(errors) == 1
+
+
+class TestPackage2PodErrorTracking:
+
+    def test_detect_package_conversion_errors_identifies_error_key(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            detect_package_conversion_errors
+        )
+
+        package_results = [
+            {
+                "title": "Valid Package",
+                "identifier": "valid-001",
+                "description": "A valid package"
+            },
+            {
+                "title": "Error Package",
+                "identifier": "error-001",
+                "errors": "Missing required fields"
+            },
+            {
+                "title": "Another Valid",
+                "identifier": "valid-002",
+                "description": "Another valid package"
+            }
+        ]
+
+        valid, errors = detect_package_conversion_errors(package_results)
+
+        assert len(valid) == 2
+        assert len(errors) == 1
+        assert valid[0]["identifier"] == "valid-001"
+        assert valid[1]["identifier"] == "valid-002"
+        assert errors[0]["identifier"] == "error-001"
+
+    def test_detect_package_conversion_errors_preserves_error_details(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            detect_package_conversion_errors
+        )
+
+        package_results = [
+            {
+                "title": "Error Package",
+                "identifier": "error-001",
+                "errors": "Multiple validation failures"
+            }
+        ]
+
+        valid, errors = detect_package_conversion_errors(package_results)
+
+        assert len(errors) == 1
+        assert "identifier" in errors[0]
+        assert "title" in errors[0]
+        assert "errors" in errors[0]
+        assert errors[0]["errors"] == "Multiple validation failures"
+
+    def test_detect_package_conversion_errors_handles_empty_list(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            detect_package_conversion_errors
+        )
+
+        valid, errors = detect_package_conversion_errors([])
+
+        assert valid == []
+        assert errors == []
+
+    def test_detect_package_conversion_errors_handles_all_valid(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            detect_package_conversion_errors
+        )
+
+        package_results = [
+            {"title": "Valid 1", "identifier": "v1"},
+            {"title": "Valid 2", "identifier": "v2"}
+        ]
+
+        valid, errors = detect_package_conversion_errors(package_results)
+
+        assert len(valid) == 2
+        assert errors == []
+
+    def test_detect_package_conversion_errors_handles_all_errors(self):
+        from ckanext.datagov_inventory.dcat.validator import (
+            detect_package_conversion_errors
+        )
+
+        package_results = [
+            {"title": "Error 1", "identifier": "e1", "errors": "Bad data"},
+            {"title": "Error 2", "identifier": "e2", "errors": "Missing field"}
+        ]
+
+        valid, errors = detect_package_conversion_errors(package_results)
+
+        assert valid == []
+        assert len(errors) == 2
