@@ -13,13 +13,10 @@ from . import transforms
 from .validator import (
     CatalogValidationException,
     V1_1_CATALOG_SCHEMA_ID,
-    V1_1_DATASET_SCHEMA_ID,
     V3_0_CATALOG_SCHEMA_ID,
-    V3_0_DATASET_SCHEMA_ID,
     load_schema_registry,
     validate_catalog,
     validate_datasets,
-    format_validation_errors,
 )
 
 

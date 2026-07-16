@@ -293,7 +293,8 @@ class TestDCATConverter:
             return original_transform(dataset)
 
         with mock.patch.object(
-            transforms, 'transform_temporal', side_effect=mock_transform_temporal
+            transforms, 'transform_temporal',
+            side_effect=mock_transform_temporal
         ):
             catalog, errors = dcat_converter.convert_dcat_catalog(
                 catalog_with_datasets
@@ -407,5 +408,4 @@ class TestDCATConverter:
         assert catalog["dataset"][1]["identifier"] == "valid-002"
         assert len(errors) == 1
         assert errors[0]["identifier"] == "error-001"
-
 

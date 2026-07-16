@@ -474,7 +474,10 @@ class TestEndToEndErrorHandling:
         )
 
         v1_1_catalog = {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
@@ -523,7 +526,10 @@ class TestEndToEndErrorHandling:
         )
 
         v1_1_catalog = {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
@@ -553,7 +559,10 @@ class TestEndToEndErrorHandling:
         )
 
         v1_1_catalog = {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
@@ -583,13 +592,15 @@ class TestEndToEndErrorHandling:
     def test_full_export_flow_captures_v3_0_validation_errors(self):
         import zipfile
         import io
-        import json
         from ckanext.datagov_inventory.dcat.validator import (
             process_export_with_error_tracking
         )
 
         v1_1_catalog = {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
@@ -621,7 +632,10 @@ class TestEndToEndErrorHandling:
         )
 
         v1_1_catalog = {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
@@ -655,7 +669,10 @@ class TestEndToEndErrorHandling:
         )
 
         v1_1_catalog = {
-            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "@context": (
+                "https://project-open-data.cio.gov/v1.1/schema/"
+                "catalog.jsonld"
+            ),
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
