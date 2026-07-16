@@ -1,7 +1,7 @@
--e /app
+-e .
 
 flake8
-pytest==8.3.5
+pytest==9.0.3
 pytest-ckan
 pytest-cov
 
