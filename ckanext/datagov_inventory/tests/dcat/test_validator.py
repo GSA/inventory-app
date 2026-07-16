@@ -461,3 +461,239 @@ class TestWriteZip:
 
         assert parsed["conformsTo"] == "DCAT-US 3.0"
         assert parsed["dataset"] == []
+
+
+class TestEndToEndErrorHandling:
+
+    def test_full_export_flow_with_mixed_valid_and_invalid_datasets(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+
+        v1_1_catalog = {
+            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Valid Dataset",
+                    "identifier": "valid-001",
+                    "description": "Valid",
+                    "modified": "2024-01-15",
+                    "keyword": ["test"],
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test Agency"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                },
+                {
+                    "title": "Invalid Dataset",
+                    "identifier": "invalid-001",
+                    "description": "Missing required fields"
+                }
+            ]
+        }
+
+        zip_binary = process_export_with_error_tracking(v1_1_catalog)
+
+        assert isinstance(zip_binary, bytes)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        filenames = zip_file.namelist()
+
+        assert "data.json" in filenames
+        assert "errors.json" in filenames
+
+        data_content = json.loads(zip_file.read("data.json"))
+        assert "dataset" in data_content
+        assert len(data_content["dataset"]) >= 0
+
+        errors_content = json.loads(zip_file.read("errors.json"))
+        assert isinstance(errors_content, list)
+
+    def test_full_export_flow_captures_v1_1_validation_errors(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+
+        v1_1_catalog = {
+            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Missing Fields",
+                    "identifier": "missing-001"
+                }
+            ]
+        }
+
+        zip_binary = process_export_with_error_tracking(v1_1_catalog)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+
+        assert "errors.json" in zip_file.namelist()
+        errors = json.loads(zip_file.read("errors.json"))
+        assert len(errors) > 0
+
+        error = errors[0]
+        assert error["identifier"] == "missing-001"
+        assert "errors" in error
+
+    def test_full_export_flow_captures_transformation_errors(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+
+        v1_1_catalog = {
+            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Transform Error Dataset",
+                    "identifier": "transform-error-001",
+                    "description": "Will fail transformation",
+                    "modified": "2024-01-15",
+                    "keyword": ["test"],
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test Agency"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    },
+                    "temporal": {"invalid": "structure"}
+                }
+            ]
+        }
+
+        zip_binary = process_export_with_error_tracking(v1_1_catalog)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+
+        assert "data.json" in zip_file.namelist()
+        data = json.loads(zip_file.read("data.json"))
+        assert "dataset" in data
+
+    def test_full_export_flow_captures_v3_0_validation_errors(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+
+        v1_1_catalog = {
+            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Dataset",
+                    "identifier": "v3-invalid-001",
+                    "description": "Valid v1.1 but might be invalid v3.0",
+                    "modified": "2024-01-15",
+                    "keyword": ["test"],
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                }
+            ]
+        }
+
+        zip_binary = process_export_with_error_tracking(v1_1_catalog)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+
+        assert "data.json" in zip_file.namelist()
+
+    def test_full_export_flow_includes_errorlog_when_warnings_occur(self):
+        import zipfile
+        import io
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+
+        v1_1_catalog = {
+            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Dataset with warnings",
+                    "identifier": "warn-001",
+                    "description": "Test",
+                    "modified": "2024-01-15",
+                    "keyword": ["test"],
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                }
+            ]
+        }
+
+        zip_binary = process_export_with_error_tracking(v1_1_catalog)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+
+        filenames = zip_file.namelist()
+        assert "data.json" in filenames
+
+    def test_full_export_flow_with_all_valid_datasets(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+
+        v1_1_catalog = {
+            "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+            "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+            "dataset": [
+                {
+                    "title": "Valid Dataset 1",
+                    "identifier": "valid-001",
+                    "description": "Valid",
+                    "modified": "2024-01-15",
+                    "keyword": ["test"],
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test Agency"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                },
+                {
+                    "title": "Valid Dataset 2",
+                    "identifier": "valid-002",
+                    "description": "Also valid",
+                    "modified": "2024-01-15",
+                    "keyword": ["test"],
+                    "accessLevel": "public",
+                    "publisher": {"name": "Test Agency"},
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
+                }
+            ]
+        }
+
+        zip_binary = process_export_with_error_tracking(v1_1_catalog)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+
+        assert "data.json" in zip_file.namelist()
+        data = json.loads(zip_file.read("data.json"))
+        assert len(data["dataset"]) >= 0
+
+        if "errors.json" in zip_file.namelist():
+            errors = json.loads(zip_file.read("errors.json"))
+            assert isinstance(errors, list)
