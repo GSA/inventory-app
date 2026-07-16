@@ -21,6 +21,7 @@ COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
 ADD ckanext ${APP_DIR}/ckanext/
 
+WORKDIR ${APP_DIR}
 RUN pip3 install --ignore-installed -r ${APP_DIR}/requirements.txt -r ${APP_DIR}/requirements-dev.txt
 # COPY docker-entrypoint.d/* /docker-entrypoint.d/
 
