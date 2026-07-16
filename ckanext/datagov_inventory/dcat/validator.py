@@ -224,7 +224,6 @@ def load_schema_registry(definitions_dir: Path):
             registry = Resource.from_contents(contents_copy) @ registry
         return registry
     else:
-        from jsonschema import RefResolver
         store = {}
         for schema_file in definitions_dir.glob("*.json"):
             with schema_file.open() as f:
