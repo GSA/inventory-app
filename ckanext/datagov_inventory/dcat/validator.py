@@ -316,3 +316,83 @@ def validate_v1_1_catalog_with_counts(catalog: dict) -> tuple[int, int, list]:
             valid += 1
 
     return valid, invalid, errors
+
+
+def validate_v3_0_catalog(catalog: dict) -> list:
+    """Validate DCAT-US v3.0 catalog and return errors with dataset context.
+
+    Returns a list of error objects, one per invalid dataset.
+    Each error object includes:
+    - identifier: dataset identifier
+    - title: dataset title
+    - errors: list of validation error messages
+    """
+    v3_0_registry = load_schema_registry(V3_0_DEFINITIONS_DIR)
+
+    validator = Draft202012Validator(
+        {"$ref": V3_0_DATASET_SCHEMA_ID},
+        registry=v3_0_registry,
+        format_checker=Draft202012Validator.FORMAT_CHECKER,
+    )
+
+    errors = []
+    datasets = catalog.get("dataset", [])
+
+    for i, dataset in enumerate(datasets):
+        validation_errors = list(validator.iter_errors(dataset))
+        if validation_errors:
+            identifier = dataset.get("identifier", f"index {i}")
+            title = dataset.get("title", "Unknown")
+            error_messages = [
+                format_validation_errors([err], indent=0)
+                for err in validation_errors
+            ]
+            errors.append({
+                "identifier": identifier,
+                "title": title,
+                "errors": error_messages
+            })
+
+    return errors
+
+
+def validate_v3_0_catalog_with_counts(catalog: dict) -> tuple[int, int, list]:
+    """Validate DCAT-US v3.0 catalog and return counts with errors.
+
+    Returns:
+    - valid: number of valid datasets
+    - invalid: number of invalid datasets
+    - errors: list of error objects with dataset context
+    """
+    v3_0_registry = load_schema_registry(V3_0_DEFINITIONS_DIR)
+
+    validator = Draft202012Validator(
+        {"$ref": V3_0_DATASET_SCHEMA_ID},
+        registry=v3_0_registry,
+        format_checker=Draft202012Validator.FORMAT_CHECKER,
+    )
+
+    valid = 0
+    invalid = 0
+    errors = []
+    datasets = catalog.get("dataset", [])
+
+    for i, dataset in enumerate(datasets):
+        validation_errors = list(validator.iter_errors(dataset))
+        if validation_errors:
+            invalid += 1
+            identifier = dataset.get("identifier", f"index {i}")
+            title = dataset.get("title", "Unknown")
+            error_messages = [
+                format_validation_errors([err], indent=0)
+                for err in validation_errors
+            ]
+            errors.append({
+                "identifier": identifier,
+                "title": title,
+                "errors": error_messages
+            })
+        else:
+            valid += 1
+
+    return valid, invalid, errors
