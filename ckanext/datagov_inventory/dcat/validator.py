@@ -463,3 +463,43 @@ def capture_processing_logs(processing_function, logger_name):
         logger.setLevel(original_level)
         handler.close()
         stream.close()
+
+
+def write_zip(data, error_log=None, errors_json=None):
+    """Create a ZIP file containing catalog data and optional error files.
+
+    Args:
+        data: Dict containing the catalog data, or None
+        error_log: String containing log output, or None
+        errors_json: List of error dicts, or None
+
+    Returns:
+        Binary ZIP file data
+    """
+    import zipfile
+    import io
+    import json
+
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(
+        zip_buffer, 'w', zipfile.ZIP_DEFLATED
+    ) as zip_file:
+        if data:
+            data_json = json.dumps(data, indent=2, ensure_ascii=False)
+            zip_file.writestr('data.json', data_json.encode('utf-8'))
+        else:
+            zip_file.writestr('empty.json', '')
+
+        if errors_json:
+            errors_json_str = json.dumps(
+                errors_json, indent=2, ensure_ascii=False
+            )
+            zip_file.writestr('errors.json', errors_json_str.encode('utf-8'))
+
+        if error_log:
+            error_log_normalized = error_log.replace("\n", "\r\n")
+            zip_file.writestr('errorlog.txt', error_log_normalized)
+
+    zip_buffer.seek(0)
+    return zip_buffer.getvalue()

@@ -360,3 +360,104 @@ class TestErrorLogCapture:
         assert "Line 1" in log_output
         assert "Line 2" in log_output
         assert "Line 3" in log_output
+
+
+class TestWriteZip:
+
+    def test_write_zip_creates_zip_with_data_json(self):
+        import zipfile
+        import io
+        from ckanext.datagov_inventory.dcat.validator import write_zip
+
+        data = {"test": "data", "datasets": []}
+        zip_binary = write_zip(data, error_log=None, errors_json=None)
+
+        assert isinstance(zip_binary, bytes)
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        assert "data.json" in zip_file.namelist()
+
+    def test_write_zip_includes_errors_json_when_present(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import write_zip
+
+        data = {"test": "data"}
+        errors = [
+            {"identifier": "error-001", "title": "Error", "errors": ["Bad"]}
+        ]
+        zip_binary = write_zip(data, error_log=None, errors_json=errors)
+
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        assert "errors.json" in zip_file.namelist()
+
+        errors_content = zip_file.read("errors.json")
+        errors_data = json.loads(errors_content)
+        assert len(errors_data) == 1
+        assert errors_data[0]["identifier"] == "error-001"
+
+    def test_write_zip_includes_errorlog_txt_when_present(self):
+        import zipfile
+        import io
+        from ckanext.datagov_inventory.dcat.validator import write_zip
+
+        data = {"test": "data"}
+        error_log = "WARNING: Something happened\nERROR: Something bad"
+        zip_binary = write_zip(data, error_log=error_log, errors_json=None)
+
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        assert "errorlog.txt" in zip_file.namelist()
+
+        log_content = zip_file.read("errorlog.txt").decode("utf-8")
+        assert "WARNING: Something happened" in log_content
+        assert "ERROR: Something bad" in log_content
+
+    def test_write_zip_includes_all_files_when_all_present(self):
+        import zipfile
+        import io
+        from ckanext.datagov_inventory.dcat.validator import write_zip
+
+        data = {"catalog": "data"}
+        errors = [{"identifier": "e1", "errors": ["Bad"]}]
+        error_log = "WARNING: Test warning"
+
+        zip_binary = write_zip(
+            data,
+            error_log=error_log,
+            errors_json=errors
+        )
+
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        filenames = zip_file.namelist()
+
+        assert "data.json" in filenames
+        assert "errors.json" in filenames
+        assert "errorlog.txt" in filenames
+        assert len(filenames) == 3
+
+    def test_write_zip_creates_empty_json_when_no_data(self):
+        import zipfile
+        import io
+        from ckanext.datagov_inventory.dcat.validator import write_zip
+
+        zip_binary = write_zip(None, error_log=None, errors_json=None)
+
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        assert "empty.json" in zip_file.namelist()
+        assert "data.json" not in zip_file.namelist()
+
+    def test_write_zip_data_json_is_valid_json(self):
+        import zipfile
+        import io
+        import json
+        from ckanext.datagov_inventory.dcat.validator import write_zip
+
+        data = {"conformsTo": "DCAT-US 3.0", "dataset": []}
+        zip_binary = write_zip(data, error_log=None, errors_json=None)
+
+        zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
+        data_content = zip_file.read("data.json")
+        parsed = json.loads(data_content)
+
+        assert parsed["conformsTo"] == "DCAT-US 3.0"
+        assert parsed["dataset"] == []
