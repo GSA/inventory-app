@@ -396,3 +396,32 @@ def validate_v3_0_catalog_with_counts(catalog: dict) -> tuple[int, int, list]:
             valid += 1
 
     return valid, invalid, errors
+
+
+def detect_package_conversion_errors(
+    package_results: list
+) -> tuple[list, list]:
+    """Separate valid packages from errored packages.
+
+    Package2Pod.convert_package returns a dict with an 'errors' key
+    when conversion fails. This function separates those from valid
+    packages.
+
+    Args:
+        package_results: List of package dicts from convert_package
+
+    Returns:
+        Tuple of (valid_packages, error_packages)
+        - valid_packages: packages without 'errors' key
+        - error_packages: packages with 'errors' key (preserved as-is)
+    """
+    valid = []
+    errors = []
+
+    for package in package_results:
+        if isinstance(package, dict) and 'errors' in package:
+            errors.append(package)
+        else:
+            valid.append(package)
+
+    return valid, errors
