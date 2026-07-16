@@ -2,8 +2,13 @@
 import json
 from pathlib import Path
 
-from jsonschema import Draft202012Validator
-from referencing import Registry, Resource
+try:
+    from jsonschema import Draft202012Validator as ValidatorClass
+    from referencing import Registry, Resource
+    USE_NEW_API = True
+except ImportError:
+    from jsonschema import Draft7Validator as ValidatorClass
+    USE_NEW_API = False
 
 
 SCRIPT_DIR = Path(__file__).parent
@@ -174,38 +179,73 @@ def extract_schema_name(schema):
     return None
 
 
-def load_schema_registry(definitions_dir: Path) -> Registry:
-    registry = Registry()
-    for schema_file in definitions_dir.glob("*.json"):
-        with schema_file.open() as f:
-            resource = Resource.from_contents(json.load(f))
-            registry = resource @ registry
+def create_validator(schema_id: str, registry_or_store):
+    """Create a validator with the given schema and registry/store."""
+    if USE_NEW_API:
+        validator = ValidatorClass(
+            {"$ref": schema_id},
+            registry=registry_or_store,
+            format_checker=ValidatorClass.FORMAT_CHECKER,
+        )
+    else:
+        from jsonschema import RefResolver
+        schema = {"$ref": schema_id}
+        resolver = RefResolver.from_schema(
+            schema, store=registry_or_store
+        )
+        validator = ValidatorClass(
+            schema,
+            resolver=resolver,
+            format_checker=ValidatorClass.FORMAT_CHECKER,
+        )
+    return validator
 
-    non_federal = definitions_dir / "non-federal_dataset.json"
-    if non_federal.exists():
-        with non_federal.open() as f:
-            contents = json.load(f)
-        contents_copy = {
-            **contents,
-            "$id": (
-                "https://project-open-data.cio.gov/v1.1/schema/"
-                "non-federal_dataset.json"
-            )
-        }
-        registry = Resource.from_contents(contents_copy) @ registry
 
-    return registry
+def load_schema_registry(definitions_dir: Path):
+    """Load schemas into a registry (new API) or store dict (old API)."""
+    if USE_NEW_API:
+        registry = Registry()
+        for schema_file in definitions_dir.glob("*.json"):
+            with schema_file.open() as f:
+                resource = Resource.from_contents(json.load(f))
+                registry = resource @ registry
+
+        non_federal = definitions_dir / "non-federal_dataset.json"
+        if non_federal.exists():
+            with non_federal.open() as f:
+                contents = json.load(f)
+            contents_copy = {
+                **contents,
+                "$id": (
+                    "https://project-open-data.cio.gov/v1.1/schema/"
+                    "non-federal_dataset.json"
+                )
+            }
+            registry = Resource.from_contents(contents_copy) @ registry
+        return registry
+    else:
+        from jsonschema import RefResolver
+        store = {}
+        for schema_file in definitions_dir.glob("*.json"):
+            with schema_file.open() as f:
+                schema = json.load(f)
+                if "$id" in schema:
+                    store[schema["$id"]] = schema
+
+        non_federal = definitions_dir / "non-federal_dataset.json"
+        if non_federal.exists():
+            with non_federal.open() as f:
+                contents = json.load(f)
+            store["https://project-open-data.cio.gov/v1.1/schema/"
+                  "non-federal_dataset.json"] = contents
+        return store
 
 
 def validate_catalog(
-    schema_id: str, registry: Registry, catalog: dict
+    schema_id: str, registry, catalog: dict
 ) -> None:
     """Validate a DCAT-US v1.1 or v3.0 catalog."""
-    validator = Draft202012Validator(
-        {"$ref": schema_id},
-        registry=registry,
-        format_checker=Draft202012Validator.FORMAT_CHECKER,
-    )
+    validator = create_validator(schema_id, registry)
     errors = list(validator.iter_errors(catalog))
     if errors:
         version_number = "v1.1" if "v1.1" in schema_id else "v3.0"
@@ -217,14 +257,10 @@ def validate_catalog(
 
 
 def validate_datasets(
-    schema_id: str, registry: Registry, datasets: list
+    schema_id: str, registry, datasets: list
 ) -> tuple[int, int, int]:
     """Validate each dataset individually."""
-    validator = Draft202012Validator(
-        {"$ref": schema_id},
-        registry=registry,
-        format_checker=Draft202012Validator.FORMAT_CHECKER,
-    )
+    validator = create_validator(schema_id, registry)
     valid = 0
     invalid = 0
     error_count = 0
@@ -249,11 +285,7 @@ def validate_v1_1_catalog(catalog: dict) -> list:
     """
     v1_1_registry = load_schema_registry(V1_1_DEFINITIONS_DIR)
 
-    validator = Draft202012Validator(
-        {"$ref": V1_1_DATASET_SCHEMA_ID},
-        registry=v1_1_registry,
-        format_checker=Draft202012Validator.FORMAT_CHECKER,
-    )
+    validator = create_validator(V1_1_DATASET_SCHEMA_ID, v1_1_registry)
 
     errors = []
     datasets = catalog.get("dataset", [])
@@ -286,11 +318,7 @@ def validate_v1_1_catalog_with_counts(catalog: dict) -> tuple[int, int, list]:
     """
     v1_1_registry = load_schema_registry(V1_1_DEFINITIONS_DIR)
 
-    validator = Draft202012Validator(
-        {"$ref": V1_1_DATASET_SCHEMA_ID},
-        registry=v1_1_registry,
-        format_checker=Draft202012Validator.FORMAT_CHECKER,
-    )
+    validator = create_validator(V1_1_DATASET_SCHEMA_ID, v1_1_registry)
 
     valid = 0
     invalid = 0
@@ -329,11 +357,7 @@ def validate_v3_0_catalog(catalog: dict) -> list:
     """
     v3_0_registry = load_schema_registry(V3_0_DEFINITIONS_DIR)
 
-    validator = Draft202012Validator(
-        {"$ref": V3_0_DATASET_SCHEMA_ID},
-        registry=v3_0_registry,
-        format_checker=Draft202012Validator.FORMAT_CHECKER,
-    )
+    validator = create_validator(V3_0_DATASET_SCHEMA_ID, v3_0_registry)
 
     errors = []
     datasets = catalog.get("dataset", [])
@@ -366,11 +390,7 @@ def validate_v3_0_catalog_with_counts(catalog: dict) -> tuple[int, int, list]:
     """
     v3_0_registry = load_schema_registry(V3_0_DEFINITIONS_DIR)
 
-    validator = Draft202012Validator(
-        {"$ref": V3_0_DATASET_SCHEMA_ID},
-        registry=v3_0_registry,
-        format_checker=Draft202012Validator.FORMAT_CHECKER,
-    )
+    validator = create_validator(V3_0_DATASET_SCHEMA_ID, v3_0_registry)
 
     valid = 0
     invalid = 0
