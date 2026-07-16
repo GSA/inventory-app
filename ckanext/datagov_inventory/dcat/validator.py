@@ -503,3 +503,67 @@ def write_zip(data, error_log=None, errors_json=None):
 
     zip_buffer.seek(0)
     return zip_buffer.getvalue()
+
+
+def process_export_with_error_tracking(v1_1_catalog):
+    """Process complete export with comprehensive error tracking.
+
+    This orchestrates the full export pipeline:
+    1. Validate v1.1 datasets
+    2. Convert v1.1 → v3.0 (capturing transformation errors)
+    3. Validate v3.0 datasets
+    4. Collect all errors and logs
+    5. Create ZIP with data, errors, and logs
+
+    Args:
+        v1_1_catalog: Dict containing DCAT-US v1.1 catalog
+
+    Returns:
+        Binary ZIP file data
+    """
+    import logging
+    from . import dcat_converter
+
+    logger = logging.getLogger(__name__)
+    all_errors = []
+
+    v1_1_validation_errors = validate_v1_1_catalog(v1_1_catalog)
+    if v1_1_validation_errors:
+        all_errors.extend(v1_1_validation_errors)
+        logger.warning(
+            f"v1.1 validation: {len(v1_1_validation_errors)} "
+            "invalid datasets"
+        )
+
+    catalog_v3_0, conversion_errors = dcat_converter.convert_dcat_catalog(
+        v1_1_catalog
+    )
+    if conversion_errors:
+        all_errors.extend(conversion_errors)
+        logger.warning(
+            f"Transformation: {len(conversion_errors)} datasets failed"
+        )
+
+    v3_0_validation_errors = validate_v3_0_catalog(catalog_v3_0)
+    if v3_0_validation_errors:
+        all_errors.extend(v3_0_validation_errors)
+        logger.warning(
+            f"v3.0 validation: {len(v3_0_validation_errors)} "
+            "invalid datasets"
+        )
+
+    def generate_output():
+        return catalog_v3_0
+
+    result, log_output = capture_processing_logs(
+        generate_output,
+        logger_name=__name__
+    )
+
+    zip_binary = write_zip(
+        data=result,
+        error_log=log_output if log_output else None,
+        errors_json=all_errors if all_errors else None
+    )
+
+    return zip_binary
