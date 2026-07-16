@@ -408,4 +408,3 @@ class TestDCATConverter:
         assert catalog["dataset"][1]["identifier"] == "valid-002"
         assert len(errors) == 1
         assert errors[0]["identifier"] == "error-001"
-

@@ -19,9 +19,6 @@ from datetime import datetime, timezone
 import logging
 import re
 from urllib.parse import quote
-import json
-import io
-import zipfile
 
 log = logging.getLogger(__name__)
 pusher = Blueprint('datagov_inventory', __name__)
