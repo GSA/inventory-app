@@ -1,18 +1,17 @@
-"""Tests for validator.py backwards compatibility with old jsonschema versions.
+"""Tests for validator.py backwards compatibility with old jsonschema.
 
-These tests ensure the validator module can be imported and used in environments
-with jsonschema 2.4.0 (which lacks Draft7Validator and Draft202012Validator).
+These tests ensure the validator module can be imported and used in
+environments with jsonschema 2.4.0 (which lacks Draft7Validator and
+Draft202012Validator).
 """
-import sys
 import unittest
-from unittest import mock
 
 
 class TestValidatorBackwardsCompatibility(unittest.TestCase):
-    """Test validator import compatibility with different jsonschema versions."""
+    """Test validator import compatibility with different versions."""
 
     def test_import_with_draft202012_available(self):
-        """Test validator imports correctly when Draft202012Validator exists."""
+        """Test validator imports with Draft202012Validator."""
         # This should work in modern jsonschema (4.x+)
         try:
             from ckanext.datagov_inventory.dcat.validator import (
