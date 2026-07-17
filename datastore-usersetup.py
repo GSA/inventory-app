@@ -5,7 +5,6 @@
 from __future__ import print_function
 import os
 import psycopg2
-import re
 import sys
 from urllib.parse import urlparse
 
@@ -22,20 +21,6 @@ def identifier(s):
     Return s as a double-quoted string (good for psql identifiers)
     """
     return u'"' + s.replace(u'"', u'""').replace(u'\0', '') + u'"'
-
-
-def hide_sensitive(s):
-    """
-    Return s with sensitive info replaced.
-    """
-
-    # Hide password with <...>
-    s = re.sub(
-            r'((?i)PASSWORD\s+)(\'.*?\')(\s*;\s*)',
-            r'\g<1><...>\g<3>',
-            s)
-
-    return s
 
 
 def datastore_sql(datastoredb, writeuser, readuser, readpassword):
@@ -80,9 +65,10 @@ def main():
         raise Exception("DATASTORE_URL is missing a user name")
 
     sql = datastore_sql(datastoredb, writeuser, readuser, readpassword)
+    logged_sql = datastore_sql(datastoredb, writeuser, readuser, '<redacted>')
 
     print("<datastore SQL>")
-    print(hide_sensitive(sql))
+    print(logged_sql)
     print("</datastore SQL>")
 
     try:
@@ -92,6 +78,7 @@ def main():
                     cur.execute(sql)
             except Exception as sql_e:
                 print("Exception while executing SQL:", str(sql_e))
+                sys.exit(-1)
     except Exception as conn_e:
         print("Unable to connect to datastore:", str(conn_e))
         sys.exit(-1)
