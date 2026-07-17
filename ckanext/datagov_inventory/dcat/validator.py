@@ -185,22 +185,35 @@ def extract_schema_name(schema):
 
 def create_validator(schema_id: str, registry_or_store):
     """Create a validator with the given schema and registry/store."""
+    # Get format_checker - handle both old and new jsonschema APIs
+    try:
+        format_checker = ValidatorClass.FORMAT_CHECKER
+    except AttributeError:
+        # jsonschema 2.4.0 doesn't have FORMAT_CHECKER class attribute
+        from jsonschema import FormatChecker
+        format_checker = FormatChecker()
+
     if USE_NEW_API:
         validator = ValidatorClass(
             {"$ref": schema_id},
             registry=registry_or_store,
-            format_checker=ValidatorClass.FORMAT_CHECKER,
+            format_checker=format_checker,
         )
     else:
         from jsonschema import RefResolver
         schema = {"$ref": schema_id}
-        resolver = RefResolver.from_schema(
-            schema, store=registry_or_store
+        # RefResolver constructor: (base_uri, referrer, store, ...)
+        # In 2.4.0, from_schema creates resolver but doesn't accept store
+        # Must use constructor directly to pass store
+        resolver = RefResolver(
+            base_uri="",
+            referrer=schema,
+            store=registry_or_store
         )
         validator = ValidatorClass(
             schema,
             resolver=resolver,
-            format_checker=ValidatorClass.FORMAT_CHECKER,
+            format_checker=format_checker,
         )
     return validator
 

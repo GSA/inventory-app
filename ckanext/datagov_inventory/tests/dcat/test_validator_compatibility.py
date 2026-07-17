@@ -70,10 +70,56 @@ class TestValidatorBackwardsCompatibility(unittest.TestCase):
         self.assertTrue(callable(load_schema_registry))
 
     def test_validator_class_has_format_checker(self):
-        """Test that ValidatorClass has FORMAT_CHECKER attribute."""
+        """Test that ValidatorClass has FORMAT_CHECKER attribute.
+
+        Note: In jsonschema 2.4.0, Draft4Validator doesn't have
+        FORMAT_CHECKER as a class attribute. Our create_validator function
+        handles this by catching AttributeError and creating a
+        FormatChecker instance instead.
+        """
         from ckanext.datagov_inventory.dcat.validator import ValidatorClass
-        # All Draft validators (4, 7, 2020-12) have FORMAT_CHECKER
-        self.assertTrue(hasattr(ValidatorClass, 'FORMAT_CHECKER'))
+        # Newer validators have FORMAT_CHECKER; old ones don't but that's OK
+        # because create_validator handles it
+        if hasattr(ValidatorClass, 'FORMAT_CHECKER'):
+            self.assertIsNotNone(ValidatorClass.FORMAT_CHECKER)
+        else:
+            # If no FORMAT_CHECKER, verify FormatChecker is importable
+            from jsonschema import FormatChecker
+            self.assertIsNotNone(FormatChecker)
+
+    def test_create_validator_handles_missing_format_checker(self):
+        """Test create_validator works even without FORMAT_CHECKER attribute.
+
+        This specifically tests the fix for:
+        AttributeError: type object 'Draft4Validator' has no attribute
+        'FORMAT_CHECKER'
+
+        In jsonschema 2.4.0, Draft4Validator lacks the FORMAT_CHECKER class
+        attribute. The create_validator function must handle this gracefully.
+        """
+        from ckanext.datagov_inventory.dcat.validator import (
+            create_validator,
+            load_schema_registry,
+            V1_1_DEFINITIONS_DIR,
+            V1_1_DATASET_SCHEMA_ID,
+        )
+
+        # Load a real schema registry
+        registry = load_schema_registry(V1_1_DEFINITIONS_DIR)
+
+        # This should not raise AttributeError even with old jsonschema
+        try:
+            validator = create_validator(V1_1_DATASET_SCHEMA_ID, registry)
+            self.assertIsNotNone(validator)
+            # Validator should have a format_checker
+            self.assertTrue(hasattr(validator, 'format_checker'))
+        except AttributeError as e:
+            if 'FORMAT_CHECKER' in str(e):
+                self.fail(
+                    f"create_validator should handle missing FORMAT_CHECKER "
+                    f"attribute, but got: {e}"
+                )
+            raise
 
     def test_backwards_compatibility_prevents_import_error(self):
         """Test that the compatibility layer prevents the ImportError from
