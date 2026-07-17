@@ -4,6 +4,8 @@ name: commit
 on:
   push:
 
+permissions:
+  contents: read
 
 jobs:
   lint:
@@ -62,6 +64,9 @@ jobs:
     name: deploy (development)
     needs:
       - create-cloudgov-services-development
+    permissions:
+      actions: write
+      contents: read
     uses: gsa/data.gov/.github/workflows/deploy-template.yml@main
     with:
       environ: development
