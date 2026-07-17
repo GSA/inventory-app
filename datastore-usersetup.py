@@ -65,11 +65,7 @@ def main():
         raise Exception("DATASTORE_URL is missing a user name")
 
     sql = datastore_sql(datastoredb, writeuser, readuser, readpassword)
-    logged_sql = datastore_sql(datastoredb, writeuser, readuser, '<redacted>')
-
-    print("<datastore SQL>")
-    print(logged_sql)
-    print("</datastore SQL>")
+    print("Prepared datastore permission SQL.")
 
     try:
         with psycopg2.connect(datastore_url) as conn:
