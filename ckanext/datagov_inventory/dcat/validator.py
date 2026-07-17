@@ -7,8 +7,12 @@ try:
     from referencing import Registry, Resource
     USE_NEW_API = True
 except ImportError:
-    from jsonschema import Draft7Validator as ValidatorClass
-    USE_NEW_API = False
+    try:
+        from jsonschema import Draft7Validator as ValidatorClass
+        USE_NEW_API = False
+    except ImportError:
+        from jsonschema import Draft4Validator as ValidatorClass
+        USE_NEW_API = False
 
 
 SCRIPT_DIR = Path(__file__).parent
