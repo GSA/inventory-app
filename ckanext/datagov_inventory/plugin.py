@@ -200,9 +200,13 @@ pusher.add_url_rule(
 
 
 def generate_dcat_v3(org_id):
-    from ckanext.datagov_inventory.dcat.validator import (
-        process_export_with_error_tracking
-    )
+    try:
+        from ckanext.datagov_inventory.dcat.validator import (
+            process_export_with_error_tracking
+        )
+    except ImportError as e:
+        log.exception('Failed to import validator module')
+        return f"Import error: {str(e)}", 500
 
     log.debug(f'Generating DCAT-US v3.0 export for org: {org_id}')
 
