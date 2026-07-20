@@ -517,7 +517,14 @@ class TestEndToEndErrorHandling:
         errors_content = json.loads(zip_file.read("errors.json"))
         assert isinstance(errors_content, list)
 
-    def test_full_export_flow_captures_v1_1_validation_errors(self):
+    def test_full_export_flow_only_reports_v3_errors(self):
+        """Test that only v3.0 validation errors are reported, not v1.1.
+
+        This dataset is missing fields required by v1.1 (keyword, modified,
+        publisher, accessLevel) but has all fields required by v3.0
+        (title, description, identifier, contactPoint). The errors.json
+        should be empty or only contain actual v3.0 violations.
+        """
         import zipfile
         import io
         import json
@@ -533,8 +540,13 @@ class TestEndToEndErrorHandling:
             "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
             "dataset": [
                 {
-                    "title": "Missing Fields",
-                    "identifier": "missing-001"
+                    "title": "Valid for v3.0",
+                    "identifier": "valid-v3-001",
+                    "description": "Has all v3.0 required fields",
+                    "contactPoint": {
+                        "fn": "Jane Doe",
+                        "hasEmail": "mailto:jane@example.gov"
+                    }
                 }
             ]
         }
@@ -542,13 +554,22 @@ class TestEndToEndErrorHandling:
         zip_binary = process_export_with_error_tracking(v1_1_catalog)
         zip_file = zipfile.ZipFile(io.BytesIO(zip_binary))
 
-        assert "errors.json" in zip_file.namelist()
-        errors = json.loads(zip_file.read("errors.json"))
-        assert len(errors) > 0
+        # Should have data.json with v3.0 catalog
+        assert "data.json" in zip_file.namelist()
 
-        error = errors[0]
-        assert error["identifier"] == "missing-001"
-        assert "errors" in error
+        # Should not have errors.json since the dataset is valid v3.0
+        if "errors.json" in zip_file.namelist():
+            errors = json.loads(zip_file.read("errors.json"))
+            # If errors exist, they should be real v3.0 errors,
+            # not v1.1 errors about missing keyword/modified/etc
+            for error in errors:
+                error_messages = error.get("errors", [])
+                for msg in error_messages:
+                    # These are v1.1-only required fields
+                    assert "keyword" not in msg
+                    assert "modified" not in msg
+                    assert "accessLevel" not in msg
+                    assert "publisher" not in msg
 
     def test_full_export_flow_captures_transformation_errors(self):
         import zipfile
