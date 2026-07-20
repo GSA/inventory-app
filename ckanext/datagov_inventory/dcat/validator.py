@@ -463,16 +463,16 @@ def detect_package_conversion_errors(
     return valid, errors
 
 
-def capture_processing_logs(processing_function, logger_name):
-    """Capture log output during processing.
+def capture_conversion_logs(conversion_function, logger_name):
+    """Capture log output during conversion.
 
     Args:
-        processing_function: Callable that performs processing
+        conversion_function: Callable that performs conversion
         logger_name: Name of logger to capture
 
     Returns:
         Tuple of (result, log_output)
-        - result: return value from processing_function
+        - result: return value from conversion_function
         - log_output: string containing captured log messages
     """
     import logging
@@ -490,7 +490,7 @@ def capture_processing_logs(processing_function, logger_name):
     logger.setLevel(logging.WARNING)
 
     try:
-        result = processing_function()
+        result = conversion_function()
         handler.flush()
         log_output = stream.getvalue()
         return result, log_output
@@ -586,7 +586,7 @@ def process_export_with_error_tracking(v1_1_catalog):
     def generate_output():
         return catalog_v3_0
 
-    result, log_output = capture_processing_logs(
+    result, log_output = capture_conversion_logs(
         generate_output,
         logger_name=__name__
     )
