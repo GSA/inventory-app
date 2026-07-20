@@ -545,31 +545,26 @@ def process_export_with_error_tracking(v1_1_catalog):
     """Process complete export with comprehensive error tracking.
 
     This orchestrates the full export pipeline:
-    1. Validate v1.1 datasets
-    2. Convert v1.1 → v3.0 (capturing transformation errors)
-    3. Validate v3.0 datasets
-    4. Collect all errors and logs
-    5. Create ZIP with data, errors, and logs
+    1. Convert v1.1 → v3.0 (capturing transformation errors)
+    2. Validate v3.0 datasets
+    3. Collect all errors and logs
+    4. Create ZIP with data, errors, and logs
 
     Args:
         v1_1_catalog: Dict containing DCAT-US v1.1 catalog
 
     Returns:
         Binary ZIP file data
+
+    Note: We only validate v3.0 since that's what's in the output data.json.
+    Validating v1.1 would report false positives for fields required in v1.1
+    but not in v3.0 (like 'keyword', 'modified', 'publisher', 'accessLevel').
     """
     import logging
     from . import dcat_converter
 
     logger = logging.getLogger(__name__)
     all_errors = []
-
-    v1_1_validation_errors = validate_v1_1_catalog(v1_1_catalog)
-    if v1_1_validation_errors:
-        all_errors.extend(v1_1_validation_errors)
-        logger.warning(
-            f"v1.1 validation: {len(v1_1_validation_errors)} "
-            "invalid datasets"
-        )
 
     catalog_v3_0, conversion_errors = dcat_converter.convert_dcat_catalog(
         v1_1_catalog
