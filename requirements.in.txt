@@ -86,7 +86,7 @@ importlib-resources<6.0
 zipp>=3.19.1
 gevent>=24.10.1
 
-setuptools~=78.1.1
+setuptools~=83.0.0
 
 # Pin MarkupSafe to avoid button issue data.gov/issues/4954 for logged in user
 # https://github.com/GSA/data.gov/issues/4954
