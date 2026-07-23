@@ -214,7 +214,53 @@ def user_org_roles_table():
 
 pusher.add_url_rule(
     '/user/user-org-roles',
-    view_func=user_org_roles_table
+    view_func=user_org_roles_table,
+    methods=['GET']
+)
+
+
+def create_user_form():
+    from flask import request as flask_request
+    import ckan.lib.helpers as h
+
+    if flask_request.method == 'POST':
+        context = {
+            'model': model,
+            'user': g.user,
+        }
+
+        username = flask_request.form.get('username', '').strip()
+        email = flask_request.form.get('email', '').strip()
+
+        try:
+            user = toolkit.get_action('create_inventory_user')(
+                context,
+                {'name': username, 'email': email}
+            )
+            h.flash_success(
+                _('User {0} created successfully').format(user['name'])
+            )
+            return redirect('/user/user-org-roles')
+        except logic.ValidationError as e:
+            error_messages = []
+            for field, errors in e.error_dict.items():
+                for error in errors:
+                    error_messages.append('{0}: {1}'.format(field, error))
+            h.flash_error('; '.join(error_messages))
+        except logic.NotAuthorized:
+            h.flash_error(_('Not authorized to create users'))
+        except Exception as e:
+            log.error('Error creating user: %s', str(e))
+            h.flash_error(_('Error creating user: {0}').format(str(e)))
+
+    return redirect('/user/user-org-roles')
+
+
+pusher.add_url_rule(
+    '/user/create-user',
+    'create_user_form',
+    view_func=create_user_form,
+    methods=['POST']
 )
 
 
