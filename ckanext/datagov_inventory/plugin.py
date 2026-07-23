@@ -109,6 +109,21 @@ def create_inventory_user(context, data_dict):
     }
 
 
+def reactivate_user(context, data_dict):
+    user = context.get('user')
+    if not user:
+        return {
+            'success': False,
+            'msg': 'Action reactivate_user requires an authenticated user'
+        }
+    if authz.is_sysadmin(user):
+        return {'success': True}
+    return {
+        'success': False,
+        'msg': 'Only sysadmins can reactivate users'
+    }
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
@@ -132,6 +147,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'user_list': restrict_anon_access,
                 'user_org_roles': user_org_roles,
                 'create_inventory_user': create_inventory_user,
+                'reactivate_user': reactivate_user,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
                 'vocabulary_show': restrict_anon_access,
@@ -141,6 +157,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
         return {
             'user_org_roles': action.user_org_roles,
             'create_inventory_user': action.create_inventory_user,
+            'reactivate_user': action.reactivate_user,
         }
 
     # render our custom 403 template
