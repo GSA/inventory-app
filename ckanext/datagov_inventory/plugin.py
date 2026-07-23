@@ -94,6 +94,21 @@ def user_org_roles(context, data_dict):
     return {'success': False}
 
 
+def create_inventory_user(context, data_dict):
+    user = context.get('user')
+    if not user:
+        return {
+            'success': False,
+            'msg': 'Action create_inventory_user requires an authenticated user'
+        }
+    if authz.is_sysadmin(user):
+        return {'success': True}
+    return {
+        'success': False,
+        'msg': 'Only sysadmins can create inventory users'
+    }
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
@@ -116,13 +131,17 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'task_status_show': restrict_anon_access,
                 'user_list': restrict_anon_access,
                 'user_org_roles': user_org_roles,
+                'create_inventory_user': create_inventory_user,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
                 'vocabulary_show': restrict_anon_access,
                 }
 
     def get_actions(self):
-        return {'user_org_roles': action.user_org_roles}
+        return {
+            'user_org_roles': action.user_org_roles,
+            'create_inventory_user': action.create_inventory_user,
+        }
 
     # render our custom 403 template
     def update_config(self, config):

@@ -19,15 +19,10 @@ class TestCreateInventoryUser(FunctionalTestBase):
 
     def setup_method(self):
         super(TestCreateInventoryUser, self).setup_class()
-        self.sysadmin = factories.Sysadmin(name='test_sysadmin')
-        self.regular_user = factories.User(name='test_regular_user')
+        self.sysadmin = factories.Sysadmin()
+        self.regular_user = factories.User()
 
     def test_create_user_with_valid_gov_email(self):
-        context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': self.sysadmin['name']
-        }
         user_dict = {
             'name': 'testuser',
             'email': 'testuser@gsa.gov'
@@ -35,7 +30,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
 
         result = helpers.call_action(
             'create_inventory_user',
-            context=context,
+            context={'user': self.sysadmin['name']},
             **user_dict
         )
 
@@ -44,10 +39,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert result['state'] == 'active'
 
     def test_create_user_rejects_non_gov_email(self):
-        context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': self.sysadmin['name']
+        context = {'user': self.sysadmin['name']
         }
         user_dict = {
             'name': 'testuser2',
@@ -65,10 +57,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert '.gov' in str(exc_info.value.error_dict['email'])
 
     def test_create_user_handles_duplicate_username(self):
-        context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': self.sysadmin['name']
+        context = {'user': self.sysadmin['name']
         }
         user_dict = {
             'name': 'duplicate_user',
@@ -93,10 +82,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert 'name' in exc_info.value.error_dict
 
     def test_create_user_auto_generates_password(self):
-        context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': self.sysadmin['name']
+        context = {'user': self.sysadmin['name']
         }
         user_dict = {
             'name': 'testuser3',
@@ -115,9 +101,8 @@ class TestCreateInventoryUser(FunctionalTestBase):
 
     def test_create_user_requires_sysadmin(self):
         context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': self.regular_user['name']
+            'user': self.regular_user['name'],
+            'ignore_auth': False
         }
         user_dict = {
             'name': 'testuser4',
@@ -132,10 +117,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
             )
 
     def test_create_user_validates_email_format(self):
-        context = {
-            'model': model,
-            'ignore_auth': False,
-            'user': self.sysadmin['name']
+        context = {'user': self.sysadmin['name']
         }
         user_dict = {
             'name': 'testuser5',

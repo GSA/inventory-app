@@ -1,5 +1,46 @@
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+import ckan.logic as logic
+import secrets
+import string
+
+
+def create_inventory_user(context, data_dict):
+    """Create a new user with .gov email validation and auto-generated password."""
+    toolkit.check_access('create_inventory_user', context, data_dict)
+
+    name = data_dict.get('name', '').strip()
+    email = data_dict.get('email', '').strip()
+
+    if not name:
+        raise logic.ValidationError({'name': ['Missing value']})
+
+    if not email:
+        raise logic.ValidationError({'email': ['Missing value']})
+
+    if '@' not in email or '.' not in email.split('@')[-1]:
+        raise logic.ValidationError({'email': ['Invalid email format']})
+
+    if not email.lower().endswith('.gov'):
+        raise logic.ValidationError(
+            {'email': ['Email must be from a .gov domain']}
+        )
+
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(secrets.choice(alphabet) for i in range(32))
+
+    user_dict = {
+        'name': name,
+        'email': email,
+        'password': password
+    }
+
+    try:
+        user = toolkit.get_action('user_create')(context, user_dict)
+    except logic.ValidationError as e:
+        raise e
+
+    return user
 
 
 @toolkit.side_effect_free
