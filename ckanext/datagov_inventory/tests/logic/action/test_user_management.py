@@ -132,3 +132,87 @@ class TestCreateInventoryUser(FunctionalTestBase):
             )
 
         assert 'email' in exc_info.value.error_dict
+
+
+@pytest.mark.usefixtures("clean_db")
+@pytest.mark.usefixtures("with_request_context")
+class TestReactivateUser(FunctionalTestBase):
+
+    def setup_method(self):
+        super(TestReactivateUser, self).setup_class()
+        self.sysadmin = factories.Sysadmin()
+        self.regular_user = factories.User()
+
+    def test_reactivate_deleted_user(self):
+        deleted_user = factories.User(state='deleted')
+
+        context = {'user': self.sysadmin['name']}
+        user_dict = {'id': deleted_user['id']}
+
+        result = helpers.call_action(
+            'reactivate_user',
+            context=context,
+            **user_dict
+        )
+
+        assert result['state'] == 'active'
+        user_obj = model.User.get(deleted_user['id'])
+        assert user_obj.state == 'active'
+
+    def test_reactivate_user_requires_sysadmin(self):
+        deleted_user = factories.User(state='deleted')
+
+        context = {
+            'user': self.regular_user['name'],
+            'ignore_auth': False
+        }
+        user_dict = {'id': deleted_user['id']}
+
+        with assert_raises(logic.NotAuthorized):
+            helpers.call_action(
+                'reactivate_user',
+                context=context,
+                **user_dict
+            )
+
+    def test_reactivate_already_active_user(self):
+        active_user = factories.User(state='active')
+
+        context = {'user': self.sysadmin['name']}
+        user_dict = {'id': active_user['id']}
+
+        with assert_raises(logic.ValidationError) as exc_info:
+            helpers.call_action(
+                'reactivate_user',
+                context=context,
+                **user_dict
+            )
+
+        assert 'already active' in str(exc_info.value.error_dict).lower()
+
+    def test_reactivate_nonexistent_user(self):
+        context = {'user': self.sysadmin['name']}
+        user_dict = {'id': 'nonexistent-user-id'}
+
+        with assert_raises(logic.NotFound):
+            helpers.call_action(
+                'reactivate_user',
+                context=context,
+                **user_dict
+            )
+
+    def test_reactivate_user_by_name(self):
+        deleted_user = factories.User(state='deleted')
+
+        context = {'user': self.sysadmin['name']}
+        user_dict = {'id': deleted_user['name']}
+
+        result = helpers.call_action(
+            'reactivate_user',
+            context=context,
+            **user_dict
+        )
+
+        assert result['state'] == 'active'
+        user_obj = model.User.get(deleted_user['name'])
+        assert user_obj.state == 'active'
