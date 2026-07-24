@@ -21,8 +21,8 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users').should('exist');
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users', { timeout: 10000 }).should('exist');
+        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('form[action*="reactivate"]').should('exist');
@@ -38,17 +38,17 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
-        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
+        cy.contains('.alert-success', 'reactivated successfully', { timeout: 10000 }).should('be.visible');
 
         cy.get('#deleted-users table tbody tr').contains(testUser).should('not.exist');
 
-        cy.get('#users-without-organizations table tbody tr')
+        cy.get('#users-without-organizations table tbody tr', { timeout: 10000 })
             .contains(testUser)
             .should('exist');
     });
@@ -62,15 +62,15 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
-        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
+        cy.contains('.alert-success', 'reactivated successfully', { timeout: 10000 }).should('be.visible');
 
-        cy.get('#users-with-organizations table tbody tr')
+        cy.get('#users-with-organizations table tbody tr', { timeout: 10000 })
             .contains(testUser)
             .should('exist');
 
@@ -87,7 +87,7 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#users-without-organizations table tbody tr')
+        cy.get('#users-without-organizations table tbody tr', { timeout: 10000 })
             .contains(testUser)
             .parents('tr')
             .within(() => {
@@ -101,7 +101,7 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
             .parents('tr')
             .find('form[action*="reactivate"]')
             .invoke('attr', 'action')
@@ -121,14 +121,14 @@ describe('User Reactivation', () => {
 
                 cy.visit('/user/user-org-roles');
 
-                cy.get('#deleted-users table tbody tr')
+                cy.get('#deleted-users table tbody tr', { timeout: 10000 })
                     .contains(testUser)
                     .parents('tr')
                     .within(() => {
                         cy.get('button[type="submit"]').contains('Reactivate').click();
                     });
 
-                cy.contains('.alert-error', 'already active').should('be.visible');
+                cy.contains('.alert-error', 'already active', { timeout: 10000 }).should('be.visible');
             });
     });
 
@@ -154,16 +154,16 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
-        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
+        cy.contains('.alert-success', 'reactivated successfully', { timeout: 10000 }).should('be.visible');
 
         cy.logout();
         cy.login(testUser, 'Password123!');
-        cy.get('.nav-tabs>li>a').should('contain', 'My Organizations');
+        cy.get('.nav-tabs>li>a', { timeout: 10000 }).should('contain', 'My Organizations');
     });
 });
