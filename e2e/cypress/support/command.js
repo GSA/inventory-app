@@ -212,32 +212,55 @@ Cypress.Commands.add('delete_organization', (orgName) => {
 Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
     /**
      * Method to create an user via CKAN API
+     * Creates user with auto-generated password, then patches it with the provided password if given
      * :RETURN null:
      */
     let request_obj = {
-        url: '/api/action/user_create',
+        url: '/api/action/create_inventory_user',
         method: 'POST',
         failOnStatusCode: false,
         headers: api_headers(),
         body: {
             name: userName,
-            email: userEmail,
-            password: userPassword
+            email: userEmail
         },
     };
 
     cy.request(request_obj).then((response) => {
         if (response.status === 409 && response.body.error.name.includes("That login name is not available.")) {
-            cy.log("User already exists. Make sure it is active");
-            request_obj.url = '/api/action/user_patch';
+            cy.log("User already exists. Reactivating...");
+            request_obj.url = '/api/action/reactivate_user';
             request_obj.failOnStatusCode = true;
             request_obj.body = {
-                id: userName,
-                password: userPassword,
-                email: userEmail,
-                state: "active"
+                id: userName
             }
-            cy.request(request_obj);
+            cy.request(request_obj).then(() => {
+                if (userPassword) {
+                    cy.log("Setting user password via user_patch...");
+                    cy.request({
+                        url: '/api/action/user_patch',
+                        method: 'POST',
+                        headers: api_headers(),
+                        body: {
+                            id: userName,
+                            password: userPassword,
+                            email: userEmail
+                        }
+                    });
+                }
+            });
+        } else if (response.status === 200 && userPassword) {
+            cy.log("User created successfully. Setting password via user_patch...");
+            cy.request({
+                url: '/api/action/user_patch',
+                method: 'POST',
+                headers: api_headers(),
+                body: {
+                    id: userName,
+                    password: userPassword,
+                    email: userEmail
+                }
+            });
         }
     });
 

@@ -39,8 +39,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert result['state'] == 'active'
 
     def test_create_user_accepts_any_valid_email(self):
-        context = {'user': self.sysadmin['name']
-        }
+        context = {'user': self.sysadmin['name']}
         user_dict = {
             'name': 'testuser2',
             'email': 'testuser@example.com'
@@ -57,8 +56,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert result['state'] == 'active'
 
     def test_create_user_handles_duplicate_username(self):
-        context = {'user': self.sysadmin['name']
-        }
+        context = {'user': self.sysadmin['name']}
         user_dict = {
             'name': 'duplicate_user',
             'email': 'user1@gsa.gov'
@@ -82,8 +80,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert 'name' in exc_info.value.error_dict
 
     def test_create_user_auto_generates_password(self):
-        context = {'user': self.sysadmin['name']
-        }
+        context = {'user': self.sysadmin['name']}
         user_dict = {
             'name': 'testuser3',
             'email': 'testuser3@gsa.gov'
@@ -117,8 +114,7 @@ class TestCreateInventoryUser(FunctionalTestBase):
             )
 
     def test_create_user_validates_email_format(self):
-        context = {'user': self.sysadmin['name']
-        }
+        context = {'user': self.sysadmin['name']}
         user_dict = {
             'name': 'testuser5',
             'email': 'invalid-email'
