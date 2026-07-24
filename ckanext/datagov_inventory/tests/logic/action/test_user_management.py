@@ -38,23 +38,23 @@ class TestCreateInventoryUser(FunctionalTestBase):
         assert result['email'] == 'testuser@gsa.gov'
         assert result['state'] == 'active'
 
-    def test_create_user_rejects_non_gov_email(self):
+    def test_create_user_accepts_any_valid_email(self):
         context = {'user': self.sysadmin['name']
         }
         user_dict = {
             'name': 'testuser2',
-            'email': 'testuser@gmail.com'
+            'email': 'testuser@example.com'
         }
 
-        with assert_raises(logic.ValidationError) as exc_info:
-            helpers.call_action(
-                'create_inventory_user',
-                context=context,
-                **user_dict
-            )
+        result = helpers.call_action(
+            'create_inventory_user',
+            context=context,
+            **user_dict
+        )
 
-        assert 'email' in exc_info.value.error_dict
-        assert '.gov' in str(exc_info.value.error_dict['email'])
+        assert result['name'] == 'testuser2'
+        assert result['email'] == 'testuser@example.com'
+        assert result['state'] == 'active'
 
     def test_create_user_handles_duplicate_username(self):
         context = {'user': self.sysadmin['name']

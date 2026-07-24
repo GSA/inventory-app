@@ -6,7 +6,7 @@ import string
 
 
 def create_inventory_user(context, data_dict):
-    """Create a new user with .gov email validation and auto-generated password."""
+    """Create a new user with email validation and auto-generated password."""
     toolkit.check_access('create_inventory_user', context, data_dict)
 
     name = data_dict.get('name', '').strip()
@@ -20,11 +20,6 @@ def create_inventory_user(context, data_dict):
 
     if '@' not in email or '.' not in email.split('@')[-1]:
         raise logic.ValidationError({'email': ['Invalid email format']})
-
-    if not email.lower().endswith('.gov'):
-        raise logic.ValidationError(
-            {'email': ['Email must be from a .gov domain']}
-        )
 
     alphabet = string.ascii_letters + string.digits + string.punctuation
     password = ''.join(secrets.choice(alphabet) for i in range(32))

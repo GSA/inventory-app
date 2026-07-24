@@ -36,13 +36,16 @@ describe('User Creation Form', () => {
         cy.contains('table', testEmail).should('exist');
     });
 
-    it('shows error for non-.gov email', () => {
-        cy.get('form#create-user-form input#field-username').type('baduser');
-        cy.get('form#create-user-form input#field-email').type('baduser@gmail.com');
+    it('accepts any valid email domain', () => {
+        const testUser = 'cypress_any_email_' + Date.now();
+        cy.get('form#create-user-form input#field-username').type(testUser);
+        cy.get('form#create-user-form input#field-email').type(testUser + '@example.com');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.contains('.alert-error', '.gov').should('be.visible');
-        cy.contains('table', 'baduser').should('not.exist');
+        cy.contains('.alert-success', 'User created successfully').should('be.visible');
+        cy.contains('table', testUser).should('exist');
+
+        cy.delete_user(testUser);
     });
 
     it('shows error for duplicate username', () => {
