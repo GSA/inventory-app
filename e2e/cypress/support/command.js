@@ -215,7 +215,7 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
      * Creates user with create_inventory_user, then sets password if provided
      * :RETURN null:
      */
-    cy.request({
+    return cy.request({
         url: '/api/action/create_inventory_user',
         method: 'POST',
         failOnStatusCode: false,
@@ -226,11 +226,11 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
         },
     }).then((response) => {
         // Handle successful creation
-        if (response.status === 200) {
+        if (response.status === 200 && response.body && response.body.success) {
             cy.log(`User ${userName} created successfully`);
             if (userPassword) {
                 cy.log("Setting password via user_patch...");
-                cy.request({
+                return cy.request({
                     url: '/api/action/user_patch',
                     method: 'POST',
                     headers: api_headers(),
@@ -242,10 +242,11 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
                 });
             }
         }
-        // Handle duplicate user - try to reactivate
-        else if (response.status === 409 || response.status === 500) {
-            cy.log(`User ${userName} might already exist, trying to reactivate...`);
-            cy.request({
+        // Handle duplicate/error - try to reactivate if deleted, or just update password if active
+        else {
+            cy.log(`User ${userName} might already exist, attempting to ensure it's active...`);
+            // Try to reactivate (will fail gracefully if already active)
+            return cy.request({
                 url: '/api/action/reactivate_user',
                 method: 'POST',
                 failOnStatusCode: false,
@@ -253,17 +254,20 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
                 body: {
                     id: userName
                 }
-            }).then((reactivateResponse) => {
-                if (reactivateResponse.status === 200 && userPassword) {
-                    cy.log("User reactivated, setting password via user_patch...");
-                    cy.request({
+            }).then(() => {
+                // Whether reactivation succeeded or failed (if already active), set the password
+                if (userPassword) {
+                    cy.log("Setting/updating password via user_patch...");
+                    return cy.request({
                         url: '/api/action/user_patch',
                         method: 'POST',
+                        failOnStatusCode: false,
                         headers: api_headers(),
                         body: {
                             id: userName,
                             password: userPassword,
-                            email: userEmail
+                            email: userEmail,
+                            state: 'active'
                         }
                     });
                 }
