@@ -281,6 +281,47 @@ pusher.add_url_rule(
 )
 
 
+def reactivate_user_form(user_id):
+    import ckan.lib.helpers as h
+
+    context = {
+        'model': model,
+        'user': g.user,
+    }
+
+    try:
+        user = toolkit.get_action('reactivate_user')(
+            context,
+            {'id': user_id}
+        )
+        h.flash_success(
+            _('User {0} reactivated successfully').format(user['name'])
+        )
+    except logic.ValidationError as e:
+        error_messages = []
+        for field, errors in e.error_dict.items():
+            for error in errors:
+                error_messages.append('{0}: {1}'.format(field, error))
+        h.flash_error('; '.join(error_messages))
+    except logic.NotAuthorized:
+        h.flash_error(_('Not authorized to reactivate users'))
+    except logic.NotFound:
+        h.flash_error(_('User not found'))
+    except Exception as e:
+        log.error('Error reactivating user: %s', str(e))
+        h.flash_error(_('Error reactivating user: {0}').format(str(e)))
+
+    return redirect('/user/user-org-roles')
+
+
+pusher.add_url_rule(
+    '/user/reactivate/<user_id>',
+    'reactivate_user_form',
+    view_func=reactivate_user_form,
+    methods=['POST']
+)
+
+
 def generate_dcat_v3(org_id):
     try:
         from ckanext.datagov_inventory.dcat.validator import (
@@ -425,13 +466,15 @@ def _user_org_roles_row_values(user, organization, columns):
         'organization': organization['name'] or '',
         'role': organization['role'] or '',
     }
-    return [
+    row = [
         {
             'value': values[column],
             'url': _user_org_roles_cell_url(column, user, organization),
+            'user_id': user['id'] if column == 'user' else None,
         }
         for column in columns
     ]
+    return row
 
 
 def _user_org_roles_cell_url(column, user, organization):

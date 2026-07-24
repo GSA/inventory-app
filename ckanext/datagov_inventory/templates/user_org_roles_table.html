@@ -62,6 +62,9 @@
                       <th>{{ label }}</th>
                     {% endif %}
                   {% endfor %}
+                  {% if section.id == 'deleted-users' %}
+                    <th>{{ _('Actions') }}</th>
+                  {% endif %}
                 </tr>
               </thead>
               <tbody>
@@ -76,6 +79,14 @@
                         {% endif %}
                       </td>
                     {% endfor %}
+                    {% if section.id == 'deleted-users' and row.0.user_id %}
+                      <td>
+                        <form method="post" action="{{ h.url_for('datagov_inventory.reactivate_user_form', user_id=row.0.user_id) }}" style="display: inline;">
+                          {{ h.csrf_input() }}
+                          <button type="submit" class="btn btn-sm btn-primary">{{ _('Reactivate') }}</button>
+                        </form>
+                      </td>
+                    {% endif %}
                   </tr>
                 {% else %}
                   <tr>
