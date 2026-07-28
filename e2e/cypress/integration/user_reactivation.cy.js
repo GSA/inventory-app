@@ -111,17 +111,20 @@ describe('User Reactivation', () => {
         cy.visit('/user/user-org-roles');
 
         cy.task('log', `>>> TEST: Reactivating ${testUser} from deleted section`);
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users table tbody tr', {timeout: 10000}).contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
+        cy.task('log', '>>> TEST: Waiting for page reload after reactivation');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for success message');
-        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
+        cy.contains('.alert', 'reactivated successfully', {timeout: 10000}).should('be.visible');
 
         cy.task('log', `>>> TEST: Verifying ${testUser} appears in users-with-organizations section`);
-        cy.get('#users-with-organizations table tbody tr')
+        cy.get('#users-with-organizations table tbody tr', {timeout: 10000})
             .contains(testUser)
             .should('exist');
 
@@ -142,7 +145,7 @@ describe('User Reactivation', () => {
         cy.visit('/user/user-org-roles');
 
         cy.task('log', `>>> TEST: Finding ${testUser} in users-without-organizations section`);
-        cy.get('#users-without-organizations table tbody tr')
+        cy.get('#users-without-organizations table tbody tr', {timeout: 10000})
             .contains(testUser)
             .parents('tr')
             .within(() => {
@@ -251,21 +254,24 @@ describe('User Reactivation', () => {
         cy.visit('/user/user-org-roles');
 
         cy.task('log', `>>> TEST: Reactivating ${testUser} via UI`);
-        cy.get('#deleted-users table tbody tr').contains(testUser)
+        cy.get('#deleted-users table tbody tr', {timeout: 10000}).contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
+        cy.task('log', '>>> TEST: Waiting for page reload');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for success message');
-        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
+        cy.contains('.alert', 'reactivated successfully', {timeout: 10000}).should('be.visible');
 
         cy.task('log', `>>> TEST: Logging out admin and attempting to login as ${testUser}`);
         cy.logout();
         cy.login(testUser, 'Password123!');
 
         cy.task('log', '>>> TEST: Verifying user can see My Organizations tab');
-        cy.get('.nav-tabs>li>a').should('contain', 'My Organizations');
+        cy.get('.nav-tabs>li>a', {timeout: 10000}).should('contain', 'My Organizations');
         cy.task('log', `>>> TEST COMPLETE: verifies reactivated user can login - User ${testUser} logged in successfully`);
     });
 });

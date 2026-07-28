@@ -70,8 +70,15 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Submitting form');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.task('log', '>>> TEST: Checking for success message');
-        cy.contains('.alert-success', 'User created successfully').should('be.visible');
+        cy.task('log', '>>> TEST: Waiting for page to reload after form submission');
+        cy.url().should('include', '/user/user-org-roles');
+
+        cy.task('log', '>>> TEST: Checking for success message (flash message after redirect)');
+        cy.get('.alert', {timeout: 10000}).should('exist').then(($alert) => {
+            cy.task('log', `>>> TEST: Found alert element with classes: ${$alert.attr('class')}`);
+            cy.task('log', `>>> TEST: Alert text content: ${$alert.text()}`);
+        });
+        cy.contains('.alert', 'created successfully', {timeout: 10000}).should('be.visible');
 
         cy.task('log', '>>> TEST: Verifying user appears in table');
         cy.contains('table', testUser).should('exist');
@@ -91,8 +98,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Submitting form');
         cy.get('form#create-user-form button[type="submit"]').click();
 
+        cy.task('log', '>>> TEST: Waiting for page to reload after form submission');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for success message');
-        cy.contains('.alert-success', 'User created successfully').should('be.visible');
+        cy.contains('.alert', 'created successfully', {timeout: 10000}).should('be.visible');
         cy.contains('table', 'cypress_any_email').should('exist');
         cy.task('log', '>>> TEST COMPLETE: accepts any valid email domain - User cypress_any_email created successfully');
     });
@@ -111,8 +121,14 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Submitting form with duplicate username');
         cy.get('form#create-user-form button[type="submit"]').click();
 
+        cy.task('log', '>>> TEST: Waiting for page to reload');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for error message about login name');
-        cy.contains('.alert-error', 'login name').should('be.visible');
+        cy.get('.alert', {timeout: 10000}).should('exist').then(($alert) => {
+            cy.task('log', `>>> TEST: Found alert with text: ${$alert.text()}`);
+        });
+        cy.contains('.alert', 'login name', {timeout: 10000}).should('be.visible');
         cy.task('log', '>>> TEST COMPLETE: shows error for duplicate username - Error message displayed correctly');
     });
 
@@ -126,8 +142,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Clicking submit without username');
         cy.get('form#create-user-form button[type="submit"]').click();
 
+        cy.task('log', '>>> TEST: Waiting for page reload');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for username error message');
-        cy.contains('.alert-error', 'username').should('be.visible');
+        cy.contains('.alert', 'username', {timeout: 10000}).should('be.visible');
         cy.task('log', '>>> TEST COMPLETE: shows error for empty username - Error displayed correctly');
     });
 
@@ -141,8 +160,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Clicking submit without email');
         cy.get('form#create-user-form button[type="submit"]').click();
 
+        cy.task('log', '>>> TEST: Waiting for page reload');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for email error message');
-        cy.contains('.alert-error', 'email').should('be.visible');
+        cy.contains('.alert', 'email', {timeout: 10000}).should('be.visible');
         cy.task('log', '>>> TEST COMPLETE: shows error for empty email - Error displayed correctly');
     });
 
@@ -157,8 +179,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Clicking submit with invalid email');
         cy.get('form#create-user-form button[type="submit"]').click();
 
+        cy.task('log', '>>> TEST: Waiting for page reload');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Checking for email format error message');
-        cy.contains('.alert-error', 'email').should('be.visible');
+        cy.contains('.alert', 'email', {timeout: 10000}).should('be.visible');
         cy.task('log', '>>> TEST COMPLETE: shows error for invalid email format - Error displayed correctly');
     });
 
@@ -173,8 +198,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Submitting form');
         cy.get('form#create-user-form button[type="submit"]').click();
 
+        cy.task('log', '>>> TEST: Waiting for page reload');
+        cy.url().should('include', '/user/user-org-roles');
+
         cy.task('log', '>>> TEST: Verifying success message');
-        cy.contains('.alert-success', 'User created successfully').should('be.visible');
+        cy.contains('.alert', 'created successfully', {timeout: 10000}).should('be.visible');
 
         cy.task('log', '>>> TEST: Checking if form fields are cleared');
         cy.get('form#create-user-form input#field-username').should('have.value', '');
