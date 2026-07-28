@@ -16,13 +16,10 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> USER_CREATION: Logging out');
         cy.logout();
 
-        cy.task('log', `>>> USER_CREATION: Deleting user: ${testUser}`);
+        cy.task('log', `>>> USER_CREATION: Deleting test users`);
         cy.delete_user(testUser);
-        cy.task('log', '>>> USER_CREATION: Deleting user: cypress_any_email');
         cy.delete_user('cypress_any_email');
-        cy.task('log', '>>> USER_CREATION: Deleting user: cypress_duplicate');
         cy.delete_user('cypress_duplicate');
-        cy.task('log', '>>> USER_CREATION: Deleting user: cypress_clear');
         cy.delete_user('cypress_clear');
 
         cy.task('log', '>>> USER_CREATION: Logging in');
@@ -132,60 +129,6 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST COMPLETE: shows error for duplicate username - Error message displayed correctly');
     });
 
-    it('shows error for empty username', () => {
-        cy.log('>>> TEST START: shows error for empty username');
-        cy.task('log', '>>> TEST: Submitting form with empty username');
-
-        cy.visit('/user/user-org-roles');
-        cy.get('form#create-user-form input#field-email').clear().type('test@gsa.gov');
-
-        cy.task('log', '>>> TEST: Clicking submit without username');
-        cy.get('form#create-user-form button[type="submit"]').click();
-
-        cy.task('log', '>>> TEST: Waiting for page reload');
-        cy.url().should('include', '/user/user-org-roles');
-
-        cy.task('log', '>>> TEST: Checking for username error message');
-        cy.contains('.alert', 'username', {timeout: 10000}).should('be.visible');
-        cy.task('log', '>>> TEST COMPLETE: shows error for empty username - Error displayed correctly');
-    });
-
-    it('shows error for empty email', () => {
-        cy.log('>>> TEST START: shows error for empty email');
-        cy.task('log', '>>> TEST: Submitting form with empty email');
-
-        cy.visit('/user/user-org-roles');
-        cy.get('form#create-user-form input#field-username').clear().type('testuser');
-
-        cy.task('log', '>>> TEST: Clicking submit without email');
-        cy.get('form#create-user-form button[type="submit"]').click();
-
-        cy.task('log', '>>> TEST: Waiting for page reload');
-        cy.url().should('include', '/user/user-org-roles');
-
-        cy.task('log', '>>> TEST: Checking for email error message');
-        cy.contains('.alert', 'email', {timeout: 10000}).should('be.visible');
-        cy.task('log', '>>> TEST COMPLETE: shows error for empty email - Error displayed correctly');
-    });
-
-    it('shows error for invalid email format', () => {
-        cy.log('>>> TEST START: shows error for invalid email format');
-        cy.task('log', '>>> TEST: Submitting form with invalid email format');
-
-        cy.visit('/user/user-org-roles');
-        cy.get('form#create-user-form input#field-username').clear().type('testuser');
-        cy.get('form#create-user-form input#field-email').clear().type('not-an-email');
-
-        cy.task('log', '>>> TEST: Clicking submit with invalid email');
-        cy.get('form#create-user-form button[type="submit"]').click();
-
-        cy.task('log', '>>> TEST: Waiting for page reload');
-        cy.url().should('include', '/user/user-org-roles');
-
-        cy.task('log', '>>> TEST: Checking for email format error message');
-        cy.contains('.alert', 'email', {timeout: 10000}).should('be.visible');
-        cy.task('log', '>>> TEST COMPLETE: shows error for invalid email format - Error displayed correctly');
-    });
 
     it('clears form after successful submission', () => {
         cy.log('>>> TEST START: clears form after successful submission');

@@ -99,7 +99,10 @@ def create_inventory_user(context, data_dict):
     if not user:
         return {
             'success': False,
-            'msg': 'Action create_inventory_user requires an authenticated user'
+            'msg': (
+                'Action create_inventory_user requires '
+                'an authenticated user'
+            )
         }
     if authz.is_sysadmin(user):
         return {'success': True}
