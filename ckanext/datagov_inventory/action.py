@@ -1,5 +1,72 @@
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+import ckan.logic as logic
+import secrets
+import string
+
+
+def create_inventory_user(context, data_dict):
+    """Create a new user with email validation and auto-generated password."""
+    toolkit.check_access('create_inventory_user', context, data_dict)
+
+    name = data_dict.get('name', '').strip()
+    email = data_dict.get('email', '').strip()
+
+    if not name:
+        raise logic.ValidationError({'name': ['Missing value']})
+
+    if not email:
+        raise logic.ValidationError({'email': ['Missing value']})
+
+    if '@' not in email or '.' not in email.split('@')[-1]:
+        raise logic.ValidationError({'email': ['Invalid email format']})
+
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(secrets.choice(alphabet) for i in range(32))
+
+    user_dict = {
+        'name': name,
+        'email': email,
+        'password': password
+    }
+
+    try:
+        user = toolkit.get_action('user_create')(context, user_dict)
+    except logic.ValidationError as e:
+        raise e
+
+    return user
+
+
+def reactivate_user(context, data_dict):
+    """Reactivate a deleted user by changing their state to active."""
+    toolkit.check_access('reactivate_user', context, data_dict)
+
+    user_id = data_dict.get('id', '').strip()
+
+    if not user_id:
+        raise logic.ValidationError({'id': ['Missing value']})
+
+    user_obj = model.User.get(user_id)
+
+    if not user_obj:
+        raise logic.NotFound('User not found')
+
+    if user_obj.state == 'active':
+        raise logic.ValidationError(
+            {'id': ['User is already active']}
+        )
+
+    user_obj.state = 'active'
+    model.Session.add(user_obj)
+    model.Session.commit()
+
+    user_dict = toolkit.get_action('user_show')(
+        {'ignore_auth': True},
+        {'id': user_obj.id}
+    )
+
+    return user_dict
 
 
 @toolkit.side_effect_free

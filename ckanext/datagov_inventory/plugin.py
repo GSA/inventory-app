@@ -94,6 +94,39 @@ def user_org_roles(context, data_dict):
     return {'success': False}
 
 
+def create_inventory_user(context, data_dict):
+    user = context.get('user')
+    if not user:
+        return {
+            'success': False,
+            'msg': (
+                'Action create_inventory_user requires '
+                'an authenticated user'
+            )
+        }
+    if authz.is_sysadmin(user):
+        return {'success': True}
+    return {
+        'success': False,
+        'msg': 'Only sysadmins can create inventory users'
+    }
+
+
+def reactivate_user(context, data_dict):
+    user = context.get('user')
+    if not user:
+        return {
+            'success': False,
+            'msg': 'Action reactivate_user requires an authenticated user'
+        }
+    if authz.is_sysadmin(user):
+        return {'success': True}
+    return {
+        'success': False,
+        'msg': 'Only sysadmins can reactivate users'
+    }
+
+
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
@@ -116,13 +149,19 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'task_status_show': restrict_anon_access,
                 'user_list': restrict_anon_access,
                 'user_org_roles': user_org_roles,
+                'create_inventory_user': create_inventory_user,
+                'reactivate_user': reactivate_user,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
                 'vocabulary_show': restrict_anon_access,
                 }
 
     def get_actions(self):
-        return {'user_org_roles': action.user_org_roles}
+        return {
+            'user_org_roles': action.user_org_roles,
+            'create_inventory_user': action.create_inventory_user,
+            'reactivate_user': action.reactivate_user,
+        }
 
     # render our custom 403 template
     def update_config(self, config):
@@ -195,7 +234,94 @@ def user_org_roles_table():
 
 pusher.add_url_rule(
     '/user/user-org-roles',
-    view_func=user_org_roles_table
+    view_func=user_org_roles_table,
+    methods=['GET']
+)
+
+
+def create_user_form():
+    from flask import request as flask_request
+    import ckan.lib.helpers as h
+
+    if flask_request.method == 'POST':
+        context = {
+            'model': model,
+            'user': g.user,
+        }
+
+        username = flask_request.form.get('username', '').strip()
+        email = flask_request.form.get('email', '').strip()
+
+        try:
+            user = toolkit.get_action('create_inventory_user')(
+                context,
+                {'name': username, 'email': email}
+            )
+            h.flash_success(
+                _('User {0} created successfully').format(user['name'])
+            )
+            return redirect('/user/user-org-roles')
+        except logic.ValidationError as e:
+            error_messages = []
+            for field, errors in e.error_dict.items():
+                for error in errors:
+                    error_messages.append('{0}: {1}'.format(field, error))
+            h.flash_error('; '.join(error_messages))
+        except logic.NotAuthorized:
+            h.flash_error(_('Not authorized to create users'))
+        except Exception as e:
+            log.error('Error creating user: %s', str(e))
+            h.flash_error(_('Error creating user: {0}').format(str(e)))
+
+    return redirect('/user/user-org-roles')
+
+
+pusher.add_url_rule(
+    '/user/create-user',
+    'create_user_form',
+    view_func=create_user_form,
+    methods=['POST']
+)
+
+
+def reactivate_user_form(user_id):
+    import ckan.lib.helpers as h
+
+    context = {
+        'model': model,
+        'user': g.user,
+    }
+
+    try:
+        user = toolkit.get_action('reactivate_user')(
+            context,
+            {'id': user_id}
+        )
+        h.flash_success(
+            _('User {0} reactivated successfully').format(user['name'])
+        )
+    except logic.ValidationError as e:
+        error_messages = []
+        for field, errors in e.error_dict.items():
+            for error in errors:
+                error_messages.append('{0}: {1}'.format(field, error))
+        h.flash_error('; '.join(error_messages))
+    except logic.NotAuthorized:
+        h.flash_error(_('Not authorized to reactivate users'))
+    except logic.NotFound:
+        h.flash_error(_('User not found'))
+    except Exception as e:
+        log.error('Error reactivating user: %s', str(e))
+        h.flash_error(_('Error reactivating user: {0}').format(str(e)))
+
+    return redirect('/user/user-org-roles')
+
+
+pusher.add_url_rule(
+    '/user/reactivate/<user_id>',
+    'reactivate_user_form',
+    view_func=reactivate_user_form,
+    methods=['POST']
 )
 
 
@@ -343,13 +469,15 @@ def _user_org_roles_row_values(user, organization, columns):
         'organization': organization['name'] or '',
         'role': organization['role'] or '',
     }
-    return [
+    row = [
         {
             'value': values[column],
             'url': _user_org_roles_cell_url(column, user, organization),
+            'user_id': user['id'] if column == 'user' else None,
         }
         for column in columns
     ]
+    return row
 
 
 def _user_org_roles_cell_url(column, user, organization):

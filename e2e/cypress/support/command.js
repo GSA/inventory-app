@@ -211,36 +211,69 @@ Cypress.Commands.add('delete_organization', (orgName) => {
 
 Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
     /**
-     * Method to create an user via CKAN API
+     * Method to create a user via CKAN API
+     * Creates user with create_inventory_user, then sets password if provided
      * :RETURN null:
      */
-    let request_obj = {
-        url: '/api/action/user_create',
+    return cy.request({
+        url: '/api/action/create_inventory_user',
         method: 'POST',
         failOnStatusCode: false,
         headers: api_headers(),
         body: {
             name: userName,
-            email: userEmail,
-            password: userPassword
+            email: userEmail
         },
-    };
-
-    cy.request(request_obj).then((response) => {
-        if (response.status === 409 && response.body.error.name.includes("That login name is not available.")) {
-            cy.log("User already exists. Make sure it is active");
-            request_obj.url = '/api/action/user_patch';
-            request_obj.failOnStatusCode = true;
-            request_obj.body = {
-                id: userName,
-                password: userPassword,
-                email: userEmail,
-                state: "active"
+    }).then((response) => {
+        // Handle successful creation
+        if (response.status === 200 && response.body && response.body.success) {
+            cy.log(`User ${userName} created successfully`);
+            if (userPassword) {
+                cy.log("Setting password via user_patch...");
+                return cy.request({
+                    url: '/api/action/user_patch',
+                    method: 'POST',
+                    headers: api_headers(),
+                    body: {
+                        id: userName,
+                        password: userPassword,
+                        email: userEmail
+                    }
+                });
             }
-            cy.request(request_obj);
+        }
+        // Handle duplicate/error - try to reactivate if deleted, or just update password if active
+        else {
+            cy.log(`User ${userName} might already exist, attempting to ensure it's active...`);
+            // Try to reactivate (will fail gracefully if already active)
+            return cy.request({
+                url: '/api/action/reactivate_user',
+                method: 'POST',
+                failOnStatusCode: false,
+                headers: api_headers(),
+                body: {
+                    id: userName
+                }
+            }).then(() => {
+                // Whether reactivation succeeded or failed (if already active), set the password
+                if (userPassword) {
+                    cy.log("Setting/updating password via user_patch...");
+                    return cy.request({
+                        url: '/api/action/user_patch',
+                        method: 'POST',
+                        failOnStatusCode: false,
+                        headers: api_headers(),
+                        body: {
+                            id: userName,
+                            password: userPassword,
+                            email: userEmail,
+                            state: 'active'
+                        }
+                    });
+                }
+            });
         }
     });
-
 });
 
 
