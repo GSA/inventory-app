@@ -1,24 +1,31 @@
 describe('User Creation Form', () => {
-    const testUser = 'cypress_test_user_' + Date.now();
+    const testUser = 'cypress_test_user_creation';
     const testEmail = testUser + '@gsa.gov';
 
     before(() => {
         cy.create_token();
     });
 
-    after(() => {
+    beforeEach(() => {
+        cy.logout();
         cy.delete_user(testUser);
+        cy.delete_user('cypress_any_email');
+        cy.delete_user('cypress_duplicate');
+        cy.delete_user('cypress_clear');
+        cy.login();
+    });
+
+    after(() => {
+        cy.logout();
+        cy.delete_user(testUser);
+        cy.delete_user('cypress_any_email');
+        cy.delete_user('cypress_duplicate');
+        cy.delete_user('cypress_clear');
         cy.revoke_token();
     });
 
-    beforeEach(() => {
-        cy.login();
-        cy.visit('/user/user-org-roles');
-        // Wait for the form to be fully loaded
-        cy.get('form#create-user-form', { timeout: 10000 }).should('be.visible');
-    });
-
     it('renders the user creation form', () => {
+        cy.visit('/user/user-org-roles');
         cy.get('form#create-user-form').should('exist');
         cy.get('form#create-user-form input#field-username').should('exist');
         cy.get('form#create-user-form input#field-email').should('exist');
@@ -29,95 +36,70 @@ describe('User Creation Form', () => {
     });
 
     it('creates a user with valid .gov email', () => {
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-username').should('be.visible').clear().type(testUser);
-        cy.get('form#create-user-form input#field-email').should('be.visible').clear().type(testEmail);
+        cy.visit('/user/user-org-roles');
+        cy.get('form#create-user-form input#field-username').clear().type(testUser);
+        cy.get('form#create-user-form input#field-email').clear().type(testEmail);
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-success', 'User created successfully', { timeout: 10000 }).should('be.visible');
-        cy.contains('table', testUser, { timeout: 10000 }).should('exist');
+        cy.contains('.alert-success', 'User created successfully').should('be.visible');
+        cy.contains('table', testUser).should('exist');
         cy.contains('table', testEmail).should('exist');
     });
 
     it('accepts any valid email domain', () => {
-        const testUser = 'cypress_any_email_' + Date.now();
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-username').should('be.visible').clear().type(testUser);
-        cy.get('form#create-user-form input#field-email').should('be.visible').clear().type(testUser + '@example.com');
+        cy.visit('/user/user-org-roles');
+        cy.get('form#create-user-form input#field-username').clear().type('cypress_any_email');
+        cy.get('form#create-user-form input#field-email').clear().type('cypress_any_email@example.com');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-success', 'User created successfully', { timeout: 10000 }).should('be.visible');
-        cy.contains('table', testUser, { timeout: 10000 }).should('exist');
-
-        cy.delete_user(testUser);
+        cy.contains('.alert-success', 'User created successfully').should('be.visible');
+        cy.contains('table', 'cypress_any_email').should('exist');
     });
 
     it('shows error for duplicate username', () => {
-        const duplicateUser = 'cypress_duplicate_' + Date.now();
-        cy.create_user(duplicateUser, duplicateUser + '@gsa.gov', 'Password123!');
+        cy.create_user('cypress_duplicate', 'cypress_duplicate@gsa.gov', 'Password123!');
 
         cy.visit('/user/user-org-roles');
-        cy.get('form#create-user-form', { timeout: 10000 }).should('be.visible');
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-username').should('be.visible').clear().type(duplicateUser);
-        cy.get('form#create-user-form input#field-email').should('be.visible').clear().type('different@gsa.gov');
+        cy.get('form#create-user-form input#field-username').clear().type('cypress_duplicate');
+        cy.get('form#create-user-form input#field-email').clear().type('different@gsa.gov');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-error', 'login name', { timeout: 10000 }).should('be.visible');
-
-        cy.delete_user(duplicateUser);
+        cy.contains('.alert-error', 'login name').should('be.visible');
     });
 
     it('shows error for empty username', () => {
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-email').should('be.visible').clear().type('test@gsa.gov');
+        cy.visit('/user/user-org-roles');
+        cy.get('form#create-user-form input#field-email').clear().type('test@gsa.gov');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-error', 'username', { timeout: 10000 }).should('be.visible');
+        cy.contains('.alert-error', 'username').should('be.visible');
     });
 
     it('shows error for empty email', () => {
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-username').should('be.visible').clear().type('testuser');
+        cy.visit('/user/user-org-roles');
+        cy.get('form#create-user-form input#field-username').clear().type('testuser');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-error', 'email', { timeout: 10000 }).should('be.visible');
+        cy.contains('.alert-error', 'email').should('be.visible');
     });
 
     it('shows error for invalid email format', () => {
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-username').should('be.visible').clear().type('testuser');
-        cy.get('form#create-user-form input#field-email').should('be.visible').clear().type('not-an-email');
+        cy.visit('/user/user-org-roles');
+        cy.get('form#create-user-form input#field-username').clear().type('testuser');
+        cy.get('form#create-user-form input#field-email').clear().type('not-an-email');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-error', 'email', { timeout: 10000 }).should('be.visible');
+        cy.contains('.alert-error', 'email').should('be.visible');
     });
 
     it('clears form after successful submission', () => {
-        const clearTestUser = 'cypress_clear_' + Date.now();
-        cy.intercept('POST', '/user/create-user').as('createUser');
-
-        cy.get('form#create-user-form input#field-username').should('be.visible').clear().type(clearTestUser);
-        cy.get('form#create-user-form input#field-email').should('be.visible').clear().type(clearTestUser + '@gsa.gov');
+        cy.visit('/user/user-org-roles');
+        cy.get('form#create-user-form input#field-username').clear().type('cypress_clear');
+        cy.get('form#create-user-form input#field-email').clear().type('cypress_clear@gsa.gov');
         cy.get('form#create-user-form button[type="submit"]').click();
 
-        cy.wait('@createUser');
-        cy.contains('.alert-success', 'User created successfully', { timeout: 10000 }).should('be.visible');
+        cy.contains('.alert-success', 'User created successfully').should('be.visible');
         cy.get('form#create-user-form input#field-username').should('have.value', '');
         cy.get('form#create-user-form input#field-email').should('have.value', '');
-
-        cy.delete_user(clearTestUser);
     });
 });

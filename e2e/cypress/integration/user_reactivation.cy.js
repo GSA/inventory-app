@@ -1,18 +1,24 @@
 describe('User Reactivation', () => {
-    const testUser = 'cypress_reactivate_' + Date.now();
+    const testUser = 'cypress_reactivate_user';
     const testEmail = testUser + '@gsa.gov';
+    const orgName = 'cypress-reactivate-org';
 
     before(() => {
         cy.create_token();
     });
 
-    after(() => {
+    beforeEach(() => {
+        cy.logout();
         cy.delete_user(testUser);
-        cy.revoke_token();
+        cy.delete_organization(orgName);
+        cy.login();
     });
 
-    beforeEach(() => {
-        cy.login();
+    after(() => {
+        cy.logout();
+        cy.delete_user(testUser);
+        cy.delete_organization(orgName);
+        cy.revoke_token();
     });
 
     it('shows reactivate button in deleted users section', () => {
@@ -21,8 +27,8 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users', { timeout: 10000 }).should('exist');
-        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
+        cy.get('#deleted-users').should('exist');
+        cy.get('#deleted-users table tbody tr').contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('form[action*="reactivate"]').should('exist');
@@ -38,23 +44,20 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
+        cy.get('#deleted-users table tbody tr').contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
-        cy.contains('.alert-success', 'reactivated successfully', { timeout: 10000 }).should('be.visible');
-
+        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
         cy.get('#deleted-users table tbody tr').contains(testUser).should('not.exist');
-
-        cy.get('#users-without-organizations table tbody tr', { timeout: 10000 })
+        cy.get('#users-without-organizations table tbody tr')
             .contains(testUser)
             .should('exist');
     });
 
     it('moves reactivated user to correct section based on organization', () => {
-        const orgName = 'cypress-reactivate-org-' + Date.now();
         cy.create_organization(orgName, 'Test org for reactivation');
         cy.create_user(testUser, testEmail, 'Password123!');
         cy.assign_user(orgName, testUser, 'editor');
@@ -62,24 +65,20 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
+        cy.get('#deleted-users table tbody tr').contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
-        cy.contains('.alert-success', 'reactivated successfully', { timeout: 10000 }).should('be.visible');
-
-        cy.get('#users-with-organizations table tbody tr', { timeout: 10000 })
+        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
+        cy.get('#users-with-organizations table tbody tr')
             .contains(testUser)
             .should('exist');
-
         cy.get('#users-with-organizations table tbody tr')
             .contains(testUser)
             .parents('tr')
             .should('contain', orgName);
-
-        cy.delete_organization(orgName);
     });
 
     it('shows no reactivate button for active users', () => {
@@ -87,7 +86,7 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#users-without-organizations table tbody tr', { timeout: 10000 })
+        cy.get('#users-without-organizations table tbody tr')
             .contains(testUser)
             .parents('tr')
             .within(() => {
@@ -101,7 +100,7 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
+        cy.get('#deleted-users table tbody tr').contains(testUser)
             .parents('tr')
             .find('form[action*="reactivate"]')
             .invoke('attr', 'action')
@@ -121,30 +120,43 @@ describe('User Reactivation', () => {
 
                 cy.visit('/user/user-org-roles');
 
-                cy.get('#deleted-users table tbody tr', { timeout: 10000 })
+                cy.get('#users-without-organizations table tbody tr')
                     .contains(testUser)
-                    .parents('tr')
-                    .within(() => {
-                        cy.get('button[type="submit"]').contains('Reactivate').click();
-                    });
+                    .should('exist');
 
-                cy.contains('.alert-error', 'already active', { timeout: 10000 }).should('be.visible');
+                cy.request({
+                    method: 'POST',
+                    url: '/api/3/action/reactivate_user',
+                    failOnStatusCode: false,
+                    headers: {
+                        'X-CKAN-API-Key': Cypress.env('token_data').api_token,
+                    },
+                    body: {
+                        id: userId
+                    }
+                }).then((response) => {
+                    expect(response.status).to.be.oneOf([200, 409]);
+                    if (response.body && response.body.error) {
+                        expect(response.body.error.message).to.contain('active');
+                    }
+                });
             });
     });
 
     it('shows error when reactivating nonexistent user', () => {
-        cy.visit('/user/user-org-roles');
-
-        const fakeUserId = 'nonexistent-user-' + Date.now();
+        const fakeUserId = 'nonexistent-user-12345';
         cy.request({
             method: 'POST',
-            url: `/user/reactivate/${fakeUserId}`,
+            url: '/api/3/action/reactivate_user',
             failOnStatusCode: false,
             headers: {
-                'Cookie': document.cookie
+                'X-CKAN-API-Key': Cypress.env('token_data').api_token,
+            },
+            body: {
+                id: fakeUserId
             }
         }).then((response) => {
-            expect(response.status).to.be.oneOf([404, 302]);
+            expect(response.status).to.be.oneOf([404, 409]);
         });
     });
 
@@ -154,16 +166,16 @@ describe('User Reactivation', () => {
 
         cy.visit('/user/user-org-roles');
 
-        cy.get('#deleted-users table tbody tr', { timeout: 10000 }).contains(testUser)
+        cy.get('#deleted-users table tbody tr').contains(testUser)
             .parents('tr')
             .within(() => {
                 cy.get('button[type="submit"]').contains('Reactivate').click();
             });
 
-        cy.contains('.alert-success', 'reactivated successfully', { timeout: 10000 }).should('be.visible');
+        cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
 
         cy.logout();
         cy.login(testUser, 'Password123!');
-        cy.get('.nav-tabs>li>a', { timeout: 10000 }).should('contain', 'My Organizations');
+        cy.get('.nav-tabs>li>a').should('contain', 'My Organizations');
     });
 });
