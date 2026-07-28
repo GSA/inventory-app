@@ -14,7 +14,7 @@
                     {% if data.resource_type =='api' %} checked="checked" {% endif %} value="api"/>
             <label class="radio inline" for="field-resource-type-api">{{ _('Link to an API') }}</label>
             <input id="field-resource-type-accessurl" type="radio" name="resource_type"
-                    {% if not data.resource_type or data.resource_type =='' %} checked="checked" {% endif %} value=""/>
+                    {% if not data.resource_type or data.resource_type =='' or data.resource_type =='accessurl' %} checked="checked" {% endif %} value="accessurl"/>
             <label class="radio inline" for="field-resource-type-accessurl">{{ _('Access URL') }}</label>
         </div>
     </div>
