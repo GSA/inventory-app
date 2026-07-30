@@ -50,6 +50,7 @@ describe('Dataset', () => {
 
         cy.task('log', 'USER_PERM: Visiting dataset page');
         cy.visit('/dataset/test-dataset-1');
+        cy.task('log', 'USER_PERM: Dataset page loaded');
 
         // Check what buttons/links are available
         cy.get('body').then(($body) => {
