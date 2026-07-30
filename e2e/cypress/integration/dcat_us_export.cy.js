@@ -99,17 +99,17 @@ describe('DCAT-US Export', () => {
     });
 
     it('Submit Required Metadata works', () => {
-        cy.log('TEST: Starting Submit Required Metadata test');
+        cy.task('log', 'TEST: Starting Submit Required Metadata test');
         cy.visit('/dataset/new-metadata');
-        cy.log('TEST: Visited /dataset/new-metadata');
+        cy.task('log', 'TEST: Visited /dataset/new-metadata');
         cy.requiredMetadata(dataset_title);
-        cy.log('TEST: Filled required metadata for: ' + dataset_title);
+        cy.task('log', 'TEST: Filled required metadata for: ' + dataset_title);
         cy.get('body').then(($body) => {
-            cy.log('TEST: Page body HTML length: ' + $body.html().length);
-            cy.log('TEST: Looking for "Dataset saved successfully" message');
+            cy.task('log', 'TEST: Page body HTML length: ' + $body.html().length);
+            cy.task('log', 'TEST: Looking for "Dataset saved successfully" message');
         });
         cy.contains('Dataset saved successfully', { timeout: 10000 }).then(($el) => {
-            cy.log('TEST: SUCCESS - Found "Dataset saved successfully" message');
+            cy.task('log', 'TEST: SUCCESS - Found "Dataset saved successfully" message');
         });
     });
 

@@ -368,10 +368,10 @@ Cypress.Commands.add('form_request', (method, url, formData, done) => {
 });
 
 Cypress.Commands.add('requiredMetadata', (title) => {
-    cy.log('REQUIRED_METADATA: Starting required metadata fill');
+    cy.task('log', 'REQUIRED_METADATA: Starting required metadata fill');
     cy.intercept('/api/3/action/package_create').as('packageCreate');
     const datasetTitle = title || chance.word({ length: 5 });
-    cy.log('REQUIRED_METADATA: Dataset title: ' + datasetTitle);
+    cy.task('log', 'REQUIRED_METADATA: Dataset title: ' + datasetTitle);
     cy.get('input[name=title]').type(datasetTitle);
     cy.get('textarea[name=description]').type(chance.sentence({ words: 4 }));
     cy.get('.react-tags input').type('1234{enter}');
@@ -390,17 +390,17 @@ Cypress.Commands.add('requiredMetadata', (title) => {
     cy.get('#temporal_option_2').parent('.form-group').click();
     cy.get('input[name=temporal_start_date]').type('2010-11-11');
     cy.get('input[name=temporal_end_date]').type('2020-11-11');
-    cy.log('REQUIRED_METADATA: All fields filled, clicking Save and Continue');
+    cy.task('log', 'REQUIRED_METADATA: All fields filled, clicking Save and Continue');
     cy.get('button[type=button]').contains('Save and Continue').click();
-    cy.log('REQUIRED_METADATA: Waiting for package_create API call');
+    cy.task('log', 'REQUIRED_METADATA: Waiting for package_create API call');
     cy.wait('@packageCreate').then((interception) => {
-        cy.log('REQUIRED_METADATA: package_create API status: ' + interception.response.statusCode);
-        cy.log('REQUIRED_METADATA: package_create success: ' + interception.response.body.success);
+        cy.task('log', 'REQUIRED_METADATA: package_create API status: ' + interception.response.statusCode);
+        cy.task('log', 'REQUIRED_METADATA: package_create success: ' + interception.response.body.success);
         if (!interception.response.body.success) {
-            cy.log('REQUIRED_METADATA: ERROR - package_create failed: ' + JSON.stringify(interception.response.body.error));
+            cy.task('log', 'REQUIRED_METADATA: ERROR - package_create failed: ' + JSON.stringify(interception.response.body.error));
         }
     });
-    cy.log('REQUIRED_METADATA: Required metadata completed');
+    cy.task('log', 'REQUIRED_METADATA: Required metadata completed');
 });
 
 Cypress.Commands.add('additionalMetadata', (isparent) => {
@@ -425,15 +425,15 @@ Cypress.Commands.add('additionalMetadata', (isparent) => {
 
 Cypress.Commands.add('resourceUpload', () => {
     const yourFixturePath = '../fixtures/ckan_resource.csv';
-    cy.log('RESOURCE_UPLOAD: Starting resource upload');
+    cy.task('log', 'RESOURCE_UPLOAD: Starting resource upload');
     cy.get('#resource-option-upload-file').parent('.form-group').then(($el) => {
-        cy.log('RESOURCE_UPLOAD: Found upload file option, clicking...');
+        cy.task('log', 'RESOURCE_UPLOAD: Found upload file option, clicking...');
     }).click();
     cy.get('label[for=upload]').then(($el) => {
-        cy.log('RESOURCE_UPLOAD: Found upload label, clicking...');
+        cy.task('log', 'RESOURCE_UPLOAD: Found upload label, clicking...');
     }).click();
     cy.get('input#upload').attachFile(yourFixturePath);
-    cy.log('RESOURCE_UPLOAD: File attached: ' + yourFixturePath);
+    cy.task('log', 'RESOURCE_UPLOAD: File attached: ' + yourFixturePath);
 
     // Check which input field exists and fail with diagnostic info if neither found
     cy.get('body').then(($body) => {
@@ -441,9 +441,9 @@ Cypress.Commands.add('resourceUpload', () => {
         const hasConformsTo = $body.find('input[name="resource\\.conformsTo"]').length > 0;
         const allInputs = $body.find('input').map((i, el) => el.name).get().join(', ');
 
-        cy.log('RESOURCE_UPLOAD: resource_type field exists: ' + hasResourceType);
-        cy.log('RESOURCE_UPLOAD: conformsTo field exists: ' + hasConformsTo);
-        cy.log('RESOURCE_UPLOAD: All input names on page: ' + allInputs);
+        cy.task('log', 'RESOURCE_UPLOAD: resource_type field exists: ' + hasResourceType);
+        cy.task('log', 'RESOURCE_UPLOAD: conformsTo field exists: ' + hasConformsTo);
+        cy.task('log', 'RESOURCE_UPLOAD: All input names on page: ' + allInputs);
 
         // Assert at least one exists with diagnostic message
         expect(hasResourceType || hasConformsTo,
@@ -456,9 +456,9 @@ Cypress.Commands.add('resourceUpload', () => {
         const fieldName = hasResourceType ? 'resource\\.resource_type' : 'resource\\.conformsTo';
         const url = chance.url();
 
-        cy.log('RESOURCE_UPLOAD: Using field: ' + fieldName);
-        cy.log('RESOURCE_UPLOAD: Typing URL: ' + url);
+        cy.task('log', 'RESOURCE_UPLOAD: Using field: ' + fieldName);
+        cy.task('log', 'RESOURCE_UPLOAD: Typing URL: ' + url);
         cy.get(`input[name="${fieldName}"]`, { timeout: 5000 }).should('exist').type(url);
     });
-    cy.log('RESOURCE_UPLOAD: Resource upload completed');
+    cy.task('log', 'RESOURCE_UPLOAD: Resource upload completed');
 });

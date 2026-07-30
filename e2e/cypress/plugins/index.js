@@ -75,6 +75,10 @@ module.exports = (on, config) => {
         ms
         );
         return hasFile(fileName, ms);
+    },
+    log(message) {
+        console.log('CYPRESS_LOG: ' + message);
+        return null;
     }
     });
 
