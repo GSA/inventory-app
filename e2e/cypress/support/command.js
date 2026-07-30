@@ -45,23 +45,31 @@ Cypress.Commands.add('login', (userName, password) => {
      * :PARAM password String: password for the user logging in
      * :RETURN null:
      */
+    cy.log('LOGIN: Starting login process');
     cy.logout();
+    cy.log('LOGIN: Visiting /user/login');
     cy.visit('/user/login');
 
     if (!userName) {
         userName = Cypress.env('USER');
-        cy.log(userName, process.env);
+        cy.log('LOGIN: Using default user from env: ' + userName);
+    } else {
+        cy.log('LOGIN: Logging in as: ' + userName);
     }
     if (!password) {
         password = Cypress.env('USER_PASSWORD');
     }
 
     // Hide flask debug toolbar
-    cy.get('#flDebugHideToolBarButton').click();
+    cy.log('LOGIN: Hiding debug toolbar');
+    cy.get('#flDebugHideToolBarButton', { timeout: 5000 }).click();
 
-    cy.get('#field-login').type(userName);
-    cy.get('#field-password').type(password);
+    cy.log('LOGIN: Filling login form');
+    cy.get('#field-login', { timeout: 5000 }).type(userName);
+    cy.get('#field-password', { timeout: 5000 }).type(password);
+    cy.log('LOGIN: Submitting login form');
     cy.get('.btn-primary').click();
+    cy.log('LOGIN: Login form submitted');
 
 });
 
@@ -214,6 +222,7 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
      * Method to create an user via CKAN API
      * :RETURN null:
      */
+    cy.log('CREATE_USER: Creating user: ' + userName + ' with email: ' + userEmail);
     let request_obj = {
         url: '/api/action/user_create',
         method: 'POST',
@@ -227,8 +236,10 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
     };
 
     cy.request(request_obj).then((response) => {
+        cy.log('CREATE_USER: Response status: ' + response.status);
+        cy.log('CREATE_USER: Response success: ' + response.body.success);
         if (response.status === 409 && response.body.error.name.includes("That login name is not available.")) {
-            cy.log("User already exists. Make sure it is active");
+            cy.log("CREATE_USER: User already exists. Make sure it is active");
             request_obj.url = '/api/action/user_patch';
             request_obj.failOnStatusCode = true;
             request_obj.body = {
@@ -237,7 +248,15 @@ Cypress.Commands.add('create_user', (userName, userEmail, userPassword) => {
                 email: userEmail,
                 state: "active"
             }
-            cy.request(request_obj);
+            cy.log('CREATE_USER: Patching existing user');
+            cy.request(request_obj).then((patchResponse) => {
+                cy.log('CREATE_USER: Patch response status: ' + patchResponse.status);
+                cy.log('CREATE_USER: Patch response success: ' + patchResponse.body.success);
+            });
+        } else if (!response.body.success) {
+            cy.log('CREATE_USER: ERROR - User creation failed: ' + JSON.stringify(response.body.error));
+        } else {
+            cy.log('CREATE_USER: User created successfully');
         }
     });
 
@@ -249,6 +268,7 @@ Cypress.Commands.add('assign_user', (orgName, userName, userRole) => {
      * Method to assign an organization role to an user via CKAN API
      * :RETURN null:
      */
+    cy.log('ASSIGN_USER: Assigning user ' + userName + ' to org ' + orgName + ' with role ' + userRole);
     let request_obj = {
         url: '/api/action/organization_member_create',
         method: 'POST',
@@ -261,7 +281,15 @@ Cypress.Commands.add('assign_user', (orgName, userName, userRole) => {
         },
     };
 
-    cy.request(request_obj);
+    cy.request(request_obj).then((response) => {
+        cy.log('ASSIGN_USER: Response status: ' + response.status);
+        cy.log('ASSIGN_USER: Response success: ' + response.body.success);
+        if (!response.body.success) {
+            cy.log('ASSIGN_USER: ERROR - Assignment failed: ' + JSON.stringify(response.body.error));
+        } else {
+            cy.log('ASSIGN_USER: User assigned successfully');
+        }
+    });
 
 });
 
@@ -271,6 +299,7 @@ Cypress.Commands.add('delete_user', (userName) => {
      * Method to delete an user via CKAN API
      * :RETURN null:
      */
+    cy.log('DELETE_USER: Deleting user: ' + userName);
     let request_obj = {
         method: 'POST',
         failOnStatusCode: false,
@@ -281,7 +310,15 @@ Cypress.Commands.add('delete_user', (userName) => {
     };
 
     request_obj.url = '/api/action/user_delete'
-    cy.request(request_obj);
+    cy.request(request_obj).then((response) => {
+        cy.log('DELETE_USER: Response status: ' + response.status);
+        cy.log('DELETE_USER: Response success: ' + response.body.success);
+        if (!response.body.success) {
+            cy.log('DELETE_USER: ERROR - User deletion failed: ' + JSON.stringify(response.body.error));
+        } else {
+            cy.log('DELETE_USER: User deleted successfully');
+        }
+    });
 
 });
 
@@ -331,8 +368,10 @@ Cypress.Commands.add('form_request', (method, url, formData, done) => {
 });
 
 Cypress.Commands.add('requiredMetadata', (title) => {
+    cy.log('REQUIRED_METADATA: Starting required metadata fill');
     cy.intercept('/api/3/action/package_create').as('packageCreate');
     const datasetTitle = title || chance.word({ length: 5 });
+    cy.log('REQUIRED_METADATA: Dataset title: ' + datasetTitle);
     cy.get('input[name=title]').type(datasetTitle);
     cy.get('textarea[name=description]').type(chance.sentence({ words: 4 }));
     cy.get('.react-tags input').type('1234{enter}');
@@ -351,8 +390,17 @@ Cypress.Commands.add('requiredMetadata', (title) => {
     cy.get('#temporal_option_2').parent('.form-group').click();
     cy.get('input[name=temporal_start_date]').type('2010-11-11');
     cy.get('input[name=temporal_end_date]').type('2020-11-11');
+    cy.log('REQUIRED_METADATA: All fields filled, clicking Save and Continue');
     cy.get('button[type=button]').contains('Save and Continue').click();
-    cy.wait('@packageCreate');
+    cy.log('REQUIRED_METADATA: Waiting for package_create API call');
+    cy.wait('@packageCreate').then((interception) => {
+        cy.log('REQUIRED_METADATA: package_create API status: ' + interception.response.statusCode);
+        cy.log('REQUIRED_METADATA: package_create success: ' + interception.response.body.success);
+        if (!interception.response.body.success) {
+            cy.log('REQUIRED_METADATA: ERROR - package_create failed: ' + JSON.stringify(interception.response.body.error));
+        }
+    });
+    cy.log('REQUIRED_METADATA: Required metadata completed');
 });
 
 Cypress.Commands.add('additionalMetadata', (isparent) => {
@@ -377,8 +425,28 @@ Cypress.Commands.add('additionalMetadata', (isparent) => {
 
 Cypress.Commands.add('resourceUpload', () => {
     const yourFixturePath = '../fixtures/ckan_resource.csv';
-    cy.get('#resource-option-upload-file').parent('.form-group').click();
-    cy.get('label[for=upload]').click();
+    cy.log('RESOURCE_UPLOAD: Starting resource upload');
+    cy.get('#resource-option-upload-file').parent('.form-group').then(($el) => {
+        cy.log('RESOURCE_UPLOAD: Found upload file option, clicking...');
+    }).click();
+    cy.get('label[for=upload]').then(($el) => {
+        cy.log('RESOURCE_UPLOAD: Found upload label, clicking...');
+    }).click();
     cy.get('input#upload').attachFile(yourFixturePath);
-    cy.get('input[name=resource\\.resource_type]').type(chance.url());
+    cy.log('RESOURCE_UPLOAD: File attached: ' + yourFixturePath);
+
+    // Check which input field exists
+    cy.get('body').then(($body) => {
+        const hasResourceType = $body.find('input[name="resource\\.resource_type"]').length > 0;
+        const hasConformsTo = $body.find('input[name="resource\\.conformsTo"]').length > 0;
+        cy.log('RESOURCE_UPLOAD: resource_type field exists: ' + hasResourceType);
+        cy.log('RESOURCE_UPLOAD: conformsTo field exists: ' + hasConformsTo);
+    });
+
+    cy.get('input[name=resource\\.resource_type]', { timeout: 5000 }).should('exist').then(($input) => {
+        const url = chance.url();
+        cy.log('RESOURCE_UPLOAD: Typing into resource_type field: ' + url);
+        cy.wrap($input).type(url);
+    });
+    cy.log('RESOURCE_UPLOAD: Resource upload completed');
 });
