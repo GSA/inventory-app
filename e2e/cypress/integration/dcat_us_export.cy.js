@@ -100,8 +100,8 @@ describe('DCAT-US Export', () => {
 
     it('Submit Required Metadata works', () => {
         cy.task('log', 'TEST: Starting Submit Required Metadata test');
-        cy.visit('/dataset/new-metadata');
-        cy.task('log', 'TEST: Visited /dataset/new-metadata');
+        cy.visit('/dataset/new');
+        cy.task('log', 'TEST: Visited /dataset/new');
 
         // Check what inputs are actually available on the page
         cy.get('body').then(($body) => {
@@ -122,8 +122,8 @@ describe('DCAT-US Export', () => {
 
     it('Save resource file to inventory', () => {
         cy.task('log', 'TEST: Starting Save resource file test');
-        cy.visit('/dataset/new-metadata');
-        cy.task('log', 'TEST: Visited /dataset/new-metadata');
+        cy.visit('/dataset/new');
+        cy.task('log', 'TEST: Visited /dataset/new');
 
         // Check what inputs are actually available on the page
         cy.get('body').then(($body) => {
