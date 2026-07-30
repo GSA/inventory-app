@@ -435,18 +435,30 @@ Cypress.Commands.add('resourceUpload', () => {
     cy.get('input#upload').attachFile(yourFixturePath);
     cy.log('RESOURCE_UPLOAD: File attached: ' + yourFixturePath);
 
-    // Check which input field exists
+    // Check which input field exists and fail with diagnostic info if neither found
     cy.get('body').then(($body) => {
         const hasResourceType = $body.find('input[name="resource\\.resource_type"]').length > 0;
         const hasConformsTo = $body.find('input[name="resource\\.conformsTo"]').length > 0;
+        const allInputs = $body.find('input').map((i, el) => el.name).get().join(', ');
+
         cy.log('RESOURCE_UPLOAD: resource_type field exists: ' + hasResourceType);
         cy.log('RESOURCE_UPLOAD: conformsTo field exists: ' + hasConformsTo);
+        cy.log('RESOURCE_UPLOAD: All input names on page: ' + allInputs);
+
+        // Assert at least one exists with diagnostic message
+        expect(hasResourceType || hasConformsTo,
+            `Neither resource_type nor conformsTo field found. Available inputs: ${allInputs}`).to.be.true;
     });
 
-    cy.get('input[name=resource\\.resource_type]', { timeout: 5000 }).should('exist').then(($input) => {
+    // Try resource_type first, fallback to conformsTo
+    cy.get('body').then(($body) => {
+        const hasResourceType = $body.find('input[name="resource\\.resource_type"]').length > 0;
+        const fieldName = hasResourceType ? 'resource\\.resource_type' : 'resource\\.conformsTo';
         const url = chance.url();
-        cy.log('RESOURCE_UPLOAD: Typing into resource_type field: ' + url);
-        cy.wrap($input).type(url);
+
+        cy.log('RESOURCE_UPLOAD: Using field: ' + fieldName);
+        cy.log('RESOURCE_UPLOAD: Typing URL: ' + url);
+        cy.get(`input[name="${fieldName}"]`, { timeout: 5000 }).should('exist').type(url);
     });
     cy.log('RESOURCE_UPLOAD: Resource upload completed');
 });

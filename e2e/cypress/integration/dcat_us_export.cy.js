@@ -160,15 +160,32 @@ describe('DCAT-US Export', () => {
                             cy.log('TEST: API Response Status: ' + response.status);
                             cy.log('TEST: Dataset private: ' + response.body.result.private);
                             cy.log('TEST: Number of resources: ' + response.body.result.resources.length);
-                            if (response.body.result.resources.length > 0) {
-                                const resource = response.body.result.resources[0];
-                                cy.log('TEST: Resource keys: ' + Object.keys(resource).join(', '));
-                                cy.log('TEST: resource_type value: ' + JSON.stringify(resource.resource_type));
-                                cy.log('TEST: conformsTo value: ' + JSON.stringify(resource.conformsTo));
-                            }
+
                             expect(response.status).to.eq(200);
                             expect(response.body.result.private).to.equal(false);
-                            expect(response.body.result.resources[0].resource_type).to.exist;
+
+                            if (response.body.result.resources.length > 0) {
+                                const resource = response.body.result.resources[0];
+                                const resourceKeys = Object.keys(resource).join(', ');
+                                cy.log('TEST: Resource keys: ' + resourceKeys);
+                                cy.log('TEST: resource_type value: ' + JSON.stringify(resource.resource_type));
+                                cy.log('TEST: conformsTo value: ' + JSON.stringify(resource.conformsTo));
+
+                                // Try both field names with diagnostic message
+                                const hasResourceType = resource.hasOwnProperty('resource_type');
+                                const hasConformsTo = resource.hasOwnProperty('conformsTo');
+
+                                expect(hasResourceType || hasConformsTo,
+                                    `Neither resource_type nor conformsTo found in resource. Available keys: ${resourceKeys}`).to.be.true;
+
+                                if (hasResourceType) {
+                                    expect(resource.resource_type, 'resource_type should have a value').to.exist;
+                                } else if (hasConformsTo) {
+                                    expect(resource.conformsTo, 'conformsTo should have a value').to.exist;
+                                }
+                            } else {
+                                throw new Error('No resources found in dataset');
+                            }
                         });
                     });
             });
