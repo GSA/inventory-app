@@ -54,8 +54,15 @@ describe('Dataset', () => {
 
         // Check what buttons/links are available
         cy.get('body').then(($body) => {
+            const pageText = $body.text().substring(0, 200);
             const allButtons = $body.find('button, a').map((i, el) => $(el).text().trim()).get().filter(t => t.length > 0 && t.length < 50);
-            cy.task('log', 'USER_PERM: Available buttons/links: ' + allButtons.slice(0, 10).join(', '));
+            cy.task('log', 'USER_PERM: First 200 chars of page: ' + pageText);
+            cy.task('log', 'USER_PERM: Available buttons/links (first 20): ' + allButtons.slice(0, 20).join(' | '));
+            cy.task('log', 'USER_PERM: Total buttons/links found: ' + allButtons.length);
+
+            // Check specifically for Edit
+            const hasEdit = allButtons.some(text => text.toLowerCase().includes('edit'));
+            cy.task('log', 'USER_PERM: Page contains Edit button: ' + hasEdit);
         });
 
         cy.task('log', 'USER_PERM: Looking for Edit button');

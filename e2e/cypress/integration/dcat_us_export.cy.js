@@ -102,6 +102,13 @@ describe('DCAT-US Export', () => {
         cy.task('log', 'TEST: Starting Submit Required Metadata test');
         cy.visit('/dataset/new-metadata');
         cy.task('log', 'TEST: Visited /dataset/new-metadata');
+
+        // Check what inputs are actually available on the page
+        cy.get('body').then(($body) => {
+            const allInputs = $body.find('input').map((i, el) => el.name || el.id || el.type).get().filter(n => n).slice(0, 20);
+            cy.task('log', 'TEST: Available inputs on page: ' + allInputs.join(', '));
+        });
+
         cy.requiredMetadata(dataset_title);
         cy.task('log', 'TEST: Filled required metadata for: ' + dataset_title);
         cy.get('body').then(($body) => {
@@ -117,6 +124,13 @@ describe('DCAT-US Export', () => {
         cy.task('log', 'TEST: Starting Save resource file test');
         cy.visit('/dataset/new-metadata');
         cy.task('log', 'TEST: Visited /dataset/new-metadata');
+
+        // Check what inputs are actually available on the page
+        cy.get('body').then(($body) => {
+            const allInputs = $body.find('input').map((i, el) => el.name || el.id || el.type).get().filter(n => n).slice(0, 20);
+            cy.task('log', 'TEST: Available inputs on page: ' + allInputs.join(', '));
+        });
+
         cy.requiredMetadata(dataset_title);
         cy.task('log', 'TEST: Filled required metadata');
         cy.additionalMetadata();

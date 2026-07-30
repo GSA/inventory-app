@@ -372,7 +372,12 @@ Cypress.Commands.add('requiredMetadata', (title) => {
     cy.intercept('/api/3/action/package_create').as('packageCreate');
     const datasetTitle = title || chance.word({ length: 5 });
     cy.task('log', 'REQUIRED_METADATA: Dataset title: ' + datasetTitle);
-    cy.get('input[name=title]').type(datasetTitle);
+
+    // Add explicit wait and better error handling for title field
+    cy.get('input[name=title]', { timeout: 10000 }).should('be.visible').then(($input) => {
+        cy.task('log', 'REQUIRED_METADATA: Found title input field, typing...');
+        cy.wrap($input).clear().type(datasetTitle);
+    });
     cy.task('log', 'REQUIRED_METADATA: Filled title');
     cy.get('textarea[name=description]').type(chance.sentence({ words: 4 }));
     cy.task('log', 'REQUIRED_METADATA: Filled description');
