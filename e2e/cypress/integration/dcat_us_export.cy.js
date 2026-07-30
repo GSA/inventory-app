@@ -122,7 +122,7 @@ describe('DCAT-US Export', () => {
                         cy.request('/api/3/action/package_show?id=' + dataset_title).then((response) => {
                             expect(response.status).to.eq(200);
                             expect(response.body.result.private).to.equal(false);
-                            expect(response.body.result.resources[0].conformsTo).to.exist;
+                            expect(response.body.result.resources[0].resource_type).to.exist;
                         });
                     });
             });

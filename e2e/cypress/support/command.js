@@ -380,5 +380,5 @@ Cypress.Commands.add('resourceUpload', () => {
     cy.get('#resource-option-upload-file').parent('.form-group').click();
     cy.get('label[for=upload]').click();
     cy.get('input#upload').attachFile(yourFixturePath);
-    cy.get('input[name=resource\\.conformsTo]').type(chance.url());
+    cy.get('input[name=resource\\.resource_type]').type(chance.url());
 });
