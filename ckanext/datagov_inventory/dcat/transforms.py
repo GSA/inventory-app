@@ -424,7 +424,7 @@ def _parse_bbox(value: str) -> tuple[float, float, float, float] | None:
         nums = tuple(float(p) for p in parts)
     except ValueError:
         return None
-    return nums  # type: ignore[return-value]
+    return nums  # type: ignore
 
 
 def _bbox_to_polygon_wkt(bbox: tuple[float, float, float, float]) -> str:

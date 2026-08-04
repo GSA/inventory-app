@@ -257,16 +257,29 @@ def create_user_form():
                 context,
                 {'name': username, 'email': email}
             )
+            user_url = h.url_for('user.read', id=user['name'])
             h.flash_success(
-                _('User {0} created successfully').format(user['name'])
+                _('User <a href="{0}">{1}</a> created successfully').format(
+                    user_url, user['name']
+                ),
+                allow_html=True
             )
             return redirect('/user/user-org-roles')
         except logic.ValidationError as e:
             error_messages = []
             for field, errors in e.error_dict.items():
                 for error in errors:
-                    error_messages.append('{0}: {1}'.format(field, error))
-            h.flash_error('; '.join(error_messages))
+                    # Special handling for duplicate username errors
+                    if field == 'name' and 'not available' in error.lower():
+                        user_url = h.url_for('user.read', id=username)
+                        msg = (
+                            'Existing username <a href="{0}">{1}</a> '
+                            'is already in use. Please choose another.'
+                        )
+                        error_messages.append(msg.format(user_url, username))
+                    else:
+                        error_messages.append('{0}: {1}'.format(field, error))
+            h.flash_error('; '.join(error_messages), allow_html=True)
         except logic.NotAuthorized:
             h.flash_error(_('Not authorized to create users'))
         except Exception as e:
@@ -297,8 +310,12 @@ def reactivate_user_form(user_id):
             context,
             {'id': user_id}
         )
+        user_url = h.url_for('user.read', id=user['name'])
         h.flash_success(
-            _('User {0} reactivated successfully').format(user['name'])
+            _('User <a href="{0}">{1}</a> reactivated successfully').format(
+                user_url, user['name']
+            ),
+            allow_html=True
         )
     except logic.ValidationError as e:
         error_messages = []

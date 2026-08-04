@@ -55,6 +55,17 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST COMPLETE: renders the user creation form');
     });
 
+    it('shows placeholder text for username field', () => {
+        cy.log('>>> TEST START: shows placeholder text for username field');
+        cy.task('log', '>>> TEST: Visiting /user/user-org-roles');
+        cy.visit('/user/user-org-roles');
+
+        cy.task('log', '>>> TEST: Checking username field has placeholder');
+        cy.get('form#create-user-form input#field-username')
+            .should('have.attr', 'placeholder', 'firstname-lastname');
+        cy.task('log', '>>> TEST COMPLETE: shows placeholder text for username field');
+    });
+
     it('creates a user with valid .gov email', () => {
         cy.log('>>> TEST START: creates a user with valid .gov email');
         cy.task('log', `>>> TEST: Creating user ${testUser} with email ${testEmail}`);
@@ -121,11 +132,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Waiting for page to reload');
         cy.url().should('include', '/user/user-org-roles');
 
-        cy.task('log', '>>> TEST: Checking for error message about login name');
+        cy.task('log', '>>> TEST: Checking for error message about duplicate username');
         cy.get('.alert', {timeout: 10000}).should('exist').then(($alert) => {
             cy.task('log', `>>> TEST: Found alert with text: ${$alert.text()}`);
         });
-        cy.contains('.alert', 'login name', {timeout: 10000}).should('be.visible');
+        cy.contains('.alert', 'already in use', {timeout: 10000}).should('be.visible');
         cy.task('log', '>>> TEST COMPLETE: shows error for duplicate username - Error message displayed correctly');
     });
 
