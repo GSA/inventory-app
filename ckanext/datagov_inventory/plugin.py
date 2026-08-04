@@ -265,7 +265,13 @@ def create_user_form():
             error_messages = []
             for field, errors in e.error_dict.items():
                 for error in errors:
-                    error_messages.append('{0}: {1}'.format(field, error))
+                    # Special handling for duplicate username errors
+                    if field == 'name' and 'not available' in error.lower():
+                        error_messages.append(
+                            'Username "{0}" is not available.'.format(username)
+                        )
+                    else:
+                        error_messages.append('{0}: {1}'.format(field, error))
             h.flash_error('; '.join(error_messages))
         except logic.NotAuthorized:
             h.flash_error(_('Not authorized to create users'))
