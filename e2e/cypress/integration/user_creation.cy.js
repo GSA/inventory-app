@@ -132,11 +132,11 @@ describe('User Creation Form', () => {
         cy.task('log', '>>> TEST: Waiting for page to reload');
         cy.url().should('include', '/user/user-org-roles');
 
-        cy.task('log', '>>> TEST: Checking for error message about login name');
+        cy.task('log', '>>> TEST: Checking for error message about duplicate username');
         cy.get('.alert', {timeout: 10000}).should('exist').then(($alert) => {
             cy.task('log', `>>> TEST: Found alert with text: ${$alert.text()}`);
         });
-        cy.contains('.alert', 'login name', {timeout: 10000}).should('be.visible');
+        cy.contains('.alert', 'already in use', {timeout: 10000}).should('be.visible');
         cy.task('log', '>>> TEST COMPLETE: shows error for duplicate username - Error message displayed correctly');
     });
 
