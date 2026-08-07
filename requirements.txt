@@ -14,7 +14,7 @@ chardet==7.4.3
 charset-normalizer==3.4.7
 ckan @ git+https://github.com/GSA/ckan.git@065722f9da689b613bc606c05489a75395e50be7
 ckanext-datajson==0.1.29
-ckanext-dcat-usmetadata @ git+https://github.com/GSA/ckanext-dcat_usmetadata.git@2af7c47543d432996b8520ca17250ab262c612f4
+ckanext-dcat-usmetadata @ git+https://github.com/GSA/ckanext-dcat_usmetadata.git@323b2de6088293a39cb6f320f093c14a814e39f4
 ckanext-envvars==0.0.6
 ckanext-pgsearch @ git+https://github.com/GSA/ckanext-pgsearch.git@48492c63fbaed8bcd892194b22192ffb404f2902
 ckanext-s3filestore @ git+https://github.com/keitaroinc/ckanext-s3filestore.git@e972ae3c36489dcfc716f75063ac64c13cde1146
