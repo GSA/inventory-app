@@ -31,6 +31,7 @@ ignore:
     - "*":
         reason: >-
           Slated to deal with in October
+          Link to issue: https://github.com/GSA/data.gov/issues/6230
         expires: 2026-10-31T00:00:00.000Z
         created: 2026-08-12T00:00:00.000Z
 patch: {}
