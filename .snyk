@@ -27,6 +27,13 @@ ignore:
           https://github.com/GSA/data.gov/issues/6123
         expires: 2026-10-01T00:00:00.000Z
         created: 2026-07-01T00:00:00.000Z
+  SNYK-PYTHON-PIP-18426311:
+    - "*":
+        reason: >-
+          Slated to deal with in October
+          Link to issue: https://github.com/GSA/data.gov/issues/6230
+        expires: 2026-10-31T00:00:00.000Z
+        created: 2026-08-12T00:00:00.000Z
 patch: {}
 # specify the directories or files to be excludeed from import:
 exclude:
