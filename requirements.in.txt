@@ -50,7 +50,7 @@ requests==2.33.0
 rq==1.16.2
 simplejson==3.19.2
 SQLAlchemy[mypy]==1.4.52
-sqlparse==0.5.4
+sqlparse==0.6.0
 #typing_extensions==4.12.2
 typing_extensions>=4.13.2
 tzlocal==5.2
