@@ -217,10 +217,22 @@ def create_validator(schema_id: str, registry_or_store):
 
 
 def load_schema_registry(definitions_dir: Path):
-    """Load schemas into a registry (new API) or store dict (old API)."""
+    """Load schemas into a registry (new API) or store dict (old API).
+
+    Raises FileNotFoundError if the directory holds no schemas. A missing
+    directory and an empty one both glob to nothing, so without this the
+    caller gets an empty registry and fails later as an opaque $ref
+    resolution error, far from the actual cause.
+    """
+    schema_files = sorted(definitions_dir.glob("*.json"))
+    if not schema_files:
+        raise FileNotFoundError(
+            f"No JSON Schema definitions found in {definitions_dir}."
+        )
+
     if USE_NEW_API:
         registry = Registry()
-        for schema_file in definitions_dir.glob("*.json"):
+        for schema_file in schema_files:
             with schema_file.open() as f:
                 resource = Resource.from_contents(json.load(f))
                 registry = resource @ registry
@@ -240,7 +252,7 @@ def load_schema_registry(definitions_dir: Path):
         return registry
     else:
         store = {}
-        for schema_file in definitions_dir.glob("*.json"):
+        for schema_file in schema_files:
             with schema_file.open() as f:
                 schema = json.load(f)
                 if "$id" in schema:
