@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v7
+        with:
+          submodules: true
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -33,6 +35,11 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v7
+        with:
+          # The DCAT-US 3.0 schemas live in the _external/dcat-us submodule.
+          # Without this, make test-extension and the dcat_us_export cypress
+          # spec fail on an empty schema directory.
+          submodules: true
       - name: Create local env file
         run: cp .env.sample .env
       - name: test startup validation

@@ -32,3 +32,7 @@ patch: {}
 exclude:
  global:
    - requirements-dev.txt
+   # Third-party git submodules. GSA/dcat-us ships its own package.json and
+   # pyproject.toml, which `all_projects: true` would otherwise pick up as
+   # projects of ours. That repo scans itself.
+   - _external/**
