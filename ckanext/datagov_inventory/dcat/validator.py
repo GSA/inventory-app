@@ -2,7 +2,11 @@
 import json
 from pathlib import Path
 
-from .schema_paths import V1_1_DEFINITIONS_DIR, V3_0_DEFINITIONS_DIR
+from .schema_paths import (
+    EXTERNAL_DIR,
+    V1_1_DEFINITIONS_DIR,
+    V3_0_DEFINITIONS_DIR,
+)
 
 try:
     from jsonschema import Draft202012Validator as ValidatorClass
@@ -226,9 +230,18 @@ def load_schema_registry(definitions_dir: Path):
     """
     schema_files = sorted(definitions_dir.glob("*.json"))
     if not schema_files:
-        raise FileNotFoundError(
-            f"No JSON Schema definitions found in {definitions_dir}."
-        )
+        message = f"No JSON Schema definitions found in {definitions_dir}."
+        # An uninitialized submodule is an empty directory, not a missing
+        # one, so this is the likeliest cause for the v3.0 schemas. Only
+        # say so when the directory really is under the submodule -- a
+        # missing v1.1_definitions must not get submodule advice.
+        if EXTERNAL_DIR in definitions_dir.resolve().parents:
+            message += (
+                " The DCAT-US 3.0 schemas come from the GSA/dcat-us git"
+                " submodule; run"
+                " `git submodule update --init _external/dcat-us`."
+            )
+        raise FileNotFoundError(message)
 
     if USE_NEW_API:
         registry = Registry()
