@@ -2,6 +2,8 @@
 import json
 from pathlib import Path
 
+from .schema_paths import V1_1_DEFINITIONS_DIR, V3_0_DEFINITIONS_DIR
+
 try:
     from jsonschema import Draft202012Validator as ValidatorClass
     from referencing import Registry, Resource
@@ -14,10 +16,6 @@ except ImportError:
         from jsonschema import Draft4Validator as ValidatorClass
         USE_NEW_API = False
 
-
-SCRIPT_DIR = Path(__file__).parent
-V1_1_DEFINITIONS_DIR = SCRIPT_DIR / "v1.1_definitions"
-V3_0_DEFINITIONS_DIR = SCRIPT_DIR / "definitions"
 
 V1_1_CATALOG_SCHEMA_ID = (
     "https://project-open-data.cio.gov/v1.1/schema/catalog.json"
