@@ -223,18 +223,15 @@ def create_validator(schema_id: str, registry_or_store):
 def load_schema_registry(definitions_dir: Path):
     """Load schemas into a registry (new API) or store dict (old API).
 
-    Raises FileNotFoundError if the directory holds no schemas. A missing
-    directory and an empty one both glob to nothing, so without this the
-    caller gets an empty registry and fails later as an opaque $ref
-    resolution error, far from the actual cause.
+    Raises FileNotFoundError if the directory holds no schemas: missing and
+    empty both glob to nothing, and an empty registry only surfaces later as
+    an opaque $ref resolution error.
     """
     schema_files = sorted(definitions_dir.glob("*.json"))
     if not schema_files:
         message = f"No JSON Schema definitions found in {definitions_dir}."
-        # An uninitialized submodule is an empty directory, not a missing
-        # one, so this is the likeliest cause for the v3.0 schemas. Only
-        # say so when the directory really is under the submodule -- a
-        # missing v1.1_definitions must not get submodule advice.
+        # An uninitialized submodule is an empty directory, not a missing one.
+        # Only advise it for paths under _external, never for v1.1_definitions.
         if EXTERNAL_DIR in definitions_dir.resolve().parents:
             message += (
                 " The DCAT-US 3.0 schemas come from the GSA/dcat-us git"

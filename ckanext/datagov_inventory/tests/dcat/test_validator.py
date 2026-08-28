@@ -738,14 +738,7 @@ class TestEndToEndErrorHandling:
 
 
 class TestLoadSchemaRegistryGuard:
-    """load_schema_registry must fail loudly on a schema-less directory.
-
-    Both DCAT-US versions load through this function, and the v3.0
-    definitions come from a git submodule that is an empty directory until
-    it is initialized. Globbing an empty or missing directory raises
-    nothing, so without a guard the caller builds an empty registry and
-    fails much later with an unrelated-looking $ref error.
-    """
+    """load_schema_registry must fail loudly on a schema-less directory."""
 
     def test_raises_on_empty_directory(self, tmp_path):
         with pytest.raises(FileNotFoundError) as exc_info:

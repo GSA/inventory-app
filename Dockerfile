@@ -20,8 +20,7 @@ RUN apt-get update -y && \
 COPY requirements.txt requirements-dev.txt ${APP_DIR}/
 ADD setup.py README.md ${APP_DIR}/
 ADD ckanext ${APP_DIR}/ckanext/
-# The DCAT-US 3.0 JSON Schemas the v3.0 export validates against live in the
-# _external/dcat-us git submodule, outside the ckanext package.
+# DCAT-US 3.0 JSON Schemas: a submodule, so outside the ckanext package.
 ADD _external ${APP_DIR}/_external/
 
 WORKDIR ${APP_DIR}
