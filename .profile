@@ -79,8 +79,9 @@ is_missing_required_value() {
 beaker_secret=$(vcap_get_service secrets .credentials.CKAN___BEAKER__SESSION__SECRET)
 ckan_secret=$(vcap_get_service secrets .credentials.CKAN___SECRET_KEY)
 csrf_secret=$(vcap_get_service secrets .credentials.CKAN___WTF_CSRF_SECRET_KEY)
+xloader_api_token=$(vcap_get_service secrets .credentials.CKANEXT__XLOADER__API_TOKEN)
 
-for secret_name in beaker_secret ckan_secret csrf_secret; do
+for secret_name in beaker_secret ckan_secret csrf_secret xloader_api_token; do
   secret_value="${!secret_name}"
   if is_missing_required_value "$secret_value"; then
     echo "$secret_name is not found in secrets" >&2
@@ -91,6 +92,7 @@ done
 export CKAN___BEAKER__SESSION__SECRET=$beaker_secret
 export CKAN___SECRET_KEY=$ckan_secret
 export CKAN___WTF_CSRF_SECRET_KEY=$csrf_secret
+export CKANEXT__XLOADER__API_TOKEN=$xloader_api_token
 
 
 export CKAN___CACHE_DIR=${SHARED_DIR}/cache
@@ -119,7 +121,6 @@ export CKANEXT__S3FILESTORE__AWS_SECRET_ACCESS_KEY=$(vcap_get_service s3 .creden
 export CKANEXT__S3FILESTORE__AWS_BUCKET_NAME=$(vcap_get_service s3 .credentials.bucket)
 export CKANEXT__S3FILESTORE__AWS_STORAGE_PATH=datagov/inventory-next
 # xloader uses the same db as datastore
-export CKANEXT__XLOADER__API_TOKEN=$(vcap_get_service secrets .credentials.API_TOKEN)
 export CKANEXT__XLOADER__JOBS_DB__URI=$(vcap_get_service db .credentials.uri)
 export CKANEXT__XLOADER__JOBS_DB__URI=${CKANEXT__XLOADER__JOBS_DB__URI/postgres/postgresql}
 
