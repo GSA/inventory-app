@@ -32,3 +32,6 @@ patch: {}
 exclude:
  global:
    - requirements-dev.txt
+   # Third-party submodules. GSA/dcat-us ships its own package.json and
+   # pyproject.toml that `all_projects: true` would claim as ours; it scans itself.
+   - _external/**

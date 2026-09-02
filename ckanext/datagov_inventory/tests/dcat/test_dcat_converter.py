@@ -1,7 +1,10 @@
 import pytest
-from pathlib import Path
 
-from ckanext.datagov_inventory.dcat import dcat_converter, validator
+from ckanext.datagov_inventory.dcat import (
+    dcat_converter,
+    schema_paths,
+    validator,
+)
 
 
 class TestDCATConverter:
@@ -72,18 +75,15 @@ class TestDCATConverter:
         }
 
     def test_load_schema_registry_v1_1(self):
-        schema_dir = (
-            Path(__file__).parent.parent.parent
-            / "dcat" / "v1.1_definitions"
+        registry = validator.load_schema_registry(
+            schema_paths.V1_1_DEFINITIONS_DIR
         )
-        registry = validator.load_schema_registry(schema_dir)
         assert registry is not None
 
     def test_load_schema_registry_v3_0(self):
-        schema_dir = (
-            Path(__file__).parent.parent.parent / "dcat" / "definitions"
+        registry = validator.load_schema_registry(
+            schema_paths.V3_0_DEFINITIONS_DIR
         )
-        registry = validator.load_schema_registry(schema_dir)
         assert registry is not None
 
     def test_convert_dcat_catalog_updates_conforms_to(

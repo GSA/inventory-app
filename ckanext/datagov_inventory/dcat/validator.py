@@ -2,6 +2,12 @@
 import json
 from pathlib import Path
 
+from .schema_paths import (
+    EXTERNAL_DIR,
+    V1_1_DEFINITIONS_DIR,
+    V3_0_DEFINITIONS_DIR,
+)
+
 try:
     from jsonschema import Draft202012Validator as ValidatorClass
     from referencing import Registry, Resource
@@ -14,10 +20,6 @@ except ImportError:
         from jsonschema import Draft4Validator as ValidatorClass
         USE_NEW_API = False
 
-
-SCRIPT_DIR = Path(__file__).parent
-V1_1_DEFINITIONS_DIR = SCRIPT_DIR / "v1.1_definitions"
-V3_0_DEFINITIONS_DIR = SCRIPT_DIR / "definitions"
 
 V1_1_CATALOG_SCHEMA_ID = (
     "https://project-open-data.cio.gov/v1.1/schema/catalog.json"
@@ -219,10 +221,28 @@ def create_validator(schema_id: str, registry_or_store):
 
 
 def load_schema_registry(definitions_dir: Path):
-    """Load schemas into a registry (new API) or store dict (old API)."""
+    """Load schemas into a registry (new API) or store dict (old API).
+
+    Raises FileNotFoundError if the directory holds no schemas: missing and
+    empty both glob to nothing, and an empty registry only surfaces later as
+    an opaque $ref resolution error.
+    """
+    schema_files = sorted(definitions_dir.glob("*.json"))
+    if not schema_files:
+        message = f"No JSON Schema definitions found in {definitions_dir}."
+        # An uninitialized submodule is an empty directory, not a missing one.
+        # Only advise it for paths under _external, never for v1.1_definitions.
+        if EXTERNAL_DIR in definitions_dir.resolve().parents:
+            message += (
+                " The DCAT-US 3.0 schemas come from the GSA/dcat-us git"
+                " submodule; run"
+                " `git submodule update --init _external/dcat-us`."
+            )
+        raise FileNotFoundError(message)
+
     if USE_NEW_API:
         registry = Registry()
-        for schema_file in definitions_dir.glob("*.json"):
+        for schema_file in schema_files:
             with schema_file.open() as f:
                 resource = Resource.from_contents(json.load(f))
                 registry = resource @ registry
@@ -242,7 +262,7 @@ def load_schema_registry(definitions_dir: Path):
         return registry
     else:
         store = {}
-        for schema_file in definitions_dir.glob("*.json"):
+        for schema_file in schema_files:
             with schema_file.open() as f:
                 schema = json.load(f)
                 if "$id" in schema:

@@ -10,19 +10,17 @@ from curl_cffi import requests
 from curl_cffi.requests.exceptions import RequestException
 
 from . import transforms
+from .schema_paths import V1_1_DEFINITIONS_DIR, V3_0_DEFINITIONS_DIR
 from .validator import (
     CatalogValidationException,
     V1_1_CATALOG_SCHEMA_ID,
+    V1_1_DATASET_SCHEMA_ID,
     V3_0_CATALOG_SCHEMA_ID,
+    V3_0_DATASET_SCHEMA_ID,
     load_schema_registry,
     validate_catalog,
     validate_datasets,
 )
-
-
-SCRIPT_DIR = Path(__file__).parent
-V1_1_DEFINITIONS_DIR = SCRIPT_DIR / "v1.1_definitions"
-V3_0_DEFINITIONS_DIR = SCRIPT_DIR / "definitions"
 
 
 class CatalogFetchException(Exception):
@@ -204,10 +202,6 @@ def main(output_dir, url, dry_run):
         # Per-dataset v1.1 validation
         # The v1.1 catalog schema validates the catalog wrapper,
         # not individual datasets directly.
-        V1_1_DATASET_SCHEMA_ID = (
-            "https://project-open-data.cio.gov/v1.1/schema/"
-            "non-federal_dataset.json"
-        )
         valid_v1_1, invalid_v1_1, validation_errors_v1_1 = (
             validate_datasets(
                 V1_1_DATASET_SCHEMA_ID, v1_1_registry, datasets
@@ -240,9 +234,6 @@ def main(output_dir, url, dry_run):
             click.echo(f"Invalid DCAT-US data: {e}", err=True)
 
         converted_datasets = converted_catalog.get("dataset", [])
-        V3_0_DATASET_SCHEMA_ID = (
-            "https://resources.data.gov/dcat-us/3.0.0/definitions/dataset"
-        )
         valid_v3_0, invalid_v3_0, validation_errors_v3_0 = (
             validate_datasets(
                 V3_0_DATASET_SCHEMA_ID, v3_0_registry, converted_datasets

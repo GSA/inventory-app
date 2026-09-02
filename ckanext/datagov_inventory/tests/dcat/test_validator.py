@@ -735,3 +735,38 @@ class TestEndToEndErrorHandling:
         if "errors.json" in zip_file.namelist():
             errors = json.loads(zip_file.read("errors.json"))
             assert isinstance(errors, list)
+
+
+class TestLoadSchemaRegistryGuard:
+    """load_schema_registry must fail loudly on a schema-less directory."""
+
+    def test_raises_on_empty_directory(self, tmp_path):
+        with pytest.raises(FileNotFoundError) as exc_info:
+            validator.load_schema_registry(tmp_path)
+
+        assert str(tmp_path) in str(exc_info.value)
+
+    def test_raises_on_missing_directory(self, tmp_path):
+        missing = tmp_path / "definitions"
+
+        with pytest.raises(FileNotFoundError) as exc_info:
+            validator.load_schema_registry(missing)
+
+        assert str(missing) in str(exc_info.value)
+
+    def test_raises_when_directory_holds_no_json(self, tmp_path):
+        (tmp_path / "README.md").write_text("not a schema")
+
+        with pytest.raises(FileNotFoundError):
+            validator.load_schema_registry(tmp_path)
+
+    def test_loads_schemas_when_present(self, tmp_path):
+        import json
+
+        (tmp_path / "Thing.json").write_text(json.dumps({
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "https://example.gov/definitions/thing",
+            "type": "object",
+        }))
+
+        assert validator.load_schema_registry(tmp_path) is not None

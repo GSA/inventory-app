@@ -13,3 +13,9 @@ updates:
       github-actions:
         patterns:
           - "*"
+  # Bumps the _external/dcat-us gitlink (the DCAT-US 3.0 JSON Schemas) to the
+  # branch in .gitmodules. A bump failing CI is expected -- see README.md.
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "monthly"

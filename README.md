@@ -6,6 +6,8 @@ A [Docker](https://www.docker.com/)-based [CKAN](http://ckan.org) development en
 
 For details on the system architecture, please see our [data.gov systems list](https://github.com/GSA/data.gov/blob/main/SYSTEMS.md).
 
+Clone with `--recurse-submodules` — the DCAT-US 3.0 JSON Schemas are a [git submodule](#dcat-us-30-schemas).
+
 ## Development
 
 ### Prerequisites
@@ -28,6 +30,26 @@ Open CKAN to verify it's working:
 The app validates required environment variables at startup. For local development, `.env.sample` provides defaults for `CKAN___SECRET_KEY`, `CKAN___WTF_CSRF_SECRET_KEY`, and `CKAN_SQLALCHEMY_URL`.
 
 If you would like to seed data into the system, examine the test framework (`e2e/cypress/support/command.js`) for some examples of creating organizations and/or datasets with resources.
+
+### DCAT-US 3.0 schemas
+
+The JSON Schemas the DCAT-US 3.0 export validates against come from [GSA/dcat-us](https://github.com/GSA/dcat-us), pinned as a git submodule at `_external/dcat-us`. Don't edit anything under there — those changes belong in a PR against GSA/dcat-us. The schema directories are named only in `ckanext/datagov_inventory/dcat/schema_paths.py`; import paths from there rather than building them from `__file__`.
+
+    git clone --recurse-submodules https://github.com/GSA/inventory-app.git  # fresh clone
+    git submodule update --init _external/dcat-us                            # clone you already have
+    git config --global submodule.recurse true                                # stop having to remember
+
+**An uninitialized submodule is an empty directory, not a missing one.** Git creates `_external/dcat-us` from the gitlink either way, so nothing looks wrong until the v3.0 export or `ckanext/datagov_inventory/tests/dcat/` fails with a `FileNotFoundError` naming the schema directory. `git submodule status` shows a leading `-` when it's uninitialized. Fix it on the host: `make build` and `make up` can't, because `docker-compose.yml` bind-mounts `.:/app/` and the container reads your working tree. Don't sparse-checkout inside the submodule to trim it either — those patterns live in `.git/modules/`, can't be committed, and only make your machine disagree with CI about which schema files exist.
+
+To move to newer schemas:
+
+    git submodule update --remote _external/dcat-us  # follows GSA/dcat-us main, not ours
+    git diff --submodule=log
+    make test-extension
+
+Commit only the gitlink; nothing else in this repo should change. Tests failing after a bump is the pin doing its job — definition changes legitimately move which datasets validate, so fix the code or reject the bump, but never skip the tests. Dependabot proposes these monthly.
+
+DCAT-US 1.1 (`ckanext/datagov_inventory/dcat/v1.1_definitions/`) is different: Project Open Data schemas with no GSA/dcat-us equivalent, so they stay vendored here and need no submodule.
 
 ### docker compose commands
 
