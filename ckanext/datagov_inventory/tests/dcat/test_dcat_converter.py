@@ -1,4 +1,7 @@
+import json
+
 import pytest
+from click.testing import CliRunner
 
 from ckanext.datagov_inventory.dcat import (
     dcat_converter,
@@ -408,3 +411,71 @@ class TestDCATConverter:
         assert catalog["dataset"][1]["identifier"] == "valid-002"
         assert len(errors) == 1
         assert errors[0]["identifier"] == "error-001"
+
+    def test_main_writes_catalog_on_success(
+        self, sample_v1_1_catalog, tmp_path
+    ):
+        import unittest.mock as mock
+
+        output_dir = tmp_path / "out"
+        with mock.patch.object(
+            dcat_converter, 'fetch_dcat_catalog',
+            return_value=sample_v1_1_catalog
+        ):
+            result = CliRunner().invoke(
+                dcat_converter.main,
+                [
+                    "-u", "https://example.gov/data.json",
+                    "-o", str(output_dir),
+                ]
+            )
+
+        assert result.exit_code == 0, result.output
+        assert "Could not convert." not in result.output
+
+        output_file = output_dir / "catalog.json"
+        assert output_file.exists()
+        written = json.loads(output_file.read_text(encoding="utf-8"))
+        assert written["conformsTo"]["title"] == "DCAT-US 3.0"
+
+    def test_main_dry_run_does_not_write(
+        self, sample_v1_1_catalog, tmp_path
+    ):
+        import unittest.mock as mock
+
+        output_dir = tmp_path / "out"
+        with mock.patch.object(
+            dcat_converter, 'fetch_dcat_catalog',
+            return_value=sample_v1_1_catalog
+        ):
+            result = CliRunner().invoke(
+                dcat_converter.main,
+                [
+                    "--dry-run",
+                    "-u", "https://example.gov/data.json",
+                    "-o", str(output_dir),
+                ]
+            )
+
+        assert result.exit_code == 0, result.output
+        assert "Dry run complete." in result.output
+        assert not (output_dir / "catalog.json").exists()
+
+    def test_main_exits_nonzero_on_fetch_failure(self, tmp_path):
+        import unittest.mock as mock
+
+        output_dir = tmp_path / "out"
+        with mock.patch.object(
+            dcat_converter, 'fetch_dcat_catalog',
+            side_effect=dcat_converter.CatalogFetchException("boom")
+        ):
+            result = CliRunner().invoke(
+                dcat_converter.main,
+                [
+                    "-u", "https://example.gov/data.json",
+                    "-o", str(output_dir),
+                ]
+            )
+
+        assert result.exit_code == 1
+        assert not (output_dir / "catalog.json").exists()

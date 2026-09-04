@@ -249,8 +249,6 @@ def main(output_dir, url, dry_run):
 
         if dry_run:
             click.echo("Dry run complete.")
-        elif results["error"] is False:
-            click.echo("Could not convert.")
         else:
             export_converted_catalog(converted_catalog, output_dir)
 
