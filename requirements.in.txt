@@ -69,7 +69,6 @@ ckantoolkit
 
 # ckanext-xloader dependencies
 # https://github.com/ckan/ckanext-xloader/blob/master/requirements.txt
-messytables==0.15.2
 pika>=1.1.0
 Unidecode==1.0.22
 requests[security]>=2.11.1
