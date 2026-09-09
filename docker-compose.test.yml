@@ -5,9 +5,12 @@ services:
   test:
     image: cypress/included:12.17.2
     entrypoint: []
+    # Check-Valid-Until=false: this image is Debian bullseye, whose
+    # bullseye-security Release file is past its Valid-Until date now that
+    # bullseye is out of support. Without this, apt-get update exits 100.
     command: /bin/bash -c "
       rm -rf /etc/apt/sources.list.d/google-chrome.list && \
-      apt-get update && \
+      apt-get -o Acquire::Check-Valid-Until=false update && \
       apt-get install -y unzip && \
       npm install && \
       npx wait-on http://ckan:5000/api/action/status_show && \
