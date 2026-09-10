@@ -74,9 +74,8 @@ describe('User organization roles', () => {
         cy.get('.user-org-roles-summary')
             .contains('a', 'Users without organizations')
             .should('have.attr', 'href', '#users-without-organizations');
-        cy.get('.user-org-roles-summary')
-            .contains('a', 'Deleted Users')
-            .should('have.attr', 'href', '#deleted-users');
+        cy.get('#deleted-users').should('not.exist');
+        cy.get('.user-org-roles-summary').should('not.contain', 'Deleted Users');
         cy.get('article.user-org-roles table.table-header')
             .should('exist');
         cy.get('article.user-org-roles .user-org-roles-section')
@@ -149,6 +148,23 @@ describe('User organization roles', () => {
                         );
                 });
             });
+    });
+
+    it('opens Deleted Users from the third sidebar tab', () => {
+        cy.visit('/user/user-org-roles');
+        cy.get('.secondary .nav-simple .nav-item').eq(2)
+            .contains('a', 'Deleted Users')
+            .should('have.attr', 'href', '/user/deleted-users')
+            .click();
+        cy.title().should('include', 'Deleted Users');
+        cy.get('.breadcrumb .active').should('contain', 'Deleted Users');
+        cy.get('.secondary .nav-simple .nav-item.active')
+            .should('have.length', 1)
+            .and('contain', 'Deleted Users');
+        cy.get('#deleted-users table[data-sortable-table]').should('exist');
+        cy.get('#deleted-users thead').should('contain', 'Actions');
+        cy.get('#sysadmins, #users-with-organizations, #users-without-organizations, #create-user-form')
+            .should('not.exist');
     });
 
 });

@@ -14,5 +14,8 @@
     <li class="nav-item{% if h.current_url() == '/user/user-org-roles' %} active{% endif %}">
       {{ h.nav_link(_('User Roles in Organizations'), named_route='datagov_inventory.user_org_roles_table') }}
     </li>
+    <li class="nav-item{% if h.current_url() == '/user/deleted-users' %} active{% endif %}">
+      {{ h.nav_link(_('Deleted Users'), named_route='datagov_inventory.deleted_users_table') }}
+    </li>
   </ul>
 </section>

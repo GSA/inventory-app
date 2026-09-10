@@ -1,17 +1,18 @@
 {% extends "page.html" %}
 
-{% block subtitle %}{{ _('User Roles in Organizations') }}{% endblock %}
+{% block subtitle %}{{ page_title }}{% endblock %}
 
 {% block breadcrumb_content %}
   {{ h.build_nav('user.index', _('Users')) }}
-  <li class="active">{{ _('User Roles in Organizations') }}</li>
+  <li class="active">{{ page_title }}</li>
 {% endblock %}
 
 {% block primary_content %}
   <article class="module user-org-roles">
     <div class="module-content">
-      <h1 id="user-org-roles-top" class="page-heading">{{ _('User Roles in Organizations') }}</h1>
+      <h1 id="user-org-roles-top" class="page-heading">{{ page_title }}</h1>
 
+      {% if show_user_tools %}
       <section class="module module-narrow module-shallow user-org-roles-create">
         <h2 class="module-heading">
           <i class="fa fa-user-plus" aria-hidden="true"></i>
@@ -47,6 +48,7 @@
           {% endfor %}
         </ul>
       </nav>
+      {% endif %}
 
       {% for section in sections %}
         <section id="{{ section.id }}" class="user-org-roles-section">
@@ -104,7 +106,7 @@
                   </tr>
                 {% else %}
                   <tr>
-                    <td colspan="{{ section.columns|length }}">{{ _('No users') }}</td>
+                    <td colspan="{{ section.columns|length + (1 if section.id == 'deleted-users' else 0) }}">{{ _('No users') }}</td>
                   </tr>
                 {% endfor %}
               </tbody>

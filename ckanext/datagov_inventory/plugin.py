@@ -216,25 +216,43 @@ pusher.add_url_rule('/', view_func=redirect_homepage)
 
 
 def user_org_roles_table():
+    return base.render(
+        u'user_org_roles_table.html',
+        {'sections': user_org_roles_table_sections(_user_management_users()),
+         'page_title': _('User Roles in Organizations'),
+         'show_user_tools': True}
+    )
+
+
+def deleted_users_table():
+    return base.render(
+        u'user_org_roles_table.html',
+        {'sections': [deleted_users_table_section(_user_management_users())],
+         'page_title': _('Deleted Users'),
+         'show_user_tools': False}
+    )
+
+
+def _user_management_users():
     context = {
         'model': model,
         'ignore_auth': False,
         'user': g.user,
     }
     try:
-        users = toolkit.get_action('user_org_roles')(context, {})
+        return toolkit.get_action('user_org_roles')(context, {})
     except logic.NotAuthorized:
         toolkit.abort(403, _('Not authorized to list user organization roles'))
-
-    return base.render(
-        u'user_org_roles_table.html',
-        {'sections': user_org_roles_table_sections(users)}
-    )
-
 
 pusher.add_url_rule(
     '/user/user-org-roles',
     view_func=user_org_roles_table,
+    methods=['GET']
+)
+
+pusher.add_url_rule(
+    '/user/deleted-users',
+    view_func=deleted_users_table,
     methods=['GET']
 )
 
@@ -331,7 +349,7 @@ def reactivate_user_form(user_id):
         log.error('Error reactivating user: %s', str(e))
         h.flash_error(_('Error reactivating user: {0}').format(str(e)))
 
-    return redirect('/user/user-org-roles')
+    return redirect('/user/deleted-users')
 
 
 pusher.add_url_rule(
@@ -409,7 +427,6 @@ pusher.add_url_rule(
 
 def user_org_roles_table_sections(users):
     active_users = [user for user in users if user['state'] == 'active']
-    deleted_users = [user for user in users if user['state'] == 'deleted']
     sysadmins = [user for user in active_users if user['sysadmin']]
     users_with_orgs = [
         user for user in active_users
@@ -434,11 +451,15 @@ def user_org_roles_table_sections(users):
                                 users_without_orgs,
                                 ['user', 'email', 'last_active'],
                                 sortable=True),
-        _user_org_roles_section('Deleted Users', 'deleted-users',
-                                deleted_users,
-                                ['user', 'email', 'last_active'],
-                                sortable=True),
     ]
+
+
+def deleted_users_table_section(users):
+    deleted_users = [user for user in users if user['state'] == 'deleted']
+    return _user_org_roles_section(
+        'Deleted Users', 'deleted-users', deleted_users,
+        ['user', 'email', 'last_active'], sortable=True
+    )
 
 
 def _user_org_roles_section(title, section_id, users, columns, sortable=False):
