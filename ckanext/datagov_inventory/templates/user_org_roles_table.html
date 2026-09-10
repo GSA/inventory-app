@@ -12,8 +12,11 @@
     <div class="module-content">
       <h1 id="user-org-roles-top" class="page-heading">{{ _('User Roles in Organizations') }}</h1>
 
-      <section class="module module-narrow module-shallow">
-        <h2 class="module-heading">{{ _('Add New User') }}</h2>
+      <section class="module module-narrow module-shallow user-org-roles-create">
+        <h2 class="module-heading">
+          <i class="fa fa-user-plus" aria-hidden="true"></i>
+          {{ _('Add New User') }}
+        </h2>
         <div class="module-content">
           <form id="create-user-form" method="post" action="{{ h.url_for('datagov_inventory.create_user_form') }}">
             {{ h.csrf_input() }}
@@ -49,7 +52,7 @@
         <section id="{{ section.id }}" class="user-org-roles-section">
           <h2>{{ section.title }} <span>{{ section.count }} {{ _('rows') }}</span></h2>
           <div class="table-responsive">
-            <table class="table table-header table-hover table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
+            <table class="table table-header table-hover table-striped table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
               <thead>
                 <tr>
                   {% for label in section.labels %}

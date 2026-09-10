@@ -19,7 +19,45 @@
 }
 
 .user-org-roles .page-heading {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.user-org-roles-create {
+    border: 1px solid #d8dee4;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.user-org-roles-create .module-heading {
+    border-bottom: 1px solid #d8dee4;
+    margin: 0;
+}
+
+.user-org-roles-create .module-heading .fa {
+    color: #576f7f;
+    margin-right: 6px;
+}
+
+.user-org-roles-create .module-content {
+    padding: 16px;
+}
+
+.user-org-roles-create form {
+    align-items: end;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+}
+
+.user-org-roles-create .form-group,
+.user-org-roles-create .form-actions {
+    margin: 0;
+}
+
+.user-org-roles-create .form-actions {
+    border: 0;
+    padding: 0;
 }
 
 .user-org-roles-summary {
@@ -29,30 +67,48 @@
 }
 
 .user-org-roles-summary ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
 .user-org-roles-summary a {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
+    align-items: center;
+    background-color: #f7f9fa;
+    border: 1px solid #d8dee4;
+    border-left: 3px solid #577f8b;
     border-radius: 4px;
-    display: inline-block;
-    padding: 6px 10px;
+    display: flex;
+    font-weight: 600;
+    gap: 12px;
+    justify-content: space-between;
+    min-height: 44px;
+    padding: 9px 12px;
 }
 
 .user-org-roles-summary a:hover,
 .user-org-roles-summary a:focus {
     background-color: #fff;
     border-color: #005ea8;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     text-decoration: none;
 }
 
-.user-org-roles-summary span,
+.user-org-roles-summary span {
+    background-color: #e7ecef;
+    border-radius: 999px;
+    color: #44545f;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    margin-left: auto;
+    padding: 5px 8px;
+    white-space: nowrap;
+}
+
 .user-org-roles-section h2 span {
     color: #555;
     font-size: 14px;
@@ -65,14 +121,26 @@
 }
 
 .user-org-roles-section h2 {
+    align-items: baseline;
     border-bottom: 1px solid #ddd;
+    display: flex;
     font-size: 20px;
+    gap: 4px;
     margin-bottom: 16px;
     padding-bottom: 8px;
 }
 
 .user-org-roles .table {
     margin-bottom: 0;
+}
+
+.user-org-roles .table > thead > tr > th {
+    border-bottom-width: 2px;
+    white-space: nowrap;
+}
+
+.user-org-roles .table > tbody > tr > td {
+    vertical-align: middle;
 }
 
 .user-org-roles-back-to-top {
@@ -103,4 +171,14 @@
 .user-org-roles-sort:focus {
     color: #1a4480;
     text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+    .user-org-roles-create form {
+        grid-template-columns: 1fr;
+    }
+
+    .user-org-roles-summary ul {
+        grid-template-columns: 1fr;
+    }
 }
