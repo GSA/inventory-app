@@ -1,0 +1,13 @@
+{% ckan_extends %}
+
+{% block header_account_settings_link %}
+  {% if c.userobj.sysadmin %}
+    <li>
+      <a href="{{ h.url_for('datagov_inventory.user_org_roles_table') }}" title="{{ _('User Roles in Organizations') }}">
+        <i class="fa fa-user-group" aria-hidden="true"></i>
+        <span class="text">{{ _('User Roles in Organizations') }}</span>
+      </a>
+    </li>
+  {% endif %}
+  {{ super() }}
+{% endblock %}

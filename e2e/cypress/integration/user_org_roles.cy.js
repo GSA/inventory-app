@@ -31,6 +31,16 @@ describe('User organization roles', () => {
         cy.login();
     });
 
+    it('links to user organization roles from the account header', () => {
+        cy.visit('/');
+
+        cy.get('.account-masthead')
+            .find('a[title="User Roles in Organizations"]')
+            .should('have.attr', 'href', '/user/user-org-roles')
+            .find('i')
+            .should('have.class', 'fa-user-group');
+    });
+
     it('highlights All Users on the user list page', () => {
         cy.visit('/user/');
 
