@@ -1,5 +1,11 @@
 (function () {
   function cellText(row, index) {
+    if (index === 3 && row.hasAttribute('data-organization')) {
+      return row.dataset.organization.toLowerCase();
+    }
+    if (index === 4 && row.hasAttribute('data-role')) {
+      return row.dataset.role.toLowerCase();
+    }
     return row.children[index].textContent.trim().toLowerCase();
   }
 

@@ -121,8 +121,14 @@ describe('User organization roles', () => {
                     expect(userRows).to.have.length(1);
                     expect(userRows[0].cells[3].innerText).to.contain(orgA);
                     expect(userRows[0].cells[3].innerText).to.contain(orgB);
-                    expect(userRows[0].cells[4].innerText).to.contain('admin');
-                    expect(userRows[0].cells[4].innerText).to.contain('editor');
+                    const memberships = userRows[0].querySelectorAll(
+                        '.user-org-roles-membership'
+                    );
+                    expect(memberships).to.have.length(2);
+                    expect(memberships[0].innerText).to.contain(orgA);
+                    expect(memberships[0].innerText).to.contain('admin');
+                    expect(memberships[1].innerText).to.contain(orgB);
+                    expect(memberships[1].innerText).to.contain('editor');
                 });
 
                 cy.contains('button', 'Organization').click();

@@ -72,27 +72,26 @@
               </thead>
               <tbody>
                 {% for row in section.rows %}
-                  <tr>
+                  <tr{% if 'organization' in section.columns %} data-organization="{{ row[3]['items'] | map(attribute='value') | join(' ') }}" data-role="{{ row[4]['items'] | map(attribute='value') | join(' ') }}"{% endif %}>
                     {% for cell in row %}
-                      <td>
-                        {% if cell['items'] %}
-                          <div class="user-org-roles-cell-list">
-                            {% for item in cell['items'] %}
-                              <div>
-                                {% if item.url %}
-                                  <a href="{{ item.url }}">{{ item.value }}</a>
-                                {% else %}
-                                  {{ item.value }}
-                                {% endif %}
-                              </div>
-                            {% endfor %}
+                      {% if section.columns[loop.index0] == 'organization' %}
+                      <td colspan="2" class="user-org-roles-memberships">
+                        {% for item in cell['items'] %}
+                          <div class="user-org-roles-membership">
+                            <a href="{{ item.url }}">{{ item.value }}</a>
+                            <span>{{ row[4]['items'][loop.index0].value }}</span>
                           </div>
-                        {% elif cell.url %}
+                        {% endfor %}
+                      </td>
+                      {% elif section.columns[loop.index0] != 'role' %}
+                      <td>
+                        {% if cell.url %}
                           <a href="{{ cell.url }}">{{ cell.value }}</a>
                         {% else %}
                           {{ cell.value }}
                         {% endif %}
                       </td>
+                      {% endif %}
                     {% endfor %}
                     {% if section.id == 'deleted-users' and row.0.user_id %}
                       <td>

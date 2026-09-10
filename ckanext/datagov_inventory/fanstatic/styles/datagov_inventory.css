@@ -143,9 +143,36 @@
     vertical-align: middle;
 }
 
-.user-org-roles-cell-list {
+.user-org-roles .table > tbody > tr > .user-org-roles-memberships {
+    padding: 0;
+}
+
+.user-org-roles-membership {
+    align-items: center;
     display: grid;
-    gap: 4px;
+    grid-template-columns: minmax(0, 1fr) 68px;
+}
+
+.user-org-roles-membership + .user-org-roles-membership {
+    border-top: 1px solid #d8dee4;
+}
+
+.user-org-roles-membership > a,
+.user-org-roles-membership > span {
+    padding: 8px;
+    overflow-wrap: anywhere;
+}
+
+.user-org-roles-membership > span {
+    align-content: center;
+    align-self: stretch;
+    border-left: 1px solid #d8dee4;
+}
+
+#users-with-organizations .table th:last-child,
+#sysadmins .table th:last-child {
+    width: 68px;
+    min-width: 68px;
 }
 
 .user-org-roles-back-to-top {
