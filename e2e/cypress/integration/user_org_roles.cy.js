@@ -16,6 +16,7 @@ describe('User organization roles', () => {
         cy.create_user(userA, 'gsa_admin@example.com', userPassword);
         cy.create_user(userB, 'doi_admin@example.com', userPassword);
         cy.assign_user(orgA, userA, 'admin');
+        cy.assign_user(orgB, userA, 'editor');
         cy.assign_user(orgB, userB, 'admin');
     });
 
@@ -113,6 +114,17 @@ describe('User organization roles', () => {
 
         cy.get('#users-with-organizations table[data-sortable-table]')
             .within(() => {
+                cy.get('tbody tr').then(($rows) => {
+                    const userRows = [...$rows].filter((row) =>
+                        row.cells[0].innerText.trim() === userA
+                    );
+                    expect(userRows).to.have.length(1);
+                    expect(userRows[0].cells[3].innerText).to.contain(orgA);
+                    expect(userRows[0].cells[3].innerText).to.contain(orgB);
+                    expect(userRows[0].cells[4].innerText).to.contain('admin');
+                    expect(userRows[0].cells[4].innerText).to.contain('editor');
+                });
+
                 cy.contains('button', 'Organization').click();
                 cy.get('tbody tr').then(($rows) => {
                     const rowTexts = [...$rows].map((row) => row.innerText);

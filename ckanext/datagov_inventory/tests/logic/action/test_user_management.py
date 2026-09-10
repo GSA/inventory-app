@@ -8,9 +8,49 @@ import ckan.model as model
 from ckan.tests.helpers import FunctionalTestBase
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
+from ckanext.datagov_inventory.plugin import user_org_roles_table_sections
 
 is_allowed = True
 is_denied = False
+
+
+def _table_user(name, sysadmin=False, organizations=None):
+    return {
+        'id': '{}-id'.format(name),
+        'name': name,
+        'email': '{}@example.com'.format(name),
+        'last_active': '',
+        'state': 'active',
+        'sysadmin': sysadmin,
+        'organizations': organizations or [],
+    }
+
+
+def test_user_org_roles_sections_use_one_row_per_user():
+    organizations = [
+        {'name': 'agency-a', 'title': 'Agency A', 'role': 'admin'},
+        {'name': 'agency-b', 'title': 'Agency B', 'role': 'editor'},
+    ]
+    users = [
+        _table_user('sysadmin', sysadmin=True, organizations=organizations),
+        _table_user('org-user', organizations=organizations),
+    ]
+
+    sections = {
+        section['id']: section
+        for section in user_org_roles_table_sections(users)
+    }
+
+    for section_id in ('sysadmins', 'users-with-organizations'):
+        section = sections[section_id]
+        assert section['count'] == 1
+        assert len(section['rows']) == 1
+        assert [item['value'] for item in section['rows'][0][3]['items']] == [
+            'agency-a', 'agency-b'
+        ]
+        assert [item['value'] for item in section['rows'][0][4]['items']] == [
+            'admin', 'editor'
+        ]
 
 
 @pytest.mark.usefixtures("clean_db")

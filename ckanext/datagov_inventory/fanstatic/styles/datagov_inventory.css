@@ -143,6 +143,11 @@
     vertical-align: middle;
 }
 
+.user-org-roles-cell-list {
+    display: grid;
+    gap: 4px;
+}
+
 .user-org-roles-back-to-top {
     margin: 10px 0 0;
     text-align: right;

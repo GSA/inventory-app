@@ -75,7 +75,19 @@
                   <tr>
                     {% for cell in row %}
                       <td>
-                        {% if cell.url %}
+                        {% if cell['items'] %}
+                          <div class="user-org-roles-cell-list">
+                            {% for item in cell['items'] %}
+                              <div>
+                                {% if item.url %}
+                                  <a href="{{ item.url }}">{{ item.value }}</a>
+                                {% else %}
+                                  {{ item.value }}
+                                {% endif %}
+                              </div>
+                            {% endfor %}
+                          </div>
+                        {% elif cell.url %}
                           <a href="{{ cell.url }}">{{ cell.value }}</a>
                         {% else %}
                           {{ cell.value }}

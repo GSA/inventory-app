@@ -442,23 +442,16 @@ def user_org_roles_table_sections(users):
 
 
 def _user_org_roles_section(title, section_id, users, columns, sortable=False):
-    rows = []
-    for user in users:
-        organizations = user['organizations'] or [{
-            'name': '',
-            'title': '',
-            'role': '',
-        }]
-        for organization in organizations:
-            rows.append(
-                _user_org_roles_row_values(user, organization, columns)
-            )
+    rows = [
+        _user_org_roles_row_values(user, user['organizations'], columns)
+        for user in users
+    ]
 
     return {
         'id': section_id,
         'title': title,
         'columns': columns,
-        'count': len(rows),
+        'count': len(users),
         'labels': _user_org_roles_column_labels(columns),
         'rows': rows,
         'sortable': sortable,
@@ -477,31 +470,46 @@ def _user_org_roles_column_labels(columns):
     return [labels[column] for column in columns]
 
 
-def _user_org_roles_row_values(user, organization, columns):
+def _user_org_roles_row_values(user, organizations, columns):
     values = {
         'user': user['name'] or '',
         'email': user['email'] or '',
         'last_active': user['last_active'] or '',
         'sysadmin': 'yes' if user['sysadmin'] else 'no',
-        'organization': organization['name'] or '',
-        'role': organization['role'] or '',
+        'organization': '',
+        'role': '',
     }
-    row = [
-        {
+    row = []
+    for column in columns:
+        cell = {
             'value': values[column],
-            'url': _user_org_roles_cell_url(column, user, organization),
+            'url': _user_org_roles_cell_url(column, user),
             'user_id': user['id'] if column == 'user' else None,
+            'items': [],
         }
-        for column in columns
-    ]
+
+        if column == 'organization':
+            cell['items'] = [
+                {
+                    'value': organization['name'] or '',
+                    'url': _organization_manage_members_url(organization),
+                }
+                for organization in organizations
+            ]
+        elif column == 'role':
+            cell['items'] = [
+                {'value': organization['role'] or '', 'url': ''}
+                for organization in organizations
+            ]
+
+        row.append(cell)
+
     return row
 
 
-def _user_org_roles_cell_url(column, user, organization):
+def _user_org_roles_cell_url(column, user):
     if column == 'user':
         return _user_url(user)
-    if column == 'organization':
-        return _organization_manage_members_url(organization)
     return ''
 
 
