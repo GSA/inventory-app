@@ -244,6 +244,7 @@ def _user_management_users():
     except logic.NotAuthorized:
         toolkit.abort(403, _('Not authorized to list user organization roles'))
 
+
 pusher.add_url_rule(
     '/user/user-org-roles',
     view_func=user_org_roles_table,
