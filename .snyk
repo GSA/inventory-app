@@ -7,10 +7,15 @@ ignore:
   SNYK-PYTHON-SETUPTOOLS-17895075:
     - "*":
         reason: >-
-          GH issue created to track it
-          https://github.com/GSA/data.gov/issues/6167
-        expires: 2026-10-08T00:00:00.000Z
-        created: 2026-07-13T00:00:00.000Z
+          Not affected. CVE-2026-59890 only triggers when setuptools applies
+          MANIFEST.in exclusion directives while building a source distribution
+          on a macOS APFS/HFS+ filesystem, via Unicode filename normalization
+          collisions. This app builds and runs exclusively in Linux containers
+          and does not build source distributions. The fix is only in
+          setuptools>=83.0.0, which is uninstallable here because CKAN 2.11.5
+          caps setuptools<82. https://github.com/GSA/data.gov/issues/6167
+        expires: 2027-09-10T00:00:00.000Z
+        created: 2026-09-11T00:00:00.000Z
   SNYK-PYTHON-BLEACH-17356127:
     - "*":
         reason: >-
