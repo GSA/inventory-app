@@ -14,10 +14,12 @@ ignore:
   SNYK-PYTHON-BLEACH-17356127:
     - "*":
         reason: >-
-          not vulnerable: Bleach linkification path with parse_email=True is
-          not used.
-          https://github.com/GSA/data.gov/issues/6122
-        expires: 2026-10-01T00:00:00.000Z
+          Not affected. bleach is a CKAN-core-only dependency; CKAN imports
+          bleach.clean, never linkify, and no installed package calls
+          linkify(parse_email=True), so the vulnerable
+          LinkifyFilter.handle_email_addresses() path is unreachable. No fixed
+          bleach version exists. https://github.com/GSA/data.gov/issues/6122
+        expires: 2027-09-10T00:00:00.000Z
         created: 2026-07-01T00:00:00.000Z
 patch: {}
 # specify the directories or files to be excludeed from import:
