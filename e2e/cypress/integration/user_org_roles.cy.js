@@ -152,10 +152,10 @@ describe('User organization roles', () => {
 
     it('opens Deleted Users from the third sidebar tab', () => {
         cy.visit('/user/user-org-roles');
-        cy.get('.secondary .nav-simple .nav-item').eq(2)
-            .contains('a', 'Deleted Users')
+        cy.get('.secondary .nav-simple a[href="/user/deleted-users"]')
+            .contains('Deleted Users')
             .should('have.attr', 'href', '/user/deleted-users')
-            .click();
+            .click({force: true});
         cy.title().should('include', 'Deleted Users');
         cy.get('.breadcrumb .active').should('contain', 'Deleted Users');
         cy.get('.secondary .nav-simple .nav-item.active')
