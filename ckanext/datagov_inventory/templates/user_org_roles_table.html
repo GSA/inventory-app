@@ -1,19 +1,23 @@
 {% extends "page.html" %}
 
-{% block subtitle %}{{ _('User Roles in Organizations') }}{% endblock %}
+{% block subtitle %}{{ page_title }}{% endblock %}
 
 {% block breadcrumb_content %}
   {{ h.build_nav('user.index', _('Users')) }}
-  <li class="active">{{ _('User Roles in Organizations') }}</li>
+  <li class="active">{{ page_title }}</li>
 {% endblock %}
 
 {% block primary_content %}
   <article class="module user-org-roles">
     <div class="module-content">
-      <h1 id="user-org-roles-top" class="page-heading">{{ _('User Roles in Organizations') }}</h1>
+      <h1 id="user-org-roles-top" class="page-heading">{{ page_title }}</h1>
 
-      <section class="module module-narrow module-shallow">
-        <h2 class="module-heading">{{ _('Add New User') }}</h2>
+      {% if show_user_tools %}
+      <section class="module module-narrow module-shallow user-org-roles-create">
+        <h2 class="module-heading">
+          <i class="fa fa-user-plus" aria-hidden="true"></i>
+          {{ _('Add New User') }}
+        </h2>
         <div class="module-content">
           <form id="create-user-form" method="post" action="{{ h.url_for('datagov_inventory.create_user_form') }}">
             {{ h.csrf_input() }}
@@ -44,22 +48,23 @@
           {% endfor %}
         </ul>
       </nav>
+      {% endif %}
 
       {% for section in sections %}
         <section id="{{ section.id }}" class="user-org-roles-section">
           <h2>{{ section.title }} <span>{{ section.count }} {{ _('rows') }}</span></h2>
           <div class="table-responsive">
-            <table class="table table-header table-hover table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
+            <table class="table table-header table-hover table-striped table-bordered"{% if section.sortable %} data-sortable-table{% endif %}>
               <thead>
                 <tr>
                   {% for label in section.labels %}
                     {% set column = section.columns[loop.index0] %}
                     {% if section.sortable and column in ('user', 'email', 'last_active', 'organization', 'role') %}
-                      <th class="sortable" data-sort-index="{{ loop.index0 }}" data-label="{{ label }}">
+                      <th id="{{ section.id }}-{{ column }}-heading" scope="col" class="sortable" data-sort-index="{{ loop.index0 }}" data-sort-field="{{ column }}" data-label="{{ label }}">
                         <button type="button" class="user-org-roles-sort">{{ label }}</button>
                       </th>
                     {% else %}
-                      <th>{{ label }}</th>
+                      <th id="{{ section.id }}-{{ column }}-heading" scope="col">{{ label }}</th>
                     {% endif %}
                   {% endfor %}
                   {% if section.id == 'deleted-users' %}
@@ -69,8 +74,18 @@
               </thead>
               <tbody>
                 {% for row in section.rows %}
-                  <tr>
+                  <tr{% if 'organization' in section.columns %} data-organization="{{ row[3]['items'] | map(attribute='value') | join(' ') }}" data-role="{{ row[4]['items'] | map(attribute='value') | join(' ') }}"{% endif %}>
                     {% for cell in row %}
+                      {% if section.columns[loop.index0] == 'organization' %}
+                      <td colspan="2" class="user-org-roles-memberships" headers="{{ section.id }}-organization-heading {{ section.id }}-role-heading">
+                        {% for item in cell['items'] %}
+                          <div class="user-org-roles-membership">
+                            <a href="{{ item.url }}"><span class="sr-only">{{ _('Organization') }}: </span>{{ item.value }}</a>
+                            <span><span class="sr-only">{{ _('Role') }}: </span>{{ row[4]['items'][loop.index0].value }}</span>
+                          </div>
+                        {% endfor %}
+                      </td>
+                      {% elif section.columns[loop.index0] != 'role' %}
                       <td>
                         {% if cell.url %}
                           <a href="{{ cell.url }}">{{ cell.value }}</a>
@@ -78,6 +93,7 @@
                           {{ cell.value }}
                         {% endif %}
                       </td>
+                      {% endif %}
                     {% endfor %}
                     {% if section.id == 'deleted-users' and row.0.user_id %}
                       <td>
@@ -90,7 +106,7 @@
                   </tr>
                 {% else %}
                   <tr>
-                    <td colspan="{{ section.columns|length }}">{{ _('No users') }}</td>
+                    <td colspan="{{ section.columns|length + (1 if section.id == 'deleted-users' else 0) }}">{{ _('No users') }}</td>
                   </tr>
                 {% endfor %}
               </tbody>

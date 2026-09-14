@@ -8,9 +8,70 @@ import ckan.model as model
 from ckan.tests.helpers import FunctionalTestBase
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
+from ckanext.datagov_inventory.plugin import (
+    deleted_users_table_section,
+    user_org_roles_table_sections,
+)
 
 is_allowed = True
 is_denied = False
+
+
+def _table_user(name, sysadmin=False, organizations=None):
+    return {
+        'id': '{}-id'.format(name),
+        'name': name,
+        'email': '{}@example.com'.format(name),
+        'last_active': '',
+        'state': 'active',
+        'sysadmin': sysadmin,
+        'organizations': organizations or [],
+    }
+
+
+def test_user_org_roles_sections_use_one_row_per_user():
+    organizations = [
+        {'name': 'agency-a', 'title': 'Agency A', 'role': 'admin'},
+        {'name': 'agency-b', 'title': 'Agency B', 'role': 'editor'},
+    ]
+    users = [
+        _table_user('sysadmin', sysadmin=True, organizations=organizations),
+        _table_user('org-user', organizations=organizations),
+    ]
+
+    sections = {
+        section['id']: section
+        for section in user_org_roles_table_sections(users)
+    }
+
+    for section_id in ('sysadmins', 'users-with-organizations'):
+        section = sections[section_id]
+        assert section['count'] == 1
+        assert len(section['rows']) == 1
+        assert [item['value'] for item in section['rows'][0][3]['items']] == [
+            'agency-a', 'agency-b'
+        ]
+        assert [item['value'] for item in section['rows'][0][4]['items']] == [
+            'admin', 'editor'
+        ]
+
+
+def test_deleted_users_have_their_own_section():
+    deleted_user = _table_user('deleted-user')
+    deleted_user['state'] = 'deleted'
+    users = [_table_user('active-user'), deleted_user]
+
+    sections = user_org_roles_table_sections(users)
+    assert [section['id'] for section in sections] == [
+        'sysadmins', 'users-with-organizations', 'users-without-organizations'
+    ]
+    assert sum(section['count'] for section in sections) == 1
+
+    section = deleted_users_table_section(users)
+    assert section['count'] == 1
+    assert section['rows'][0][0]['value'] == 'deleted-user'
+    assert section['sortable'] is True
+    assert deleted_users_table_section([])['count'] == 0
 
 
 @pytest.mark.usefixtures("clean_db")

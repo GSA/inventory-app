@@ -45,8 +45,8 @@ describe('User Reactivation', () => {
         cy.task('log', `>>> TEST: Deleting user ${testUser} to move to deleted section`);
         cy.delete_user(testUser);
 
-        cy.task('log', '>>> TEST: Visiting /user/user-org-roles page');
-        cy.visit('/user/user-org-roles');
+        cy.task('log', '>>> TEST: Visiting /user/deleted-users page');
+        cy.visit('/user/deleted-users');
 
         cy.task('log', '>>> TEST: Checking #deleted-users section exists');
         cy.get('#deleted-users').should('exist');
@@ -70,8 +70,8 @@ describe('User Reactivation', () => {
         cy.create_user(testUser, testEmail, 'Password123!');
         cy.delete_user(testUser);
 
-        cy.task('log', '>>> TEST: Visiting /user/user-org-roles');
-        cy.visit('/user/user-org-roles');
+        cy.task('log', '>>> TEST: Visiting /user/deleted-users');
+        cy.visit('/user/deleted-users');
 
         cy.task('log', `>>> TEST: Finding ${testUser} in deleted users and clicking Reactivate`);
         cy.get('#deleted-users table tbody tr').contains(testUser)
@@ -87,6 +87,7 @@ describe('User Reactivation', () => {
         cy.get('#deleted-users table tbody tr').contains(testUser).should('not.exist');
 
         cy.task('log', '>>> TEST: Verifying user appears in users-without-organizations section');
+        cy.visit('/user/user-org-roles');
         cy.get('#users-without-organizations table tbody tr')
             .contains(testUser)
             .should('exist');
@@ -102,8 +103,8 @@ describe('User Reactivation', () => {
         cy.task('log', `>>> TEST: Deleting user ${testUser}`);
         cy.delete_user(testUser);
 
-        cy.task('log', '>>> TEST: Visiting /user/user-org-roles');
-        cy.visit('/user/user-org-roles');
+        cy.task('log', '>>> TEST: Visiting /user/deleted-users');
+        cy.visit('/user/deleted-users');
 
         cy.task('log', `>>> TEST: Reactivating ${testUser} via UI`);
         cy.get('#deleted-users table tbody tr', {timeout: 10000}).contains(testUser)
@@ -113,7 +114,7 @@ describe('User Reactivation', () => {
             });
 
         cy.task('log', '>>> TEST: Waiting for page reload');
-        cy.url().should('include', '/user/user-org-roles');
+        cy.url().should('include', '/user/deleted-users');
 
         cy.task('log', '>>> TEST: Checking for success message');
         cy.contains('.alert', 'reactivated successfully', {timeout: 10000}).should('be.visible');

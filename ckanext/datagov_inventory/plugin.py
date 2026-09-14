@@ -216,25 +216,44 @@ pusher.add_url_rule('/', view_func=redirect_homepage)
 
 
 def user_org_roles_table():
+    return base.render(
+        u'user_org_roles_table.html',
+        {'sections': user_org_roles_table_sections(_user_management_users()),
+         'page_title': _('User Roles in Organizations'),
+         'show_user_tools': True}
+    )
+
+
+def deleted_users_table():
+    return base.render(
+        u'user_org_roles_table.html',
+        {'sections': [deleted_users_table_section(_user_management_users())],
+         'page_title': _('Deleted Users'),
+         'show_user_tools': False}
+    )
+
+
+def _user_management_users():
     context = {
         'model': model,
         'ignore_auth': False,
         'user': g.user,
     }
     try:
-        users = toolkit.get_action('user_org_roles')(context, {})
+        return toolkit.get_action('user_org_roles')(context, {})
     except logic.NotAuthorized:
         toolkit.abort(403, _('Not authorized to list user organization roles'))
-
-    return base.render(
-        u'user_org_roles_table.html',
-        {'sections': user_org_roles_table_sections(users)}
-    )
 
 
 pusher.add_url_rule(
     '/user/user-org-roles',
     view_func=user_org_roles_table,
+    methods=['GET']
+)
+
+pusher.add_url_rule(
+    '/user/deleted-users',
+    view_func=deleted_users_table,
     methods=['GET']
 )
 
@@ -331,7 +350,7 @@ def reactivate_user_form(user_id):
         log.error('Error reactivating user: %s', str(e))
         h.flash_error(_('Error reactivating user: {0}').format(str(e)))
 
-    return redirect('/user/user-org-roles')
+    return redirect('/user/deleted-users')
 
 
 pusher.add_url_rule(
@@ -409,7 +428,6 @@ pusher.add_url_rule(
 
 def user_org_roles_table_sections(users):
     active_users = [user for user in users if user['state'] == 'active']
-    deleted_users = [user for user in users if user['state'] == 'deleted']
     sysadmins = [user for user in active_users if user['sysadmin']]
     users_with_orgs = [
         user for user in active_users
@@ -434,31 +452,28 @@ def user_org_roles_table_sections(users):
                                 users_without_orgs,
                                 ['user', 'email', 'last_active'],
                                 sortable=True),
-        _user_org_roles_section('Deleted Users', 'deleted-users',
-                                deleted_users,
-                                ['user', 'email', 'last_active'],
-                                sortable=True),
     ]
 
 
+def deleted_users_table_section(users):
+    deleted_users = [user for user in users if user['state'] == 'deleted']
+    return _user_org_roles_section(
+        'Deleted Users', 'deleted-users', deleted_users,
+        ['user', 'email', 'last_active'], sortable=True
+    )
+
+
 def _user_org_roles_section(title, section_id, users, columns, sortable=False):
-    rows = []
-    for user in users:
-        organizations = user['organizations'] or [{
-            'name': '',
-            'title': '',
-            'role': '',
-        }]
-        for organization in organizations:
-            rows.append(
-                _user_org_roles_row_values(user, organization, columns)
-            )
+    rows = [
+        _user_org_roles_row_values(user, user['organizations'], columns)
+        for user in users
+    ]
 
     return {
         'id': section_id,
         'title': title,
         'columns': columns,
-        'count': len(rows),
+        'count': len(users),
         'labels': _user_org_roles_column_labels(columns),
         'rows': rows,
         'sortable': sortable,
@@ -477,31 +492,46 @@ def _user_org_roles_column_labels(columns):
     return [labels[column] for column in columns]
 
 
-def _user_org_roles_row_values(user, organization, columns):
+def _user_org_roles_row_values(user, organizations, columns):
     values = {
         'user': user['name'] or '',
         'email': user['email'] or '',
         'last_active': user['last_active'] or '',
         'sysadmin': 'yes' if user['sysadmin'] else 'no',
-        'organization': organization['name'] or '',
-        'role': organization['role'] or '',
+        'organization': '',
+        'role': '',
     }
-    row = [
-        {
+    row = []
+    for column in columns:
+        cell = {
             'value': values[column],
-            'url': _user_org_roles_cell_url(column, user, organization),
+            'url': _user_org_roles_cell_url(column, user),
             'user_id': user['id'] if column == 'user' else None,
+            'items': [],
         }
-        for column in columns
-    ]
+
+        if column == 'organization':
+            cell['items'] = [
+                {
+                    'value': organization['name'] or '',
+                    'url': _organization_manage_members_url(organization),
+                }
+                for organization in organizations
+            ]
+        elif column == 'role':
+            cell['items'] = [
+                {'value': organization['role'] or '', 'url': ''}
+                for organization in organizations
+            ]
+
+        row.append(cell)
+
     return row
 
 
-def _user_org_roles_cell_url(column, user, organization):
+def _user_org_roles_cell_url(column, user):
     if column == 'user':
         return _user_url(user)
-    if column == 'organization':
-        return _organization_manage_members_url(organization)
     return ''
 
 
