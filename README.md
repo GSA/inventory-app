@@ -166,6 +166,18 @@ Our Service Provider (SP) certificate and key are provided through environment v
 
 See [inventory.data.gov wiki page](https://github.com/GSA/data.gov/wiki/inventory.data.gov).
 
+### Delete inactive users
+
+Preview active users whose last activity is more than 90 days old:
+
+    ckan delete-inactive-users --days 90 --dry-run
+
+Delete those users using CKAN's standard `user_delete` action:
+
+    ckan delete-inactive-users --days 90
+
+When `last_active` is empty, the command uses the account creation date.
+
 ## License and Contributing
 
 We're glad you're thinking about contributing to Data.gov! Before contributing, please read our [CONTRIBUTING](CONTRIBUTING.md) guide, our [LICENSE](LICENSE.md), and this README.

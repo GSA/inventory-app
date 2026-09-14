@@ -9,7 +9,7 @@ from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
-from ckanext.datagov_inventory import action
+from ckanext.datagov_inventory import action, cli
 from ckanext.datajson.blueprint import get_packages
 from ckanext.datajson.package2pod import Package2Pod
 from ckanext.datajson.helpers import get_export_map_json
@@ -132,6 +132,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
+    plugins.implements(plugins.IClick)
     plugins.implements(plugins.IResourceController, inherit=True)
 
     def get_auth_functions(self):
@@ -162,6 +163,10 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
             'create_inventory_user': action.create_inventory_user,
             'reactivate_user': action.reactivate_user,
         }
+
+    # IClick
+    def get_commands(self):
+        return [cli.delete_inactive_users]
 
     # render our custom 403 template
     def update_config(self, config):
