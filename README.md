@@ -168,15 +168,17 @@ See [inventory.data.gov wiki page](https://github.com/GSA/data.gov/wiki/inventor
 
 ### Delete inactive users
 
-Preview active users whose last activity is more than 90 days old:
+Preview active users whose most recent creation or activity date is older than
+the configured inactivity threshold:
 
-    ckan delete-inactive-users --days 90 --dry-run
+    ckan delete-inactive-users --dry-run
 
-Delete those users using CKAN's standard `user_delete` action:
+Lock those users while preserving their organization memberships:
 
-    ckan delete-inactive-users --days 90
+    ckan delete-inactive-users
 
-When `last_active` is empty, the command uses the account creation date.
+Set the threshold with `ckanext.datagov_inventory.inactivity_days`. It defaults
+to 90 days. Reactivating an account restarts its inactivity period.
 
 ## License and Contributing
 
