@@ -6,11 +6,30 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 
-DEFAULT_INACTIVITY_DAYS = 90
+INACTIVITY_DAYS_CONFIG = (
+    'ckanext.datagov_inventory.inactivity_days'
+)
 
 
 def _utcnow():
     return datetime.utcnow()
+
+
+def _inactivity_days():
+    value = toolkit.config.get(INACTIVITY_DAYS_CONFIG)
+    try:
+        days = int(value)
+    except (TypeError, ValueError):
+        raise click.ClickException(
+            '{} must be a positive integer'.format(INACTIVITY_DAYS_CONFIG)
+        )
+
+    if days < 1:
+        raise click.ClickException(
+            '{} must be a positive integer'.format(INACTIVITY_DAYS_CONFIG)
+        )
+
+    return days
 
 
 def _last_activity(user):
@@ -35,19 +54,13 @@ def _inactive_users(cutoff):
 
 @click.command('delete-inactive-users')
 @click.option(
-    '--days',
-    default=DEFAULT_INACTIVITY_DAYS,
-    show_default=True,
-    type=click.IntRange(min=1),
-    help='Delete users inactive for more than this number of days.',
-)
-@click.option(
     '--dry-run',
     is_flag=True,
     help='List users that would be deleted without deleting them.',
 )
-def delete_inactive_users(days, dry_run):
+def delete_inactive_users(dry_run):
     """Delete CKAN users whose last activity is older than the cutoff."""
+    days = _inactivity_days()
     cutoff = _utcnow() - timedelta(days=days)
     users = _inactive_users(cutoff)
     action = 'Would delete' if dry_run else 'Deleting'

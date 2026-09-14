@@ -6,6 +6,7 @@ import pytest
 from click.testing import CliRunner
 
 import ckan.model as model
+import ckan.plugins.toolkit as toolkit
 import ckan.tests.factories as factories
 
 from ckanext.datagov_inventory import cli
@@ -14,6 +15,14 @@ from ckanext.datagov_inventory import cli
 @pytest.mark.usefixtures('clean_db')
 class TestDeleteInactiveUsers:
     now = datetime(2026, 9, 11, 12, 0, 0)
+
+    @pytest.fixture(autouse=True)
+    def _configure_inactivity_days(self, monkeypatch):
+        monkeypatch.setitem(
+            toolkit.config,
+            cli.INACTIVITY_DAYS_CONFIG,
+            '90',
+        )
 
     def _set_user_dates(self, user, created, last_active):
         user_obj = model.User.get(user['id'])
@@ -111,3 +120,48 @@ class TestDeleteInactiveUsers:
         assert user_obj.state == model.State.ACTIVE
         assert user_obj.last_active == old_last_active
         assert 'Deleted 0 inactive user(s).' in result.output
+
+    def test_reads_inactivity_days_from_config(self, monkeypatch):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        monkeypatch.setitem(
+            toolkit.config,
+            cli.INACTIVITY_DAYS_CONFIG,
+            '30',
+        )
+        inactive = factories.User(name='configured-cutoff')
+        self._set_user_dates(
+            inactive,
+            self.now - timedelta(days=60),
+            self.now - timedelta(days=30, seconds=1),
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.DELETED
+
+    @pytest.mark.parametrize('value', [None, 'invalid', '0', '-1'])
+    def test_rejects_invalid_inactivity_days_config(
+        self,
+        monkeypatch,
+        value,
+    ):
+        if value is None:
+            monkeypatch.delitem(
+                toolkit.config,
+                cli.INACTIVITY_DAYS_CONFIG,
+                raising=False,
+            )
+        else:
+            monkeypatch.setitem(
+                toolkit.config,
+                cli.INACTIVITY_DAYS_CONFIG,
+                value,
+            )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 1
+        assert '{} must be a positive integer'.format(
+            cli.INACTIVITY_DAYS_CONFIG
+        ) in result.output
