@@ -14,7 +14,12 @@ def _utcnow():
 
 
 def _last_activity(user):
-    return user.last_active or user.created
+    timestamps = [
+        timestamp
+        for timestamp in (user.last_active, user.created)
+        if timestamp is not None
+    ]
+    return max(timestamps) if timestamps else None
 
 
 def _inactive_users(cutoff):
@@ -49,7 +54,11 @@ def delete_inactive_users(days, dry_run):
 
     for user in users:
         last_activity = _last_activity(user)
-        source = 'last_active' if user.last_active else 'created'
+        source = (
+            'last_active'
+            if last_activity == user.last_active
+            else 'created'
+        )
         click.echo(
             '{} {} ({}: {})'.format(
                 action,

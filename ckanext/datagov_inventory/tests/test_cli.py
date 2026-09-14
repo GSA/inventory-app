@@ -30,17 +30,17 @@ class TestDeleteInactiveUsers:
 
         self._set_user_dates(
             inactive,
-            self.now,
+            self.now - timedelta(days=180),
             self.now - timedelta(days=90, seconds=1),
         )
         self._set_user_dates(
             boundary,
-            self.now,
+            self.now - timedelta(days=180),
             self.now - timedelta(days=90),
         )
         self._set_user_dates(
             recent,
-            self.now,
+            self.now - timedelta(days=180),
             self.now - timedelta(days=89),
         )
 
@@ -80,7 +80,7 @@ class TestDeleteInactiveUsers:
         inactive = factories.User(name='inactive-dry-run')
         self._set_user_dates(
             inactive,
-            self.now,
+            self.now - timedelta(days=180),
             self.now - timedelta(days=91),
         )
 
@@ -93,3 +93,21 @@ class TestDeleteInactiveUsers:
         assert model.User.get(inactive['id']).state == model.State.ACTIVE
         assert 'Would delete inactive-dry-run (last_active:' in result.output
         assert 'Would delete 1 inactive user(s).' in result.output
+
+    def test_new_creation_date_keeps_reactivated_user(self, monkeypatch):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        reactivated = factories.User(name='recently-reactivated')
+        old_last_active = self.now - timedelta(days=100)
+        self._set_user_dates(
+            reactivated,
+            self.now,
+            old_last_active,
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        user_obj = model.User.get(reactivated['id'])
+        assert user_obj.state == model.State.ACTIVE
+        assert user_obj.last_active == old_last_active
+        assert 'Deleted 0 inactive user(s).' in result.output
