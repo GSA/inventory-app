@@ -52,6 +52,13 @@ def _inactive_users(cutoff):
     ]
 
 
+def soft_delete(user):
+    """Mark a user deleted without changing their memberships."""
+    user.state = model.State.DELETED
+    model.Session.add(user)
+    model.Session.commit()
+
+
 @click.command('delete-inactive-users')
 @click.option(
     '--dry-run',
@@ -81,13 +88,7 @@ def delete_inactive_users(dry_run):
             )
         )
         if not dry_run:
-            toolkit.get_action('user_delete')(
-                {
-                    'ignore_auth': True,
-                    'model': model,
-                },
-                {'id': user.id},
-            )
+            soft_delete(user)
 
     result = 'Would delete' if dry_run else 'Deleted'
     click.echo('{} {} inactive user(s).'.format(result, len(users)))

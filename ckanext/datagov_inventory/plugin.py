@@ -130,6 +130,7 @@ def reactivate_user(context, data_dict):
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
+    plugins.implements(plugins.IConfigDeclaration)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.IClick)
@@ -167,6 +168,15 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     # IClick
     def get_commands(self):
         return [cli.delete_inactive_users]
+
+    # IConfigDeclaration
+    def declare_config_options(self, declaration, key):
+        declaration.declare(
+            key.ckanext.datagov_inventory.inactivity_days,
+            None,
+        ).set_description(
+            'Number of inactive days before an account is soft-deleted.'
+        )
 
     # render our custom 403 template
     def update_config(self, config):

@@ -9,7 +9,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.tests.factories as factories
 
-from ckanext.datagov_inventory import cli
+from ckanext.datagov_inventory import action, cli
 
 
 @pytest.mark.usefixtures('clean_db')
@@ -102,6 +102,40 @@ class TestDeleteInactiveUsers:
         assert model.User.get(inactive['id']).state == model.State.ACTIVE
         assert 'Would delete inactive-dry-run (last_active:' in result.output
         assert 'Would delete 1 inactive user(s).' in result.output
+
+    def test_soft_delete_retains_organization_membership(self, monkeypatch):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        monkeypatch.setattr(action, '_utcnow', lambda: self.now)
+        inactive = factories.User(name='inactive-member')
+        organization = factories.Organization()
+        membership = model.Member(
+            group_id=organization['id'],
+            table_id=inactive['id'],
+            table_name='user',
+            capacity='editor',
+            state=model.State.ACTIVE,
+        )
+        model.Session.add(membership)
+        self._set_user_dates(
+            inactive,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=91),
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.DELETED
+        action.reactivate_user(
+            {'ignore_auth': True},
+            {'id': inactive['id']},
+        )
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+        retained_membership = model.Session.query(model.Member).filter(
+            model.Member.id == membership.id
+        ).one()
+        assert retained_membership.state == model.State.ACTIVE
+        assert retained_membership.capacity == 'editor'
 
     def test_new_creation_date_keeps_reactivated_user(self, monkeypatch):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
