@@ -17,7 +17,7 @@ describe('User organization roles', () => {
         cy.create_user(userB, 'doi_admin@example.com', userPassword);
         cy.assign_user(orgA, userA, 'admin');
         cy.assign_user(orgB, userA, 'editor');
-        cy.assign_user(orgB, userB, 'admin');
+        cy.assign_user(orgB, userB, 'member');
     });
 
     after(() => {
@@ -120,15 +120,32 @@ describe('User organization roles', () => {
                     expect(userRows).to.have.length(1);
                     expect(userRows[0].cells[3].innerText).to.contain(orgA);
                     expect(userRows[0].cells[3].innerText).to.contain(orgB);
+                    expect(userRows[0].cells[3].headers).to.equal(
+                        'users-with-organizations-organization-heading ' +
+                        'users-with-organizations-role-heading'
+                    );
                     const memberships = userRows[0].querySelectorAll(
                         '.user-org-roles-membership'
                     );
                     expect(memberships).to.have.length(2);
                     expect(memberships[0].innerText).to.contain(orgA);
                     expect(memberships[0].innerText).to.contain('admin');
+                    expect(memberships[0].querySelector('a').innerText)
+                        .to.contain('Organization:');
+                    expect(memberships[0].children[1].innerText)
+                        .to.contain('Role:');
                     expect(memberships[1].innerText).to.contain(orgB);
                     expect(memberships[1].innerText).to.contain('editor');
+                    const membershipsCell = userRows[0].cells[3];
+                    const dividerStyle = membershipsCell.ownerDocument.defaultView
+                        .getComputedStyle(membershipsCell, '::after');
+                    expect(dividerStyle.top).to.equal('0px');
+                    expect(dividerStyle.bottom).to.equal('0px');
+                    expect(dividerStyle.right).to.equal('80px');
+                    expect(dividerStyle.borderLeftWidth).to.equal('1px');
                 });
+                cy.contains('.user-org-roles-membership > span', 'member')
+                    .should('have.css', 'white-space', 'nowrap');
 
                 cy.contains('button', 'Organization').click();
                 cy.get('tbody tr').then(($rows) => {

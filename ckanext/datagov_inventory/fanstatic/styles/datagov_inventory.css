@@ -145,12 +145,23 @@
 
 .user-org-roles .table > tbody > tr > .user-org-roles-memberships {
     padding: 0;
+    position: relative;
+}
+
+.user-org-roles-memberships::after {
+    border-left: 1px solid #d8dee4;
+    bottom: 0;
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    right: 80px;
+    top: 0;
 }
 
 .user-org-roles-membership {
     align-items: center;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 68px;
+    grid-template-columns: minmax(0, 1fr) 80px;
 }
 
 .user-org-roles-membership + .user-org-roles-membership {
@@ -166,13 +177,13 @@
 .user-org-roles-membership > span {
     align-content: center;
     align-self: stretch;
-    border-left: 1px solid #d8dee4;
+    white-space: nowrap;
 }
 
 #users-with-organizations .table th:last-child,
 #sysadmins .table th:last-child {
-    width: 68px;
-    min-width: 68px;
+    width: 80px;
+    min-width: 80px;
 }
 
 .user-org-roles-back-to-top {
