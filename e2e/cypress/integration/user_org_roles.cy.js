@@ -146,6 +146,10 @@ describe('User organization roles', () => {
                 });
                 cy.contains('.user-org-roles-membership > span', 'member')
                     .should('have.css', 'white-space', 'nowrap');
+                cy.contains('th', 'Organization')
+                    .should('have.attr', 'data-sort-field', 'organization');
+                cy.contains('th', 'Role')
+                    .should('have.attr', 'data-sort-field', 'role');
 
                 cy.contains('button', 'Organization').click();
                 cy.get('tbody tr').then(($rows) => {
@@ -157,6 +161,24 @@ describe('User organization roles', () => {
                 });
 
                 cy.contains('button', 'Organization').click();
+                cy.get('tbody tr').then(($rows) => {
+                    const rowTexts = [...$rows].map((row) => row.innerText);
+                    expect(rowTexts.findIndex((text) => text.includes(userB)))
+                        .to.be.lessThan(
+                            rowTexts.findIndex((text) => text.includes(userA))
+                        );
+                });
+
+                cy.contains('button', 'Role').click();
+                cy.get('tbody tr').then(($rows) => {
+                    const rowTexts = [...$rows].map((row) => row.innerText);
+                    expect(rowTexts.findIndex((text) => text.includes(userA)))
+                        .to.be.lessThan(
+                            rowTexts.findIndex((text) => text.includes(userB))
+                        );
+                });
+
+                cy.contains('button', 'Role').click();
                 cy.get('tbody tr').then(($rows) => {
                     const rowTexts = [...$rows].map((row) => row.innerText);
                     expect(rowTexts.findIndex((text) => text.includes(userB)))

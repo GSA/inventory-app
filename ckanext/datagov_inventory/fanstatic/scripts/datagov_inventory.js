@@ -1,10 +1,8 @@
 (function () {
-  function cellText(row, index) {
-    if (index === 3 && row.hasAttribute('data-organization')) {
-      return row.dataset.organization.toLowerCase();
-    }
-    if (index === 4 && row.hasAttribute('data-role')) {
-      return row.dataset.role.toLowerCase();
+  function cellText(row, index, field) {
+    var sortValue = row.getAttribute('data-' + field);
+    if (sortValue !== null) {
+      return sortValue.toLowerCase();
     }
     return row.children[index].textContent.trim().toLowerCase();
   }
@@ -20,7 +18,7 @@
     });
   }
 
-  function sortTable(table, buttons, sortState, index) {
+  function sortTable(table, buttons, sortState, index, field) {
     if (sortState.index === index) {
       sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
     } else {
@@ -31,8 +29,8 @@
     var tbody = table.querySelector('tbody');
     var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
     rows.sort(function (left, right) {
-      var leftText = cellText(left, index);
-      var rightText = cellText(right, index);
+      var leftText = cellText(left, index, field);
+      var rightText = cellText(right, index, field);
       var comparison = leftText.localeCompare(rightText);
       return sortState.direction === 'asc' ? comparison : -comparison;
     });
@@ -48,11 +46,13 @@
 
     buttons.forEach(function (button) {
       button.addEventListener('click', function () {
+        var th = button.closest('th');
         sortTable(
           table,
           buttons,
           sortState,
-          Number(button.closest('th').dataset.sortIndex)
+          Number(th.dataset.sortIndex),
+          th.dataset.sortField
         );
       });
     });
