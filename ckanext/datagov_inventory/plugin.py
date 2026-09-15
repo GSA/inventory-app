@@ -9,7 +9,7 @@ from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
-from ckanext.datagov_inventory import action
+from ckanext.datagov_inventory import action, cli, user_activity
 from ckanext.datajson.blueprint import get_packages
 from ckanext.datajson.package2pod import Package2Pod
 from ckanext.datajson.helpers import get_export_map_json
@@ -130,9 +130,12 @@ def reactivate_user(context, data_dict):
 class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
+    plugins.implements(plugins.IConfigDeclaration)
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
+    plugins.implements(plugins.IClick)
     plugins.implements(plugins.IResourceController, inherit=True)
+    plugins.implements(plugins.ITemplateHelpers)
 
     def get_auth_functions(self):
         return {'format_autocomplete': restrict_anon_access,
@@ -162,6 +165,28 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
             'create_inventory_user': action.create_inventory_user,
             'reactivate_user': action.reactivate_user,
         }
+
+    # IClick
+    def get_commands(self):
+        return [cli.delete_inactive_users]
+
+    # ITemplateHelpers
+    def get_helpers(self):
+        return {
+            'datagov_inventory_reactivated_at': user_reactivated_at,
+            'datagov_inventory_deleted_organization_members': (
+                deleted_organization_members
+            ),
+        }
+
+    # IConfigDeclaration
+    def declare_config_options(self, declaration, key):
+        declaration.declare(
+            key.ckanext.datagov_inventory.inactivity_days,
+            None,
+        ).set_description(
+            'Number of inactive days before an account is soft-deleted.'
+        )
 
     # render our custom 403 template
     def update_config(self, config):
@@ -202,6 +227,42 @@ def _touch_dataset_modified(context, package_id):
         context,
         {'id': package_id, 'modified': modified}
     )
+
+
+def user_reactivated_at(user_id):
+    user = model.User.get(user_id)
+    if not user:
+        return None
+
+    try:
+        return user_activity.get_reactivated_at(user)
+    except (TypeError, ValueError):
+        log.warning('Invalid reactivated_at timestamp for user %s', user_id)
+        return None
+
+
+def deleted_organization_members(organization_id):
+    """Return deleted users whose organization membership is still active."""
+    organization = model.Group.get(organization_id)
+    if not organization:
+        return []
+
+    memberships = (
+        model.Session.query(model.Member, model.User)
+        .join(model.User, model.User.id == model.Member.table_id)
+        .filter(model.Member.group_id == organization.id)
+        .filter(model.Member.table_name == 'user')
+        .filter(model.Member.state == model.State.ACTIVE)
+        .filter(model.User.state == model.State.DELETED)
+        .order_by(model.User.name)
+        .all()
+    )
+    roles = authz.roles_trans()
+    return [
+        (user.id, 'user', roles.get(membership.capacity,
+                                    membership.capacity))
+        for membership, user in memberships
+    ]
 
 
 def redirect_homepage():
