@@ -9,7 +9,7 @@ from ckan.logic.auth import get_resource_object
 from ckan.logic.auth.get import package_show
 from ckan.plugins.toolkit import config
 import ckan.authz as authz
-from ckanext.datagov_inventory import action, cli
+from ckanext.datagov_inventory import action, cli, user_activity
 from ckanext.datajson.blueprint import get_packages
 from ckanext.datajson.package2pod import Package2Pod
 from ckanext.datajson.helpers import get_export_map_json
@@ -135,6 +135,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.IClick)
     plugins.implements(plugins.IResourceController, inherit=True)
+    plugins.implements(plugins.ITemplateHelpers)
 
     def get_auth_functions(self):
         return {'format_autocomplete': restrict_anon_access,
@@ -168,6 +169,12 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     # IClick
     def get_commands(self):
         return [cli.delete_inactive_users]
+
+    # ITemplateHelpers
+    def get_helpers(self):
+        return {
+            'datagov_inventory_reactivated_at': user_reactivated_at,
+        }
 
     # IConfigDeclaration
     def declare_config_options(self, declaration, key):
@@ -217,6 +224,18 @@ def _touch_dataset_modified(context, package_id):
         context,
         {'id': package_id, 'modified': modified}
     )
+
+
+def user_reactivated_at(user_id):
+    user = model.User.get(user_id)
+    if not user:
+        return None
+
+    try:
+        return user_activity.get_reactivated_at(user)
+    except (TypeError, ValueError):
+        log.warning('Invalid reactivated_at timestamp for user %s', user_id)
+        return None
 
 
 def redirect_homepage():
