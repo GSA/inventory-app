@@ -9,7 +9,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.tests.factories as factories
 
-from ckanext.datagov_inventory import action, cli
+from ckanext.datagov_inventory import action, cli, user_activity
 
 
 @pytest.mark.usefixtures('clean_db')
@@ -121,6 +121,7 @@ class TestDeleteInactiveUsers:
             self.now - timedelta(days=180),
             self.now - timedelta(days=91),
         )
+        original_created = model.User.get(inactive['id']).created
 
         result = CliRunner().invoke(cli.delete_inactive_users)
 
@@ -131,29 +132,67 @@ class TestDeleteInactiveUsers:
             {'id': inactive['id']},
         )
         assert model.User.get(inactive['id']).state == model.State.ACTIVE
+        assert model.User.get(inactive['id']).created == original_created
         retained_membership = model.Session.query(model.Member).filter(
             model.Member.id == membership.id
         ).one()
         assert retained_membership.state == model.State.ACTIVE
         assert retained_membership.capacity == 'editor'
 
-    def test_new_creation_date_keeps_reactivated_user(self, monkeypatch):
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+
+    def test_reactivation_timestamp_keeps_reactivated_user(
+        self,
+        monkeypatch,
+    ):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
         reactivated = factories.User(name='recently-reactivated')
+        original_created = self.now - timedelta(days=120)
         old_last_active = self.now - timedelta(days=100)
-        self._set_user_dates(
+        user_obj = self._set_user_dates(
             reactivated,
-            self.now,
+            original_created,
             old_last_active,
         )
+        user_activity.set_reactivated_at(user_obj, self.now)
+        model.Session.commit()
 
         result = CliRunner().invoke(cli.delete_inactive_users)
 
         assert result.exit_code == 0, result.output
         user_obj = model.User.get(reactivated['id'])
         assert user_obj.state == model.State.ACTIVE
+        assert user_obj.created == original_created
         assert user_obj.last_active == old_last_active
         assert 'Deleted 0 inactive user(s).' in result.output
+
+    def test_reports_reactivation_as_latest_activity(self, monkeypatch):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        inactive = factories.User(name='old-reactivation')
+        user_obj = self._set_user_dates(
+            inactive,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=100),
+        )
+        user_activity.set_reactivated_at(
+            user_obj,
+            self.now - timedelta(days=91),
+        )
+        model.Session.commit()
+
+        result = CliRunner().invoke(
+            cli.delete_inactive_users,
+            ['--dry-run'],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert (
+            'Would delete old-reactivation (reactivated_at:'
+            in result.output
+        )
 
     def test_reads_inactivity_days_from_config(self, monkeypatch):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)

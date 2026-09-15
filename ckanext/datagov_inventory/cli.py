@@ -5,6 +5,8 @@ import click
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
+from ckanext.datagov_inventory import user_activity
+
 
 INACTIVITY_DAYS_CONFIG = (
     'ckanext.datagov_inventory.inactivity_days'
@@ -33,9 +35,16 @@ def _inactivity_days():
 
 
 def _last_activity(user):
+    try:
+        reactivated_at = user_activity.get_reactivated_at(user)
+    except (TypeError, ValueError):
+        raise click.ClickException(
+            'Invalid reactivated_at timestamp for user {}'.format(user.name)
+        )
+
     timestamps = [
         timestamp
-        for timestamp in (user.last_active, user.created)
+        for timestamp in (user.last_active, user.created, reactivated_at)
         if timestamp is not None
     ]
     return max(timestamps) if timestamps else None
@@ -77,7 +86,11 @@ def delete_inactive_users(dry_run):
         source = (
             'last_active'
             if last_activity == user.last_active
-            else 'created'
+            else (
+                'created'
+                if last_activity == user.created
+                else 'reactivated_at'
+            )
         )
         click.echo(
             '{} {} ({}: {})'.format(

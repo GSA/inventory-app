@@ -16,6 +16,7 @@ from ckanext.datagov_inventory.plugin import (
 )
 
 from ckanext.datagov_inventory import action
+from ckanext.datagov_inventory import user_activity
 
 is_allowed = True
 is_denied = False
@@ -209,8 +210,10 @@ class TestReactivateUser(FunctionalTestBase):
         reactivated_at = datetime(2026, 9, 14, 12, 0, 0)
         old_last_active = reactivated_at - timedelta(days=100)
         user_obj = model.User.get(deleted_user['id'])
-        user_obj.created = reactivated_at - timedelta(days=120)
+        original_created = reactivated_at - timedelta(days=120)
+        user_obj.created = original_created
         user_obj.last_active = old_last_active
+        user_obj.plugin_extras = {'another_extension': {'preserved': True}}
         model.Session.commit()
         monkeypatch.setattr(action, '_utcnow', lambda: reactivated_at)
 
@@ -226,8 +229,12 @@ class TestReactivateUser(FunctionalTestBase):
         assert result['state'] == 'active'
         user_obj = model.User.get(deleted_user['id'])
         assert user_obj.state == 'active'
-        assert user_obj.created == reactivated_at
+        assert user_obj.created == original_created
         assert user_obj.last_active == old_last_active
+        assert user_activity.get_reactivated_at(user_obj) == reactivated_at
+        assert user_obj.plugin_extras['another_extension'] == {
+            'preserved': True
+        }
 
     def test_reactivate_user_requires_sysadmin(self):
         deleted_user = factories.User(state='deleted')
