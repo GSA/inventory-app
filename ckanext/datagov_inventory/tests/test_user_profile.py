@@ -11,7 +11,8 @@ from ckan.lib.helpers import url_for
 from ckanext.datagov_inventory import user_activity
 
 
-@pytest.mark.usefixtures('clean_db')
+@pytest.mark.ckan_config('ckan.plugins', 'datagov_inventory')
+@pytest.mark.usefixtures('with_plugins', 'clean_db')
 class TestUserProfile:
     def _get_profile(self, app, user):
         token = factories.APIToken(user=user['name'])

@@ -174,6 +174,9 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
     def get_helpers(self):
         return {
             'datagov_inventory_reactivated_at': user_reactivated_at,
+            'datagov_inventory_deleted_organization_members': (
+                deleted_organization_members
+            ),
         }
 
     # IConfigDeclaration
@@ -236,6 +239,30 @@ def user_reactivated_at(user_id):
     except (TypeError, ValueError):
         log.warning('Invalid reactivated_at timestamp for user %s', user_id)
         return None
+
+
+def deleted_organization_members(organization_id):
+    """Return deleted users whose organization membership is still active."""
+    organization = model.Group.get(organization_id)
+    if not organization:
+        return []
+
+    memberships = (
+        model.Session.query(model.Member, model.User)
+        .join(model.User, model.User.id == model.Member.table_id)
+        .filter(model.Member.group_id == organization.id)
+        .filter(model.Member.table_name == 'user')
+        .filter(model.Member.state == model.State.ACTIVE)
+        .filter(model.User.state == model.State.DELETED)
+        .order_by(model.User.name)
+        .all()
+    )
+    roles = authz.roles_trans()
+    return [
+        (user.id, 'user', roles.get(membership.capacity,
+                                    membership.capacity))
+        for membership, user in memberships
+    ]
 
 
 def redirect_homepage():
