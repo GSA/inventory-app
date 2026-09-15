@@ -168,8 +168,8 @@ See [inventory.data.gov wiki page](https://github.com/GSA/data.gov/wiki/inventor
 
 ### Delete inactive users
 
-Preview active users whose most recent creation or activity date is older than
-the configured inactivity threshold:
+Preview active users whose most recent creation, activity, or reactivation date
+is older than the configured inactivity threshold:
 
     ckan delete-inactive-users --dry-run
 
