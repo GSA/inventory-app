@@ -7,7 +7,6 @@ from pytest import raises as assert_raises
 
 import ckan.logic as logic
 import ckan.model as model
-from ckan.tests.helpers import FunctionalTestBase
 import ckan.tests.factories as factories
 import ckan.tests.helpers as helpers
 from ckanext.datagov_inventory.plugin import (
@@ -81,10 +80,11 @@ def test_deleted_users_have_their_own_section():
 
 @pytest.mark.usefixtures("clean_db")
 @pytest.mark.usefixtures("with_request_context")
-class TestCreateInventoryUser(FunctionalTestBase):
+@pytest.mark.ckan_config('ckan.plugins', 'datagov_inventory')
+@pytest.mark.usefixtures('with_plugins')
+class TestCreateInventoryUser:
 
     def setup_method(self):
-        super(TestCreateInventoryUser, self).setup_class()
         self.sysadmin = factories.Sysadmin()
         self.regular_user = factories.User()
 
@@ -198,10 +198,11 @@ class TestCreateInventoryUser(FunctionalTestBase):
 
 @pytest.mark.usefixtures("clean_db")
 @pytest.mark.usefixtures("with_request_context")
-class TestReactivateUser(FunctionalTestBase):
+@pytest.mark.ckan_config('ckan.plugins', 'datagov_inventory')
+@pytest.mark.usefixtures('with_plugins')
+class TestReactivateUser:
 
     def setup_method(self):
-        super(TestReactivateUser, self).setup_class()
         self.sysadmin = factories.Sysadmin()
         self.regular_user = factories.User()
 

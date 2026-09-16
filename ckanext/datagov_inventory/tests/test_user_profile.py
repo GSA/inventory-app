@@ -15,10 +15,9 @@ from ckanext.datagov_inventory import user_activity
 @pytest.mark.usefixtures('with_plugins', 'clean_db')
 class TestUserProfile:
     def _get_profile(self, app, user):
-        token = factories.APIToken(user=user['name'])
         response = app.get(
             url_for('user.read', id=user['name']),
-            headers={'Authorization': token['token']},
+            extra_environ={'REMOTE_USER': user['name']},
             status=200,
         )
         return response.data.decode('utf-8')

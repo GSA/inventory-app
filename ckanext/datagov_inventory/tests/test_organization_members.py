@@ -32,10 +32,9 @@ class TestOrganizationMembers:
         deleted_user_obj.state = model.State.DELETED
         model.Session.commit()
 
-        token = factories.APIToken(user=sysadmin['name'])
         response = app.get(
             '/organization/manage_members/{}'.format(organization['name']),
-            headers={'Authorization': token['token']},
+            extra_environ={'REMOTE_USER': sysadmin['name']},
             status=200,
         )
         page = response.data.decode('utf-8')
@@ -54,10 +53,9 @@ class TestOrganizationMembers:
         )
         sysadmin = factories.Sysadmin()
 
-        token = factories.APIToken(user=sysadmin['name'])
         response = app.get(
             '/organization/manage_members/{}'.format(organization['name']),
-            headers={'Authorization': token['token']},
+            extra_environ={'REMOTE_USER': sysadmin['name']},
             status=200,
         )
         page = response.data.decode('utf-8')
