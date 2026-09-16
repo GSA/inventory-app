@@ -6,9 +6,9 @@ services:
     image: cypress/included:12.17.2
     entrypoint: []
     command: /bin/bash -c "
-      rm -rf /etc/apt/sources.list.d/google-chrome.list && \
-      apt-get update && \
-      apt-get install -y unzip && \
+      rm -rf /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/microsoft-edge*.list && \
+      apt-get update --allow-releaseinfo-change && \
+      apt-get install -y --fix-missing unzip && \
       npm install && \
       npx wait-on http://ckan:5000/api/action/status_show && \
       cypress run "
