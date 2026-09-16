@@ -1,8 +1,16 @@
-import ckan.model as model
-import ckan.plugins.toolkit as toolkit
-import ckan.logic as logic
+from datetime import datetime
 import secrets
 import string
+
+import ckan.logic as logic
+import ckan.model as model
+import ckan.plugins.toolkit as toolkit
+
+from ckanext.datagov_inventory import user_activity
+
+
+def _utcnow():
+    return datetime.utcnow()
 
 
 def create_inventory_user(context, data_dict):
@@ -39,7 +47,7 @@ def create_inventory_user(context, data_dict):
 
 
 def reactivate_user(context, data_dict):
-    """Reactivate a deleted user by changing their state to active."""
+    """Reactivate a deleted user and record when it was reactivated."""
     toolkit.check_access('reactivate_user', context, data_dict)
 
     user_id = data_dict.get('id', '').strip()
@@ -58,6 +66,7 @@ def reactivate_user(context, data_dict):
         )
 
     user_obj.state = 'active'
+    user_activity.set_reactivated_at(user_obj, _utcnow())
     model.Session.add(user_obj)
     model.Session.commit()
 

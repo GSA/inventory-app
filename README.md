@@ -166,6 +166,20 @@ Our Service Provider (SP) certificate and key are provided through environment v
 
 See [inventory.data.gov wiki page](https://github.com/GSA/data.gov/wiki/inventory.data.gov).
 
+### Delete inactive users
+
+Preview active users whose most recent creation, activity, or reactivation date
+is older than the configured inactivity threshold:
+
+    ckan delete-inactive-users --dry-run
+
+Lock those users while preserving their organization memberships:
+
+    ckan delete-inactive-users
+
+Set the threshold with `ckanext.datagov_inventory.inactivity_days`. It defaults
+to 90 days. Reactivating an account restarts its inactivity period.
+
 ## License and Contributing
 
 We're glad you're thinking about contributing to Data.gov! Before contributing, please read our [CONTRIBUTING](CONTRIBUTING.md) guide, our [LICENSE](LICENSE.md), and this README.

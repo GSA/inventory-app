@@ -1,0 +1,42 @@
+{% ckan_extends %}
+
+{% block user_info %}
+{% set reactivated_at = h.datagov_inventory_reactivated_at(user.id) %}
+<div class="info">
+  <dl>
+    {% if user.name.startswith('http://') or user.name.startswith('https://') %}
+      <dt>{{ _('Open ID') }}</dt>
+      <dd>{{ user.name|urlize(25) }}{# Be great if this just showed the domain #}</dd>
+    {% else %}
+      <dt>{{ _('Username') }}</dt>
+      <dd>{{ user.name }}</dd>
+    {% endif %}
+  </dl>
+  {% if is_myself %}
+    <dl>
+      <dt>{{ _('Email') }} <span class="label label-default" title="{{ _('This means only you can see this') }}">{{ _('Private') }}</span></dt>
+      <dd>{{ user.email }}</dd>
+    </dl>
+  {% endif %}
+  <dl>
+    <dt>{{ _('Member Since') }}</dt>
+    <dd>{{ h.render_datetime(user.created) }}</dd>
+  </dl>
+  {% if reactivated_at %}
+    <dl>
+      <dt>{{ _('Reactivated At') }}</dt>
+      <dd>{{ h.render_datetime(reactivated_at) }}</dd>
+    </dl>
+  {% endif %}
+  {% if is_sysadmin %}
+  <dl>
+    <dt>{{ _('Last Active') }}</dt>
+    <dd>{{ h.time_ago_from_timestamp(user.last_active) }}</dd>
+  </dl>
+  {% endif %}
+  <dl>
+    <dt>{{ _('State') }}</dt>
+    <dd>{{ _(user.state) }}</dd>
+  </dl>
+</div>
+{% endblock %}
