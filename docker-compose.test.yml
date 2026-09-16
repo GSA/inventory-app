@@ -3,7 +3,7 @@ services:
     environment:
       - CKAN_SITE_URL=http://ckan:5000
   test:
-    image: cypress/included:12.17.2
+    image: cypress/included:13.6.0
     entrypoint: []
     # Check-Valid-Until=false: this image is Debian bullseye, whose
     # bullseye-security Release file is past its Valid-Until date now that
