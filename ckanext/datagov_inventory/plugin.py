@@ -112,6 +112,10 @@ def create_inventory_user(context, data_dict):
     }
 
 
+def soft_delete_user(context, data_dict):
+    return {'success': authz.is_sysadmin(context.get('user'))}
+
+
 def reactivate_user(context, data_dict):
     user = context.get('user')
     if not user:
@@ -153,6 +157,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'user_list': restrict_anon_access,
                 'user_org_roles': user_org_roles,
                 'create_inventory_user': create_inventory_user,
+                'soft_delete_user': soft_delete_user,
                 'reactivate_user': reactivate_user,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
@@ -163,6 +168,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
         return {
             'user_org_roles': action.user_org_roles,
             'create_inventory_user': action.create_inventory_user,
+            'soft_delete_user': action.soft_delete_user,
             'reactivate_user': action.reactivate_user,
         }
 
@@ -377,6 +383,51 @@ pusher.add_url_rule(
 )
 
 
+def soft_delete_user_form(user_id):
+    import ckan.lib.helpers as h
+
+    context = {
+        'model': model,
+        'user': g.user,
+    }
+
+    try:
+        user = toolkit.get_action('soft_delete_user')(
+            context,
+            {'id': user_id}
+        )
+        user_url = h.url_for('user.read', id=user['name'])
+        h.flash_success(
+            _('User <a href="{0}">{1}</a> deleted successfully').format(
+                user_url, user['name']
+            ),
+            allow_html=True
+        )
+    except logic.ValidationError as e:
+        h.flash_error('; '.join(
+            '{}: {}'.format(field, error)
+            for field, errors in e.error_dict.items()
+            for error in errors
+        ))
+    except logic.NotAuthorized:
+        h.flash_error(_('Not authorized to delete users'))
+    except logic.NotFound:
+        h.flash_error(_('User not found'))
+    except Exception as e:
+        log.error('Error deleting user: %s', str(e))
+        h.flash_error(_('Error deleting user: {0}').format(str(e)))
+
+    return redirect(_user_management_redirect('/user/user-org-roles'))
+
+
+pusher.add_url_rule(
+    '/user/soft-delete/<user_id>',
+    'soft_delete_user_form',
+    view_func=soft_delete_user_form,
+    methods=['POST']
+)
+
+
 def reactivate_user_form(user_id):
     import ckan.lib.helpers as h
 
@@ -411,7 +462,14 @@ def reactivate_user_form(user_id):
         log.error('Error reactivating user: %s', str(e))
         h.flash_error(_('Error reactivating user: {0}').format(str(e)))
 
-    return redirect('/user/deleted-users')
+    return redirect(_user_management_redirect('/user/deleted-users'))
+
+
+def _user_management_redirect(default):
+    return_to = ckan_request.args.get('return_to')
+    if return_to and return_to.startswith('/organization/manage_members/'):
+        return return_to
+    return default
 
 
 pusher.add_url_rule(
@@ -520,7 +578,7 @@ def deleted_users_table_section(users):
     deleted_users = [user for user in users if user['state'] == 'deleted']
     return _user_org_roles_section(
         'Deleted Users', 'deleted-users', deleted_users,
-        ['user', 'email', 'last_active'], sortable=True
+        ['user', 'email', 'last_active', 'organization'], sortable=True
     )
 
 
