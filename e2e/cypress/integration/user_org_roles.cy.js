@@ -208,6 +208,9 @@ describe('User organization roles', () => {
             .and('contain', 'Deleted Users');
         cy.get('#deleted-users table[data-sortable-table]').should('exist');
         cy.get('#deleted-users thead').should('not.contain', 'Actions');
+        cy.get('#deleted-users thead')
+            .should('contain', 'Organization')
+            .and('not.contain', 'Role');
         cy.get('#sysadmins, #users-with-organizations, #users-without-organizations, #create-user-form')
             .should('not.exist');
     });

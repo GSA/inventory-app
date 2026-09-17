@@ -571,7 +571,7 @@ def deleted_users_table_section(users):
     deleted_users = [user for user in users if user['state'] == 'deleted']
     return _user_org_roles_section(
         'Deleted Users', 'deleted-users', deleted_users,
-        ['user', 'email', 'last_active'], sortable=True
+        ['user', 'email', 'last_active', 'organization'], sortable=True
     )
 
 

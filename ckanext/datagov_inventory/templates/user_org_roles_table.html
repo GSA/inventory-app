@@ -71,17 +71,27 @@
               </thead>
               <tbody>
                 {% for row in section.rows %}
-                  <tr{% if 'organization' in section.columns %} data-organization="{{ row[3]['items'] | map(attribute='value') | join(' ') }}" data-role="{{ row[4]['items'] | map(attribute='value') | join(' ') }}"{% endif %}>
+                  <tr{% if 'organization' in section.columns and section.id != 'deleted-users' %} data-organization="{{ row[3]['items'] | map(attribute='value') | join(' ') }}" data-role="{{ row[4]['items'] | map(attribute='value') | join(' ') }}"{% endif %}>
                     {% for cell in row %}
                       {% if section.columns[loop.index0] == 'organization' %}
-                      <td colspan="2" class="user-org-roles-memberships" headers="{{ section.id }}-organization-heading {{ section.id }}-role-heading">
-                        {% for item in cell['items'] %}
-                          <div class="user-org-roles-membership">
-                            <a href="{{ item.url }}"><span class="sr-only">{{ _('Organization') }}: </span>{{ item.value }}</a>
-                            <span><span class="sr-only">{{ _('Role') }}: </span>{{ row[4]['items'][loop.index0].value }}</span>
-                          </div>
-                        {% endfor %}
-                      </td>
+                        {% if section.id == 'deleted-users' %}
+                          <td class="user-org-roles-memberships" headers="{{ section.id }}-organization-heading">
+                            {% for item in cell['items'] %}
+                              <div class="user-org-roles-membership">
+                                <a href="{{ item.url }}">{{ item.value }}</a>
+                              </div>
+                            {% endfor %}
+                          </td>
+                        {% else %}
+                          <td colspan="2" class="user-org-roles-memberships" headers="{{ section.id }}-organization-heading {{ section.id }}-role-heading">
+                            {% for item in cell['items'] %}
+                              <div class="user-org-roles-membership">
+                                <a href="{{ item.url }}"><span class="sr-only">{{ _('Organization') }}: </span>{{ item.value }}</a>
+                                <span><span class="sr-only">{{ _('Role') }}: </span>{{ row[4]['items'][loop.index0].value }}</span>
+                              </div>
+                            {% endfor %}
+                          </td>
+                        {% endif %}
                       {% elif section.columns[loop.index0] != 'role' %}
                       <td>
                         {% if cell.url %}

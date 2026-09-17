@@ -74,6 +74,7 @@ def test_deleted_users_have_their_own_section():
     section = deleted_users_table_section(users)
     assert section['count'] == 1
     assert section['rows'][0][0]['value'] == 'deleted-user'
+    assert section['columns'] == ['user', 'email', 'last_active', 'organization']
     assert section['sortable'] is True
     assert deleted_users_table_section([])['count'] == 0
 

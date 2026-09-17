@@ -181,10 +181,18 @@
     top: 0;
 }
 
+#deleted-users .user-org-roles-memberships::after {
+    display: none;
+}
+
 .user-org-roles-membership {
     align-items: center;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 80px;
+}
+
+#deleted-users .user-org-roles-membership {
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .user-org-roles-membership + .user-org-roles-membership {
