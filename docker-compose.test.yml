@@ -7,8 +7,9 @@ services:
     entrypoint: []
     command: /bin/bash -c "
       rm -rf /etc/apt/sources.list.d/google-chrome.list && \
+      rm -rf /etc/apt/sources.list.d/microsoft-edge*.list && \
       apt-get update && \
-      apt-get install -y unzip && \
+      apt-get install -y unzip || apt-get install -y --fix-missing unzip && \
       npm install && \
       npx wait-on http://ckan:5000/api/action/status_show && \
       cypress run "
