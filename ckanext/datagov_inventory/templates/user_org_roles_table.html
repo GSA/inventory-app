@@ -87,6 +87,9 @@
                       </td>
                       {% elif section.columns[loop.index0] != 'role' %}
                       <td>
+                        {% if section.columns[loop.index0] == 'user' and cell.user_id and h.check_access('soft_delete_user', {'id': cell.user_id}) %}
+                          <a class="user-org-roles-delete" href="{{ h.url_for('datagov_inventory.soft_delete_user_form', user_id=cell.user_id) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this User?') }}" aria-label="{{ _('Delete user') }}" title="{{ _('Delete user') }}"><i class="fa fa-user-xmark" aria-hidden="true"></i></a>
+                        {% endif %}
                         {% if cell.url %}
                           <a href="{{ cell.url }}">{{ cell.value }}</a>
                         {% else %}

@@ -112,6 +112,10 @@ def create_inventory_user(context, data_dict):
     }
 
 
+def soft_delete_user(context, data_dict):
+    return {'success': authz.is_sysadmin(context.get('user'))}
+
+
 def reactivate_user(context, data_dict):
     user = context.get('user')
     if not user:
@@ -153,6 +157,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
                 'user_list': restrict_anon_access,
                 'user_org_roles': user_org_roles,
                 'create_inventory_user': create_inventory_user,
+                'soft_delete_user': soft_delete_user,
                 'reactivate_user': reactivate_user,
                 'user_show': restrict_anon_access,
                 'vocabulary_list': restrict_anon_access,
@@ -163,6 +168,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
         return {
             'user_org_roles': action.user_org_roles,
             'create_inventory_user': action.create_inventory_user,
+            'soft_delete_user': action.soft_delete_user,
             'reactivate_user': action.reactivate_user,
         }
 
@@ -373,6 +379,51 @@ pusher.add_url_rule(
     '/user/create-user',
     'create_user_form',
     view_func=create_user_form,
+    methods=['POST']
+)
+
+
+def soft_delete_user_form(user_id):
+    import ckan.lib.helpers as h
+
+    context = {
+        'model': model,
+        'user': g.user,
+    }
+
+    try:
+        user = toolkit.get_action('soft_delete_user')(
+            context,
+            {'id': user_id}
+        )
+        user_url = h.url_for('user.read', id=user['name'])
+        h.flash_success(
+            _('User <a href="{0}">{1}</a> deleted successfully').format(
+                user_url, user['name']
+            ),
+            allow_html=True
+        )
+    except logic.ValidationError as e:
+        h.flash_error('; '.join(
+            '{}: {}'.format(field, error)
+            for field, errors in e.error_dict.items()
+            for error in errors
+        ))
+    except logic.NotAuthorized:
+        h.flash_error(_('Not authorized to delete users'))
+    except logic.NotFound:
+        h.flash_error(_('User not found'))
+    except Exception as e:
+        log.error('Error deleting user: %s', str(e))
+        h.flash_error(_('Error deleting user: {0}').format(str(e)))
+
+    return redirect('/user/user-org-roles')
+
+
+pusher.add_url_rule(
+    '/user/soft-delete/<user_id>',
+    'soft_delete_user_form',
+    view_func=soft_delete_user_form,
     methods=['POST']
 )
 

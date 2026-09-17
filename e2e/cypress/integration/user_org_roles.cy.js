@@ -124,6 +124,11 @@ describe('User organization roles', () => {
                         'users-with-organizations-organization-heading ' +
                         'users-with-organizations-role-heading'
                     );
+                    cy.wrap(userRows[0])
+                        .find('a.user-org-roles-delete')
+                        .should('have.attr', 'aria-label', 'Delete user')
+                        .find('i')
+                        .should('have.class', 'fa-user-xmark');
                     const memberships = userRows[0].querySelectorAll(
                         '.user-org-roles-membership'
                     );

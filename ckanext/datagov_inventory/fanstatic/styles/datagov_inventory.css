@@ -143,6 +143,16 @@
     vertical-align: middle;
 }
 
+.user-org-roles-delete {
+    color: #d83933;
+    margin-right: 6px;
+}
+
+.user-org-roles-delete:hover,
+.user-org-roles-delete:focus {
+    color: #b50909;
+}
+
 .user-org-roles .table > tbody > tr > .user-org-roles-memberships {
     padding: 0;
     position: relative;
