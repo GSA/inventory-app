@@ -128,8 +128,8 @@ describe('User organization roles', () => {
                         .find('a.user-org-roles-delete')
                         .should('have.attr', 'aria-label', 'Delete user')
                         .and('have.css', 'float', 'right')
-                        .find('i')
-                        .should('have.class', 'fa-user-xmark');
+                        .find('.user-delete-icon .fa-user')
+                        .should('exist');
                     const memberships = userRows[0].querySelectorAll(
                         '.user-org-roles-membership'
                     );

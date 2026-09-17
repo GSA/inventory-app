@@ -103,7 +103,7 @@
                           {% if section.id == 'deleted-users' and h.check_access('reactivate_user', {'id': cell.user_id}) %}
                             <a class="user-org-roles-action user-org-roles-reactivate" href="{{ h.url_for('datagov_inventory.reactivate_user_form', user_id=cell.user_id) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to reactivate this User?') }}" aria-label="{{ _('Reactivate user') }}" title="{{ _('Reactivate user') }}"><i class="fa fa-user-plus" aria-hidden="true"></i></a>
                           {% elif section.id != 'deleted-users' and h.check_access('soft_delete_user', {'id': cell.user_id}) %}
-                            <a class="user-org-roles-action user-org-roles-delete" href="{{ h.url_for('datagov_inventory.soft_delete_user_form', user_id=cell.user_id) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this User?') }}" aria-label="{{ _('Delete user') }}" title="{{ _('Delete user') }}"><i class="fa fa-user-xmark" aria-hidden="true"></i></a>
+                            <a class="user-org-roles-action user-org-roles-delete" href="{{ h.url_for('datagov_inventory.soft_delete_user_form', user_id=cell.user_id) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this User?') }}" aria-label="{{ _('Delete user') }}" title="{{ _('Delete user') }}"><span class="user-delete-icon" aria-hidden="true"><i class="fa fa-user"></i><i class="fa fa-times"></i></span></a>
                           {% endif %}
                         {% endif %}
                       </td>

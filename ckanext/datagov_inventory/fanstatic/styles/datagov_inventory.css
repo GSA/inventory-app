@@ -157,6 +157,32 @@
     color: #b50909;
 }
 
+.organization-member-role {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-delete-icon {
+    display: inline-block;
+    height: 14px;
+    position: relative;
+    width: 14px;
+}
+
+.user-delete-icon > .fa-user {
+    left: 0;
+    position: absolute;
+    top: 1px;
+}
+
+.user-delete-icon > .fa-times {
+    font-size: 9px;
+    position: absolute;
+    right: -3px;
+    top: -3px;
+}
+
 .user-org-roles-reactivate {
     color: #005ea8;
 }

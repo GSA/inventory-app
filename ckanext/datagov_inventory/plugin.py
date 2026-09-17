@@ -417,7 +417,7 @@ def soft_delete_user_form(user_id):
         log.error('Error deleting user: %s', str(e))
         h.flash_error(_('Error deleting user: {0}').format(str(e)))
 
-    return redirect('/user/user-org-roles')
+    return redirect(_user_management_redirect('/user/user-org-roles'))
 
 
 pusher.add_url_rule(
@@ -462,7 +462,14 @@ def reactivate_user_form(user_id):
         log.error('Error reactivating user: %s', str(e))
         h.flash_error(_('Error reactivating user: {0}').format(str(e)))
 
-    return redirect('/user/deleted-users')
+    return redirect(_user_management_redirect('/user/deleted-users'))
+
+
+def _user_management_redirect(default):
+    return_to = ckan_request.args.get('return_to')
+    if return_to and return_to.startswith('/organization/manage_members/'):
+        return return_to
+    return default
 
 
 pusher.add_url_rule(
