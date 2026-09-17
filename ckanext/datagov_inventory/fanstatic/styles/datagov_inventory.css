@@ -145,7 +145,8 @@
 
 .user-org-roles-delete {
     color: #d83933;
-    margin-right: 6px;
+    float: right;
+    margin-left: 6px;
 }
 
 .user-org-roles-delete:hover,
