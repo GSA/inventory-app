@@ -341,6 +341,9 @@ class TestSoftDeleteUser:
         with assert_raises(logic.NotAuthorized):
             helpers.call_action(
                 'soft_delete_user',
-                context={'user': self.regular_user['name']},
+                context={
+                    'user': self.regular_user['name'],
+                    'ignore_auth': False,
+                },
                 id=user['id'],
             )
