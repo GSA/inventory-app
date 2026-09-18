@@ -3,6 +3,17 @@ describe('User Reactivation', () => {
     const testEmail = testUser + '@gsa.gov';
     const orgName = 'cypress-reactivate-org';
 
+    function reactivateUser() {
+        cy.get('#deleted-users table tbody tr').contains(testUser)
+            .parents('tr')
+            .within(() => {
+                cy.get('a.user-org-roles-reactivate').click();
+            });
+        cy.get('.modal').should('be.visible')
+            .find('.btn-primary')
+            .click();
+    }
+
     before(() => {
         cy.log('=== USER_REACTIVATION: BEFORE HOOK START ===');
         cy.task('log', '=== USER_REACTIVATION: Creating token ===');
@@ -55,10 +66,9 @@ describe('User Reactivation', () => {
         cy.get('#deleted-users table tbody tr').contains(testUser)
             .parents('tr')
             .within(() => {
-                cy.task('log', '>>> TEST: Verifying reactivate form and button exist');
-                cy.get('form[action*="reactivate"]').should('exist');
-                cy.get('button[type="submit"]')
-                    .should('contain', 'Reactivate')
+                cy.task('log', '>>> TEST: Verifying reactivate link exists');
+                cy.get('a.user-org-roles-reactivate')
+                    .should('have.attr', 'aria-label', 'Reactivate user')
                     .should('be.visible');
             });
         cy.task('log', '>>> TEST COMPLETE: shows reactivate button in deleted users section - Button displayed correctly');
@@ -74,11 +84,7 @@ describe('User Reactivation', () => {
         cy.visit('/user/deleted-users');
 
         cy.task('log', `>>> TEST: Finding ${testUser} in deleted users and clicking Reactivate`);
-        cy.get('#deleted-users table tbody tr').contains(testUser)
-            .parents('tr')
-            .within(() => {
-                cy.get('button[type="submit"]').contains('Reactivate').click();
-            });
+        reactivateUser();
 
         cy.task('log', '>>> TEST: Checking for success message');
         cy.contains('.alert-success', 'reactivated successfully').should('be.visible');
@@ -107,11 +113,7 @@ describe('User Reactivation', () => {
         cy.visit('/user/deleted-users');
 
         cy.task('log', `>>> TEST: Reactivating ${testUser} via UI`);
-        cy.get('#deleted-users table tbody tr', {timeout: 10000}).contains(testUser)
-            .parents('tr')
-            .within(() => {
-                cy.get('button[type="submit"]').contains('Reactivate').click();
-            });
+        reactivateUser();
 
         cy.task('log', '>>> TEST: Waiting for page reload');
         cy.url().should('include', '/user/deleted-users');
