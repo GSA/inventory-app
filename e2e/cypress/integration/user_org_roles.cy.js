@@ -124,6 +124,12 @@ describe('User organization roles', () => {
                         'users-with-organizations-organization-heading ' +
                         'users-with-organizations-role-heading'
                     );
+                    cy.wrap(userRows[0])
+                        .find('a.user-org-roles-delete')
+                        .should('have.attr', 'aria-label', 'Delete user')
+                        .and('have.css', 'float', 'right')
+                        .find('.user-delete-icon .fa-user')
+                        .should('exist');
                     const memberships = userRows[0].querySelectorAll(
                         '.user-org-roles-membership'
                     );
@@ -201,7 +207,10 @@ describe('User organization roles', () => {
             .should('have.length', 1)
             .and('contain', 'Deleted Users');
         cy.get('#deleted-users table[data-sortable-table]').should('exist');
-        cy.get('#deleted-users thead').should('contain', 'Actions');
+        cy.get('#deleted-users thead').should('not.contain', 'Actions');
+        cy.get('#deleted-users thead')
+            .should('contain', 'Organization')
+            .and('not.contain', 'Role');
         cy.get('#sysadmins, #users-with-organizations, #users-without-organizations, #create-user-form')
             .should('not.exist');
     });

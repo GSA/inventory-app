@@ -6,6 +6,7 @@ import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
+from ckanext.datagov_inventory.cli import soft_delete
 from ckanext.datagov_inventory import user_activity
 
 
@@ -76,6 +77,29 @@ def reactivate_user(context, data_dict):
     )
 
     return user_dict
+
+
+def soft_delete_user(context, data_dict):
+    """Soft-delete a user without changing organization memberships."""
+    toolkit.check_access('soft_delete_user', context, data_dict)
+
+    user_id = data_dict.get('id', '').strip()
+    if not user_id:
+        raise logic.ValidationError({'id': ['Missing value']})
+
+    user_obj = model.User.get(user_id)
+    if not user_obj:
+        raise logic.NotFound('User not found')
+
+    if user_obj.state == model.State.DELETED:
+        raise logic.ValidationError({'id': ['User is already deleted']})
+
+    soft_delete(user_obj)
+
+    return toolkit.get_action('user_show')(
+        {'ignore_auth': True},
+        {'id': user_obj.id}
+    )
 
 
 @toolkit.side_effect_free

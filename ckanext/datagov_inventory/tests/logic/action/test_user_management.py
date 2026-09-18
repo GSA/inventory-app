@@ -74,6 +74,9 @@ def test_deleted_users_have_their_own_section():
     section = deleted_users_table_section(users)
     assert section['count'] == 1
     assert section['rows'][0][0]['value'] == 'deleted-user'
+    assert section['columns'] == [
+        'user', 'email', 'last_active', 'organization'
+    ]
     assert section['sortable'] is True
     assert deleted_users_table_section([])['count'] == 0
 
@@ -294,3 +297,53 @@ class TestReactivateUser:
         assert result['state'] == 'active'
         user_obj = model.User.get(deleted_user['name'])
         assert user_obj.state == 'active'
+
+
+@pytest.mark.usefixtures("clean_db")
+@pytest.mark.usefixtures("with_request_context")
+@pytest.mark.ckan_config('ckan.plugins', 'datagov_inventory')
+@pytest.mark.usefixtures('with_plugins')
+class TestSoftDeleteUser:
+
+    def setup_method(self):
+        self.sysadmin = factories.Sysadmin()
+        self.regular_user = factories.User()
+
+    def test_soft_delete_retains_organization_membership(self):
+        user = factories.User()
+        organization = factories.Organization()
+        membership = model.Member(
+            group_id=organization['id'],
+            table_id=user['id'],
+            table_name='user',
+            capacity='editor',
+            state=model.State.ACTIVE,
+        )
+        model.Session.add(membership)
+        model.Session.commit()
+
+        result = helpers.call_action(
+            'soft_delete_user',
+            context={'user': self.sysadmin['name']},
+            id=user['id'],
+        )
+
+        assert result['state'] == model.State.DELETED
+        assert model.User.get(user['id']).state == model.State.DELETED
+        retained_membership = model.Session.query(model.Member).filter(
+            model.Member.id == membership.id
+        ).one()
+        assert retained_membership.state == model.State.ACTIVE
+
+    def test_soft_delete_requires_sysadmin(self):
+        user = factories.User()
+
+        with assert_raises(logic.NotAuthorized):
+            helpers.call_action(
+                'soft_delete_user',
+                context={
+                    'user': self.regular_user['name'],
+                    'ignore_auth': False,
+                },
+                id=user['id'],
+            )
