@@ -271,7 +271,7 @@ sequenceDiagram
     U->>L: PIV/CAC authentication
     L-->>U: 302 → /auth/callback?code&state
     U->>W: GET /auth/callback
-    W->>W: verify state; bind PKCE verifier
+    W->>W: verify state, bind PKCE verifier
     W->>L: token request (private_key_jwt + code_verifier)
     L-->>W: id_token
     W->>W: verify signature (JWKS), iss, aud, exp, nonce, acr
@@ -339,7 +339,7 @@ sequenceDiagram
     SC->>S3: stream object
     SC->>SC: clamd INSTREAM
     alt clean
-        SC->>S3: copy → clean/{uuid}; delete quarantine/
+        SC->>S3: copy → clean/{uuid}, delete quarantine/
         SC->>DB: scan_state=clean, scanned_at, signature_version
     else infected
         SC->>S3: delete object
