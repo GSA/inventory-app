@@ -1,6 +1,7 @@
 """Tests for user management actions."""
 
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 import pytest
 from pytest import raises as assert_raises
@@ -209,7 +210,8 @@ class TestReactivateUser:
         self.sysadmin = factories.Sysadmin()
         self.regular_user = factories.User()
 
-    def test_reactivate_deleted_user(self, monkeypatch):
+    @patch('ckanext.datagov_inventory.notifications.send_unlocked')
+    def test_reactivate_deleted_user(self, send_unlocked, monkeypatch):
         deleted_user = factories.User(state='deleted')
         reactivated_at = datetime(2026, 9, 14, 12, 0, 0)
         old_last_active = reactivated_at - timedelta(days=100)
@@ -236,6 +238,7 @@ class TestReactivateUser:
         assert user_obj.created == original_created
         assert user_obj.last_active == old_last_active
         assert user_activity.get_reactivated_at(user_obj) == reactivated_at
+        send_unlocked.assert_called_once_with(user_obj)
         assert user_obj.plugin_extras['another_extension'] == {
             'preserved': True
         }

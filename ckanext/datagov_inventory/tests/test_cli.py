@@ -1,6 +1,7 @@
 """Tests for Inventory CKAN commands."""
 
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 import pytest
 from click.testing import CliRunner
@@ -23,6 +24,15 @@ class TestDeleteInactiveUsers:
             cli.INACTIVITY_DAYS_CONFIG,
             '90',
         )
+
+    def test_defaults_warning_days_when_config_is_null(self, monkeypatch):
+        monkeypatch.setitem(
+            toolkit.config,
+            cli.INACTIVITY_WARNING_DAYS_CONFIG,
+            None,
+        )
+
+        assert cli._inactivity_warning_days() == 7
 
     def _set_user_dates(self, user, created, last_active):
         user_obj = model.User.get(user['id'])
@@ -60,6 +70,141 @@ class TestDeleteInactiveUsers:
         assert model.User.get(boundary['id']).state == model.State.ACTIVE
         assert model.User.get(recent['id']).state == model.State.ACTIVE
         assert 'Deleted 1 inactive user(s).' in result.output
+
+    @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
+    @patch('ckanext.datagov_inventory.notifications.send_locked')
+    def test_notifies_about_to_lock_and_locked_users(
+        self,
+        send_locked,
+        send_about_to_lock,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        warning = factories.User(name='warning-user')
+        locked = factories.User(name='locked-user')
+        self._set_user_dates(
+            warning,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=85),
+        )
+        self._set_user_dates(
+            locked,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=91),
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        send_about_to_lock.assert_any_call(
+            model.User.get(warning['id']), 5
+        )
+        send_about_to_lock.assert_any_call(model.User.get(locked['id']), 7)
+        assert send_about_to_lock.call_count == 2
+        assert 'Sent warning email to warning-user' in result.output
+        assert 'Sent warning email to locked-user' in result.output
+        send_locked.assert_not_called()
+        assert model.User.get(locked['id']).state == model.State.ACTIVE
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert send_about_to_lock.call_count == 2
+
+    @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
+    @patch('ckanext.datagov_inventory.notifications.send_locked')
+    def test_successful_warning_defers_overdue_deletion(
+        self,
+        send_locked,
+        send_about_to_lock,
+        monkeypatch,
+    ):
+        current_time = [self.now]
+        monkeypatch.setattr(cli, '_utcnow', lambda: current_time[0])
+        inactive = factories.User(name='warn-before-delete')
+        self._set_user_dates(
+            inactive,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=91),
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+        send_about_to_lock.assert_called_once_with(
+            model.User.get(inactive['id']), 7
+        )
+        send_locked.assert_not_called()
+
+        current_time[0] += timedelta(days=7)
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.DELETED
+        send_locked.assert_called_once_with(model.User.get(inactive['id']))
+
+    @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
+    @patch('ckanext.datagov_inventory.notifications.send_locked')
+    def test_failed_warning_is_treated_as_success(
+        self,
+        send_locked,
+        send_about_to_lock,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        send_about_to_lock.side_effect = RuntimeError('SMTP unavailable')
+        inactive = factories.User(name='failed-warning')
+        self._set_user_dates(
+            inactive,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=91),
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+        send_about_to_lock.assert_called_once_with(
+            model.User.get(inactive['id']), 7
+        )
+        send_locked.assert_not_called()
+        assert (
+            'Warning email delivery failed for failed-warning'
+            in result.output
+        )
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        send_about_to_lock.assert_called_once()
+
+    @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
+    def test_dry_run_does_not_send_about_to_lock_email(
+        self,
+        send_about_to_lock,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        warning = factories.User(name='warning-dry-run')
+        self._set_user_dates(
+            warning,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=85),
+        )
+
+        result = CliRunner().invoke(
+            cli.delete_inactive_users,
+            ['--dry-run'],
+        )
+
+        assert result.exit_code == 0, result.output
+        send_about_to_lock.assert_not_called()
+        assert (
+            'Would send warning email to warning-dry-run '
+            '(warning-dry-run@example.com, 5 days until lock)'
+            in result.output
+        )
 
     def test_uses_creation_date_when_last_active_is_null(self, monkeypatch):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
@@ -100,8 +245,13 @@ class TestDeleteInactiveUsers:
 
         assert result.exit_code == 0, result.output
         assert model.User.get(inactive['id']).state == model.State.ACTIVE
-        assert 'Would delete inactive-dry-run (last_active:' in result.output
-        assert 'Would delete 1 inactive user(s).' in result.output
+        assert (
+            'Would send warning email to inactive-dry-run '
+            '(inactive-dry-run@example.com, 7 days until lock)'
+            in result.output
+        )
+        assert 'Would delete inactive-dry-run' not in result.output
+        assert 'Would delete 0 inactive user(s).' in result.output
 
     def test_soft_delete_retains_organization_membership(self, monkeypatch):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
@@ -189,10 +339,8 @@ class TestDeleteInactiveUsers:
         )
 
         assert result.exit_code == 0, result.output
-        assert (
-            'Would delete old-reactivation (reactivated_at:'
-            in result.output
-        )
+        assert 'Would send warning email to old-reactivation' in result.output
+        assert 'Would delete old-reactivation' not in result.output
 
     def test_reads_inactivity_days_from_config(self, monkeypatch):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)

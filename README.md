@@ -178,7 +178,12 @@ Lock those users while preserving their organization memberships:
     ckan delete-inactive-users
 
 Set the threshold with `ckanext.datagov_inventory.inactivity_days`. It defaults
-to 90 days. Reactivating an account restarts its inactivity period.
+to 90 days. The warning email is sent 7 days before locking by default; this
+can be changed with `ckanext.datagov_inventory.inactivity_warning_days`.
+Users who are already past the threshold receive the warning first and are
+given the warning period before they are locked. If email delivery fails, the
+failure is logged, the warning is treated as sent, and the warning is not
+retried. Reactivating an account restarts its inactivity period.
 
 ## License and Contributing
 

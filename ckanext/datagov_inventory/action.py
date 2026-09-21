@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 import secrets
 import string
 
@@ -8,6 +9,10 @@ import ckan.plugins.toolkit as toolkit
 
 from ckanext.datagov_inventory.cli import soft_delete
 from ckanext.datagov_inventory import user_activity
+from ckanext.datagov_inventory import notifications
+
+
+log = logging.getLogger(__name__)
 
 
 def _utcnow():
@@ -68,8 +73,16 @@ def reactivate_user(context, data_dict):
 
     user_obj.state = 'active'
     user_activity.set_reactivated_at(user_obj, _utcnow())
+    user_activity.clear_inactivity_warning_sent_at(user_obj)
     model.Session.add(user_obj)
     model.Session.commit()
+    try:
+        notifications.send_unlocked(user_obj)
+    except Exception:
+        # Reactivation has completed; a mail failure must not undo it.
+        log.exception(
+            'Unable to send unlocked notification for %s', user_obj.name
+        )
 
     user_dict = toolkit.get_action('user_show')(
         {'ignore_auth': True},

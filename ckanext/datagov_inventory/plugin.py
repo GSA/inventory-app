@@ -193,6 +193,12 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
         ).set_description(
             'Number of inactive days before an account is soft-deleted.'
         )
+        declaration.declare(
+            key.ckanext.datagov_inventory.inactivity_warning_days,
+            None,
+        ).set_description(
+            'Number of days before locking to send the warning email.'
+        )
 
     # render our custom 403 template
     def update_config(self, config):
