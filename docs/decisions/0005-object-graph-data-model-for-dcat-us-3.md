@@ -88,10 +88,10 @@ JSON Schema, not RDF — the fidelity is not worth the platform cost here.
 ### Shape
 
 ```
-organization      ── owns ──▶ catalog
+user_account      ── created ──▶ catalog                  (creator; not a tenant boundary)
 catalog           ── catalog_link ──▶ catalog            (embedded catalogs, live only)
 catalog           ── catalog_member ──▶ metadata_object  (top-level dataset[]/service[]/datasetSeries[])
-catalog           ── catalog_permission ──▶ user_account | catalog   (read | write | admin)
+catalog           ── catalog_permission ──▶ user_account | catalog   (read | edit | admin)
 
 metadata_object(id, catalog_id, dcat_class, state, payload JSONB,
                 payload_hash, current_version_id, search_vector tsvector)
@@ -126,7 +126,14 @@ Search uses Postgres full-text search (`tsvector` + GIN) on
 - Version history is append-only with `editor_user_id`, satisfying AU-2/AU-3
   and AU-10 without `sqlalchemy-continuum`, temporal tables, or trigger magic.
 - Catalog-to-catalog sharing is native: `catalog_permission` accepts either a
-  user or a catalog as principal.
+  user or a catalog as principal. Since that feature is MVP scope, the model
+  carries it from the first release rather than requiring a later schema change.
+- **No tenant entity.** v1's CKAN agency/bureau organization is not carried
+  forward: agency silos are not a first-class concept in v2, so the isolation
+  boundary is the catalog and nothing is inherited from an enclosing container.
+  `user_account ── created ──▶ catalog` is provenance for audit, not ownership,
+  and conveys no privilege. See
+  [`architecture.md` §4](../architecture.md#there-is-no-agencybureau-tenant-entity).
 - Draft autosave (ADR 0002) writes `object_version` rows with
   `change_summary='autosave'`, making in-progress work both recoverable and
   auditable.
@@ -143,7 +150,11 @@ Search uses Postgres full-text search (`tsvector` + GIN) on
 - **Cycles are possible** — embedded catalogs and `object_reference` edges can
   both form loops. The walk needs cycle detection with a depth bound, and
   `catalog_link` needs an acyclicity check on write. A cycle discovered only at
-  export time is a denial-of-service against the export path.
+  export time is a denial-of-service against the export path. **This is MVP work,
+  not deferrable:** catalog-to-catalog sharing is MVP scope (see
+  [`architecture.md` §4](../architecture.md#catalog-to-catalog-sharing-is-mvp-scope)),
+  so embedded catalogs — and therefore the cycle risk — exist from the first
+  release.
 - **`JSONB payload` is schemaless at the database layer**, so the database will
   not catch a malformed payload; validation is entirely an application
   responsibility (SI-10). This is deliberate — it is what buys cheap schema
@@ -170,6 +181,10 @@ Search uses Postgres full-text search (`tsvector` + GIN) on
   every object route, since reusable objects are addressable independently of
   the catalog a user reached them through. This is the model's main new access
   risk and must be an explicit test case.
+  Because catalog-to-catalog sharing is MVP scope, authorization resolution must
+  handle a **catalog** principal and **transitive** grants through embedded
+  catalogs from the first release — not only the direct user-to-catalog case.
+  Transitive resolution is the harder half and needs its own test coverage.
 - **SI-10 (Input Validation)** — all imports and exports validated against
   DCAT-US JSON Schema (Draft 2020-12) by the single Python validator.
 - **SI-12 (Information Management and Retention)** — append-only history implies
@@ -184,6 +199,21 @@ Search uses Postgres full-text search (`tsvector` + GIN) on
   RDS brokered service. No field-level encryption: DCAT metadata is public open
   data by definition and contains no PII beyond publicly published contact
   points.
+
+### Open question: what becomes of the publishers reference data?
+
+`config/data/inventory_publishers.csv` (~270 rows encoding a department → bureau
+hierarchy) was v1's organization registry. With no tenant entity in v2 it is no
+longer structural data, and its only remaining candidate purpose is **seed data
+for reusable DCAT `Organization` objects** so that agency staff select a canonical
+publisher instead of typing one.
+
+That is a convenience feature and it is not designed. Open sub-questions: whether
+the department → bureau hierarchy is represented at all (DCAT-US 3.0 has no
+required parent/child relation between `Organization` objects); whether seeded
+objects are global or copied per catalog; and whether the existing
+`update_publishers.yml` workflow still has anything to update. **Decide before
+building the publisher picker, not after.**
 
 ## Links
 

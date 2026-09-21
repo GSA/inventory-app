@@ -13,8 +13,8 @@ related_files:
 
 > **Status: `draft`.** This document describes a *target* architecture, not a
 > built system. Every significant choice here is backed by a decision record in
-> [`docs/decisions/`](decisions/README.md), and **all eight of those records are
-> `proposed`, not `accepted`** — seven carry explicit blockers that could change
+> [`docs/decisions/`](decisions/README.md), and **all nine of those records are
+> `proposed`, not `accepted`** — all nine carry explicit blockers that could change
 > the design. See [Open blockers](#9-open-blockers). Nothing in this document
 > describes the code currently in this repository, which is the CKAN-based v1.
 >
@@ -68,7 +68,7 @@ agency onboarding path.
 flowchart TB
     subgraph clients["Clients"]
         GOV["Agency data manager<br/>PIV/CAC"]
-        PUB["Anonymous public user<br/>(long term — not MVP)"]
+        PUB["Anonymous public user<br/>(2.1 — not MVP)"]
         HARV["harvest.data.gov<br/>(long term: dcatus3.0 source)"]
     end
 
@@ -79,7 +79,7 @@ flowchart TB
 
         subgraph internal["*.apps.internal — no public route"]
             WEB["<b>inventory</b><br/>Python 3.12 · Flask + APIFlask · gunicorn<br/>Jinja2 + USWDS 3 + HTMX + islands<br/>Authlib · Flask-Login · Talisman"]
-            SCAN["<b>inventory-scanner</b><br/>clamd + freshclam + thin Flask<br/>POST /scan · GET /health<br/>sweeper on instance 0"]
+            SCAN["<b>inventory-scanner</b><br/>clamav-rest (terraform-cloudgov module)<br/>POST /scan · apps.internal only<br/>~3G · sweeper on instance 0"]
             TASK["<b>cf run-task</b> — ephemeral<br/>db upgrade · audit urls<br/>audit orphans · import-publishers"]
         end
 
@@ -174,7 +174,7 @@ in [ADR 0005](decisions/0005-object-graph-data-model-for-dcat-us-3.md).
 
 ```mermaid
 erDiagram
-    ORGANIZATION ||--o{ CATALOG : owns
+    USER_ACCOUNT ||--o{ CATALOG : created
     USER_ACCOUNT ||--o{ CATALOG_PERMISSION : holds
     CATALOG ||--o{ CATALOG_PERMISSION : "granted on"
     CATALOG ||--o{ CATALOG_LINK : "embeds (acyclic)"
@@ -217,7 +217,7 @@ erDiagram
         uuid catalog_id FK
         uuid principal_user_id FK "nullable"
         uuid principal_catalog_id FK "nullable — catalog-to-catalog sharing"
-        text level "read | write | admin"
+        text level "read | edit | admin"
     }
     RESOURCE_FILE {
         uuid id PK
@@ -253,6 +253,90 @@ writes, and schema validation of every export before delivery.
 **Second risk:** reusable objects are addressable independently of the catalog a
 user reached them through, so **every object route needs an explicit
 direct-object-reference authorization check**. Object IDs are not authorization.
+
+### There is no agency/bureau tenant entity
+
+v1 inherits CKAN's organization: an agency/bureau silo that owns datasets, holds
+user membership, and is the unit of isolation. The wiki's first feature bullet
+still describes v1 that way — *"Agency/organization silos for metadata management
+and managed teams of users isolated from each other."*
+
+**v2 drops it. Agency/bureau silos are not a first-class concept.** The
+consequences are worth stating plainly, because this is a genuine change in the
+product's shape, not a schema tidy-up:
+
+- **The isolation boundary is the catalog, not the agency.** A user sees exactly
+  the catalogs they hold a `catalog_permission` on ([ADR 0004](decisions/0004-jit-user-provisioning-and-catalog-rbac.md)).
+  There is no enclosing container that grants or restricts access, and no
+  membership list.
+- **Nothing is inherited.** A catalog does not acquire a publisher, a theme, or a
+  default contact point from an owning agency. Every such value is an explicit
+  `metadata_object` reference.
+- **`user_account ── created ──▶ catalog` is provenance only.** It records who
+  created a catalog for audit purposes; it is not ownership and conveys no
+  privilege. The creator's access comes from their `catalog_permission` row like
+  anyone else's.
+- **Cross-agency sharing needs no special case.** Because there is no silo to
+  cross, sharing a catalog with a user or another catalog in a different agency is
+  the same operation as sharing within one.
+
+Two loose ends follow from this, and both are real:
+
+1. **`config/data/inventory_publishers.csv`** (~270 rows;
+   `organization,publisher,publisher_1…publisher_5`, encoding a
+   department → bureau hierarchy, with e.g. `usda-gov` appearing on several rows
+   for different sub-bureaus) is **no longer a tenant registry**. Its remaining
+   value is as **seed data for reusable DCAT `Organization` objects**, so agency
+   staff select a canonical publisher rather than typing one. That is a
+   convenience feature, not a structural one, and it is not yet designed — see
+   the ADR 0005 blocker.
+2. **The first-`admin` bootstrap question in
+   [ADR 0004](decisions/0004-jit-user-provisioning-and-catalog-rbac.md) can no
+   longer be answered with "an agency-scoped role,"** because no agency scope
+   exists. The likely answer is that catalog creation grants the creator `admin`
+   on that catalog, with a Data.gov sysadmin role for recovery. That remains an
+   open ADR 0004 blocker.
+
+### Two distinct things named "Organization"
+
+Avoiding a collision that the ERD above previously invited:
+
+| Term | What it is |
+|---|---|
+| **DCAT `Organization`** | A `metadata_object` row with `dcat_class = 'Organization'`, used as `publisher` and reusable across datasets — exactly like `Kind` |
+| ~~tenant organization~~ | **Does not exist in v2.** The v1 CKAN agency silo, removed |
+
+Every remaining use of "Organization" in this document and in the decision records
+means the DCAT class.
+
+### Catalog-to-catalog sharing is MVP scope
+
+The wiki's User and Data Management section specifies that because catalogs can
+embed other catalogs, *"catalogs can be shared with catalogs"*, and that
+*"catalogs can only be shared if they are no longer in `draft` state."* This is
+**MVP scope**, which makes three pieces of work MVP-blocking rather than
+deferrable:
+
+1. **Acyclicity enforcement on `catalog_link` writes.** Catalog A embedding B
+   embedding A is a cycle, and a cycle reaching production is a denial-of-service
+   against the export path — the walk never terminates. Enforcement is required at
+   write time, not only defended against at read time. The write path must reject
+   an edge that would close a loop, with a clear error naming the conflicting
+   path.
+2. **A second authorization path.** `catalog_permission` grants to either a user
+   (`principal_user_id`) or a catalog (`principal_catalog_id`), so every
+   authorization check must resolve **both** — and permission can arrive
+   transitively through an embedded catalog. This is materially harder to get
+   right than user-only permissions and needs explicit test coverage for the
+   transitive case, not just the direct one.
+3. **A `state` precondition on sharing.** A catalog may only be shared once it is
+   no longer `draft`, so the share operation carries a state check distinct from
+   the export-time `WHERE state = 'live'` filter.
+
+Depth bounding on the walk remains necessary even with write-time acyclicity
+enforcement: `object_reference` edges can also form loops, enforcement could have
+a defect, and rows can be introduced outside the application path (migrations,
+manual repair). Belt and braces.
 
 ## 5. Key flows
 
@@ -393,6 +477,35 @@ Per-environment sizing follows v1 (`vars.*.yml`), minus the removed services.
 Removed relative to v1: `inventory-datastore`, `inventory-redis`,
 `sysadmin-users`.
 
+### Infrastructure is provisioned with Terraform
+
+Per [ADR 0009](decisions/0009-terraform-cloudgov-for-infrastructure.md), v2
+provisions cloud.gov infrastructure with
+[`GSA-TTS/terraform-cloudgov`](https://github.com/GSA-TTS/terraform-cloudgov)
+modules pinned by tag, replacing v1's `create-cloudgov-services.sh`.
+
+| Managed by Terraform | Module |
+|---|---|
+| `inventory-db` (Postgres, `prevent_destroy` in prod) | `database` |
+| `inventory-s3` | `s3` |
+| `inventory-scanner` (ClamAV, ~3 GB, `apps.internal` only) | `clamav` |
+| Egress proxy + allowlist | `egress_proxy` |
+| Egress space | `cg_space` |
+| Container-network policies, space roles, deployer accounts | provider resources |
+
+**Two boundaries matter.** Terraform manages service *existence* and topology but
+**not secret values** — `inventory-secrets` credentials stay in `cf cups`/`uups`,
+because service-key attributes are stored in Terraform state in plaintext. And
+**application deployment stays `cf push --strategy rolling`** via a composite
+GitHub action, as in `datagov-catalog`; the modules' `application` deployment
+module is deliberately unused.
+
+This is the one place v2 diverges from `datagov-catalog` and
+`datagov-harvester`, neither of which uses Terraform. The justification is that
+v2's infrastructure — a scanner app, an egress proxy with an allowlist, and
+network policies across three apps — is materially larger than theirs, and in v1
+that class of configuration exists only as undocumented manual `cf` commands.
+
 ### Deployment differences from v1 that matter
 
 - **Migrations run once, via `cf run-task`, before the app rolls.** v1 runs
@@ -408,6 +521,38 @@ Removed relative to v1: `inventory-datastore`, `inventory-redis`,
   invocations of Flask CLI commands, replacing the RQ worker co-located with
   gunicorn.
 
+### Squash the migration history at 1.0
+
+Pre-1.0 development will accumulate Alembic revisions that exist only because the
+schema was still being discovered — a table added, split, renamed, and dropped
+again. None of that churn is meaningful to a production system, but once it has
+run against production it becomes part of that system's lineage and can never be
+removed.
+
+**Before the first production deploy**, collapse the Alembic history into a
+single baseline revision at the 1.0 tag: drop the accumulated revisions, generate
+one initial migration from the final models, and stamp it. Future schema changes
+migrate forward from that baseline normally.
+
+This is a **time-boxed opportunity, not a cleanup task.** The window closes at
+the first production deploy — after that, squashing means reconciling against a
+deployed database and is no longer worth doing. It is the reason ADR 0008's
+decision to forgo a CKAN migration matters here too: with no v1 data to carry
+forward, the 1.0 baseline can be generated from the models rather than
+reverse-engineered from an existing production schema.
+
+Two practical notes:
+
+- Development and staging databases will need to be reset (dropped and rebuilt
+  from the baseline) at the same time, since their `alembic_version` will
+  reference revisions that no longer exist.
+- The squash must land **after** the schema is genuinely settled. Doing it early
+  and then discovering another model change wastes the one clean opportunity.
+
+Requested in [GSA/data.gov#6349](https://github.com/GSA/data.gov/issues/6349):
+*"we may want to 'reset' the DB on version 1.0 and remove all the complex
+migrations, and then plan for future migrations."*
+
 ### Scheduled tasks
 
 | Task | Cadence | Purpose |
@@ -415,7 +560,7 @@ Removed relative to v1: `inventory-datastore`, `inventory-redis`,
 | `flask audit urls` | daily | Scan `live` catalog URLs for malicious content (feature-list requirement) |
 | `flask audit orphans` | daily | Catalogs with no `admin` — one query over `catalog_permission` |
 | `flask db upgrade` | per deploy | Once, before rollout |
-| `flask import-publishers` | on CSV change | Carries forward v1's `update_publishers.yml` |
+| `flask import-publishers` | on CSV change | Seeds reusable DCAT `Organization` objects from `inventory_publishers.csv`. **Purpose not yet designed** — see the ADR 0005 blocker; with no tenant entity this is convenience seed data, not a registry |
 | freshclam | per scanner schedule | Signature updates; **alert on signature age**, not only on scan failure |
 
 ### Egress allowlist
@@ -426,11 +571,20 @@ and agency URLs (`data.json` import and URL auditing). All three fail closed.
 OIDC discovery and JWKS documents must be cached with a bounded TTL so a
 transient Login.gov outage does not deny all logins.
 
+The allowlist is a Terraform input to the `egress_proxy` module
+([ADR 0009](decisions/0009-terraform-cloudgov-for-infrastructure.md)), not a
+manual configuration step. **Note `allowports = [443, 61443]`** — the module
+README records that the New Relic Python agent needs 61443 to reach
+`gov-collector.newrelic.com`, discovered on the FAC, which uses the same agent
+and the same FedRAMP collector v2 will use. Omitting it fails silently: the app
+works, telemetry does not.
+
 ## 7. What v1 components disappear
 
 | Removed | Notes |
 |---|---|
 | CKAN 2.11.5 (GSA fork, pinned commit) | Plus 8 extensions, 3 of them GSA/vendor forks |
+| Agency/bureau organizations (tenant silos) | Isolation is per-catalog via `catalog_permission`; nothing is inherited from an enclosing agency ([§4](#there-is-no-agencybureau-tenant-entity)) |
 | Solr scaffolding | Already dead in v1: 12 files, 3 Makefile targets, a `pysolr` pin, a placeholder `CKAN_SOLR_URL`, a `/solr` nginx route |
 | Redis + RQ | No remaining need |
 | DataStore + xloader + `datastore_ro` provisioning | [ADR 0007](decisions/0007-retire-tabular-datastore-api.md) — **a user-visible regression**, see below |
@@ -523,12 +677,14 @@ area — until these clear. Reproduced from
 | ADR | Blocker | Type |
 |---|---|---|
 | 0001 | Request `GSA/datagov-inventory` per the new-repository checklist; decide where the shared DCAT-US library lives (needs harvester team input). | Organizational + design |
-| 0002 | Confirm the editing model: **(A)** decomposed per-object screens vs. **(B)** unified tree-plus-detail workspace. (B) reverses the decision toward an SPA. | Product |
+| 0002 | Confirm the editing model: **(A)** decomposed per-object screens vs. **(B)** unified tree-plus-detail workspace. (B) reverses the decision toward an SPA. A reversal condition is **already triggered** (anonymous editing scheduled 2.1). | Product |
 | 0003 | Login.gov must confirm OIDC registration with `acr_values` AAL3+HSPD-12 per environment; verify the returned `acr` claim in the sandbox. If unavailable, fall back to SAML. | External |
 | 0004 | Confirm whether an email-domain allowlist is wanted; define how the first `admin` grant on a new catalog happens. | Product + design |
+| 0005 | Decide the role of `inventory_publishers.csv` now that there is no tenant entity (seed data for DCAT `Organization` objects; hierarchy; global vs. per-catalog). | Design |
 | 0006 | Query existing S3 objects for actual file-size distribution to confirm 500 MB. | Data |
 | 0007 | Query access logs and New Relic for `datastore_search` consumers (required CM-4 impact analysis). | Data |
 | 0008 | Records-officer determination on NARA retention of v1 edit history; archive the v1 database if required. | Compliance |
+| 0009 | Verify module `variables.tf` for a Flask app; Terraform vs. OpenTofu; provision the encrypted state backend; scope of `logshipper`. | Design + organizational |
 
 **Longest lead time: ADR 0003.** The Login.gov OIDC confirmation is the only
 blocker with an external dependency, spans three environments, and reverses a

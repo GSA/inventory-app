@@ -86,6 +86,37 @@ AC-6 exists to prevent.
 
 Option 3 is **deferred, not rejected** — see the open question below.
 
+### Permission levels
+
+Three levels on `catalog_permission.level`:
+
+| Level | Grants |
+|---|---|
+| `read` | View the catalog and its non-draft objects |
+| `edit` | `read`, plus create, modify, and change the `state` of objects |
+| `admin` | `edit`, plus grant and revoke permissions on the catalog |
+
+The enum uses **`edit`**, not `write`, to match the vocabulary already in use by
+the team: [GSA/data.gov#6349](https://github.com/GSA/data.gov/issues/6349) lists
+"user permissions access of admin/read/edit," and the
+[re-design wiki page](https://github.com/GSA/data.gov/wiki/Inventory-Beta-Re%E2%80%90design#user-and-data-management)
+describes "read, read/write edit permissions, or admin permissions." Earlier
+drafts of this record said `write`; that was this document's invention and is
+corrected here so the schema, the ticket, and the wiki share one word.
+
+A principal is **either a user or another catalog** — catalog-to-catalog sharing
+is MVP scope, and the same three levels apply. Two consequences for the
+authorization check, both MVP-blocking:
+
+- Resolution must handle a **catalog** principal, and grants may arrive
+  **transitively** through an embedded catalog. The transitive case is the harder
+  half and needs its own tests.
+- A catalog may only be shared once it is no longer `draft`, per the wiki, so the
+  share operation carries a state precondition distinct from the export-time
+  `WHERE state = 'live'` filter.
+
+See [`architecture.md` §4](../architecture.md#catalog-to-catalog-sharing-is-mvp-scope).
+
 ### Open question: is an email-domain allowlist wanted?
 
 Option 1 permits anyone with a Login.gov account meeting AAL3+HSPD-12 to obtain

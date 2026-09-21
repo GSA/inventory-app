@@ -110,12 +110,50 @@ no longer uploadable. The rationale is that a cap Inventory can actually *scan*
 is worth more than a cap it can only *accept*, and files above the cap should be
 referenced by agency-hosted URL in the `Distribution` rather than uploaded.
 `clamd` must be configured with `MaxFileSize`/`MaxScanSize` at or above 500 MB,
-and the scanner sized accordingly (~2 GB memory).
+and the scanner sized accordingly (~3 GB memory — see the amendment below).
 
 **Before implementation, query existing S3 objects for the actual size
 distribution.** If a meaningful number of hosted files exceed 500 MB, this cap
 needs revisiting — the number should be chosen from data, not from ClamAV's
 defaults. Recorded as a verification task, not an assumption.
+
+### Amendment: the scanner app comes from the terraform-cloudgov clamav module
+
+[ADR 0009](0009-terraform-cloudgov-for-infrastructure.md) adopts
+[`GSA-TTS/terraform-cloudgov`](https://github.com/GSA-TTS/terraform-cloudgov),
+which includes a `clamav` module that provisions exactly the scanner application
+this record describes. Three corrections to the design above follow from reading
+that module's source, and they supersede the corresponding statements in this
+record:
+
+- **Memory is ~3 GB, not ~2 GB.** `clamav/variables.tf` defaults
+  `clamav_memory = "3072M"`, with `disk_quota = 2048M` and
+  `health_check_invocation_timeout = 600`. The ~2 GB figure elsewhere in this
+  record was an estimate; 3 GB comes from a module in production use. The space
+  memory quota must account for it.
+- **`max_file_size` is a required module input, and its interaction with the
+  500 MB cap needs checking.** The module README's example uses
+  `max_file_size = "30M"` — an order of magnitude below the cap proposed here.
+  That is an example rather than a limit, but it is a signal: the blocker above
+  (measure the real S3 size distribution) should also confirm that a 500 MB scan
+  completes within the module's health-check and request timeouts. **If it does
+  not, the cap must come down.** Scannability, not policy preference, sets the
+  ceiling.
+- **The scanner gets an `apps.internal` route only.** The module wires this
+  itself, so this record's requirement that the scanner have no public route is
+  enforced by configuration rather than by our own care.
+
+**What the module does not provide is the part that makes this design work.** It
+deploys a ClamAV-over-HTTP scanning service; it does not implement the
+quarantine/promote lifecycle, `resource_file.scan_state`, the presigned-download
+gate, or — most importantly — the **sweeper** that recovers dropped dispatches and
+crashed scans. Those remain application code in `datagov-inventory`, and the
+sweeper in particular is what allows asynchronous scanning with no message broker.
+
+Outbound access for signature updates is also the module's concern: it accepts
+`proxy_server`/`proxy_port`/`proxy_username`/`proxy_password` explicitly for
+reaching `database.clamav.net`, which is provisioned by the `egress_proxy` module
+rather than configured by hand.
 
 ### Positive Consequences
 
@@ -135,7 +173,8 @@ defaults. Recorded as a verification task, not an assumption.
 - **A new app to build, deploy, size, and monitor**, plus ClamAV operational
   knowledge (signature database freshness, memory behavior, `clamd` tuning) the
   team does not currently carry.
-- **~2 GB memory** for the scanner. Real cost against the space memory quota.
+- **~3 GB memory** for the scanner (the `clamav` module default; see the
+  amendment above). Real cost against the space memory quota.
 - **Upload is no longer immediately complete from the user's perspective.** A
   polling status UI is required, and "your file is scanning" is a new state
   agency users must understand.
@@ -186,6 +225,7 @@ defaults. Recorded as a verification task, not an assumption.
 - [EICAR test file](https://www.eicar.org/download-anti-malware-testfile/) — detection verification
 - [ADR 0005](0005-object-graph-data-model-for-dcat-us-3.md) — `resource_file` relationship to `Distribution`
 - [ADR 0007](0007-retire-tabular-datastore-api.md) — retires the DataStore; uploaded files remain downloadable
+- [ADR 0009](0009-terraform-cloudgov-for-infrastructure.md) — provisions the scanner app via the `clamav` module; source of the 3 GB and `max_file_size` findings
 - `proxy/nginx.conf:31` — current 1500 MB body limit
 - `.profile:117-122`, `config/ckan.ini:215-221` — current S3 upload configuration with no scanning
 - NIST SP 800-53 Rev 5.2 — SI-3, SI-7, SI-10, SC-7, AC-3, AU-2, AU-3, IR-4, IR-6

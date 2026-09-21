@@ -98,8 +98,12 @@ the critical path.
   fallback (v1 has an "Export Drafts" capability at
   `templates/organization/read.html:9`, which makes this recoverable).
 - **`config/data/inventory_publishers.csv`** (271 lines, ~350 organizations) is
-  *reference* data, not migration data. It carries forward as a seed load and the
-  `update_publishers.yml` workflow continues to apply.
+  *reference* data, not migration data. It is **not** a tenant registry in v2 —
+  agency/bureau silos are not a first-class concept
+  ([`architecture.md` §4](../architecture.md#there-is-no-agencybureau-tenant-entity)) —
+  so its only candidate purpose is seeding reusable DCAT `Organization` objects.
+  That purpose is not yet designed; see the open question in
+  [ADR 0005](0005-object-graph-data-model-for-dcat-us-3.md#open-question-what-becomes-of-the-publishers-reference-data).
 
 ### Positive Consequences
 
@@ -170,6 +174,6 @@ the critical path.
 - [ADR 0004](0004-jit-user-provisioning-and-catalog-rbac.md) — why user accounts need no migration
 - `ckanext/datagov_inventory/dcat/dcat_converter.py` — existing CLI converter with `--dry-run`
 - `ckanext/datagov_inventory/plugin.py:345-407` — v1 `generate_dcat_v3` export, the Option 3 fallback
-- `config/data/inventory_publishers.csv` — reference data carried forward
+- `config/data/inventory_publishers.csv` — reference data; role in v2 undecided (see ADR 0005)
 - NIST SP 800-53 Rev 5.2 — CM-3, CM-4, SI-10, SI-12, CP-9, SA-8
 - **v1 code citations** in this record refer to [`GSA/inventory-app@9fc0003a`](https://github.com/GSA/inventory-app/tree/9fc0003a7f2aeac92bab852c7ad7e5418925de5c) (2026-09-04), the v1 HEAD at the time of writing. Line numbers are pinned to that commit.

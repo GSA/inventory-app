@@ -26,13 +26,15 @@ records, to preserve the audit trail.
 | [0006](0006-quarantine-then-scan-antivirus.md) | Scan uploaded data files with a quarantine-then-scan antivirus service and cap hosted files at 500 MB | proposed | 2026-09-21 | **yes-boundary** | SI-3, SI-3(1), SI-3(2), SI-7, SI-10, SC-7, AC-3, AU-2, AU-3, IR-4, IR-6 |
 | [0007](0007-retire-tabular-datastore-api.md) | Retire the tabular DataStore API in Inventory v2 | proposed | 2026-09-21 | **yes-boundary** | CM-7, SA-8, AC-3, SI-10, CM-4 |
 | [0008](0008-onboard-via-data-json-reimport.md) | Onboard agencies by re-importing published data.json rather than migrating from CKAN | proposed | 2026-09-21 | yes-internal | CM-3, SI-10, SI-12, CP-9, CM-4, SA-8 |
+| [0009](0009-terraform-cloudgov-for-infrastructure.md) | Provision cloud.gov infrastructure with GSA-TTS/terraform-cloudgov modules | proposed | 2026-09-21 | **yes-boundary** | CM-2, CM-3, CM-6, CM-8, CM-9, SC-7, SC-12, SC-28, AC-3, AC-5, SA-8, SR-3 |
 
-**By status:** 8 proposed, 0 accepted, 0 deprecated, 0 superseded.
+**By status:** 9 proposed, 0 accepted, 0 deprecated, 0 superseded.
 
 **Boundary-affecting:** ADR 0006 (new in-boundary scanner component and outbound
-signature-update flow) and ADR 0007 (a brokered data store and a public API
-endpoint leave the boundary). Both require SSP component-inventory and data-flow
-diagram updates and should be reviewed by the ISSO.
+signature-update flow), ADR 0007 (a brokered data store and a public API endpoint
+leave the boundary), and ADR 0009 (egress allowlist and container-network policies
+become managed boundary controls). All three require SSP component-inventory and
+data-flow diagram updates and should be reviewed by the ISSO.
 
 ## Reading order
 
@@ -44,10 +46,10 @@ technical core — the CKAN data-model mismatch is the reason v2 exists at all.
 ## Controls referenced across all records
 
 `AC-2`, `AC-2(3)`, `AC-3`, `AC-5`, `AC-6`, `AC-12`, `AU-2`, `AU-3`, `AU-10`,
-`CM-2`, `CM-3`, `CM-4`, `CM-7`, `CM-9`, `CP-9`, `IA-2`, `IA-2(1)`, `IA-2(12)`,
-`IA-5`, `IA-8`, `IR-4`, `IR-6`, `PS-4`, `RA-5`, `SA-5`, `SA-8`, `SA-15`, `SC-7`,
-`SC-8`, `SC-12`, `SC-13`, `SC-17`, `SC-18`, `SC-28`, `SI-3`, `SI-3(1)`,
-`SI-3(2)`, `SI-7`, `SI-10`, `SI-12`, `SI-15`
+`CM-2`, `CM-3`, `CM-4`, `CM-6`, `CM-7`, `CM-8`, `CM-9`, `CP-9`, `IA-2`,
+`IA-2(1)`, `IA-2(12)`, `IA-5`, `IA-8`, `IR-4`, `IR-6`, `PS-4`, `RA-5`, `SA-5`,
+`SA-8`, `SA-15`, `SC-7`, `SC-8`, `SC-12`, `SC-13`, `SC-17`, `SC-18`, `SC-28`,
+`SI-3`, `SI-3(1)`, `SI-3(2)`, `SI-7`, `SI-10`, `SI-12`, `SI-15`
 
 ## Blockers before any record is accepted
 
@@ -57,12 +59,14 @@ not follow-ups. Each should be a tracked issue (AGENTS.md §15.5).
 | ADR | Blocker | Type |
 |-----|---------|------|
 | 0001 | Request `GSA/datagov-inventory` per the [new-repository checklist](https://github.com/GSA/data.gov/wiki/Checklist-for-new-repositories); decide where the shared DCAT-US library lives (needs harvester team input, since `datagov-harvester` already validates DCAT-US). | Organizational + design |
-| 0002 | Confirm the editing model: **(A)** decomposed per-object screens vs. **(B)** unified tree-plus-detail workspace. Option (B) reverses the decision toward an SPA. | Product |
+| 0002 | Confirm the editing model: **(A)** decomposed per-object screens vs. **(B)** unified tree-plus-detail workspace. Option (B) reverses the decision toward an SPA. **A reversal condition has already been triggered** — anonymous browser-memory editing is now scheduled 2.1, not long-term — so Options 1, 2, and 3 must be re-weighed together with the editing model. | Product |
 | 0003 | Login.gov must confirm OIDC client registration with `acr_values` AAL3 + HSPD-12 per environment, and the returned `acr` claim must be verified in the sandbox. If unavailable, fall back to SAML. | External dependency |
 | 0004 | Confirm whether an email-domain allowlist is wanted, and define how the *first* `admin` permission on a new catalog is granted (bootstrap path). | Product + design |
+| 0005 | Decide what `inventory_publishers.csv` becomes now that there is no tenant entity — seed data for reusable DCAT `Organization` objects, whether the department→bureau hierarchy is represented, and global vs. per-catalog seeding. Decide before building the publisher picker. | Design |
 | 0006 | Query existing S3 objects for actual file-size distribution to confirm 500 MB is the right cap rather than inheriting ClamAV's defaults. | Data |
 | 0007 | Query production access logs and New Relic for `datastore_search`, `datastore_search_sql`, and `/datastore/*` consumers before announcing removal. Required CM-4 impact analysis. | Data |
 | 0008 | Records officer determination on whether v1 edit history requires NARA retention; if so, archive the v1 database before decommissioning. | Compliance |
+| 0009 | Verify each module's `variables.tf` for a Flask (non-Rails) app; decide Terraform vs. OpenTofu; provision and document the encrypted state backend; decide whether Terraform manages CI deployer service keys; confirm `logshipper` scope. | Design + organizational |
 
 **Start ADR 0003 first.** It is the only blocker with an external dependency and
 a lead time outside the team's control, it spans three environments, and ADR 0004
