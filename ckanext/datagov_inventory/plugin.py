@@ -404,8 +404,9 @@ def soft_delete_user_form(user_id):
         )
         user_url = h.url_for('user.read', id=user['name'])
         h.flash_success(
-            _('User <a href="{0}">{1}</a> deleted successfully').format(
-                user_url, user['name']
+            _('User <a href="{0}">{1}</a> deleted successfully{2}')
+            .format(
+                user_url, user['name'], _('; user notified via email')
             ),
             allow_html=True
         )
@@ -449,8 +450,9 @@ def reactivate_user_form(user_id):
         )
         user_url = h.url_for('user.read', id=user['name'])
         h.flash_success(
-            _('User <a href="{0}">{1}</a> reactivated successfully').format(
-                user_url, user['name']
+            _('User <a href="{0}">{1}</a> reactivated successfully{2}')
+            .format(
+                user_url, user['name'], _('; user notified via email')
             ),
             allow_html=True
         )
@@ -473,7 +475,10 @@ def reactivate_user_form(user_id):
 
 def _user_management_redirect(default):
     return_to = ckan_request.args.get('return_to')
-    if return_to and return_to.startswith('/organization/manage_members/'):
+    if return_to and (
+        return_to.startswith('/organization/manage_members/')
+        or return_to.startswith('/user/')
+    ):
         return return_to
     return default
 

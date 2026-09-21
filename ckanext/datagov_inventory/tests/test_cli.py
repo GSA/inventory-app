@@ -142,7 +142,76 @@ class TestDeleteInactiveUsers:
 
         assert result.exit_code == 0, result.output
         assert model.User.get(inactive['id']).state == model.State.DELETED
+        assert 'warn-before-delete is scheduled to be deleted on/after ' \
+            in result.output
+        assert 'warning sent:' in result.output
         send_locked.assert_called_once_with(model.User.get(inactive['id']))
+
+    @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
+    def test_activity_after_warning_resets_schedule(
+        self,
+        send_about_to_lock,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        active_again = factories.User(name='active-again')
+        user_obj = self._set_user_dates(
+            active_again,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=100),
+        )
+        user_activity.set_inactivity_warning_sent_at(
+            user_obj, self.now - timedelta(days=101)
+        )
+        model.Session.commit()
+
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert 'active-again was active again after warning' in result.output
+        send_about_to_lock.assert_called_once_with(
+            model.User.get(active_again['id']), 7
+        )
+        assert (
+            user_activity.get_inactivity_warning_sent_at(
+                model.User.get(active_again['id'])
+            ) == self.now
+        )
+
+    @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
+    def test_dry_run_reports_activity_after_warning_without_resetting(
+        self,
+        send_about_to_lock,
+        monkeypatch,
+    ):
+        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        active_again = factories.User(name='active-again-dry-run')
+        user_obj = self._set_user_dates(
+            active_again,
+            self.now - timedelta(days=180),
+            self.now - timedelta(days=100),
+        )
+        warning_sent_at = self.now - timedelta(days=101)
+        user_activity.set_inactivity_warning_sent_at(
+            user_obj, warning_sent_at
+        )
+        model.Session.commit()
+
+        result = CliRunner().invoke(
+            cli.delete_inactive_users,
+            ['--dry-run'],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert 'Would reset warning schedule for active-again-dry-run' in (
+            result.output
+        )
+        send_about_to_lock.assert_not_called()
+        assert (
+            user_activity.get_inactivity_warning_sent_at(
+                model.User.get(active_again['id'])
+            ) == warning_sent_at
+        )
 
     @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
     @patch('ckanext.datagov_inventory.notifications.send_locked')
@@ -277,6 +346,11 @@ class TestDeleteInactiveUsers:
 
         assert result.exit_code == 0, result.output
         assert model.User.get(inactive['id']).state == model.State.DELETED
+        assert (
+            user_activity.get_inactivity_warning_sent_at(
+                model.User.get(inactive['id'])
+            ) is None
+        )
         action.reactivate_user(
             {'ignore_auth': True},
             {'id': inactive['id']},
