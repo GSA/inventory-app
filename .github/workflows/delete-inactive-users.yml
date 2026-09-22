@@ -3,6 +3,12 @@ name: Delete inactive users
 
 on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Run without deleting users
+        required: true
+        type: boolean
+        default: true
   schedule:
     - cron: '0 6 * * *'  # every day at 06:00 UTC
 
@@ -41,7 +47,11 @@ jobs:
         uses: cloud-gov/cg-cli-tools@main
         with:
           command: |
-            cf run-task inventory --command 'ckan delete-inactive-users --dry-run' --name "$TASK_NAME"
+            delete_args=""
+            if [[ "${{ github.event_name }}" == "schedule" || "${{ inputs.dry_run }}" == "true" ]]; then
+              delete_args=" --dry-run"
+            fi
+            cf run-task inventory --command "ckan delete-inactive-users${delete_args}" --name "$TASK_NAME"
           cf_org: gsa-datagov
           cf_space: ${{ matrix.target.space }}
           cf_username: ${{ secrets.CF_SERVICE_USER }}
