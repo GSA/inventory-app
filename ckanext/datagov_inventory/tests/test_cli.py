@@ -42,7 +42,11 @@ class TestDeleteInactiveUsers:
         return user_obj
 
     def test_deletes_users_with_old_last_active(self, monkeypatch):
-        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        # A user past the inactivity cutoff is only warned on the first
+        # run; deletion happens on a later run once the warning period
+        # (default 7 days) has elapsed.
+        current_time = [self.now]
+        monkeypatch.setattr(cli, '_utcnow', lambda: current_time[0])
         inactive = factories.User(name='inactive')
         boundary = factories.User(name='boundary')
         recent = factories.User(name='recent')
@@ -50,7 +54,7 @@ class TestDeleteInactiveUsers:
         self._set_user_dates(
             inactive,
             self.now - timedelta(days=180),
-            self.now - timedelta(days=90, seconds=1),
+            self.now - timedelta(days=100),
         )
         self._set_user_dates(
             boundary,
@@ -60,16 +64,27 @@ class TestDeleteInactiveUsers:
         self._set_user_dates(
             recent,
             self.now - timedelta(days=180),
-            self.now - timedelta(days=89),
+            self.now - timedelta(days=80),
         )
 
         result = CliRunner().invoke(cli.delete_inactive_users)
 
         assert result.exit_code == 0, result.output
-        assert model.User.get(inactive['id']).state == model.State.DELETED
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
         assert model.User.get(boundary['id']).state == model.State.ACTIVE
         assert model.User.get(recent['id']).state == model.State.ACTIVE
-        assert 'Deleted 1 inactive user(s).' in result.output
+        assert 'Deleted 0 inactive user(s).' in result.output
+
+        current_time[0] += timedelta(days=cli.INACTIVITY_WARNING_DAYS_DEFAULT)
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.DELETED
+        # boundary was exactly at the cutoff and also got warned on the
+        # first run, so 7 days later it's overdue too.
+        assert model.User.get(boundary['id']).state == model.State.DELETED
+        assert model.User.get(recent['id']).state == model.State.ACTIVE
+        assert 'Deleted 2 inactive user(s).' in result.output
 
     @patch('ckanext.datagov_inventory.notifications.send_about_to_lock')
     @patch('ckanext.datagov_inventory.notifications.send_locked')
@@ -271,32 +286,44 @@ class TestDeleteInactiveUsers:
         send_about_to_lock.assert_not_called()
         assert (
             'Would send warning email to warning-dry-run '
-            '(warning-dry-run@example.com, 5 days until lock)'
+            '({}, 5 days until lock)'.format(warning['email'])
             in result.output
         )
 
     def test_uses_creation_date_when_last_active_is_null(self, monkeypatch):
-        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        current_time = [self.now]
+        monkeypatch.setattr(cli, '_utcnow', lambda: current_time[0])
         inactive = factories.User(name='never-active-old')
         recent = factories.User(name='never-active-recent')
 
         self._set_user_dates(
             inactive,
-            self.now - timedelta(days=90, seconds=1),
+            self.now - timedelta(days=100),
             None,
         )
         self._set_user_dates(
             recent,
-            self.now - timedelta(days=89),
+            self.now - timedelta(days=80),
             None,
         )
 
         result = CliRunner().invoke(cli.delete_inactive_users)
 
         assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+        assert model.User.get(recent['id']).state == model.State.ACTIVE
+        assert (
+            'never-active-old is scheduled to be deleted on/after '
+            in result.output
+        )
+        assert 'created:' in result.output
+
+        current_time[0] += timedelta(days=cli.INACTIVITY_WARNING_DAYS_DEFAULT)
+        result = CliRunner().invoke(cli.delete_inactive_users)
+
+        assert result.exit_code == 0, result.output
         assert model.User.get(inactive['id']).state == model.State.DELETED
         assert model.User.get(recent['id']).state == model.State.ACTIVE
-        assert 'Deleting never-active-old (created:' in result.output
 
     def test_dry_run_does_not_delete_users(self, monkeypatch):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
@@ -316,15 +343,16 @@ class TestDeleteInactiveUsers:
         assert model.User.get(inactive['id']).state == model.State.ACTIVE
         assert (
             'Would send warning email to inactive-dry-run '
-            '(inactive-dry-run@example.com, 7 days until lock)'
+            '({}, 7 days until lock)'.format(inactive['email'])
             in result.output
         )
         assert 'Would delete inactive-dry-run' not in result.output
         assert 'Would delete 0 inactive user(s).' in result.output
 
     def test_soft_delete_retains_organization_membership(self, monkeypatch):
-        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
-        monkeypatch.setattr(action, '_utcnow', lambda: self.now)
+        current_time = [self.now]
+        monkeypatch.setattr(cli, '_utcnow', lambda: current_time[0])
+        monkeypatch.setattr(action, '_utcnow', lambda: current_time[0])
         inactive = factories.User(name='inactive-member')
         organization = factories.Organization()
         membership = model.Member(
@@ -342,6 +370,11 @@ class TestDeleteInactiveUsers:
         )
         original_created = model.User.get(inactive['id']).created
 
+        result = CliRunner().invoke(cli.delete_inactive_users)
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+
+        current_time[0] += timedelta(days=cli.INACTIVITY_WARNING_DAYS_DEFAULT)
         result = CliRunner().invoke(cli.delete_inactive_users)
 
         assert result.exit_code == 0, result.output
@@ -417,7 +450,8 @@ class TestDeleteInactiveUsers:
         assert 'Would delete old-reactivation' not in result.output
 
     def test_reads_inactivity_days_from_config(self, monkeypatch):
-        monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
+        current_time = [self.now]
+        monkeypatch.setattr(cli, '_utcnow', lambda: current_time[0])
         monkeypatch.setitem(
             toolkit.config,
             cli.INACTIVITY_DAYS_CONFIG,
@@ -430,6 +464,11 @@ class TestDeleteInactiveUsers:
             self.now - timedelta(days=30, seconds=1),
         )
 
+        result = CliRunner().invoke(cli.delete_inactive_users)
+        assert result.exit_code == 0, result.output
+        assert model.User.get(inactive['id']).state == model.State.ACTIVE
+
+        current_time[0] += timedelta(days=cli.INACTIVITY_WARNING_DAYS_DEFAULT)
         result = CliRunner().invoke(cli.delete_inactive_users)
 
         assert result.exit_code == 0, result.output
