@@ -186,6 +186,8 @@ def delete_inactive_users(dry_run):
     cutoff = now - timedelta(days=days)
     active_again_users = _users_active_after_warning()
     reset_warning_ids = {user.id for user in active_again_users}
+
+    # reset warning schedule for users who were active again after receiving a warning
     for user in active_again_users:
         warning_sent_at = user_activity.get_inactivity_warning_sent_at(user)
         message = (
@@ -206,6 +208,7 @@ def delete_inactive_users(dry_run):
     if not dry_run and active_again_users:
         model.Session.commit()
 
+    # send warnings to users who are about to be locked
     warning_users = _about_to_lock_users_with_resets(
         now, days, warning_days, reset_warning_ids
     )
@@ -243,6 +246,8 @@ def delete_inactive_users(dry_run):
             model.Session.add(user)
     if not dry_run:
         model.Session.commit()
+
+    # delete users who have been warned and whose warning is old enough
     inactive_users = _inactive_users(cutoff)
     for user in inactive_users:
         if user_activity.get_inactivity_warning_sent_at(user) is not None:
