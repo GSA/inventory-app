@@ -11,8 +11,15 @@ def _site_url():
     return config.get('ckan.site_url', 'https://inventory.data.gov/')
 
 
+def _mail_user(user, subject, body):
+    # check smtp.user is set, otherwise smtp is not configured.
+    if not config.get('smtp.user'):
+        raise mailer.MailerException('SMTP is not configured')
+    return mailer.mail_user(user, subject, body)
+
+
 def send_about_to_lock(user, days):
-    mailer.mail_user(
+    _mail_user(
         user,
         'Your Inventory.data.gov account will be locked soon',
         'Hello,\n\n'
@@ -29,7 +36,7 @@ def send_about_to_lock(user, days):
 
 
 def send_locked(user):
-    mailer.mail_user(
+    _mail_user(
         user,
         'Your Inventory.data.gov account has been locked',
         'Hello,\n\n'
@@ -47,7 +54,7 @@ def send_locked(user):
 
 
 def send_unlocked(user):
-    mailer.mail_user(
+    _mail_user(
         user,
         'Your Inventory.data.gov account has been reactivated',
         'Hello,\n\n'

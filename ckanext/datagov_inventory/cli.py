@@ -3,6 +3,7 @@ import logging
 
 import click
 
+import ckan.lib.mailer as mailer
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
@@ -168,8 +169,12 @@ def soft_delete(user):
     model.Session.commit()
     try:
         notifications.send_locked(user)
-    except Exception:
-        log.exception('Unable to send locked notification for %s', user.name)
+    except mailer.MailerException as error:
+        log.error(
+            'Unable to send locked notification for %s: %s',
+            user.name,
+            error,
+        )
 
 
 @click.command('delete-inactive-users')
@@ -228,10 +233,11 @@ def delete_inactive_users(dry_run):
         if not dry_run:
             try:
                 notifications.send_about_to_lock(user, remaining)
-            except Exception:
-                log.exception(
-                    'Unable to send about-to-lock notification for %s',
+            except mailer.MailerException as error:
+                log.error(
+                    'Unable to send about-to-lock notification for %s: %s',
                     user.name,
+                    error,
                 )
                 click.echo(
                     'Warning email delivery failed for {}; continuing '

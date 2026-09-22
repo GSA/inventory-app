@@ -3,6 +3,7 @@ import logging
 import secrets
 import string
 
+import ckan.lib.mailer as mailer
 import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
@@ -78,10 +79,12 @@ def reactivate_user(context, data_dict):
     model.Session.commit()
     try:
         notifications.send_unlocked(user_obj)
-    except Exception:
+    except mailer.MailerException as error:
         # Reactivation has completed; a mail failure must not undo it.
-        log.exception(
-            'Unable to send unlocked notification for %s', user_obj.name
+        log.error(
+            'Unable to send unlocked notification for %s: %s',
+            user_obj.name,
+            error,
         )
 
     user_dict = toolkit.get_action('user_show')(
