@@ -187,7 +187,7 @@ def delete_inactive_users(dry_run):
     active_again_users = _users_active_after_warning()
     reset_warning_ids = {user.id for user in active_again_users}
 
-    # reset warning schedule for users who were active again after receiving a warning
+    # Reset warning schedules for users active again after receiving a warning.
     for user in active_again_users:
         warning_sent_at = user_activity.get_inactivity_warning_sent_at(user)
         message = (
@@ -264,3 +264,69 @@ def delete_inactive_users(dry_run):
 
     result = 'Would delete' if dry_run else 'Deleted'
     click.echo('{} {} inactive user(s).'.format(result, len(users)))
+
+
+@click.command('soft-delete-user')
+@click.argument('user_identifier')
+def soft_delete_user(user_identifier):
+    """Soft-delete an active user by username or ID."""
+    user = model.User.get(user_identifier)
+    if user is None:
+        user = model.User.by_name(user_identifier)
+    if user is None:
+        raise click.ClickException(
+            'User not found: {}'.format(user_identifier)
+        )
+    if user.state == model.State.DELETED:
+        raise click.ClickException(
+            'User {} is already deleted.'.format(user.name)
+        )
+
+    try:
+        deleted_user = toolkit.get_action('soft_delete_user')(
+            {'ignore_auth': True},
+            {'id': user.id},
+        )
+    except Exception as error:
+        raise click.ClickException(
+            'Unable to delete user {}: {}'.format(user.name, error)
+        )
+
+    click.echo(
+        '{} was soft-deleted; user notified via email.'.format(
+            deleted_user['name']
+        )
+    )
+
+
+@click.command('reactivate-user')
+@click.argument('user_identifier')
+def reactivate_user(user_identifier):
+    """Reactivate a deleted user by username or ID."""
+    user = model.User.get(user_identifier)
+    if user is None:
+        user = model.User.by_name(user_identifier)
+    if user is None:
+        raise click.ClickException(
+            'User not found: {}'.format(user_identifier)
+        )
+    if user.state != model.State.DELETED:
+        raise click.ClickException(
+            'User {} is not deleted.'.format(user.name)
+        )
+
+    try:
+        reactivated_user = toolkit.get_action('reactivate_user')(
+            {'ignore_auth': True},
+            {'id': user.id},
+        )
+    except Exception as error:
+        raise click.ClickException(
+            'Unable to reactivate user {}: {}'.format(user.name, error)
+        )
+
+    click.echo(
+        '{} was reactivated; user notified via email.'.format(
+            reactivated_user['name']
+        )
+    )

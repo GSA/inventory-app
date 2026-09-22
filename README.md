@@ -183,7 +183,14 @@ can be changed with `ckanext.datagov_inventory.inactivity_warning_days`.
 Users who are already past the threshold receive the warning first and are
 given the warning period before they are locked. If email delivery fails, the
 failure is logged, the warning is treated as sent, and the warning is not
-retried. Reactivating an account restarts its inactivity period.
+retried. Reactivating an account restarts its inactivity period. To manually
+reactivate a deleted user by username or ID:
+
+    ckan reactivate-user <username-or-id>
+
+To manually soft-delete an active user by username or ID:
+
+    ckan soft-delete-user <username-or-id>
 
 ## License and Contributing
 

@@ -460,3 +460,90 @@ class TestDeleteInactiveUsers:
         assert '{} must be a positive integer'.format(
             cli.INACTIVITY_DAYS_CONFIG
         ) in result.output
+
+
+@pytest.mark.usefixtures('clean_db')
+class TestReactivateUserCommand:
+
+    @patch('ckanext.datagov_inventory.notifications.send_unlocked')
+    def test_reactivates_deleted_user_by_name(self, send_unlocked):
+        deleted_user = factories.User(
+            name='deleted-from-cli', state='deleted'
+        )
+
+        result = CliRunner().invoke(
+            cli.reactivate_user,
+            [deleted_user['name']],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(deleted_user['id']).state == model.State.ACTIVE
+        assert 'deleted-from-cli was reactivated' in result.output
+        send_unlocked.assert_called_once_with(
+            model.User.get(deleted_user['id'])
+        )
+
+    def test_rejects_active_user(self):
+        active_user = factories.User(name='active-from-cli')
+
+        result = CliRunner().invoke(
+            cli.reactivate_user,
+            [active_user['name']],
+        )
+
+        assert result.exit_code != 0
+        assert 'User active-from-cli is not deleted.' in result.output
+
+    def test_reports_unknown_user(self):
+        result = CliRunner().invoke(
+            cli.reactivate_user,
+            ['missing-from-cli'],
+        )
+
+        assert result.exit_code != 0
+        assert 'User not found: missing-from-cli' in result.output
+
+
+@pytest.mark.usefixtures('clean_db')
+class TestSoftDeleteUserCommand:
+
+    @patch('ckanext.datagov_inventory.notifications.send_locked')
+    def test_soft_deletes_active_user_by_name(self, send_locked):
+        active_user = factories.User(name='deleted-from-cli')
+
+        result = CliRunner().invoke(
+            cli.soft_delete_user,
+            [active_user['name']],
+        )
+
+        assert result.exit_code == 0, result.output
+        assert model.User.get(active_user['id']).state == model.State.DELETED
+        assert 'deleted-from-cli was soft-deleted' in result.output
+        send_locked.assert_called_once_with(
+            model.User.get(active_user['id'])
+        )
+
+    def test_rejects_deleted_user(self):
+        deleted_user = factories.User(
+            name='already-deleted-from-cli', state='deleted'
+        )
+
+        result = CliRunner().invoke(
+            cli.soft_delete_user,
+            [deleted_user['name']],
+        )
+
+        assert result.exit_code != 0
+        assert (
+            'User already-deleted-from-cli is already deleted.'
+            in result.output
+        )
+
+    def test_reports_unknown_user(self):
+        result = CliRunner().invoke(
+            cli.soft_delete_user,
+            ['missing-from-cli'],
+        )
+
+        assert result.exit_code != 0
+        assert 'User not found: missing-from-cli' in result.output

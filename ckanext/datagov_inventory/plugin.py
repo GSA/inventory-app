@@ -174,7 +174,11 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
 
     # IClick
     def get_commands(self):
-        return [cli.delete_inactive_users]
+        return [
+            cli.delete_inactive_users,
+            cli.soft_delete_user,
+            cli.reactivate_user,
+        ]
 
     # ITemplateHelpers
     def get_helpers(self):
