@@ -24,6 +24,24 @@ function api_headers(extra_headers = {}) {
     return headers;
 }
 
+function purge_is_done(response) {
+    // 200 = purged, 404 = never existed / already gone. Anything else
+    // (typically 409) means something still references the record -
+    // e.g. a pending xloader job still holding a resource - so it's
+    // worth a retry instead of treating it as fatal.
+    return response.status === 200 || response.status === 404;
+}
+
+function request_with_retry(options, isDone, maxAttempts = 5, attempt = 1) {
+    return cy.request(options).then((response) => {
+        if (isDone(response) || attempt >= maxAttempts) {
+            return response;
+        }
+        cy.wait(1000);
+        return request_with_retry(options, isDone, maxAttempts, attempt + 1);
+    });
+}
+
 function verify_element_exists() {
     cy.get('td')
         .eq(4)
@@ -181,31 +199,64 @@ Cypress.Commands.add('create_organization', (orgName, orgDesc, extras = null) =>
 });
 
 
+Cypress.Commands.add('purge_org_datasets', (orgName) => {
+    /**
+     * Purge every dataset still attached to an organization (active or
+     * private), so a dataset left behind by a previous/flaky test doesn't
+     * block organization_purge on an unrelated later test.
+     * :PARAM orgName String: Name of the organization whose datasets to purge
+     * :RETURN null:
+     */
+    cy.request({
+        url: '/api/action/package_search',
+        method: 'GET',
+        failOnStatusCode: false,
+        headers: api_headers(),
+        qs: {
+            fq: `owner_org:${orgName}`,
+            include_private: true,
+            rows: 1000,
+        },
+    }).then((response) => {
+        if (response.status === 200 && response.body.result) {
+            response.body.result.results.forEach((pkg) => {
+                cy.delete_dataset(pkg.name);
+            });
+        }
+    });
+});
+
 Cypress.Commands.add('delete_organization', (orgName) => {
     /**
      * Method to purge an organization from the current state
      * :PARAM orgName String: Name of the organization to purge from the current state
      * :RETURN null:
      */
-    cy.request({
-        url: '/api/action/organization_delete',
-        method: 'POST',
-        failOnStatusCode: false,
-        headers: api_headers(),
-        body: {
-            id: orgName? orgName: 'test-organization'
-        },
-    });
+    const id = orgName ? orgName : 'test-organization';
 
-    cy.request({
-        url: '/api/action/organization_purge',
-        method: 'POST',
-        failOnStatusCode: false,
-        headers: api_headers(),
-        body: {
-            id: orgName? orgName: 'test-organization'
+    cy.purge_org_datasets(id);
+
+    request_with_retry(
+        {
+            url: '/api/action/organization_delete',
+            method: 'POST',
+            failOnStatusCode: false,
+            headers: api_headers(),
+            body: { id },
         },
-    });
+        purge_is_done,
+    );
+
+    request_with_retry(
+        {
+            url: '/api/action/organization_purge',
+            method: 'POST',
+            failOnStatusCode: false,
+            headers: api_headers(),
+            body: { id },
+        },
+        purge_is_done,
+    );
 });
 
 
@@ -325,15 +376,18 @@ Cypress.Commands.add('delete_dataset', (datasetName) => {
      * :PARAM datasetName String: Name of the dataset to purge from the current state
      * :RETURN null:
      */
-    cy.request({
-        url: '/api/action/dataset_purge',
-        method: 'POST',
-        failOnStatusCode: false,
-        headers: api_headers(),
-        body: {
-            id: datasetName,
+    request_with_retry(
+        {
+            url: '/api/action/dataset_purge',
+            method: 'POST',
+            failOnStatusCode: false,
+            headers: api_headers(),
+            body: {
+                id: datasetName,
+            },
         },
-    });
+        purge_is_done,
+    );
 });
 
 Cypress.Commands.add('create_dataset', (ckan_dataset) => {
