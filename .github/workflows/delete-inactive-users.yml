@@ -1,0 +1,57 @@
+---
+name: Delete inactive users
+
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'  # every day at 06:00 UTC
+
+permissions:
+  contents: read
+
+jobs:
+  determine-environments:
+    runs-on: ubuntu-latest
+    outputs:
+      environments: ${{ steps.set-environments.outputs.environments }}
+    steps:
+      - id: set-environments
+        run: |
+          if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo 'environments=[{"name":"production","space":"prod"}]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'environments=[{"name":"development","space":"development"},{"name":"staging","space":"staging"},{"name":"production","space":"prod"}]' >> "$GITHUB_OUTPUT"
+          fi
+
+  delete-inactive-users:
+    needs: determine-environments
+    name: delete inactive users (${{ matrix.target.space }})
+    strategy:
+      matrix:
+        target: ${{ fromJSON(needs.determine-environments.outputs.environments) }}
+    environment: ${{ matrix.target.name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set task name
+        run: echo "TASK_NAME=delete-inactive-users-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_ENV"
+
+      - name: Run inactive-user command
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          command: |
+            cf run-task inventory --command 'ckan delete-inactive-users --dry-run' --name "$TASK_NAME"
+          cf_org: gsa-datagov
+          cf_space: ${{ matrix.target.space }}
+          cf_username: ${{ secrets.CF_SERVICE_USER }}
+          cf_password: ${{ secrets.CF_SERVICE_AUTH }}
+
+      - name: Monitor task logs
+        uses: cloud-gov/cg-cli-tools@main
+        with:
+          command: bash bin/monitor_cf_logs.sh inventory "$TASK_NAME"
+          cf_org: gsa-datagov
+          cf_space: ${{ matrix.target.space }}
+          cf_username: ${{ secrets.CF_SERVICE_USER }}
+          cf_password: ${{ secrets.CF_SERVICE_AUTH }}
