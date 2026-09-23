@@ -6,6 +6,7 @@ from unittest.mock import patch
 import pytest
 from click.testing import CliRunner
 
+import ckan.lib.mailer as mailer
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.tests.factories as factories
@@ -237,7 +238,9 @@ class TestDeleteInactiveUsers:
         monkeypatch,
     ):
         monkeypatch.setattr(cli, '_utcnow', lambda: self.now)
-        send_about_to_lock.side_effect = RuntimeError('SMTP unavailable')
+        send_about_to_lock.side_effect = mailer.MailerException(
+            'SMTP unavailable'
+        )
         inactive = factories.User(name='failed-warning')
         self._set_user_dates(
             inactive,
