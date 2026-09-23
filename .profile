@@ -53,6 +53,17 @@ export CKANEXT__SAML2AUTH__CERT_FILE_PATH=${CONFIG_DIR}/saml2_certificate.pem
 DS_RO_PASSWORD=$(vcap_get_service secrets .credentials.DS_RO_PASSWORD)
 export NEW_RELIC_LICENSE_KEY=$(vcap_get_service secrets .credentials.NEW_RELIC_LICENSE_KEY)
 
+# SMTP Settings
+smtp_server=$(vcap_get_service smtp .credentials.smtp_server)
+if [ -n "$smtp_server" ]; then
+  export CKAN_SMTP_SERVER=$smtp_server
+  export CKAN_SMTP_MAIL_FROM=inventory@$(vcap_get_service smtp .credentials.domain_arn | grep -o "ses-[[:alnum:]]\+.appmail.cloud.gov")
+  export CKAN_SMTP_USER=$(vcap_get_service smtp .credentials.smtp_user)
+  export CKAN_SMTP_PASSWORD=$(vcap_get_service smtp .credentials.smtp_password)
+else
+  echo "WARNING: SMTP service not found; using the configured SMTP defaults." >&2
+fi
+
 
 is_missing_required_value() {
   local value="$1"

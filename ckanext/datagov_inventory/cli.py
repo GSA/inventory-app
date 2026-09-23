@@ -1,16 +1,25 @@
 from datetime import datetime, timedelta
+import logging
 
 import click
 
+import ckan.lib.mailer as mailer
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 from ckanext.datagov_inventory import user_activity
+from ckanext.datagov_inventory import notifications
 
 
 INACTIVITY_DAYS_CONFIG = (
     'ckanext.datagov_inventory.inactivity_days'
 )
+INACTIVITY_WARNING_DAYS_CONFIG = (
+    'ckanext.datagov_inventory.inactivity_warning_days'
+)
+INACTIVITY_WARNING_DAYS_DEFAULT = 7
+
+log = logging.getLogger(__name__)
 
 
 def _utcnow():
@@ -29,6 +38,27 @@ def _inactivity_days():
     if days < 1:
         raise click.ClickException(
             '{} must be a positive integer'.format(INACTIVITY_DAYS_CONFIG)
+        )
+
+    return days
+
+
+def _inactivity_warning_days():
+    value = toolkit.config.get(INACTIVITY_WARNING_DAYS_CONFIG)
+    if value is None or value == '':
+        value = INACTIVITY_WARNING_DAYS_DEFAULT
+    try:
+        days = int(value)
+    except (TypeError, ValueError):
+        raise click.ClickException(
+            '{} must be a positive integer smaller than inactivity_days'
+            .format(INACTIVITY_WARNING_DAYS_CONFIG)
+        )
+
+    if days < 1 or days >= _inactivity_days():
+        raise click.ClickException(
+            '{} must be a positive integer smaller than inactivity_days'
+            .format(INACTIVITY_WARNING_DAYS_CONFIG)
         )
 
     return days
@@ -61,11 +91,90 @@ def _inactive_users(cutoff):
     ]
 
 
+def _about_to_lock_users_with_resets(
+    now, inactivity_days, warning_days, reset_warning_ids
+):
+    warning_cutoff = now - timedelta(days=inactivity_days - warning_days)
+    users = model.Session.query(model.User).filter(
+        model.User.state == model.State.ACTIVE
+    ).order_by(model.User.name).all()
+
+    return [
+        user for user in users
+        if (_last_activity(user) is not None
+            and _last_activity(user) <= warning_cutoff)
+        and (
+            user_activity.get_inactivity_warning_sent_at(user) is None
+            or user.id in reset_warning_ids
+        )
+    ]
+
+
+def _users_active_after_warning():
+    users = model.Session.query(model.User).filter(
+        model.User.state == model.State.ACTIVE
+    ).order_by(model.User.name).all()
+
+    return [
+        user for user in users
+        if (
+            user_activity.get_inactivity_warning_sent_at(user) is not None
+            and _last_activity(user) is not None
+            and _last_activity(user)
+            > user_activity.get_inactivity_warning_sent_at(user)
+        )
+    ]
+
+
+def _days_until_lock(user, now, inactivity_days):
+    lock_at = _last_activity(user) + timedelta(days=inactivity_days)
+    remaining = lock_at - now
+    return max(1, (remaining.days + (remaining.seconds > 0)))
+
+
+def _warning_is_old_enough(user, now, warning_days):
+    warning_sent_at = user_activity.get_inactivity_warning_sent_at(user)
+    return warning_sent_at is not None and warning_sent_at <= (
+        now - timedelta(days=warning_days)
+    )
+
+
+def _echo_scheduled_deletion(user, warning_days):
+    last_activity = _last_activity(user)
+    warning_sent_at = user_activity.get_inactivity_warning_sent_at(user)
+    scheduled_at = warning_sent_at + timedelta(days=warning_days)
+    source = (
+        'last_active'
+        if last_activity == user.last_active
+        else (
+            'created'
+            if last_activity == user.created
+            else 'reactivated_at'
+        )
+    )
+    click.echo(
+        '{} is scheduled to be deleted on/after {} ({}: {}; warning sent: {})'
+        .format(
+            user.name, scheduled_at.isoformat(), source,
+            last_activity.isoformat(), warning_sent_at.isoformat(),
+        )
+    )
+
+
 def soft_delete(user):
     """Mark a user deleted without changing their memberships."""
     user.state = model.State.DELETED
+    user_activity.clear_inactivity_warning_sent_at(user)
     model.Session.add(user)
     model.Session.commit()
+    try:
+        notifications.send_locked(user)
+    except mailer.MailerException as error:
+        log.error(
+            'Unable to send locked notification for %s: %s',
+            user.name,
+            error,
+        )
 
 
 @click.command('delete-inactive-users')
@@ -77,31 +186,153 @@ def soft_delete(user):
 def delete_inactive_users(dry_run):
     """Delete CKAN users whose last activity is older than the cutoff."""
     days = _inactivity_days()
-    cutoff = _utcnow() - timedelta(days=days)
-    users = _inactive_users(cutoff)
-    action = 'Would delete' if dry_run else 'Deleting'
+    warning_days = _inactivity_warning_days()
+    now = _utcnow()
+    cutoff = now - timedelta(days=days)
+    active_again_users = _users_active_after_warning()
+    reset_warning_ids = {user.id for user in active_again_users}
+
+    # Reset warning schedules for users active again after receiving a warning.
+    for user in active_again_users:
+        warning_sent_at = user_activity.get_inactivity_warning_sent_at(user)
+        message = (
+            'Would reset warning schedule for {}'
+            if dry_run
+            else '{} was active again after warning; warning schedule reset'
+        ).format(user.name)
+        click.echo(
+            '{} (last active: {}; warning sent: {})'.format(
+                message,
+                _last_activity(user).isoformat(),
+                warning_sent_at.isoformat(),
+            )
+        )
+        if not dry_run:
+            user_activity.clear_inactivity_warning_sent_at(user)
+            model.Session.add(user)
+    if not dry_run and active_again_users:
+        model.Session.commit()
+
+    # send warnings to users who are about to be locked
+    warning_users = _about_to_lock_users_with_resets(
+        now, days, warning_days, reset_warning_ids
+    )
+    for user in warning_users:
+        remaining = (
+            warning_days
+            if _last_activity(user) < cutoff
+            else _days_until_lock(user, now, days)
+        )
+        if dry_run:
+            click.echo(
+                'Would send warning email to {} ({}, {} days until lock)'
+                .format(
+                    user.name, user.email, remaining
+                )
+            )
+        if not dry_run:
+            try:
+                notifications.send_about_to_lock(user, remaining)
+            except mailer.MailerException as error:
+                log.error(
+                    'Unable to send about-to-lock notification for %s: %s',
+                    user.name,
+                    error,
+                )
+                click.echo(
+                    'Warning email delivery failed for {}; continuing '
+                    'as if it was sent.'.format(user.name)
+                )
+            else:
+                click.echo(
+                    'Sent warning email to {} ({}, {} days until lock)'
+                    .format(user.name, user.email, remaining)
+                )
+            user_activity.set_inactivity_warning_sent_at(user, now)
+            model.Session.add(user)
+    if not dry_run:
+        model.Session.commit()
+
+    # delete users who have been warned and whose warning is old enough
+    inactive_users = _inactive_users(cutoff)
+    for user in inactive_users:
+        if user_activity.get_inactivity_warning_sent_at(user) is not None:
+            _echo_scheduled_deletion(user, warning_days)
+
+    users = [
+        user for user in inactive_users
+        if _warning_is_old_enough(user, now, warning_days)
+    ]
 
     for user in users:
-        last_activity = _last_activity(user)
-        source = (
-            'last_active'
-            if last_activity == user.last_active
-            else (
-                'created'
-                if last_activity == user.created
-                else 'reactivated_at'
-            )
-        )
-        click.echo(
-            '{} {} ({}: {})'.format(
-                action,
-                user.name,
-                source,
-                last_activity.isoformat(),
-            )
-        )
         if not dry_run:
             soft_delete(user)
 
     result = 'Would delete' if dry_run else 'Deleted'
     click.echo('{} {} inactive user(s).'.format(result, len(users)))
+
+
+@click.command('soft-delete-user')
+@click.argument('user_identifier')
+def soft_delete_user(user_identifier):
+    """Soft-delete an active user by username or ID."""
+    user = model.User.get(user_identifier)
+    if user is None:
+        user = model.User.by_name(user_identifier)
+    if user is None:
+        raise click.ClickException(
+            'User not found: {}'.format(user_identifier)
+        )
+    if user.state == model.State.DELETED:
+        raise click.ClickException(
+            'User {} is already deleted.'.format(user.name)
+        )
+
+    try:
+        deleted_user = toolkit.get_action('soft_delete_user')(
+            {'ignore_auth': True},
+            {'id': user.id},
+        )
+    except Exception as error:
+        raise click.ClickException(
+            'Unable to delete user {}: {}'.format(user.name, error)
+        )
+
+    click.echo(
+        '{} was soft-deleted; user notified via email.'.format(
+            deleted_user['name']
+        )
+    )
+
+
+@click.command('reactivate-user')
+@click.argument('user_identifier')
+def reactivate_user(user_identifier):
+    """Reactivate a deleted user by username or ID."""
+    user = model.User.get(user_identifier)
+    if user is None:
+        user = model.User.by_name(user_identifier)
+    if user is None:
+        raise click.ClickException(
+            'User not found: {}'.format(user_identifier)
+        )
+    if user.state != model.State.DELETED:
+        raise click.ClickException(
+            'User {} is not deleted.'.format(user.name)
+        )
+
+    try:
+        reactivated_user = toolkit.get_action('reactivate_user')(
+            {'ignore_auth': True},
+            {'id': user.id},
+        )
+    except Exception as error:
+        raise click.ClickException(
+            'Unable to reactivate user {}: {}'.format(user.name, error)
+        )
+
+    click.echo(
+        '{} was reactivated; user notified via email.'.format(
+            reactivated_user['name']
+        )
+    )

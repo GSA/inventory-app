@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{% block content_action %}
+  {{ super() }}
+  {% if user.state == 'active' and h.check_access('soft_delete_user', {'id': user.id}) %}
+    <a class="btn btn-danger" href="{{ h.url_for('datagov_inventory.soft_delete_user_form', user_id=user.id, return_to=h.current_url()) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this User?') }}" title="{{ _('Delete user') }}" aria-label="{{ _('Delete user') }}"><i class="fa fa-user-times" aria-hidden="true"></i> {{ _('Delete (soft)') }}</a>
+  {% elif user.state == 'deleted' and h.check_access('reactivate_user', {'id': user.id}) %}
+    <a class="btn btn-primary" href="{{ h.url_for('datagov_inventory.reactivate_user_form', user_id=user.id, return_to=h.current_url()) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to reactivate this User?') }}" title="{{ _('Reactivate user') }}" aria-label="{{ _('Reactivate user') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> {{ _('Reactivate') }}</a>
+  {% endif %}
+{% endblock %}

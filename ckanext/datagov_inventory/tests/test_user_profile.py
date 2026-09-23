@@ -41,3 +41,31 @@ class TestUserProfile:
         profile = self._get_profile(app, user)
 
         assert 'Reactivated At' not in profile
+
+    def test_sysadmin_can_delete_active_user_from_profile(self, app):
+        user = factories.User()
+        admin = factories.Sysadmin()
+
+        response = app.get(
+            url_for('user.read', id=user['name']),
+            extra_environ={'REMOTE_USER': admin['name']},
+            status=200,
+        )
+
+        profile = response.data.decode('utf-8')
+        assert 'Delete user' in profile
+        assert 'soft-delete/{}'.format(user['id']) in profile
+
+    def test_sysadmin_can_reactivate_deleted_user_from_profile(self, app):
+        user = factories.User(state='deleted')
+        admin = factories.Sysadmin()
+
+        response = app.get(
+            url_for('user.read', id=user['name']),
+            extra_environ={'REMOTE_USER': admin['name']},
+            status=200,
+        )
+
+        profile = response.data.decode('utf-8')
+        assert 'Reactivate user' in profile
+        assert 'reactivate/{}'.format(user['id']) in profile
