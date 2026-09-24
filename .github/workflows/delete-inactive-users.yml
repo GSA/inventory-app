@@ -43,15 +43,18 @@ jobs:
       - name: Set task name
         run: echo "TASK_NAME=delete-inactive-users-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_ENV"
 
+      - name: Set delete arguments
+        run: |
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            echo 'DELETE_ARGS= --dry-run' >> "$GITHUB_ENV"
+          else
+            echo 'DELETE_ARGS=' >> "$GITHUB_ENV"
+          fi
+
       - name: Run inactive-user command
         uses: cloud-gov/cg-cli-tools@main
         with:
-          command: |
-            delete_args=""
-            if [[ "${{ github.event_name }}" == "schedule" || "${{ inputs.dry_run }}" == "true" ]]; then
-              delete_args=" --dry-run"
-            fi
-            cf run-task inventory --command "ckan delete-inactive-users${delete_args}" --name "$TASK_NAME"
+          command: cf run-task inventory --command "ckan delete-inactive-users${DELETE_ARGS}" --name "$TASK_NAME"
           cf_org: gsa-datagov
           cf_space: ${{ matrix.target.space }}
           cf_username: ${{ secrets.CF_SERVICE_USER }}
