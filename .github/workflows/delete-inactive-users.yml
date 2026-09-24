@@ -5,10 +5,20 @@ on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
     inputs:
       dry_run:
-        description: Run without deleting users
+        description: Dry run (no users will be deleted)
         required: true
         type: boolean
         default: true
+      space:
+        description: Space to process
+        required: true
+        type: choice
+        options:
+          - all
+          - development
+          - staging
+          - prod
+        default: all
   schedule:
     - cron: '0 6 * * *'  # every day at 06:00 UTC
 
@@ -24,6 +34,12 @@ jobs:
       - id: set-environments
         run: |
           if [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo 'environments=[{"name":"production","space":"prod"}]' >> "$GITHUB_OUTPUT"
+          elif [[ "${{ inputs.space }}" == "development" ]]; then
+            echo 'environments=[{"name":"development","space":"development"}]' >> "$GITHUB_OUTPUT"
+          elif [[ "${{ inputs.space }}" == "staging" ]]; then
+            echo 'environments=[{"name":"staging","space":"staging"}]' >> "$GITHUB_OUTPUT"
+          elif [[ "${{ inputs.space }}" == "prod" ]]; then
             echo 'environments=[{"name":"production","space":"prod"}]' >> "$GITHUB_OUTPUT"
           else
             echo 'environments=[{"name":"development","space":"development"},{"name":"staging","space":"staging"},{"name":"production","space":"prod"}]' >> "$GITHUB_OUTPUT"
@@ -43,15 +59,18 @@ jobs:
       - name: Set task name
         run: echo "TASK_NAME=delete-inactive-users-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_ENV"
 
+      - name: Set delete arguments
+        run: |
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            echo 'DELETE_ARGS= --dry-run' >> "$GITHUB_ENV"
+          else
+            echo 'DELETE_ARGS=' >> "$GITHUB_ENV"
+          fi
+
       - name: Run inactive-user command
         uses: cloud-gov/cg-cli-tools@main
         with:
-          command: |
-            delete_args=""
-            if [[ "${{ github.event_name }}" == "schedule" || "${{ inputs.dry_run }}" == "true" ]]; then
-              delete_args=" --dry-run"
-            fi
-            cf run-task inventory --command "ckan delete-inactive-users${delete_args}" --name "$TASK_NAME"
+          command: cf run-task inventory --command "ckan delete-inactive-users${DELETE_ARGS}" --name "$TASK_NAME"
           cf_org: gsa-datagov
           cf_space: ${{ matrix.target.space }}
           cf_username: ${{ secrets.CF_SERVICE_USER }}
