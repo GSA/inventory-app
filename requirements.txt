@@ -97,7 +97,7 @@ urllib3==2.8.0
 watchdog==6.0.0
 webassets==2.0
 webencodings==0.5.1
-Werkzeug==3.1.8
+Werkzeug==3.1.9
 wheel==0.46.2
 WTForms==3.2.2
 xlrd==2.0.2
