@@ -1,4 +1,4 @@
-git+https://github.com/GSA/ckan.git@ckan-2.11.5-nosolr#egg=ckan
+git+https://github.com/GSA/ckan.git@ckan-2.11.6-nosolr#egg=ckan
 # TODO https://github.com/GSA/datagov-deploy/issues/2794
 git+https://github.com/GSA/ckanext-pgsearch.git@main#egg=ckanext-pgsearch
 git+https://github.com/GSA/ckanext-saml2auth.git@ckan-2-11-datagov#egg=ckanext-saml2auth
@@ -15,8 +15,7 @@ gunicorn
 # Add necessary CKAN core libraries
 alembic==1.13.2
 Babel==2.15.0
-#bleach==6.1.0
-bleach>=6.4.0
+bleach==6.4.0
 blinker==1.9.0
 certifi>=2024.7.4
 click==8.1.7
@@ -38,7 +37,7 @@ packaging==24.1
 passlib==1.7.4
 polib==1.2.0
 psycopg2==2.9.11
-# PyJWT==2.12.1
+# PyJWT==2.13.0
 PyJWT==2.15.0
 pyparsing==3.1.2
 python-magic==0.4.27
