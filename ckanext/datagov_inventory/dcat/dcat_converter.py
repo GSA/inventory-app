@@ -34,7 +34,9 @@ class CatalogConversionException(Exception):
 def fetch_dcat_catalog(url: str) -> dict:
     """Fetch a DCAT-US v1.1 catalog to convert to DCAT-US v3.0."""
     try:
-        response = requests.get(url, timeout=60, impersonate="safari17_0")
+        response = requests.get(
+            url, timeout=60, impersonate="safari17_0", allow_redirects="safe"
+        )
         response.raise_for_status()
     except RequestException as e:
         raise CatalogFetchException(

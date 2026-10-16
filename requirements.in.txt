@@ -94,5 +94,5 @@ urllib3>=2.5.0
 cryptography>=48.0.1
 
 # DCAT-US v3.0 export needs
-curl_cffi==0.13.0
+curl_cffi==0.15.0
 langcodes[data]==3.5.1
