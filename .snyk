@@ -14,8 +14,16 @@ ignore:
           bleach version exists. https://github.com/GSA/data.gov/issues/6122
         expires: 2027-09-10T00:00:00.000Z
         created: 2026-07-01T00:00:00.000Z
+  SNYK-PYTHON-SQLPARSE-21248801:
+    - '*':
+        reason: >-
+          no published fix yet.
+          https://security.snyk.io/vuln/SNYK-PYTHON-SQLPARSE-21248801
+          https://github.com/GSA/data.gov/issues/6459
+        expires: 2026-11-18T00:00:00.000Z
+        created: 2026-10-26T00:00:00.000Z
 patch: {}
-# specify the directories or files to be excludeed from import:
+# specify the directories or files to be excluded from import:
 exclude:
  global:
    - requirements-dev.txt
