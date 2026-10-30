@@ -17,7 +17,7 @@ alembic==1.13.2
 Babel==2.15.0
 bleach==6.4.0
 blinker==1.9.0
-certifi>=2024.7.4
+certifi>=2026.10.19
 click==8.1.7
 dominate==2.9.1
 #fedgen==1.0.0
@@ -84,7 +84,7 @@ importlib-resources<6.0
 zipp>=3.19.1
 gevent>=24.10.1
 
-setuptools~=83.0.0
+setuptools~=84.1.0
 
 # Pin MarkupSafe to avoid button issue data.gov/issues/4954 for logged in user
 # https://github.com/GSA/data.gov/issues/4954
