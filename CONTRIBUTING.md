@@ -25,7 +25,7 @@ Here are some ways you can contribute:
 - Before submitting a new [issue for this repo](https://github.com/GSA/inventory-app/issues), check to make sure a similar issue isn't already open.
 - When submitting a bug report, please provide as much detail as possible including screenshots, the technology you are using, and any relevant links.
 
-Issues labeled ✨[`help wanted`](https://github.com/GSA/data.gov/labels/help%20wanted)✨ make it easy to find ways you can contribute today.
+Issues labeled ✨[`Inventory.data.gov`](https://github.com/GSA/data.gov/labels/Inventory.data.gov)✨ make it easy to find ways you can contribute today.
 
 ## Public Domain
 
