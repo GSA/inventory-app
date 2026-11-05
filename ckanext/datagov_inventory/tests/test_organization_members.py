@@ -11,6 +11,31 @@ import ckan.tests.factories as factories
 @pytest.mark.ckan_config('ckan.plugins', 'datagov_inventory')
 @pytest.mark.usefixtures('with_plugins', 'clean_db')
 class TestOrganizationMembers:
+    def test_organization_card_counts_only_active_members(self, app):
+        active_user = factories.User(name='active-member')
+        deleted_user = factories.User(name='deleted-member')
+        factories.Organization(
+            context={'user': active_user['name']},
+            users=[
+                {'name': deleted_user['name'], 'capacity': 'editor'},
+            ],
+        )
+        sysadmin = factories.Sysadmin()
+
+        deleted_user_obj = model.User.get(deleted_user['id'])
+        deleted_user_obj.state = model.State.DELETED
+        model.Session.commit()
+
+        response = app.get(
+            '/organization/',
+            extra_environ={'REMOTE_USER': sysadmin['name']},
+            status=200,
+        )
+        page = response.data.decode('utf-8')
+
+        assert '1 Member' in page
+        assert '2 Members' not in page
+
     def test_separates_active_and_deleted_members(self, app):
         active_user = factories.User(
             name='active-member',
