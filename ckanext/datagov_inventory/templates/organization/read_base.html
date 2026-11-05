@@ -1,0 +1,7 @@
+{% ckan_extends %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('organization.read', _('Datasets'), id=group_dict.name) }}
+  {{ h.build_nav_icon('organization.members', _('Members'), id=group_dict.name) }}
+  {{ h.build_nav_icon('organization.about', _('About'), id=group_dict.name) }}
+{% endblock %}
