@@ -7,6 +7,7 @@ import ckan.lib.mailer as mailer
 import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+from flask import has_request_context, request
 
 from ckanext.datagov_inventory.cli import soft_delete
 from ckanext.datagov_inventory import user_activity
@@ -14,6 +15,17 @@ from ckanext.datagov_inventory import notifications
 
 
 log = logging.getLogger(__name__)
+
+
+@toolkit.chained_action
+def package_create(original_action, context, data_dict):
+    """Require a description for datasets created through the action API."""
+    if has_request_context() and request.path.startswith('/api/'):
+        notes = data_dict.get('notes')
+        if not isinstance(notes, str) or not notes.strip():
+            raise logic.ValidationError({'notes': ['Missing value']})
+
+    return original_action(context, data_dict)
 
 
 def _utcnow():
