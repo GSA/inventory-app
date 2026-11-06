@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{% block members %}
+  {% set count = h.member_count(organization.id) %}
+  {% if count %}
+    <strong class="count">{{ ungettext('{num} Member', '{num} Members', count).format(num=count) }}</strong>
+  {% else %}
+    <span class="count">{{ _('0 Members') }}</span>
+  {% endif %}
+{% endblock %}
