@@ -166,6 +166,7 @@ class Datagov_IauthfunctionsPlugin(plugins.SingletonPlugin):
 
     def get_actions(self):
         return {
+            'package_create': action.package_create,
             'user_org_roles': action.user_org_roles,
             'create_inventory_user': action.create_inventory_user,
             'soft_delete_user': action.soft_delete_user,
