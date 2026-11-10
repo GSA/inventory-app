@@ -15,8 +15,10 @@ else
   export https_proxy=$proxy_url
 fi
 
-# Add the current directory to our virtualenv
-pip3 install -e .
+# Install our custom CKAN extension `datagov_inventory` into the virtual env.
+# --no-build-isolation since build deps (setuptools, wheel) are already pinned in
+# requirements.in.txt and installed during staging.
+pip3 install --no-build-isolation -e .
 
 function vcap_get_service () {
   local path name
