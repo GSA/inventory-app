@@ -50,6 +50,9 @@ def inventory_resource_show(context, data_dict):
         raise logic.NotFound(_('No package found for this resource,'
                                ' cannot check auth.'))
 
+    if resource.state != 'active' or pkg.state != 'active':
+        raise logic.NotFound(_('Resource was not found.'))
+
     if user is None:
         if pkg.private:
             return {'success': False}
