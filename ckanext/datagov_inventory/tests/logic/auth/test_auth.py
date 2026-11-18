@@ -314,6 +314,45 @@ class TestDatagovInventoryAuth(FunctionalTestBase):
             'anonymous': is_allowed
         }, object_id=dataset['resource_id'])
 
+    @pytest.mark.parametrize('deleted_object', ['resource', 'dataset'])
+    def test_auth_resource_show_rejects_deleted_objects(
+            self, deleted_object):
+        self.setup_test_orgs_users()
+        dataset = self.factory_dataset(owner_org='gsa', private=False)
+
+        if deleted_object == 'resource':
+            obj = model.Resource.get(dataset['resource_id'])
+        else:
+            obj = model.Package.get(dataset['package_id'])
+        obj.state = 'deleted'
+        model.Session.flush()
+
+        for user in ('', self.test_users['gsa_admin']['name']):
+            context = {'model': model, 'ignore_auth': False, 'user': user}
+            with assert_raises(logic.NotFound):
+                helpers.call_auth('resource_show', context=context,
+                                  id=dataset['resource_id'])
+
+    def test_auth_resource_show_on_draft_dataset(self):
+        self.setup_test_orgs_users()
+        dataset = self.factory_dataset(owner_org='gsa', private=False)
+        pkg = model.Package.get(dataset['package_id'])
+        pkg.state = 'draft'
+        model.Session.flush()
+
+        for user in ('gsa_editor', 'doi_admin', 'anonymous'):
+            user_context = self.test_users[user]
+            user_name = user_context['name'] if user_context else ''
+            context = {'model': model, 'ignore_auth': False,
+                       'user': user_name}
+            if user == 'gsa_editor':
+                assert helpers.call_auth('resource_show', context=context,
+                                         id=dataset['resource_id'])
+            else:
+                with assert_raises(logic.NotAuthorized):
+                    helpers.call_auth('resource_show', context=context,
+                                      id=dataset['resource_id'])
+
     def test_auth_tag_list(self):
         # Create test users and test data
         self.setup_test_orgs_users()
